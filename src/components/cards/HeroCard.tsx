@@ -1,0 +1,160 @@
+'use client';
+
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import type { NormalizedRaceEvent } from '@/types';
+import { SERIES_META } from '@/types';
+import { formatDateISR, formatTimeISR } from '@/lib/events';
+import { getCircuitImage } from '@/lib/images';
+import Countdown from '@/components/ui/Countdown';
+
+interface HeroCardProps {
+  event: NormalizedRaceEvent;
+}
+
+export default function HeroCard({ event }: HeroCardProps) {
+  const meta = SERIES_META[event.series];
+  const nextSession = event.sessions.find((s) => s.state !== 'finished');
+  const circuitImage = getCircuitImage(event.circuit.name);
+
+  return (
+    <motion.section
+      className="pw-glass relative overflow-hidden mb-8 p-6 sm:p-8 min-h-[320px] flex flex-col justify-end"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: 'spring', stiffness: 150, damping: 20 }}
+    >
+      {/* Circuit background image with ken burns */}
+      {circuitImage && (
+        <motion.div
+          className="absolute inset-0"
+          animate={{ scale: [1, 1.05, 1] }}
+          transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <Image
+            src={circuitImage}
+            alt={event.circuit.name}
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--pw-bg-primary)] via-[var(--pw-bg-primary)]/80 to-[var(--pw-bg-primary)]/40" />
+        </motion.div>
+      )}
+
+      {/* Gradient overlay with series accent */}
+      <div
+        className="absolute inset-0 opacity-20"
+        style={{
+          background: `linear-gradient(135deg, ${meta.accent} 0%, transparent 50%)`,
+        }}
+      />
+
+      {/* Animated scan line */}
+      <motion.div
+        className="absolute left-0 right-0 h-px opacity-20"
+        style={{ background: `linear-gradient(90deg, transparent, ${meta.accent}, transparent)` }}
+        animate={{ top: ['0%', '100%'] }}
+        transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+      />
+
+      <div className="relative">
+        {/* Status + Series badge */}
+        <motion.div
+          className="flex items-center gap-3 mb-3"
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.15 }}
+        >
+          {event.state === 'live' ? (
+            <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider" style={{ color: '#E10600' }}>
+              <span className="pw-live-dot" />
+              Live Now
+            </span>
+          ) : event.state === 'starting_soon' ? (
+            <span className="text-xs font-bold uppercase tracking-wider" style={{ color: '#FFB800' }}>
+              Starting Soon
+            </span>
+          ) : (
+            <span className="text-xs font-bold uppercase tracking-wider" style={{ color: meta.accent }}>
+              Next Up
+            </span>
+          )}
+          <span
+            className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded"
+            style={{ color: meta.accent, background: `${meta.accent}15` }}
+          >
+            {meta.name}
+          </span>
+        </motion.div>
+
+        {/* Event title */}
+        <motion.h2
+          className="text-3xl sm:text-5xl font-bold mb-2 tracking-tight"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, type: 'spring', stiffness: 150, damping: 20 }}
+        >
+          {event.name}
+        </motion.h2>
+
+        {/* Circuit + dates */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+        >
+          <p style={{ color: 'var(--pw-text-secondary)' }} className="text-sm sm:text-base mb-1">
+            {event.circuit.name} — {event.circuit.country}
+          </p>
+          <p className="text-xs font-mono mb-4" style={{ color: 'var(--pw-text-tertiary)' }}>
+            {formatDateISR(event.startDate)} – {formatDateISR(event.endDate)} · Israel Time
+          </p>
+        </motion.div>
+
+        {/* Countdown */}
+        {nextSession && event.state !== 'finished' && (
+          <motion.div
+            className="mb-4"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35 }}
+          >
+            <p className="text-[10px] uppercase tracking-widest mb-2" style={{ color: 'var(--pw-text-tertiary)' }}>
+              {event.state === 'live' ? 'Current Session' : `Next: ${nextSession.name}`}
+            </p>
+            <Countdown targetDate={nextSession.startTime} />
+          </motion.div>
+        )}
+
+        {/* Session pills */}
+        {event.sessions.length > 0 && (
+          <motion.div
+            className="flex flex-wrap gap-2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.45 }}
+          >
+            {event.sessions.map((s, i) => (
+              <div
+                key={i}
+                className="text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5 transition-all duration-200"
+                style={{
+                  background: s.state === 'live' ? 'rgba(225,6,0,0.15)' : 'var(--pw-glass-bg)',
+                  border: `1px solid ${s.state === 'live' ? 'rgba(225,6,0,0.4)' : 'var(--pw-glass-border)'}`,
+                  color: s.state === 'finished' ? 'var(--pw-text-tertiary)' : 'var(--pw-text-secondary)',
+                  textDecoration: s.state === 'finished' ? 'line-through' : 'none',
+                  opacity: s.state === 'finished' ? 0.5 : 1,
+                }}
+              >
+                {s.state === 'live' && <span className="pw-live-dot" style={{ width: 5, height: 5 }} />}
+                <span>{s.name}</span>
+                <span className="font-mono">{formatTimeISR(s.startTime)}</span>
+              </div>
+            ))}
+          </motion.div>
+        )}
+      </div>
+    </motion.section>
+  );
+}

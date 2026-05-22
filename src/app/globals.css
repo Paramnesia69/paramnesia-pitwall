@@ -1,26 +1,164 @@
 @import "tailwindcss";
 
+/* ── Design Tokens ─────────────────────────────────────── */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Surface */
+  --pw-bg-primary: #06060B;
+  --pw-bg-elevated: #0D0D14;
+  --pw-bg-card: rgba(14, 14, 22, 0.65);
+
+  /* Glass */
+  --pw-glass-bg: rgba(255, 255, 255, 0.04);
+  --pw-glass-border: rgba(255, 255, 255, 0.08);
+  --pw-glass-blur: 20px;
+  --pw-glass-hover-border: rgba(255, 255, 255, 0.14);
+
+  /* Text */
+  --pw-text-primary: #F0F0F5;
+  --pw-text-secondary: rgba(240, 240, 245, 0.6);
+  --pw-text-tertiary: rgba(240, 240, 245, 0.35);
+
+  /* Accent */
+  --pw-accent: #E10600;
+  --pw-accent-glow: rgba(225, 6, 0, 0.25);
+
+  /* Neon accents per series — set dynamically */
+  --pw-series-accent: var(--pw-accent);
+
+  /* Spacing scale */
+  --pw-space-xs: 4px;
+  --pw-space-sm: 8px;
+  --pw-space-md: 16px;
+  --pw-space-lg: 24px;
+  --pw-space-xl: 32px;
+  --pw-space-2xl: 48px;
+  --pw-space-3xl: 64px;
+
+  /* Radius */
+  --pw-radius-sm: 8px;
+  --pw-radius-md: 12px;
+  --pw-radius-lg: 16px;
+  --pw-radius-xl: 24px;
+
+  /* Shadows */
+  --pw-shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--pw-glass-border);
+  --pw-shadow-card-hover: 0 8px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--pw-glass-hover-border);
+  --pw-shadow-glow: 0 0 30px var(--pw-accent-glow);
+
+  /* Motion */
+  --pw-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --pw-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --pw-duration-fast: 150ms;
+  --pw-duration-normal: 250ms;
+  --pw-duration-slow: 400ms;
+
+  /* Z layers */
+  --pw-z-bg: 0;
+  --pw-z-cards: 10;
+  --pw-z-nav: 100;
+  --pw-z-overlay: 200;
+  --pw-z-modal: 300;
+  --pw-z-toast: 400;
+
+  /* Typography */
+  --pw-font-display: var(--font-geist-sans), system-ui, sans-serif;
+  --pw-font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--pw-bg-primary);
+  --color-foreground: var(--pw-text-primary);
+  --color-elevated: var(--pw-bg-elevated);
+  --color-card: var(--pw-bg-card);
+  --color-glass: var(--pw-glass-bg);
+  --color-glass-border: var(--pw-glass-border);
+  --color-text-secondary: var(--pw-text-secondary);
+  --color-text-tertiary: var(--pw-text-tertiary);
+  --color-accent: var(--pw-accent);
+  --font-sans: var(--pw-font-display);
+  --font-mono: var(--pw-font-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ── Base Reset ────────────────────────────────────────── */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--pw-bg-primary);
+  color: var(--pw-text-primary);
+  font-family: var(--pw-font-display);
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(225, 6, 0, 0.3);
+  color: #fff;
+}
+
+/* ── Glass Card Utility ────────────────────────────────── */
+
+.pw-glass {
+  background: var(--pw-glass-bg);
+  backdrop-filter: blur(var(--pw-glass-blur));
+  -webkit-backdrop-filter: blur(var(--pw-glass-blur));
+  border: 1px solid var(--pw-glass-border);
+  border-radius: var(--pw-radius-lg);
+  box-shadow: var(--pw-shadow-card);
+  transition: border-color var(--pw-duration-normal) var(--pw-ease-out),
+              box-shadow var(--pw-duration-normal) var(--pw-ease-out);
+}
+
+.pw-glass:hover {
+  border-color: var(--pw-glass-hover-border);
+  box-shadow: var(--pw-shadow-card-hover);
+}
+
+/* ── Live Pulse ────────────────────────────────────────── */
+
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.pw-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #E10600;
+  animation: live-pulse 1.5s ease-in-out infinite;
+  box-shadow: 0 0 8px rgba(225, 6, 0, 0.6);
+}
+
+/* ── Ambient Gradient Mesh ─────────────────────────────── */
+
+@keyframes mesh-drift {
+  0% { transform: translate(0%, 0%) rotate(0deg); }
+  33% { transform: translate(5%, -3%) rotate(120deg); }
+  66% { transform: translate(-3%, 5%) rotate(240deg); }
+  100% { transform: translate(0%, 0%) rotate(360deg); }
+}
+
+.pw-ambient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.15;
+  animation: mesh-drift 25s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* ── Reduced Motion ────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .pw-ambient-orb {
+    animation: none;
+  }
+  .pw-live-dot {
+    animation: none;
+    opacity: 1;
+  }
 }
