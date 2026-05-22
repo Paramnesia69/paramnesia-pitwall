@@ -8,7 +8,6 @@ import { useStore } from '@/store';
 import TiltCard from './TiltCard';
 import Countdown from '@/components/ui/Countdown';
 import FavoriteButton from '@/components/ui/FavoriteButton';
-import CircuitOutline from '@/components/ui/CircuitOutline';
 
 interface EventCardProps {
   event: NormalizedRaceEvent;
@@ -42,12 +41,6 @@ export default function EventCard({ event }: EventCardProps) {
   return (
     <div onClick={() => openEvent(event.id)}>
       <TiltCard accentColor={meta.accent}>
-        {/* Circuit outline background */}
-        <CircuitOutline
-          circuitName={event.circuit.name}
-          accentColor={meta.accent}
-          className="absolute right-2 top-2 w-24 h-24 opacity-40 pointer-events-none"
-        />
 
         {/* Header row */}
         <div className="flex items-center justify-between relative" style={{ transform: 'translateZ(20px)' }}>

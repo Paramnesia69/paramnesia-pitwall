@@ -7,7 +7,6 @@ import { SERIES_META } from '@/types';
 import { formatTimeISR } from '@/lib/events';
 import { useStore } from '@/store';
 import Countdown from '@/components/ui/Countdown';
-import CircuitOutline from '@/components/ui/CircuitOutline';
 
 interface ThisWeekendProps {
   events: NormalizedRaceEvent[];
@@ -40,22 +39,22 @@ export default function ThisWeekend({ events }: ThisWeekendProps) {
           return (
             <motion.div
               key={event.id}
-              className="pw-glass p-4 cursor-pointer group"
+              className="pw-glass p-4 cursor-pointer group relative overflow-hidden"
               style={{
                 '--pw-hover-border': `${meta.accent}40`,
                 '--pw-hover-shadow': `0 4px 24px rgba(0,0,0,0.4), 0 0 0 1px ${meta.accent}40, 0 0 30px ${meta.accent}20`,
+                boxShadow: `0 0 20px ${meta.accent}15, 0 0 40px ${meta.accent}08`,
+                borderColor: `${meta.accent}25`,
               } as React.CSSProperties}
-              whileHover={{ scale: 1.02 }}
+              whileHover={{ scale: 1.02, boxShadow: `0 0 30px ${meta.accent}30, 0 0 60px ${meta.accent}15, 0 4px 24px rgba(0,0,0,0.4)` }}
               transition={{ type: 'spring', stiffness: 300, damping: 25 }}
               onClick={() => openEvent(event.id)}
             >
-              {/* Circuit outline background */}
-              <CircuitOutline
-                circuitName={event.circuit.name}
-                accentColor={meta.accent}
-                className="absolute right-2 top-2 w-20 h-20 opacity-30 pointer-events-none"
+              {/* Accent glow */}
+              <div
+                className="absolute -top-8 -right-8 w-24 h-24 rounded-full blur-2xl pointer-events-none opacity-20"
+                style={{ background: meta.accent }}
               />
-
               {/* Series + state */}
               <div className="flex items-center justify-between mb-2 relative">
                 <span

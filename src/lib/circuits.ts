@@ -126,5 +126,9 @@ const CIRCUIT_PATHS: Record<string, { path: string; viewBox: string }> = {
 };
 
 export function getCircuitSvg(circuitName: string): { path: string; viewBox: string } | null {
-  return CIRCUIT_PATHS[circuitName] ?? null;
+  if (CIRCUIT_PATHS[circuitName]) return CIRCUIT_PATHS[circuitName];
+  for (const [key, value] of Object.entries(CIRCUIT_PATHS)) {
+    if (circuitName.includes(key) || key.includes(circuitName)) return value;
+  }
+  return null;
 }

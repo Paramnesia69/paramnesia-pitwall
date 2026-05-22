@@ -7,9 +7,10 @@ import type { NormalizedRaceEvent } from '@/types';
 import { SERIES_META } from '@/types';
 import { formatDateISR, formatTimeISR } from '@/lib/events';
 import { getCircuitImage } from '@/lib/images';
+import { getCircuitStats } from '@/lib/circuitStats';
 import { useStore } from '@/store';
 import Countdown from '@/components/ui/Countdown';
-import CircuitOutline from '@/components/ui/CircuitOutline';
+import CircuitStatsPanel from '@/components/ui/CircuitStatsPanel';
 
 interface EventDetailOverlayProps {
   events: NormalizedRaceEvent[];
@@ -225,21 +226,30 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
                 </div>
               )}
 
-              {/* Circuit info */}
-              <div className="pw-glass p-4 relative overflow-hidden">
-                <CircuitOutline
-                  circuitName={event.circuit.name}
-                  accentColor={SERIES_META[event.series].accent}
-                  className="absolute right-2 top-1 w-28 h-28 opacity-50 pointer-events-none"
-                />
-                <h4 className="text-[10px] uppercase tracking-widest mb-2" style={{ color: 'var(--pw-text-tertiary)' }}>
-                  Circuit
-                </h4>
-                <p className="text-sm font-medium">{event.circuit.name}</p>
-                <p className="text-xs" style={{ color: 'var(--pw-text-secondary)' }}>
-                  {event.circuit.country} · {event.circuit.lat.toFixed(2)}°, {event.circuit.lng.toFixed(2)}°
-                </p>
-              </div>
+              {/* Circuit info with stats */}
+              {(() => {
+                const stats = getCircuitStats(event.circuit.name);
+                if (stats) {
+                  return (
+                    <CircuitStatsPanel
+                      stats={stats}
+                      circuitName={event.circuit.name}
+                      accentColor={SERIES_META[event.series].accent}
+                    />
+                  );
+                }
+                return (
+                  <div className="pw-glass p-4 relative overflow-hidden">
+                    <h4 className="text-[10px] uppercase tracking-widest mb-2" style={{ color: 'var(--pw-text-tertiary)' }}>
+                      Circuit
+                    </h4>
+                    <p className="text-sm font-medium">{event.circuit.name}</p>
+                    <p className="text-xs" style={{ color: 'var(--pw-text-secondary)' }}>
+                      {event.circuit.country} · {event.circuit.lat.toFixed(2)}°, {event.circuit.lng.toFixed(2)}°
+                    </p>
+                  </div>
+                );
+              })()}
             </div>
           </motion.div>
         </>
