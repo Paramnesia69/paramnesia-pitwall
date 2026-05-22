@@ -13,19 +13,39 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
+const SITE_URL = 'https://paramnesia-pitwall.vercel.app';
+
 export const metadata: Metadata = {
   title: 'PARAMNESIA PITWALL',
   description:
-    'Your motorsport command center — live events, countdowns, streams, and standings.',
+    'Your motorsport command center — live events, countdowns, streams, standings, and results for F1, MotoGP, WEC, WRC, IMSA, DTM and more.',
   manifest: '/manifest.json',
+  metadataBase: new URL(SITE_URL),
   icons: {
     icon: '/icon-192.png',
     apple: '/icon-192.png',
   },
   openGraph: {
     title: 'PARAMNESIA PITWALL',
-    description: 'Motorsport command center',
+    description: 'Motorsport command center — F1, MotoGP, WEC, WRC, IMSA, DTM. Live countdowns, standings, results & news.',
     type: 'website',
+    url: SITE_URL,
+    siteName: 'PARAMNESIA PITWALL',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'PARAMNESIA PITWALL — Motorsport Command Center',
+      },
+    ],
+    locale: 'en_US',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'PARAMNESIA PITWALL',
+    description: 'Motorsport command center — F1, MotoGP, WEC, WRC, IMSA, DTM. Live countdowns, standings, results & news.',
+    images: ['/og-image.png'],
   },
   appleWebApp: {
     capable: true,
