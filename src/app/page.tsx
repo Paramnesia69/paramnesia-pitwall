@@ -3,13 +3,15 @@ import { getUpcomingEvents, getFeaturedEvent } from '@/lib/events';
 import { NEWS_ITEMS } from '@/data/news-2026';
 import Dashboard from '@/components/Dashboard';
 
-export default function Home() {
-  const featured = getFeaturedEvent() ?? null;
-  const upcoming = getUpcomingEvents(30);
+export default async function Home() {
+  const [featured, upcoming] = await Promise.all([
+    getFeaturedEvent(),
+    getUpcomingEvents(30),
+  ]);
 
   return (
     <Suspense>
-      <Dashboard featured={featured} upcoming={upcoming} news={NEWS_ITEMS} />
+      <Dashboard featured={featured ?? null} upcoming={upcoming} news={NEWS_ITEMS} />
     </Suspense>
   );
 }

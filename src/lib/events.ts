@@ -1,6 +1,6 @@
 import { CALENDAR_2026 } from '@/data/calendar-2026';
 import type { NormalizedRaceEvent, EventState } from '@/types';
-import { getSimulatedWeather } from '@/lib/weather';
+import { fetchWeather, getSimulatedWeather } from '@/lib/weather';
 import { applyOverrides, getForcedFeaturedId } from '@/lib/overrides';
 
 function computeState(event: { startDate: string; endDate: string; sessions: { startTime: string; endTime?: string }[] }): EventState {
@@ -25,8 +25,13 @@ function computeState(event: { startDate: string; endDate: string; sessions: { s
   return 'upcoming';
 }
 
-export function getEventsWithState(): NormalizedRaceEvent[] {
-  return CALENDAR_2026.map((evt) => {
+/**
+ * Build events with computed state and weather.
+ * Async — tries real OpenWeatherMap data for non-finished events,
+ * falls back to simulated weather when no API key or fetch fails.
+ */
+export async function getEventsWithState(): Promise<NormalizedRaceEvent[]> {
+  const mapped = CALENDAR_2026.map((evt) => {
     const state = computeState(evt);
     const sessions = evt.sessions.map((s) => {
       const sStart = new Date(s.startTime);
@@ -38,21 +43,35 @@ export function getEventsWithState(): NormalizedRaceEvent[] {
       else if ((sStart.getTime() - now.getTime()) / (1000 * 60 * 60) <= 2) sState = 'starting_soon';
       return { ...s, state: sState };
     });
-    // Attach weather — simulated until OpenWeatherMap key is configured
-    const weather = getSimulatedWeather(evt.circuit.lat, evt.circuit.lng, evt.startDate);
+    return { evt, state, sessions };
+  });
+
+  // Fetch real weather in parallel for non-finished events (max 15 to stay within rate limits)
+  const nonFinished = mapped.filter((m) => m.state !== 'finished').slice(0, 15);
+  const weatherResults = await Promise.all(
+    nonFinished.map((m) => fetchWeather(m.evt.circuit.lat, m.evt.circuit.lng)),
+  );
+  const weatherMap = new Map<string, NonNullable<Awaited<ReturnType<typeof fetchWeather>>>>();
+  nonFinished.forEach((m, i) => {
+    if (weatherResults[i]) weatherMap.set(m.evt.id, weatherResults[i]!);
+  });
+
+  return mapped.map(({ evt, state, sessions }) => {
+    // Use real weather if available, otherwise simulated
+    const weather = weatherMap.get(evt.id) ?? getSimulatedWeather(evt.circuit.lat, evt.circuit.lng, evt.startDate);
     return applyOverrides({ ...evt, state, sessions, weather });
   });
 }
 
-export function getUpcomingEvents(limit?: number): NormalizedRaceEvent[] {
-  const events = getEventsWithState()
+export async function getUpcomingEvents(limit?: number): Promise<NormalizedRaceEvent[]> {
+  const events = (await getEventsWithState())
     .filter((e) => e.state !== 'finished')
     .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
   return limit ? events.slice(0, limit) : events;
 }
 
-export function getFeaturedEvent(): NormalizedRaceEvent | undefined {
-  const events = getEventsWithState();
+export async function getFeaturedEvent(): Promise<NormalizedRaceEvent | undefined> {
+  const events = await getEventsWithState();
 
   // Check for manually forced featured event via overrides.json
   const forcedId = getForcedFeaturedId();
