@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import type { NormalizedRaceEvent } from '@/types';
 import { SERIES_META } from '@/types';
 import { formatDateISR } from '@/lib/events';
+import { useStore } from '@/store';
 import Countdown from '@/components/ui/Countdown';
 
 interface UpcomingTimelineProps {
@@ -11,6 +12,7 @@ interface UpcomingTimelineProps {
 }
 
 export default function UpcomingTimeline({ events }: UpcomingTimelineProps) {
+  const openEvent = useStore((s) => s.openEvent);
   if (events.length === 0) return null;
 
   let lastDate = '';
@@ -64,7 +66,14 @@ export default function UpcomingTimeline({ events }: UpcomingTimelineProps) {
               )}
 
               {/* Event row */}
-              <div className="pw-glass p-3 flex items-center gap-3 cursor-pointer group hover:border-[var(--pw-glass-hover-border)] transition-all">
+              <motion.div
+                className="pw-glass p-3 flex items-center gap-3 cursor-pointer group transition-all"
+                style={{
+                  '--pw-hover-border': `${meta.accent}40`,
+                  '--pw-hover-shadow': `0 4px 24px rgba(0,0,0,0.4), 0 0 0 1px ${meta.accent}40, 0 0 20px ${meta.accent}15`,
+                } as React.CSSProperties}
+                onClick={() => openEvent(event.id)}
+              >
                 <span
                   className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded shrink-0"
                   style={{ color: meta.accent, background: `${meta.accent}12` }}
@@ -87,7 +96,7 @@ export default function UpcomingTimeline({ events }: UpcomingTimelineProps) {
                     <Countdown targetDate={nextSession.startTime} compact />
                   ) : null}
                 </div>
-              </div>
+              </motion.div>
             </motion.div>
           );
         })}

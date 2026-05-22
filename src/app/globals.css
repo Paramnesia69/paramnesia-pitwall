@@ -113,8 +113,8 @@ body {
 }
 
 .pw-glass:hover {
-  border-color: var(--pw-glass-hover-border);
-  box-shadow: var(--pw-shadow-card-hover);
+  border-color: var(--pw-hover-border, var(--pw-glass-hover-border));
+  box-shadow: var(--pw-hover-shadow, var(--pw-shadow-card-hover));
 }
 
 /* ── Live Pulse ────────────────────────────────────────── */

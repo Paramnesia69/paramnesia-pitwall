@@ -1,16 +1,20 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import type { NormalizedRaceEvent } from '@/types';
 import { SERIES_META } from '@/types';
 import { formatTimeISR } from '@/lib/events';
+import { useStore } from '@/store';
 import Countdown from '@/components/ui/Countdown';
+import CircuitOutline from '@/components/ui/CircuitOutline';
 
 interface ThisWeekendProps {
   events: NormalizedRaceEvent[];
 }
 
 export default function ThisWeekend({ events }: ThisWeekendProps) {
+  const openEvent = useStore((s) => s.openEvent);
   if (events.length === 0) return null;
 
   return (
@@ -37,15 +41,30 @@ export default function ThisWeekend({ events }: ThisWeekendProps) {
             <motion.div
               key={event.id}
               className="pw-glass p-4 cursor-pointer group"
+              style={{
+                '--pw-hover-border': `${meta.accent}40`,
+                '--pw-hover-shadow': `0 4px 24px rgba(0,0,0,0.4), 0 0 0 1px ${meta.accent}40, 0 0 30px ${meta.accent}20`,
+              } as React.CSSProperties}
               whileHover={{ scale: 1.02 }}
               transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+              onClick={() => openEvent(event.id)}
             >
+              {/* Circuit outline background */}
+              <CircuitOutline
+                circuitName={event.circuit.name}
+                accentColor={meta.accent}
+                className="absolute right-2 top-2 w-20 h-20 opacity-30 pointer-events-none"
+              />
+
               {/* Series + state */}
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between mb-2 relative">
                 <span
-                  className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded"
+                  className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded"
                   style={{ color: meta.accent, background: `${meta.accent}12` }}
                 >
+                  {meta.logo && (
+                    <Image src={meta.logo} alt="" width={12} height={12} className="inline-block" />
+                  )}
                   {meta.name}
                 </span>
                 {event.state === 'live' && (

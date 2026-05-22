@@ -9,6 +9,7 @@ import { formatDateISR, formatTimeISR } from '@/lib/events';
 import { getCircuitImage } from '@/lib/images';
 import { useStore } from '@/store';
 import Countdown from '@/components/ui/Countdown';
+import CircuitOutline from '@/components/ui/CircuitOutline';
 
 interface EventDetailOverlayProps {
   events: NormalizedRaceEvent[];
@@ -105,13 +106,16 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
               {/* Series badge */}
               <div className="flex items-center gap-2 mb-3">
                 <span
-                  className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded"
+                  className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded"
                   style={{
                     color: SERIES_META[event.series].accent,
                     background: `${SERIES_META[event.series].accent}18`,
                     border: `1px solid ${SERIES_META[event.series].accent}30`,
                   }}
                 >
+                  {SERIES_META[event.series].logo && (
+                    <Image src={SERIES_META[event.series].logo!} alt="" width={16} height={16} />
+                  )}
                   {SERIES_META[event.series].name}
                 </span>
                 {event.state === 'live' && (
@@ -222,7 +226,12 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
               )}
 
               {/* Circuit info */}
-              <div className="pw-glass p-4">
+              <div className="pw-glass p-4 relative overflow-hidden">
+                <CircuitOutline
+                  circuitName={event.circuit.name}
+                  accentColor={SERIES_META[event.series].accent}
+                  className="absolute right-2 top-1 w-28 h-28 opacity-50 pointer-events-none"
+                />
                 <h4 className="text-[10px] uppercase tracking-widest mb-2" style={{ color: 'var(--pw-text-tertiary)' }}>
                   Circuit
                 </h4>
