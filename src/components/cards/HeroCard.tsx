@@ -7,6 +7,7 @@ import { SERIES_META } from '@/types';
 import { formatDateISR, formatTimeISR } from '@/lib/events';
 import { getCircuitImage } from '@/lib/images';
 import Countdown from '@/components/ui/Countdown';
+import { WeatherBadgeCompact } from '@/components/ui/WeatherBadge';
 
 interface HeroCardProps {
   event: NormalizedRaceEvent;
@@ -107,9 +108,12 @@ export default function HeroCard({ event }: HeroCardProps) {
           <p style={{ color: 'var(--pw-text-secondary)' }} className="text-sm sm:text-base mb-1">
             {event.circuit.name} — {event.circuit.country}
           </p>
-          <p className="text-xs font-mono mb-4" style={{ color: 'var(--pw-text-tertiary)' }}>
-            {formatDateISR(event.startDate)} – {formatDateISR(event.endDate)} · Israel Time
-          </p>
+          <div className="flex items-center gap-3 mb-4">
+            <p className="text-xs font-mono" style={{ color: 'var(--pw-text-tertiary)' }}>
+              {formatDateISR(event.startDate)} – {formatDateISR(event.endDate)} · Israel Time
+            </p>
+            {event.weather && <WeatherBadgeCompact weather={event.weather} />}
+          </div>
         </motion.div>
 
         {/* Countdown */}

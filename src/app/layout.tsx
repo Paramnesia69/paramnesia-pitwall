@@ -16,12 +16,21 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'PARAMNESIA PITWALL',
   description:
-    'Your motorsport command center — live events, countdowns, streams, and news.',
+    'Your motorsport command center — live events, countdowns, streams, and standings.',
   manifest: '/manifest.json',
+  icons: {
+    icon: '/icon-192.png',
+    apple: '/icon-192.png',
+  },
   openGraph: {
     title: 'PARAMNESIA PITWALL',
     description: 'Motorsport command center',
     type: 'website',
+  },
+  appleWebApp: {
+    capable: true,
+    title: 'PITWALL',
+    statusBarStyle: 'black-translucent',
   },
 };
 

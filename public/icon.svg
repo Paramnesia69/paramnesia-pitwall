@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#06060B"/>
+  <rect x="24" y="24" width="464" height="464" rx="80" fill="none" stroke="#E10600" stroke-width="4" opacity="0.3"/>
+  <!-- P monogram -->
+  <text x="256" y="300" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="280" fill="white" letter-spacing="-10">P</text>
+  <!-- Accent bar -->
+  <rect x="120" y="380" width="272" height="6" rx="3" fill="#E10600"/>
+  <!-- PITWALL text -->
+  <text x="256" y="430" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="48" fill="#E10600" letter-spacing="12">PITWALL</text>
+</svg>

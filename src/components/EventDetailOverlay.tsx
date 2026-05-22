@@ -11,6 +11,7 @@ import { getCircuitStats } from '@/lib/circuitStats';
 import { useStore } from '@/store';
 import Countdown from '@/components/ui/Countdown';
 import CircuitStatsPanel from '@/components/ui/CircuitStatsPanel';
+import WeatherBadge from '@/components/ui/WeatherBadge';
 
 interface EventDetailOverlayProps {
   events: NormalizedRaceEvent[];
@@ -152,6 +153,13 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
                   </div>
                 );
               })()}
+
+              {/* Weather */}
+              {event.weather && (
+                <div className="mb-6">
+                  <WeatherBadge weather={event.weather} accentColor={SERIES_META[event.series].accent} />
+                </div>
+              )}
 
               {/* Sessions list */}
               <div className="mb-6">

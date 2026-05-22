@@ -1,5 +1,6 @@
 import { CALENDAR_2026 } from '@/data/calendar-2026';
 import type { NormalizedRaceEvent, EventState } from '@/types';
+import { getSimulatedWeather } from '@/lib/weather';
 
 function computeState(event: { startDate: string; endDate: string; sessions: { startTime: string; endTime?: string }[] }): EventState {
   const now = new Date();
@@ -36,7 +37,9 @@ export function getEventsWithState(): NormalizedRaceEvent[] {
       else if ((sStart.getTime() - now.getTime()) / (1000 * 60 * 60) <= 2) sState = 'starting_soon';
       return { ...s, state: sState };
     });
-    return { ...evt, state, sessions };
+    // Attach weather — simulated until OpenWeatherMap key is configured
+    const weather = getSimulatedWeather(evt.circuit.lat, evt.circuit.lng, evt.startDate);
+    return { ...evt, state, sessions, weather };
   });
 }
 

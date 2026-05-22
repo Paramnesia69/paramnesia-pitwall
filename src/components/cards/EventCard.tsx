@@ -8,6 +8,7 @@ import { useStore } from '@/store';
 import TiltCard from './TiltCard';
 import Countdown from '@/components/ui/Countdown';
 import FavoriteButton from '@/components/ui/FavoriteButton';
+import { WeatherBadgeCompact } from '@/components/ui/WeatherBadge';
 
 interface EventCardProps {
   event: NormalizedRaceEvent;
@@ -58,6 +59,7 @@ export default function EventCard({ event }: EventCardProps) {
           </span>
           <div className="flex items-center gap-2">
             <StateBadge state={event.state} />
+            {event.weather && <WeatherBadgeCompact weather={event.weather} />}
             <span className="text-[11px] font-mono" style={{ color: 'var(--pw-text-tertiary)' }}>
               {formatDateISR(event.startDate)}
             </span>

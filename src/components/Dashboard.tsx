@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSearchParams, useRouter } from 'next/navigation';
 import type { NormalizedRaceEvent, SeriesId } from '@/types';
 import { SERIES_META } from '@/types';
 import { getThisWeekendEvents } from '@/lib/weekend';
@@ -10,9 +11,11 @@ import EventCard from '@/components/cards/EventCard';
 import ThisWeekend from '@/components/ThisWeekend';
 import UpcomingTimeline from '@/components/UpcomingTimeline';
 import EventDetailOverlay from '@/components/EventDetailOverlay';
+import StandingsPanel from '@/components/StandingsPanel';
 import ShareButton from '@/components/ui/ShareButton';
 import FadeIn from '@/components/motion/FadeIn';
 import { StaggerGrid, StaggerItem } from '@/components/motion/StaggerGrid';
+import { useServiceWorker } from '@/lib/useSW';
 
 const ALL_SERIES: SeriesId[] = [
   'f1', 'wec', 'imsa', 'motogp', 'wrc', 'gtwce', 'elms', 'dtm', 'nurburgring', 'porsche-supercup',
@@ -24,7 +27,30 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ featured, upcoming }: DashboardProps) {
-  const [activeFilter, setActiveFilter] = useState<SeriesId | 'all'>('all');
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  // Read initial filter from URL ?series=f1
+  const initialFilter = (() => {
+    const param = searchParams.get('series');
+    if (param && ALL_SERIES.includes(param as SeriesId)) return param as SeriesId;
+    return 'all' as const;
+  })();
+
+  const [activeFilter, setActiveFilter] = useState<SeriesId | 'all'>(initialFilter);
+  useServiceWorker();
+
+  // Sync filter → URL (without full navigation)
+  const updateFilter = useCallback((filter: SeriesId | 'all') => {
+    setActiveFilter(filter);
+    const url = new URL(window.location.href);
+    if (filter === 'all') {
+      url.searchParams.delete('series');
+    } else {
+      url.searchParams.set('series', filter);
+    }
+    router.replace(url.pathname + url.search, { scroll: false });
+  }, [router]);
 
   const filtered = useMemo(() => {
     if (activeFilter === 'all') return upcoming;
@@ -69,7 +95,7 @@ export default function Dashboard({ featured, upcoming }: DashboardProps) {
               border: `1px solid ${activeFilter === 'all' ? 'var(--pw-accent)' : 'var(--pw-glass-border)'}`,
               color: activeFilter === 'all' ? '#fff' : 'var(--pw-text-secondary)',
             }}
-            onClick={() => setActiveFilter('all')}
+            onClick={() => updateFilter('all')}
             whileTap={{ scale: 0.95 }}
           >
             All Series
@@ -85,7 +111,7 @@ export default function Dashboard({ featured, upcoming }: DashboardProps) {
                   border: `1px solid ${isActive ? SERIES_META[id].accent : 'var(--pw-glass-border)'}`,
                   color: isActive ? SERIES_META[id].accent : 'var(--pw-text-secondary)',
                 }}
-                onClick={() => setActiveFilter(isActive ? 'all' : id)}
+                onClick={() => updateFilter(isActive ? 'all' : id)}
                 whileTap={{ scale: 0.95 }}
               >
                 {SERIES_META[id].name}
@@ -102,6 +128,9 @@ export default function Dashboard({ featured, upcoming }: DashboardProps) {
       {activeFilter === 'all' && weekendEvents.length > 0 && (
         <ThisWeekend events={weekendEvents} />
       )}
+
+      {/* ── Championship Standings ─────────────── */}
+      {activeFilter === 'all' && <StandingsPanel />}
 
       {/* ── Event Cards Grid ─────────────────── */}
       <FadeIn delay={0.1}>
