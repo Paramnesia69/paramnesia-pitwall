@@ -13,6 +13,8 @@ import UpcomingTimeline from '@/components/UpcomingTimeline';
 import EventDetailOverlay from '@/components/EventDetailOverlay';
 import StandingsPanel from '@/components/StandingsPanel';
 import NewsFeed from '@/components/NewsFeed';
+import RecentResults from '@/components/RecentResults';
+import Footer from '@/components/Footer';
 import ShareButton from '@/components/ui/ShareButton';
 import FadeIn from '@/components/motion/FadeIn';
 import { StaggerGrid, StaggerItem } from '@/components/motion/StaggerGrid';
@@ -135,6 +137,9 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
       {/* ── Championship Standings ─────────────── */}
       {activeFilter === 'all' && <StandingsPanel />}
 
+      {/* ── Recent Results ──────────────────── */}
+      <RecentResults activeFilter={activeFilter} />
+
       {/* ── Latest News ─────────────────────── */}
       {news.length > 0 && <NewsFeed items={news} activeFilter={activeFilter} />}
 
@@ -184,6 +189,8 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
       )}
 
       <EventDetailOverlay events={upcoming} />
+
+      <Footer />
     </main>
   );
 }

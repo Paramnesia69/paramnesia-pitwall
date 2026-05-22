@@ -6,15 +6,17 @@ import {
   F1_DRIVERS_2026,
   F1_CONSTRUCTORS_2026,
   MOTOGP_RIDERS_2026,
+  WEC_DRIVERS_2026,
 } from '@/data/standings-2026';
 import type { DriverStanding, ConstructorStanding } from '@/data/standings-2026';
 
-type StandingsTab = 'f1-drivers' | 'f1-constructors' | 'motogp';
+type StandingsTab = 'f1-drivers' | 'f1-constructors' | 'motogp' | 'wec';
 
 const TABS: { id: StandingsTab; label: string; accent: string }[] = [
   { id: 'f1-drivers', label: 'F1 Drivers', accent: '#E10600' },
   { id: 'f1-constructors', label: 'F1 Teams', accent: '#E10600' },
   { id: 'motogp', label: 'MotoGP', accent: '#BE0A14' },
+  { id: 'wec', label: 'WEC', accent: '#0090D4' },
 ];
 
 function DriverRow({ d, maxPts }: { d: DriverStanding; maxPts: number }) {
@@ -188,6 +190,16 @@ export default function StandingsPanel() {
                     ))}
                     <p className="text-[9px] mt-3 text-right" style={{ color: 'var(--pw-text-tertiary)' }}>
                       After Round 6 · Catalan GP
+                    </p>
+                  </div>
+                )}
+                {activeTab === 'wec' && (
+                  <div className="space-y-0">
+                    {WEC_DRIVERS_2026.map((d, i) => (
+                      <DriverRow key={`${d.pos}-${d.name}`} d={{ ...d, pos: i + 1 }} maxPts={WEC_DRIVERS_2026[0].points} />
+                    ))}
+                    <p className="text-[9px] mt-3 text-right" style={{ color: 'var(--pw-text-tertiary)' }}>
+                      After Round 2 · 6H Spa-Francorchamps
                     </p>
                   </div>
                 )}

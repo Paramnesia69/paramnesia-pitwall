@@ -48,6 +48,20 @@ export const F1_CONSTRUCTORS_2026: ConstructorStanding[] = [
   { pos: 11, name: 'Aston Martin', points: 0, color: '#358C75' },
 ];
 
+// ─── WEC 2026 Hypercar Drivers Championship (after R2 · Spa) ─
+export const WEC_DRIVERS_2026: DriverStanding[] = [
+  { pos: 1, name: 'R. Frijns', team: 'BMW M WRT', points: 35, teamColor: '#1E88E5' },
+  { pos: 1, name: 'R. Rast', team: 'BMW M WRT', points: 35, teamColor: '#1E88E5' },
+  { pos: 3, name: 'S. Buemi', team: 'Toyota', points: 26, teamColor: '#EB0A1E' },
+  { pos: 3, name: 'B. Hartley', team: 'Toyota', points: 26, teamColor: '#EB0A1E' },
+  { pos: 3, name: 'R. Hirakawa', team: 'Toyota', points: 26, teamColor: '#EB0A1E' },
+  { pos: 6, name: 'S. van der Linde', team: 'BMW M WRT', points: 22, teamColor: '#1E88E5' },
+  { pos: 7, name: 'K. Estre', team: 'Porsche Penske', points: 19, teamColor: '#C0A062' },
+  { pos: 7, name: 'M. Christensen', team: 'Porsche Penske', points: 19, teamColor: '#C0A062' },
+  { pos: 9, name: 'A. Fuoco', team: 'Ferrari AF Corse', points: 15, teamColor: '#E8002D' },
+  { pos: 10, name: 'M. Molina', team: 'Ferrari AF Corse', points: 15, teamColor: '#E8002D' },
+];
+
 // ─── MotoGP 2026 Riders Championship (after R6 · Catalan GP) ─
 export const MOTOGP_RIDERS_2026: DriverStanding[] = [
   { pos: 1, name: 'M. Bezzecchi', team: 'Aprilia', points: 142, teamColor: '#41434C' },
