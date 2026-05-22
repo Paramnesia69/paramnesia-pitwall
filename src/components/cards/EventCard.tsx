@@ -104,6 +104,29 @@ export default function EventCard({ event }: EventCardProps) {
           >
             Details
           </button>
+          {event.streamLinks.length > 0 && (() => {
+            const primary = event.streamLinks.find((l) => l.type === 'official') ?? event.streamLinks[0];
+            return (
+              <a
+                href={primary.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full transition-all duration-200 hover:scale-[1.05]"
+                style={{
+                  background: `${meta.accent}15`,
+                  border: `1px solid ${meta.accent}30`,
+                  color: meta.accent,
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
+                  <path d="M10 8l6 4-6 4V8z" />
+                </svg>
+                Watch
+              </a>
+            );
+          })()}
           <div className="flex-1" />
           <FavoriteButton series={event.series} accentColor={meta.accent} />
         </div>

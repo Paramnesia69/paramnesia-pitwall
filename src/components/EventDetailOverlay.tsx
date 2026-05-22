@@ -199,7 +199,7 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
                 </div>
               </div>
 
-              {/* Stream links placeholder */}
+              {/* Watch / stream links */}
               {event.streamLinks.length > 0 && (
                 <div className="mb-6">
                   <h4 className="text-[10px] uppercase tracking-widest mb-3" style={{ color: 'var(--pw-text-tertiary)' }}>
@@ -212,13 +212,44 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs px-4 py-2 rounded-full transition-all hover:bg-white/10"
+                        className="flex items-center gap-1.5 text-xs px-3.5 py-2 rounded-full transition-all duration-200 hover:scale-[1.03]"
                         style={{
-                          background: 'var(--pw-glass-bg)',
-                          border: '1px solid var(--pw-glass-border)',
-                          color: 'var(--pw-text-secondary)',
+                          background: link.type === 'official'
+                            ? `${SERIES_META[event.series].accent}12`
+                            : link.type === 'youtube'
+                            ? 'rgba(255,0,0,0.08)'
+                            : 'var(--pw-glass-bg)',
+                          border: `1px solid ${
+                            link.type === 'official'
+                              ? `${SERIES_META[event.series].accent}30`
+                              : link.type === 'youtube'
+                              ? 'rgba(255,0,0,0.2)'
+                              : 'var(--pw-glass-border)'
+                          }`,
+                          color: link.type === 'official'
+                            ? SERIES_META[event.series].accent
+                            : link.type === 'youtube'
+                            ? '#FF4444'
+                            : 'var(--pw-text-secondary)',
                         }}
                       >
+                        {link.type === 'youtube' && (
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.38.56A3.02 3.02 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.12 2.14c1.88.56 9.38.56 9.38.56s7.5 0 9.38-.56a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z" />
+                          </svg>
+                        )}
+                        {link.type === 'official' && (
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
+                            <path d="M10 8l6 4-6 4V8z" />
+                          </svg>
+                        )}
+                        {link.type === 'broadcast' && (
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="2" y="7" width="20" height="15" rx="2" ry="2" />
+                            <polyline points="17 2 12 7 7 2" />
+                          </svg>
+                        )}
                         {link.label}
                       </a>
                     ))}

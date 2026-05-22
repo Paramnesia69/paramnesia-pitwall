@@ -1,4 +1,5 @@
 import type { NormalizedRaceEvent, SeriesId } from '@/types';
+import { getStreamLinks } from '@/lib/streamLinks';
 
 type CalendarEntry = Omit<NormalizedRaceEvent, 'weather'>;
 
@@ -20,7 +21,7 @@ function evt(
     endDate,
     sessions,
     state: 'upcoming',
-    streamLinks: [],
+    streamLinks: getStreamLinks(series, name),
     source: { provider: 'static-calendar', reliability: 'community', lastUpdated: '2026-05-22' },
   };
 }
