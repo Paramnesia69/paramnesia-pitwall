@@ -12,10 +12,12 @@ import ThisWeekend from '@/components/ThisWeekend';
 import UpcomingTimeline from '@/components/UpcomingTimeline';
 import EventDetailOverlay from '@/components/EventDetailOverlay';
 import StandingsPanel from '@/components/StandingsPanel';
+import NewsFeed from '@/components/NewsFeed';
 import ShareButton from '@/components/ui/ShareButton';
 import FadeIn from '@/components/motion/FadeIn';
 import { StaggerGrid, StaggerItem } from '@/components/motion/StaggerGrid';
 import { useServiceWorker } from '@/lib/useSW';
+import type { NormalizedNewsItem } from '@/types';
 
 const ALL_SERIES: SeriesId[] = [
   'f1', 'wec', 'imsa', 'motogp', 'wrc', 'gtwce', 'elms', 'dtm', 'nurburgring', 'porsche-supercup',
@@ -24,9 +26,10 @@ const ALL_SERIES: SeriesId[] = [
 interface DashboardProps {
   featured: NormalizedRaceEvent | null;
   upcoming: NormalizedRaceEvent[];
+  news: NormalizedNewsItem[];
 }
 
-export default function Dashboard({ featured, upcoming }: DashboardProps) {
+export default function Dashboard({ featured, upcoming, news }: DashboardProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -131,6 +134,9 @@ export default function Dashboard({ featured, upcoming }: DashboardProps) {
 
       {/* ── Championship Standings ─────────────── */}
       {activeFilter === 'all' && <StandingsPanel />}
+
+      {/* ── Latest News ─────────────────────── */}
+      {news.length > 0 && <NewsFeed items={news} activeFilter={activeFilter} />}
 
       {/* ── Event Cards Grid ─────────────────── */}
       <FadeIn delay={0.1}>

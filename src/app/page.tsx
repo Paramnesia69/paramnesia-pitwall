@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { getUpcomingEvents, getFeaturedEvent } from '@/lib/events';
+import { NEWS_ITEMS } from '@/data/news-2026';
 import Dashboard from '@/components/Dashboard';
 
 export default function Home() {
@@ -8,7 +9,7 @@ export default function Home() {
 
   return (
     <Suspense>
-      <Dashboard featured={featured} upcoming={upcoming} />
+      <Dashboard featured={featured} upcoming={upcoming} news={NEWS_ITEMS} />
     </Suspense>
   );
 }
