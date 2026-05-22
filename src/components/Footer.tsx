@@ -63,7 +63,7 @@ export default function Footer() {
             href="https://github.com/Paramnesia69/paramnesia-pitwall"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-[10px] transition-colors hover:text-white"
+            className="flex items-center gap-1.5 text-[10px] transition-colors"
             style={{ color: 'var(--pw-text-tertiary)' }}
           >
             <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">

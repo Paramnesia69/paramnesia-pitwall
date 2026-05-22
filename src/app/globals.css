@@ -80,6 +80,39 @@
   --font-mono: var(--pw-font-mono);
 }
 
+/* ── Light Theme ──────────────────────────────────────── */
+
+[data-theme='light'] {
+  --pw-bg-primary: #F2F2F7;
+  --pw-bg-elevated: #FFFFFF;
+  --pw-bg-card: rgba(255, 255, 255, 0.8);
+
+  --pw-glass-bg: rgba(0, 0, 0, 0.03);
+  --pw-glass-border: rgba(0, 0, 0, 0.08);
+  --pw-glass-hover-border: rgba(0, 0, 0, 0.15);
+
+  --pw-text-primary: #1A1A2E;
+  --pw-text-secondary: rgba(26, 26, 46, 0.65);
+  --pw-text-tertiary: rgba(26, 26, 46, 0.4);
+
+  --pw-shadow-card: 0 2px 12px rgba(0, 0, 0, 0.06), 0 0 0 1px var(--pw-glass-border);
+  --pw-shadow-card-hover: 0 4px 20px rgba(0, 0, 0, 0.1), 0 0 0 1px var(--pw-glass-hover-border);
+  --pw-shadow-glow: 0 0 20px rgba(225, 6, 0, 0.12);
+}
+
+[data-theme='light'] .pw-ambient-orb {
+  opacity: 0.06;
+}
+
+[data-theme='light'] ::selection {
+  background: rgba(225, 6, 0, 0.15);
+  color: #1A1A2E;
+}
+
+[data-theme='light'] * {
+  scrollbar-color: rgba(0,0,0,0.15) transparent;
+}
+
 /* ── Base Reset ────────────────────────────────────────── */
 
 * {

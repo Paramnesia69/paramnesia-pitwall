@@ -89,7 +89,7 @@ function NewsItem({ item, index }: { item: NormalizedNewsItem; index: number }) 
 
       {/* Title */}
       <h4
-        className="text-sm font-semibold leading-snug mb-1.5 group-hover:text-white transition-colors"
+        className="text-sm font-semibold leading-snug mb-1.5 transition-colors"
         style={{ color: 'var(--pw-text-primary)' }}
       >
         {item.title}

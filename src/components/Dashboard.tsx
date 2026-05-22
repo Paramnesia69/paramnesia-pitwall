@@ -16,6 +16,7 @@ import NewsFeed from '@/components/NewsFeed';
 import RecentResults from '@/components/RecentResults';
 import Footer from '@/components/Footer';
 import ShareButton from '@/components/ui/ShareButton';
+import ThemeToggle from '@/components/ui/ThemeToggle';
 import FadeIn from '@/components/motion/FadeIn';
 import { StaggerGrid, StaggerItem } from '@/components/motion/StaggerGrid';
 import { useServiceWorker } from '@/lib/useSW';
@@ -85,6 +86,7 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
           </div>
           <div className="flex items-center gap-3 text-sm" style={{ color: 'var(--pw-text-secondary)' }}>
             <span className="hidden sm:inline tracking-widest text-xs uppercase">Motorsport Command Center</span>
+            <ThemeToggle />
             <ShareButton />
           </div>
         </header>
