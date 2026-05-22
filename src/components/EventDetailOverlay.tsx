@@ -131,6 +131,25 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
                 )}
               </div>
 
+              {/* Override note */}
+              {event.overrides?.note && (
+                <div
+                  className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-wider px-3 py-2 rounded mb-3"
+                  style={{
+                    background: event.state === 'delayed' ? '#FFB80015' : event.state === 'cancelled' ? '#E1060015' : `${SERIES_META[event.series].accent}10`,
+                    border: `1px solid ${event.state === 'delayed' ? '#FFB80030' : event.state === 'cancelled' ? '#E1060030' : `${SERIES_META[event.series].accent}20`}`,
+                    color: event.state === 'delayed' ? '#FFB800' : event.state === 'cancelled' ? '#E10600' : SERIES_META[event.series].accent,
+                  }}
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                  </svg>
+                  {event.overrides.note}
+                </div>
+              )}
+
               {/* Title */}
               <h2 className="text-2xl font-bold tracking-tight mb-1">{event.name}</h2>
               <p className="text-sm mb-1" style={{ color: 'var(--pw-text-secondary)' }}>

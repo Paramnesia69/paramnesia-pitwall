@@ -1,6 +1,7 @@
 import { CALENDAR_2026 } from '@/data/calendar-2026';
 import type { NormalizedRaceEvent, EventState } from '@/types';
 import { getSimulatedWeather } from '@/lib/weather';
+import { applyOverrides, getForcedFeaturedId } from '@/lib/overrides';
 
 function computeState(event: { startDate: string; endDate: string; sessions: { startTime: string; endTime?: string }[] }): EventState {
   const now = new Date();
@@ -39,7 +40,7 @@ export function getEventsWithState(): NormalizedRaceEvent[] {
     });
     // Attach weather — simulated until OpenWeatherMap key is configured
     const weather = getSimulatedWeather(evt.circuit.lat, evt.circuit.lng, evt.startDate);
-    return { ...evt, state, sessions, weather };
+    return applyOverrides({ ...evt, state, sessions, weather });
   });
 }
 
@@ -52,6 +53,14 @@ export function getUpcomingEvents(limit?: number): NormalizedRaceEvent[] {
 
 export function getFeaturedEvent(): NormalizedRaceEvent | undefined {
   const events = getEventsWithState();
+
+  // Check for manually forced featured event via overrides.json
+  const forcedId = getForcedFeaturedId();
+  if (forcedId) {
+    const forced = events.find((e) => e.id === forcedId);
+    if (forced) return forced;
+  }
+
   const live = events.find((e) => e.state === 'live');
   if (live) return live;
   const startingSoon = events

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PITWALL Event Overrides",
+  "description": "Manual overrides for motorsport event data. Keys are event IDs.",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "_README": { "type": "string" }
+  },
+  "additionalProperties": {
+    "type": "object",
+    "properties": {
+      "streamLinks": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "label": { "type": "string" },
+            "url": { "type": "string", "format": "uri" },
+            "type": { "type": "string", "enum": ["youtube", "official", "broadcast", "other"] }
+          },
+          "required": ["label", "url", "type"]
+        }
+      },
+      "imageUrl": { "type": "string", "format": "uri" },
+      "description": { "type": "string" },
+      "startTime": { "type": "string", "format": "date-time" },
+      "featured": { "type": "boolean" },
+      "state": { "type": "string", "enum": ["upcoming", "starting_soon", "live", "finished", "delayed", "cancelled"] },
+      "note": { "type": "string" },
+      "sessionOverrides": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "object",
+          "properties": {
+            "startTime": { "type": "string", "format": "date-time" },
+            "endTime": { "type": "string", "format": "date-time" },
+            "state": { "type": "string", "enum": ["upcoming", "starting_soon", "live", "finished", "delayed", "cancelled"] },
+            "note": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

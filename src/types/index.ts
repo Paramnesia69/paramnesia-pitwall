@@ -60,11 +60,22 @@ export interface RaceSession {
 }
 
 export interface ManualOverride {
+  /** Override or add stream/watch links */
   streamLinks?: StreamLink[];
+  /** Override the event hero image */
   imageUrl?: string;
+  /** Override the event description */
   description?: string;
+  /** Override the event start time (ISO 8601) */
   startTime?: string;
+  /** Force this event as the featured hero card */
   featured?: boolean;
+  /** Force event state (e.g. 'delayed', 'cancelled') */
+  state?: EventState;
+  /** Admin notes — displayed as a banner on the event card */
+  note?: string;
+  /** Override session times: keyed by session name (e.g. "Race", "Qualifying") */
+  sessionOverrides?: Record<string, { startTime?: string; endTime?: string; state?: EventState; note?: string }>;
 }
 
 export interface DataSource {

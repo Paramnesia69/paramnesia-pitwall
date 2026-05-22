@@ -1,0 +1,12 @@
+{
+  "$schema": "./overrides-schema.json",
+  "_README": "Manual overrides for PARAMNESIA PITWALL event data. Edit this file to fix times, add links, mark delays, etc. Keys are event IDs (format: {series}-{startDate}-{slug}). Rebuild & deploy after changes.",
+
+  "f1-2026-05-22-canadian-grand-prix": {
+    "note": "Sprint weekend format",
+    "streamLinks": [
+      { "label": "F1 TV Pro", "url": "https://f1tv.formula1.com", "type": "official" },
+      { "label": "Sky Sports F1", "url": "https://www.skysports.com/f1", "type": "broadcast" }
+    ]
+  }
+}

@@ -89,6 +89,28 @@ export default function HeroCard({ event }: HeroCardProps) {
           </span>
         </motion.div>
 
+        {/* Override note banner */}
+        {event.overrides?.note && (
+          <motion.div
+            className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider px-3 py-2 rounded mb-3 w-fit"
+            style={{
+              background: event.state === 'delayed' ? '#FFB80015' : event.state === 'cancelled' ? '#E1060015' : `${meta.accent}10`,
+              border: `1px solid ${event.state === 'delayed' ? '#FFB80030' : event.state === 'cancelled' ? '#E1060030' : `${meta.accent}20`}`,
+              color: event.state === 'delayed' ? '#FFB800' : event.state === 'cancelled' ? '#E10600' : meta.accent,
+            }}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.18 }}
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            {event.overrides.note}
+          </motion.div>
+        )}
+
         {/* Event title */}
         <motion.h2
           className="text-3xl sm:text-5xl font-bold mb-2 tracking-tight"
