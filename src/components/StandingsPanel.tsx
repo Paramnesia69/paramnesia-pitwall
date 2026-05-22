@@ -7,16 +7,22 @@ import {
   F1_CONSTRUCTORS_2026,
   MOTOGP_RIDERS_2026,
   WEC_DRIVERS_2026,
+  WRC_DRIVERS_2026,
+  IMSA_GTP_DRIVERS_2026,
+  DTM_DRIVERS_2026,
 } from '@/data/standings-2026';
 import type { DriverStanding, ConstructorStanding } from '@/data/standings-2026';
 
-type StandingsTab = 'f1-drivers' | 'f1-constructors' | 'motogp' | 'wec';
+type StandingsTab = 'f1-drivers' | 'f1-constructors' | 'motogp' | 'wec' | 'wrc' | 'imsa' | 'dtm';
 
 const TABS: { id: StandingsTab; label: string; accent: string }[] = [
   { id: 'f1-drivers', label: 'F1 Drivers', accent: '#E10600' },
   { id: 'f1-constructors', label: 'F1 Teams', accent: '#E10600' },
   { id: 'motogp', label: 'MotoGP', accent: '#BE0A14' },
   { id: 'wec', label: 'WEC', accent: '#0090D4' },
+  { id: 'wrc', label: 'WRC', accent: '#003082' },
+  { id: 'imsa', label: 'IMSA', accent: '#C0A062' },
+  { id: 'dtm', label: 'DTM', accent: '#1E88E5' },
 ];
 
 function DriverRow({ d, maxPts }: { d: DriverStanding; maxPts: number }) {
@@ -30,7 +36,7 @@ function DriverRow({ d, maxPts }: { d: DriverStanding; maxPts: number }) {
     >
       <span
         className="w-5 text-[11px] font-bold tabular-nums text-right shrink-0"
-        style={{ color: d.pos <= 3 ? '#fff' : 'var(--pw-text-tertiary)' }}
+        style={{ color: d.pos <= 3 ? 'var(--pw-text-primary)' : 'var(--pw-text-tertiary)' }}
       >
         {d.pos}
       </span>
@@ -68,7 +74,7 @@ function ConstructorRow({ c, maxPts }: { c: ConstructorStanding; maxPts: number 
     >
       <span
         className="w-5 text-[11px] font-bold tabular-nums text-right shrink-0"
-        style={{ color: c.pos <= 3 ? '#fff' : 'var(--pw-text-tertiary)' }}
+        style={{ color: c.pos <= 3 ? 'var(--pw-text-primary)' : 'var(--pw-text-tertiary)' }}
       >
         {c.pos}
       </span>
@@ -137,12 +143,12 @@ export default function StandingsPanel() {
             transition={{ type: 'spring', stiffness: 200, damping: 25 }}
           >
             {/* Tab selector */}
-            <div className="flex gap-1 mb-4 p-1 rounded-lg" style={{ background: 'rgba(255,255,255,0.03)' }}>
+            <div className="flex gap-1 mb-4 p-1 rounded-lg overflow-x-auto" style={{ background: 'rgba(255,255,255,0.03)' }}>
               {TABS.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className="flex-1 text-[11px] font-medium py-1.5 rounded-md transition-all duration-200"
+                  className="text-[11px] font-medium py-1.5 px-3 rounded-md transition-all duration-200 whitespace-nowrap shrink-0"
                   style={{
                     background: activeTab === tab.id ? `${tab.accent}20` : 'transparent',
                     color: activeTab === tab.id ? tab.accent : 'var(--pw-text-tertiary)',
@@ -200,6 +206,36 @@ export default function StandingsPanel() {
                     ))}
                     <p className="text-[9px] mt-3 text-right" style={{ color: 'var(--pw-text-tertiary)' }}>
                       After Round 2 · 6H Spa-Francorchamps
+                    </p>
+                  </div>
+                )}
+                {activeTab === 'wrc' && (
+                  <div className="space-y-0">
+                    {WRC_DRIVERS_2026.map((d) => (
+                      <DriverRow key={d.pos} d={d} maxPts={WRC_DRIVERS_2026[0].points} />
+                    ))}
+                    <p className="text-[9px] mt-3 text-right" style={{ color: 'var(--pw-text-tertiary)' }}>
+                      After Round 6 · Rally of Portugal
+                    </p>
+                  </div>
+                )}
+                {activeTab === 'imsa' && (
+                  <div className="space-y-0">
+                    {IMSA_GTP_DRIVERS_2026.map((d, i) => (
+                      <DriverRow key={`${d.pos}-${d.name}`} d={{ ...d, pos: i + 1 }} maxPts={IMSA_GTP_DRIVERS_2026[0].points} />
+                    ))}
+                    <p className="text-[9px] mt-3 text-right" style={{ color: 'var(--pw-text-tertiary)' }}>
+                      GTP Class · After Round 4 · Laguna Seca
+                    </p>
+                  </div>
+                )}
+                {activeTab === 'dtm' && (
+                  <div className="space-y-0">
+                    {DTM_DRIVERS_2026.map((d, i) => (
+                      <DriverRow key={`${d.pos}-${d.name}`} d={{ ...d, pos: i + 1 }} maxPts={DTM_DRIVERS_2026[0].points} />
+                    ))}
+                    <p className="text-[9px] mt-3 text-right" style={{ color: 'var(--pw-text-tertiary)' }}>
+                      After Round 1 · Red Bull Ring
                     </p>
                   </div>
                 )}
