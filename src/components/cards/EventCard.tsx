@@ -9,6 +9,7 @@ import TiltCard from './TiltCard';
 import Countdown from '@/components/ui/Countdown';
 import FavoriteButton from '@/components/ui/FavoriteButton';
 import { WeatherBadgeCompact } from '@/components/ui/WeatherBadge';
+import ReminderButton from '@/components/ui/ReminderButton';
 
 interface EventCardProps {
   event: NormalizedRaceEvent;
@@ -108,6 +109,15 @@ export default function EventCard({ event }: EventCardProps) {
                 {s.state === 'live' && <span className="pw-live-dot" style={{ width: 5, height: 5 }} />}
                 <span style={{ color: s.state === 'live' ? '#E10600' : undefined }}>{s.name}</span>
                 <span>{formatTimeISR(s.startTime)}</span>
+                {s.state !== 'live' && (
+                  <ReminderButton
+                    eventId={event.id}
+                    eventName={event.name}
+                    sessionName={s.name}
+                    sessionStart={s.startTime}
+                    accentColor={meta.accent}
+                  />
+                )}
               </span>
             ))}
           </div>

@@ -21,6 +21,7 @@ import FadeIn from '@/components/motion/FadeIn';
 import { StaggerGrid, StaggerItem } from '@/components/motion/StaggerGrid';
 import { useServiceWorker } from '@/lib/useSW';
 import { useLiveData } from '@/lib/useLiveData';
+import { useReminderScheduler } from '@/lib/useReminders';
 import InstallPrompt from '@/components/ui/InstallPrompt';
 import UpdateBanner from '@/components/ui/UpdateBanner';
 import LiveIndicator from '@/components/ui/LiveIndicator';
@@ -52,6 +53,9 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
 
   // Live polling — replaces SSR props with fresh API data every 2 min
   const live = useLiveData(upcoming, featured);
+
+  // Schedule browser notifications for active reminders
+  useReminderScheduler();
   const liveUpcoming = live.events;
   const liveFeatured = live.featured;
 

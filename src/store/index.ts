@@ -6,6 +6,22 @@ import type { SeriesId } from '@/types';
 
 export type Theme = 'dark' | 'light';
 
+export interface Reminder {
+  /** Unique key: eventId::sessionName */
+  id: string;
+  eventId: string;
+  eventName: string;
+  sessionName: string;
+  /** When the session starts (ISO 8601) */
+  sessionStart: string;
+  /** Minutes before session to fire notification */
+  leadMinutes: number;
+  /** When the notification should fire (ISO 8601) */
+  remindAt: string;
+  /** Whether it has already fired */
+  fired: boolean;
+}
+
 interface PitwallStore {
   favorites: SeriesId[];
   toggleFavorite: (series: SeriesId) => void;
@@ -17,6 +33,13 @@ interface PitwallStore {
 
   theme: Theme;
   toggleTheme: () => void;
+
+  reminders: Reminder[];
+  addReminder: (reminder: Omit<Reminder, 'id' | 'remindAt' | 'fired'>) => void;
+  removeReminder: (id: string) => void;
+  markFired: (id: string) => void;
+  getReminder: (eventId: string, sessionName: string) => Reminder | undefined;
+  clearExpiredReminders: () => void;
 }
 
 export const useStore = create<PitwallStore>()(
@@ -44,10 +67,46 @@ export const useStore = create<PitwallStore>()(
           }
           return { theme: next };
         }),
+
+      reminders: [],
+      addReminder: (r) =>
+        set((state) => {
+          const id = `${r.eventId}::${r.sessionName}`;
+          const remindAt = new Date(
+            new Date(r.sessionStart).getTime() - r.leadMinutes * 60 * 1000,
+          ).toISOString();
+          // Remove existing reminder for same session if any
+          const filtered = state.reminders.filter((rem) => rem.id !== id);
+          return {
+            reminders: [...filtered, { ...r, id, remindAt, fired: false }],
+          };
+        }),
+      removeReminder: (id) =>
+        set((state) => ({
+          reminders: state.reminders.filter((r) => r.id !== id),
+        })),
+      markFired: (id) =>
+        set((state) => ({
+          reminders: state.reminders.map((r) =>
+            r.id === id ? { ...r, fired: true } : r,
+          ),
+        })),
+      getReminder: (eventId, sessionName) =>
+        get().reminders.find((r) => r.eventId === eventId && r.sessionName === sessionName),
+      clearExpiredReminders: () =>
+        set((state) => ({
+          reminders: state.reminders.filter(
+            (r) => new Date(r.sessionStart).getTime() > Date.now() - 3600_000,
+          ),
+        })),
     }),
     {
       name: 'pitwall-store',
-      partialize: (state) => ({ favorites: state.favorites, theme: state.theme }),
+      partialize: (state) => ({
+        favorites: state.favorites,
+        theme: state.theme,
+        reminders: state.reminders,
+      }),
     },
   ),
 );

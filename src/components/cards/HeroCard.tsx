@@ -8,6 +8,7 @@ import { formatDateISR, formatTimeISR } from '@/lib/events';
 import { getCircuitImage } from '@/lib/images';
 import Countdown from '@/components/ui/Countdown';
 import { WeatherBadgeCompact } from '@/components/ui/WeatherBadge';
+import ReminderButton from '@/components/ui/ReminderButton';
 
 interface HeroCardProps {
   event: NormalizedRaceEvent;
@@ -176,6 +177,15 @@ export default function HeroCard({ event }: HeroCardProps) {
                 {s.state === 'live' && <span className="pw-live-dot" style={{ width: 5, height: 5 }} />}
                 <span>{s.name}</span>
                 <span className="font-mono">{formatTimeISR(s.startTime)}</span>
+                {s.state !== 'finished' && s.state !== 'live' && (
+                  <ReminderButton
+                    eventId={event.id}
+                    eventName={event.name}
+                    sessionName={s.name}
+                    sessionStart={s.startTime}
+                    accentColor={meta.accent}
+                  />
+                )}
               </div>
             ))}
           </motion.div>
