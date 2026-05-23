@@ -91,9 +91,8 @@ async function fireNotification(eventName: string, sessionName: string, leadMinu
         icon: '/icon-192.png',
         badge: '/icon-192.png',
         tag: `reminder-${eventName}-${sessionName}`,
-        vibrate: [200, 100, 200],
         data: { url: '/' },
-      });
+      } as NotificationOptions);
       return;
     }
   } catch {

@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import Image from 'next/image';
 import type { NormalizedRaceEvent } from '@/types';
 import { SERIES_META } from '@/types';
@@ -34,7 +35,7 @@ function StateBadge({ state }: { state: string }) {
   return null;
 }
 
-export default function EventCard({ event }: EventCardProps) {
+export default memo(function EventCard({ event }: EventCardProps) {
   const meta = SERIES_META[event.series];
   const openEvent = useStore((s) => s.openEvent);
   const nextSession = event.sessions.find((s) => s.state !== 'finished');
@@ -164,4 +165,4 @@ export default function EventCard({ event }: EventCardProps) {
       </TiltCard>
     </div>
   );
-}
+})

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams, useRouter } from 'next/navigation';
 import type { NormalizedRaceEvent, SeriesId } from '@/types';
@@ -9,13 +9,8 @@ import { getThisWeekendEvents } from '@/lib/weekend';
 import HeroCard from '@/components/cards/HeroCard';
 import EventCard from '@/components/cards/EventCard';
 import ThisWeekend from '@/components/ThisWeekend';
-import UpcomingTimeline from '@/components/UpcomingTimeline';
-import EventDetailOverlay from '@/components/EventDetailOverlay';
-import StandingsPanel from '@/components/StandingsPanel';
-import NewsFeed from '@/components/NewsFeed';
-import RecentResults from '@/components/RecentResults';
-import Footer from '@/components/Footer';
 import ShareButton from '@/components/ui/ShareButton';
+import { useStore } from '@/store';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 import FadeIn from '@/components/motion/FadeIn';
 import { StaggerGrid, StaggerItem } from '@/components/motion/StaggerGrid';
@@ -26,6 +21,14 @@ import InstallPrompt from '@/components/ui/InstallPrompt';
 import UpdateBanner from '@/components/ui/UpdateBanner';
 import LiveIndicator from '@/components/ui/LiveIndicator';
 import type { NormalizedNewsItem } from '@/types';
+
+/* ── Lazy-loaded below-fold components ──────────── */
+const StandingsPanel = lazy(() => import('@/components/StandingsPanel'));
+const RecentResults = lazy(() => import('@/components/RecentResults'));
+const NewsFeed = lazy(() => import('@/components/NewsFeed'));
+const UpcomingTimeline = lazy(() => import('@/components/UpcomingTimeline'));
+const EventDetailOverlay = lazy(() => import('@/components/EventDetailOverlay'));
+const Footer = lazy(() => import('@/components/Footer'));
 
 const ALL_SERIES: SeriesId[] = [
   'f1', 'wec', 'imsa', 'motogp', 'wrc', 'gtwce', 'elms', 'dtm', 'nurburgring', 'porsche-supercup',
@@ -58,6 +61,17 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
   useReminderScheduler();
   const liveUpcoming = live.events;
   const liveFeatured = live.featured;
+
+  // Deep link: auto-open event overlay from ?event= URL param
+  const openEvent = useStore((s) => s.openEvent);
+  useEffect(() => {
+    const eventParam = searchParams.get('event');
+    if (eventParam && liveUpcoming.some((e) => e.id === eventParam)) {
+      openEvent(eventParam);
+    }
+    // Only run once on mount + when events load
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [liveUpcoming.length]);
 
   // Sync filter → URL (without full navigation)
   const updateFilter = useCallback((filter: SeriesId | 'all') => {
@@ -156,13 +170,23 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
       )}
 
       {/* ── Championship Standings ─────────────── */}
-      {activeFilter === 'all' && <StandingsPanel />}
+      {activeFilter === 'all' && (
+        <Suspense>
+          <StandingsPanel />
+        </Suspense>
+      )}
 
       {/* ── Recent Results ──────────────────── */}
-      <RecentResults activeFilter={activeFilter} />
+      <Suspense>
+        <RecentResults activeFilter={activeFilter} />
+      </Suspense>
 
       {/* ── Latest News ─────────────────────── */}
-      {news.length > 0 && <NewsFeed items={news} activeFilter={activeFilter} />}
+      {news.length > 0 && (
+        <Suspense>
+          <NewsFeed items={news} activeFilter={activeFilter} />
+        </Suspense>
+      )}
 
       {/* ── Event Cards Grid ─────────────────── */}
       <FadeIn delay={0.1}>
@@ -206,12 +230,18 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
 
       {/* ── Upcoming Timeline ────────────────── */}
       {timelineEvents.length > 0 && (
-        <UpcomingTimeline events={timelineEvents} />
+        <Suspense>
+          <UpcomingTimeline events={timelineEvents} />
+        </Suspense>
       )}
 
-      <EventDetailOverlay events={liveUpcoming} />
+      <Suspense>
+        <EventDetailOverlay events={liveUpcoming} />
+      </Suspense>
 
-      <Footer />
+      <Suspense>
+        <Footer />
+      </Suspense>
     </main>
     </>
   );

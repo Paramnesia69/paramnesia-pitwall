@@ -12,6 +12,7 @@ import { useStore } from '@/store';
 import Countdown from '@/components/ui/Countdown';
 import CircuitStatsPanel from '@/components/ui/CircuitStatsPanel';
 import WeatherBadge from '@/components/ui/WeatherBadge';
+import EventShareButton from '@/components/ui/EventShareButton';
 
 interface EventDetailOverlayProps {
   events: NormalizedRaceEvent[];
@@ -155,9 +156,17 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
               <p className="text-sm mb-1" style={{ color: 'var(--pw-text-secondary)' }}>
                 {event.circuit.name} — {event.circuit.country}
               </p>
-              <p className="text-xs font-mono mb-6" style={{ color: 'var(--pw-text-tertiary)' }}>
-                {formatDateISR(event.startDate)} – {formatDateISR(event.endDate)} · Israel Time
-              </p>
+              <div className="flex items-center justify-between mb-6">
+                <p className="text-xs font-mono" style={{ color: 'var(--pw-text-tertiary)' }}>
+                  {formatDateISR(event.startDate)} – {formatDateISR(event.endDate)} · Israel Time
+                </p>
+                <EventShareButton
+                  eventId={event.id}
+                  eventName={event.name}
+                  circuitName={event.circuit.name}
+                  accentColor={SERIES_META[event.series].accent}
+                />
+              </div>
 
               {/* Countdown to next session */}
               {(() => {

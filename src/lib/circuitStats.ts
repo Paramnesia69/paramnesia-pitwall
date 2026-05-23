@@ -1,9 +1,18 @@
+export interface LapRecord {
+  driver: string;
+  time: string;
+  year: number;
+}
+
 export interface CircuitStats {
   lengthKm: number;
   laps: number;
   turns: number;
   topSpeedKmph: number;
   elevationM: number;
+  drsZones?: number;
+  circuitType?: 'permanent' | 'street' | 'hybrid';
+  lapRecord?: LapRecord;
   image3d?: string;
 }
 
@@ -14,6 +23,9 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
     turns: 14,
     topSpeedKmph: 342.7,
     elevationM: 5.25,
+    drsZones: 3,
+    circuitType: 'hybrid',
+    lapRecord: { driver: 'V. Bottas', time: '1:13.078', year: 2019 },
     image3d: '/circuits/montreal.jpg',
   },
   'Circuit de Monaco': {
@@ -22,6 +34,9 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
     turns: 19,
     topSpeedKmph: 289.0,
     elevationM: 41.95,
+    drsZones: 1,
+    circuitType: 'street',
+    lapRecord: { driver: 'L. Hamilton', time: '1:12.909', year: 2021 },
     image3d: '/circuits/monaco.jpg',
   },
   'Circuit de Barcelona-Catalunya': {
@@ -30,6 +45,9 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
     turns: 14,
     topSpeedKmph: 307.2,
     elevationM: 29.63,
+    drsZones: 2,
+    circuitType: 'permanent',
+    lapRecord: { driver: 'M. Verstappen', time: '1:18.149', year: 2021 },
     image3d: '/circuits/barcelona.jpg',
   },
   'Red Bull Ring': {
@@ -38,6 +56,9 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
     turns: 10,
     topSpeedKmph: 324.7,
     elevationM: 65.0,
+    drsZones: 3,
+    circuitType: 'permanent',
+    lapRecord: { driver: 'C. Sainz', time: '1:05.619', year: 2020 },
     image3d: '/circuits/red-bull-ring.jpg',
   },
   'Silverstone Circuit': {
@@ -46,6 +67,9 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
     turns: 18,
     topSpeedKmph: 332.6,
     elevationM: 11.31,
+    drsZones: 2,
+    circuitType: 'permanent',
+    lapRecord: { driver: 'M. Verstappen', time: '1:27.097', year: 2020 },
     image3d: '/circuits/silverstone.jpg',
   },
   'Bahrain International Circuit': {
@@ -54,6 +78,9 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
     turns: 15,
     topSpeedKmph: 322.0,
     elevationM: 11.0,
+    drsZones: 3,
+    circuitType: 'permanent',
+    lapRecord: { driver: 'P. de la Rosa', time: '1:31.447', year: 2005 },
   },
   'Jeddah Corniche Circuit': {
     lengthKm: 6.174,
@@ -61,6 +88,8 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
     turns: 27,
     topSpeedKmph: 322.0,
     elevationM: 12.0,
+    drsZones: 3,
+    circuitType: 'street',
   },
   'Albert Park Circuit': {
     lengthKm: 5.278,
@@ -68,6 +97,9 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
     turns: 14,
     topSpeedKmph: 330.0,
     elevationM: 2.0,
+    drsZones: 4,
+    circuitType: 'hybrid',
+    lapRecord: { driver: 'C. Leclerc', time: '1:20.260', year: 2022 },
     image3d: '/circuits/albert-park.jpg',
   },
   'Suzuka International Racing Course': {
@@ -76,6 +108,9 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
     turns: 18,
     topSpeedKmph: 338.0,
     elevationM: 40.0,
+    drsZones: 2,
+    circuitType: 'permanent',
+    lapRecord: { driver: 'L. Hamilton', time: '1:30.983', year: 2019 },
     image3d: '/circuits/suzuka.jpg',
   },
   'Shanghai International Circuit': {
@@ -84,6 +119,9 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
     turns: 16,
     topSpeedKmph: 331.0,
     elevationM: 7.0,
+    drsZones: 3,
+    circuitType: 'permanent',
+    lapRecord: { driver: 'M. Schumacher', time: '1:32.238', year: 2004 },
     image3d: '/circuits/shanghai.jpg',
   },
   'Miami International Autodrome': {
@@ -92,6 +130,8 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
     turns: 19,
     topSpeedKmph: 338.0,
     elevationM: 2.0,
+    drsZones: 3,
+    circuitType: 'hybrid',
     image3d: '/circuits/miami.jpg',
   },
   'Circuit de Spa-Francorchamps': {
@@ -100,6 +140,9 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
     turns: 19,
     topSpeedKmph: 345.0,
     elevationM: 104.0,
+    drsZones: 2,
+    circuitType: 'permanent',
+    lapRecord: { driver: 'V. Bottas', time: '1:46.286', year: 2018 },
     image3d: '/circuits/spa.jpg',
   },
   'Circuit Zandvoort': {
@@ -108,6 +151,8 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
     turns: 14,
     topSpeedKmph: 314.0,
     elevationM: 9.0,
+    drsZones: 2,
+    circuitType: 'permanent',
     image3d: '/circuits/zandvoort.jpg',
   },
   'Autodromo Nazionale Monza': {
@@ -116,6 +161,9 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
     turns: 11,
     topSpeedKmph: 362.0,
     elevationM: 11.0,
+    drsZones: 2,
+    circuitType: 'permanent',
+    lapRecord: { driver: 'R. Barrichello', time: '1:21.046', year: 2004 },
     image3d: '/circuits/monza.jpg',
   },
   'Marina Bay Street Circuit': {
@@ -124,6 +172,8 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
     turns: 19,
     topSpeedKmph: 322.0,
     elevationM: 5.0,
+    drsZones: 3,
+    circuitType: 'street',
     image3d: '/circuits/singapore.jpg',
   },
   'Hungaroring': {
@@ -132,6 +182,9 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
     turns: 14,
     topSpeedKmph: 315.0,
     elevationM: 36.0,
+    drsZones: 2,
+    circuitType: 'permanent',
+    lapRecord: { driver: 'L. Hamilton', time: '1:16.627', year: 2020 },
     image3d: '/circuits/hungaroring.jpg',
   },
   'Baku City Circuit': {
@@ -140,6 +193,9 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
     turns: 20,
     topSpeedKmph: 348.0,
     elevationM: 12.0,
+    drsZones: 2,
+    circuitType: 'street',
+    lapRecord: { driver: 'C. Leclerc', time: '1:43.009', year: 2019 },
     image3d: '/circuits/baku.jpg',
   },
   'Circuit de la Sarthe': {
@@ -148,6 +204,7 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
     turns: 38,
     topSpeedKmph: 370.0,
     elevationM: 31.0,
+    circuitType: 'hybrid',
   },
   'Interlagos': {
     lengthKm: 4.309,
@@ -155,6 +212,9 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
     turns: 15,
     topSpeedKmph: 335.0,
     elevationM: 40.0,
+    drsZones: 2,
+    circuitType: 'permanent',
+    lapRecord: { driver: 'V. Bottas', time: '1:10.540', year: 2018 },
     image3d: '/circuits/interlagos.jpg',
   },
   'Yas Marina Circuit': {
@@ -163,6 +223,9 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
     turns: 16,
     topSpeedKmph: 335.0,
     elevationM: 5.0,
+    drsZones: 2,
+    circuitType: 'permanent',
+    lapRecord: { driver: 'M. Verstappen', time: '1:26.103', year: 2021 },
     image3d: '/circuits/yas-marina.jpg',
   },
   'Circuit of the Americas': {
@@ -171,6 +234,9 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
     turns: 20,
     topSpeedKmph: 344.7,
     elevationM: 30.9,
+    drsZones: 3,
+    circuitType: 'permanent',
+    lapRecord: { driver: 'C. Leclerc', time: '1:36.169', year: 2019 },
     image3d: '/circuits/cota.jpg',
   },
   'Autodromo Hermanos Rodriguez': {
@@ -179,6 +245,9 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
     turns: 17,
     topSpeedKmph: 350.0,
     elevationM: 8.0,
+    drsZones: 3,
+    circuitType: 'permanent',
+    lapRecord: { driver: 'V. Bottas', time: '1:18.741', year: 2021 },
     image3d: '/circuits/mexico.jpg',
   },
   'Las Vegas Strip Circuit': {
@@ -187,6 +256,8 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
     turns: 17,
     topSpeedKmph: 342.0,
     elevationM: 2.0,
+    drsZones: 2,
+    circuitType: 'street',
     image3d: '/circuits/las-vegas.jpg',
   },
   'Losail International Circuit': {
@@ -195,6 +266,8 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
     turns: 16,
     topSpeedKmph: 338.0,
     elevationM: 5.0,
+    drsZones: 2,
+    circuitType: 'permanent',
     image3d: '/circuits/qatar.jpg',
   },
   'Circuito de Madrid': {
@@ -203,6 +276,8 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
     turns: 20,
     topSpeedKmph: 330.0,
     elevationM: 20.0,
+    drsZones: 3,
+    circuitType: 'hybrid',
     image3d: '/circuits/madrid.jpg',
   },
   'Imola': {
@@ -211,6 +286,9 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
     turns: 19,
     topSpeedKmph: 326.0,
     elevationM: 33.0,
+    drsZones: 2,
+    circuitType: 'permanent',
+    lapRecord: { driver: 'L. Hamilton', time: '1:15.484', year: 2020 },
   },
   'Nürburgring Nordschleife': {
     lengthKm: 20.832,

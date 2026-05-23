@@ -10,75 +10,86 @@ interface CircuitStatsPanelProps {
   accentColor: string;
 }
 
-export default function CircuitStatsPanel({ stats, circuitName, accentColor }: CircuitStatsPanelProps) {
-  const hasImage = !!stats.image3d;
-
+/* ── Stat icon SVGs ────────────────────────────── */
+function LengthIcon({ color }: { color: string }) {
   return (
-    <div className="relative overflow-hidden rounded-xl" style={{ border: '1px solid var(--pw-glass-border)' }}>
-      {/* Background: the Box Box screenshot or gradient */}
-      {hasImage ? (
-        <div className="relative w-full" style={{ aspectRatio: '1 / 1' }}>
-          <Image
-            src={stats.image3d!}
-            alt={`${circuitName} circuit`}
-            fill
-            className="object-cover"
-            sizes="(max-width: 520px) 100vw, 480px"
-            priority
-          />
-          {/* Gradient overlay for readability at bottom */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background: `linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.7) 100%)`,
-            }}
-          />
-        </div>
-      ) : (
-        /* Fallback: stats + SVG 3D render */
-        <div className="p-4" style={{ background: 'var(--pw-glass-bg)', backdropFilter: 'blur(12px)' }}>
-          <h4 className="text-[10px] uppercase tracking-widest mb-4" style={{ color: 'var(--pw-text-tertiary)' }}>
-            Circuit Stats
-          </h4>
-          <div className="flex gap-4">
-            <div className="flex flex-col gap-3 flex-1 min-w-0">
-              <FallbackStatRow label="Length" value={stats.lengthKm} unit="KM" accentColor={accentColor} />
-              {stats.laps > 0 && <FallbackStatRow label="Laps" value={stats.laps} unit="" accentColor={accentColor} />}
-              <FallbackStatRow label="Turns" value={stats.turns} unit="" accentColor={accentColor} />
-              <FallbackStatRow label="Top Speed" value={stats.topSpeedKmph} unit="KMPH" accentColor={accentColor} />
-              <FallbackStatRow label="Elevation" value={stats.elevationM} unit="M" accentColor={accentColor} />
-            </div>
-            <div className="relative w-40 h-40 shrink-0 self-center">
-              <Circuit3D circuitName={circuitName} accentColor={accentColor} className="w-full h-full" />
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 20V10" /><path d="M12 20V4" /><path d="M6 20v-6" />
+    </svg>
+  );
+}
+function TurnsIcon({ color }: { color: string }) {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+      <polyline points="17 6 23 6 23 12" />
+    </svg>
+  );
+}
+function SpeedIcon({ color }: { color: string }) {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 12m-10 0a10 10 0 1 0 20 0 10 10 0 1 0 -20 0" />
+      <path d="M12 12l4-4" />
+      <path d="M12 7v1" />
+    </svg>
+  );
+}
+function ElevationIcon({ color }: { color: string }) {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M8 3l4-3 4 3" /><path d="M12 0v12" />
+      <path d="M2 19l5-5 4 4 6-7 5 5" />
+    </svg>
+  );
+}
+function LapsIcon({ color }: { color: string }) {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <polyline points="12 6 12 12 16 14" />
+    </svg>
+  );
+}
+function DrsIcon({ color }: { color: string }) {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="2" />
+      <path d="M9 9h6v6H9z" />
+    </svg>
   );
 }
 
-function FallbackStatRow({ label, value, unit, accentColor }: {
+/* ── Single stat tile ────────────────────────────── */
+function StatTile({
+  icon,
+  label,
+  value,
+  unit,
+  accentColor,
+}: {
+  icon: React.ReactNode;
   label: string;
   value: string | number;
-  unit: string;
+  unit?: string;
   accentColor: string;
 }) {
   return (
-    <div className="flex items-center gap-3">
+    <div
+      className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg"
+      style={{ background: `${accentColor}08` }}
+    >
       <div
         className="w-7 h-7 rounded-md flex items-center justify-center shrink-0"
-        style={{ background: `${accentColor}18` }}
+        style={{ background: `${accentColor}15` }}
       >
-        <span className="text-[10px] font-bold" style={{ color: accentColor }}>
-          {label.charAt(0)}
-        </span>
+        {icon}
       </div>
       <div className="min-w-0">
         <div className="flex items-baseline gap-1">
-          <span className="text-[14px] font-bold tabular-nums">{value}</span>
+          <span className="text-sm font-bold tabular-nums">{value}</span>
           {unit && (
-            <span className="text-[9px] font-medium uppercase" style={{ color: 'var(--pw-text-tertiary)' }}>
+            <span className="text-[9px] font-semibold uppercase" style={{ color: 'var(--pw-text-tertiary)' }}>
               {unit}
             </span>
           )}
@@ -86,6 +97,169 @@ function FallbackStatRow({ label, value, unit, accentColor }: {
         <span className="text-[9px] uppercase tracking-wider" style={{ color: 'var(--pw-text-tertiary)' }}>
           {label}
         </span>
+      </div>
+    </div>
+  );
+}
+
+/* ── Main panel ────────────────────────────── */
+export default function CircuitStatsPanel({ stats, circuitName, accentColor }: CircuitStatsPanelProps) {
+  const hasImage = !!stats.image3d;
+
+  return (
+    <div className="relative overflow-hidden rounded-xl" style={{ border: '1px solid var(--pw-glass-border)' }}>
+      {/* Circuit visual: image or 3D SVG */}
+      {hasImage ? (
+        <div className="relative w-full" style={{ aspectRatio: '16 / 9' }}>
+          <Image
+            src={stats.image3d!}
+            alt={`${circuitName} circuit`}
+            fill
+            className="object-cover"
+            sizes="(max-width: 520px) 100vw, 480px"
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background: 'linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.6) 100%)',
+            }}
+          />
+          {/* Circuit type badge overlaid on image */}
+          {stats.circuitType && (
+            <div className="absolute top-3 left-3">
+              <span
+                className="text-[9px] font-bold uppercase tracking-wider px-2 py-1 rounded"
+                style={{
+                  background: 'rgba(0,0,0,0.6)',
+                  backdropFilter: 'blur(8px)',
+                  color: accentColor,
+                  border: `1px solid ${accentColor}40`,
+                }}
+              >
+                {stats.circuitType === 'street' ? 'Street Circuit' : stats.circuitType === 'hybrid' ? 'Hybrid Circuit' : 'Permanent Circuit'}
+              </span>
+            </div>
+          )}
+        </div>
+      ) : (
+        /* No image — show 3D circuit SVG */
+        <div
+          className="relative p-4 flex items-center justify-center"
+          style={{
+            background: `linear-gradient(135deg, ${accentColor}08 0%, transparent 60%)`,
+            minHeight: 140,
+          }}
+        >
+          {stats.circuitType && (
+            <div className="absolute top-3 left-3">
+              <span
+                className="text-[9px] font-bold uppercase tracking-wider px-2 py-1 rounded"
+                style={{
+                  background: 'var(--pw-glass-bg)',
+                  color: accentColor,
+                  border: `1px solid ${accentColor}20`,
+                }}
+              >
+                {stats.circuitType === 'street' ? 'Street Circuit' : stats.circuitType === 'hybrid' ? 'Hybrid Circuit' : 'Permanent Circuit'}
+              </span>
+            </div>
+          )}
+          <Circuit3D circuitName={circuitName} accentColor={accentColor} className="w-36 h-36" />
+        </div>
+      )}
+
+      {/* Stats grid — always shown */}
+      <div className="p-4" style={{ background: 'var(--pw-glass-bg)', backdropFilter: 'blur(12px)' }}>
+        <h4 className="text-[10px] uppercase tracking-widest mb-3 flex items-center gap-2" style={{ color: 'var(--pw-text-tertiary)' }}>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+          </svg>
+          Circuit Data
+        </h4>
+        <div className="grid grid-cols-2 gap-2">
+          <StatTile
+            icon={<LengthIcon color={accentColor} />}
+            label="Length"
+            value={stats.lengthKm}
+            unit="km"
+            accentColor={accentColor}
+          />
+          {stats.laps > 0 && (
+            <StatTile
+              icon={<LapsIcon color={accentColor} />}
+              label="Race Laps"
+              value={stats.laps}
+              accentColor={accentColor}
+            />
+          )}
+          <StatTile
+            icon={<TurnsIcon color={accentColor} />}
+            label="Turns"
+            value={stats.turns}
+            accentColor={accentColor}
+          />
+          <StatTile
+            icon={<SpeedIcon color={accentColor} />}
+            label="Top Speed"
+            value={stats.topSpeedKmph}
+            unit="km/h"
+            accentColor={accentColor}
+          />
+          <StatTile
+            icon={<ElevationIcon color={accentColor} />}
+            label="Elevation Δ"
+            value={stats.elevationM}
+            unit="m"
+            accentColor={accentColor}
+          />
+          {stats.drsZones && (
+            <StatTile
+              icon={<DrsIcon color={accentColor} />}
+              label="DRS Zones"
+              value={stats.drsZones}
+              accentColor={accentColor}
+            />
+          )}
+        </div>
+
+        {/* Lap record */}
+        {stats.lapRecord && (
+          <div
+            className="mt-3 px-3 py-2.5 rounded-lg flex items-center gap-3"
+            style={{
+              background: `${accentColor}06`,
+              border: `1px solid ${accentColor}15`,
+            }}
+          >
+            <div
+              className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
+              style={{ background: `${accentColor}15` }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={accentColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 7 7 7 7" />
+                <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5C17 4 17 7 17 7" />
+                <path d="M4 22h16" />
+                <path d="M10 22V2h4v20" />
+              </svg>
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-[9px] uppercase tracking-wider mb-0.5" style={{ color: 'var(--pw-text-tertiary)' }}>
+                Fastest Lap Record
+              </div>
+              <div className="flex items-baseline gap-2 flex-wrap">
+                <span className="text-sm font-bold font-mono tabular-nums" style={{ color: accentColor }}>
+                  {stats.lapRecord.time}
+                </span>
+                <span className="text-xs" style={{ color: 'var(--pw-text-secondary)' }}>
+                  {stats.lapRecord.driver}
+                </span>
+                <span className="text-[10px] font-mono" style={{ color: 'var(--pw-text-tertiary)' }}>
+                  ({stats.lapRecord.year})
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

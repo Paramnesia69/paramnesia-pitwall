@@ -55,8 +55,24 @@ export const useStore = create<PitwallStore>()(
       isFavorite: (series) => get().favorites.includes(series),
 
       selectedEventId: null,
-      openEvent: (id) => set({ selectedEventId: id }),
-      closeEvent: () => set({ selectedEventId: null }),
+      openEvent: (id) => {
+        set({ selectedEventId: id });
+        // Update URL with event deep link (without triggering navigation)
+        if (typeof window !== 'undefined') {
+          const url = new URL(window.location.href);
+          url.searchParams.set('event', id);
+          window.history.replaceState({}, '', url.toString());
+        }
+      },
+      closeEvent: () => {
+        set({ selectedEventId: null });
+        // Remove event from URL
+        if (typeof window !== 'undefined') {
+          const url = new URL(window.location.href);
+          url.searchParams.delete('event');
+          window.history.replaceState({}, '', url.toString());
+        }
+      },
 
       theme: 'dark',
       toggleTheme: () =>
