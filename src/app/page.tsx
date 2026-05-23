@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { getUpcomingEvents, getFeaturedEvent } from '@/lib/events';
-import { NEWS_ITEMS } from '@/data/news-2026';
+import { getNews } from '@/lib/news';
 import { CALENDAR_2026 } from '@/data/calendar-2026';
 import { SERIES_META } from '@/types';
 import Dashboard from '@/components/Dashboard';
@@ -49,14 +49,15 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 }
 
 export default async function Home() {
-  const [featured, upcoming] = await Promise.all([
+  const [featured, upcoming, news] = await Promise.all([
     getFeaturedEvent(),
     getUpcomingEvents(30),
+    getNews(40),
   ]);
 
   return (
     <Suspense>
-      <Dashboard featured={featured ?? null} upcoming={upcoming} news={NEWS_ITEMS} />
+      <Dashboard featured={featured ?? null} upcoming={upcoming} news={news} />
     </Suspense>
   );
 }
