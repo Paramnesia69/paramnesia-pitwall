@@ -20,6 +20,8 @@ import ThemeToggle from '@/components/ui/ThemeToggle';
 import FadeIn from '@/components/motion/FadeIn';
 import { StaggerGrid, StaggerItem } from '@/components/motion/StaggerGrid';
 import { useServiceWorker } from '@/lib/useSW';
+import InstallPrompt from '@/components/ui/InstallPrompt';
+import UpdateBanner from '@/components/ui/UpdateBanner';
 import type { NormalizedNewsItem } from '@/types';
 
 const ALL_SERIES: SeriesId[] = [
@@ -44,7 +46,7 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
   })();
 
   const [activeFilter, setActiveFilter] = useState<SeriesId | 'all'>(initialFilter);
-  useServiceWorker();
+  const { hasUpdate, applyUpdate } = useServiceWorker();
 
   // Sync filter → URL (without full navigation)
   const updateFilter = useCallback((filter: SeriesId | 'all') => {
@@ -69,6 +71,11 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
   const timelineEvents = filtered.slice(9, 20);
 
   return (
+    <>
+    {/* PWA banners */}
+    {hasUpdate && <UpdateBanner onUpdate={applyUpdate} />}
+    <InstallPrompt />
+
     <main className="min-h-screen px-4 py-6 sm:px-6 lg:px-8 max-w-[1600px] mx-auto">
       {/* ── Top Bar ──────────────────────────── */}
       <FadeIn delay={0}>
@@ -194,5 +201,6 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
 
       <Footer />
     </main>
+    </>
   );
 }

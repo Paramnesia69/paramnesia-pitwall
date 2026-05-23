@@ -1,10 +1,31 @@
 import type { NormalizedNewsItem } from '@/types';
 
 /**
- * Curated motorsport news — sourced from motorsport.com & autosport.com
- * Updated: 2026-05-22
+ * Curated motorsport news — sourced from motorsport.com, autosport.com, formula1.com, crash.net
+ * Updated: 2026-05-23
  */
 export const NEWS_ITEMS: NormalizedNewsItem[] = [
+  // ─── F1 Canadian GP Weekend (May 22–24) ─────────────────
+  {
+    id: 'n-016',
+    title: 'Russell grabs sprint pole position ahead of Antonelli and Norris',
+    summary:
+      'George Russell set a 1:12.965 to beat teammate Kimi Antonelli by 0.068s in Sprint Qualifying at Montreal, with the McLarens of Norris and Piastri locking out row two.',
+    url: 'https://www.formula1.com/en/latest/article/russell-grabs-pole-position-in-canada-sprint-qualifying-ahead-of-antonelli-and-norris.7Fm9bjk84nwzOysiMriBCs',
+    source: 'Formula1.com',
+    publishedAt: '2026-05-22T21:30:00Z',
+    series: ['f1'],
+  },
+  {
+    id: 'n-017',
+    title: "Russell 'never doubted' himself as he returns to pole position",
+    summary:
+      'After trailing Antonelli in recent rounds, Russell credits the new Mercedes upgrade package for helping him rediscover his qualifying edge at the Canadian GP.',
+    url: 'https://www.formula1.com/en/latest/article/russell-never-doubted-himself-as-he-returns-to-pole-position-for-canada-sprint.2LfJ4u2mVXqhEJfiJjJabN',
+    source: 'Formula1.com',
+    publishedAt: '2026-05-22T22:00:00Z',
+    series: ['f1'],
+  },
   {
     id: 'n-001',
     title: 'Antonelli dominates Canadian GP practice amid three red flags',
@@ -19,20 +40,20 @@ export const NEWS_ITEMS: NormalizedNewsItem[] = [
     id: 'n-002',
     title: 'Mercedes and McLaren debut host of upgrades at Canadian GP',
     summary:
-      'Mercedes brings its first major upgrade package of 2026 while McLaren deploys the second phase of its development plan.',
+      'Mercedes brings its first major upgrade package of 2026 while McLaren deploys the second phase of its development plan including a new front wing.',
     url: 'https://www.autosport.com/f1/news/mercedes-and-mclaren-deploy-latest-upgrades-at-f1-canadian-gp/10823033/',
     source: 'Autosport',
     publishedAt: '2026-05-22T18:41:00Z',
     series: ['f1'],
   },
   {
-    id: 'n-003',
-    title: 'Haas warns against raising F1 cost cap to fix 2027 power unit issues',
+    id: 'n-018',
+    title: 'Cadillac details new upgrade package for Canadian GP',
     summary:
-      'Team principal Ayao Komatsu cautions that solving regulatory problems through budget increases contradicts cost control objectives.',
-    url: 'https://www.motorsport.com/f1/news/haas-warns-against-raising-f1-cost-cap-to-fix-2027-power-unit-issues/10822774/',
+      'The Cadillac F1 team reveals updated front wing, floor, diffuser and rear suspension for its MAC-26 as the squad accelerates development in its debut season.',
+    url: 'https://www.motorsport.com/f1/news/cadillac-details-new-f1-upgrade-package-for-canadian-gp/10822214/',
     source: 'Motorsport.com',
-    publishedAt: '2026-05-22T19:04:00Z',
+    publishedAt: '2026-05-22T14:00:00Z',
     series: ['f1'],
   },
   {
@@ -46,16 +67,6 @@ export const NEWS_ITEMS: NormalizedNewsItem[] = [
     series: ['f1'],
   },
   {
-    id: 'n-005',
-    title: 'F1 2027 power unit talks hit obstacles ahead of Canadian GP',
-    summary:
-      'F1 stakeholders will hold additional discussions on 2027 power unit changes as manufacturers continue to disagree on implementation approaches.',
-    url: 'https://www.autosport.com/f1/news/time-keeps-ticking-on-2027-changes-f1-to-host-further-talks-over-canadian-gp/10823047/',
-    source: 'Autosport',
-    publishedAt: '2026-05-22T19:09:00Z',
-    series: ['f1'],
-  },
-  {
     id: 'n-006',
     title: 'The steps Antonelli and Mercedes have taken to solve his start problem',
     summary:
@@ -66,14 +77,36 @@ export const NEWS_ITEMS: NormalizedNewsItem[] = [
     series: ['f1'],
   },
   {
-    id: 'n-007',
-    title: "Alonso: 'I am the best, I don't need to prove anything'",
+    id: 'n-003',
+    title: 'Haas warns against raising F1 cost cap to fix 2027 power unit issues',
     summary:
-      "Fernando Alonso asserts he continues performing at a high standard despite Aston Martin and Honda's technical challenges.",
-    url: 'https://www.autosport.com/f1/news/fernando-alonso-i-am-the-best-i-dont-need-to-prove-anything/10822835/',
-    source: 'Autosport',
-    publishedAt: '2026-05-22T08:17:00Z',
+      'Team principal Ayao Komatsu cautions that solving regulatory problems through budget increases contradicts cost control objectives.',
+    url: 'https://www.motorsport.com/f1/news/haas-warns-against-raising-f1-cost-cap-to-fix-2027-power-unit-issues/10822774/',
+    source: 'Motorsport.com',
+    publishedAt: '2026-05-22T19:04:00Z',
     series: ['f1'],
+  },
+
+  // ─── MotoGP ──────────────────────────────────────────────
+  {
+    id: 'n-019',
+    title: 'Mir loses Catalan GP podium as five riders penalised for tyre pressure',
+    summary:
+      'Joan Mir dropped from second to outside the podium after a 16-second penalty for tyre pressure infringement in the twice-restarted Barcelona race.',
+    url: 'https://www.autosport.com/motogp/news/final-catalan-gp-results-as-five-riders-penalised-and-joan-mir-loses-motogp-podium/10821731/',
+    source: 'Autosport',
+    publishedAt: '2026-05-22T11:00:00Z',
+    series: ['motogp'],
+  },
+  {
+    id: 'n-020',
+    title: 'Joan Mir announces Honda exit, linked with Gresini Ducati for 2027',
+    summary:
+      'The 2020 world champion will leave Honda at the end of 2026 after growing frustrated by the manufacturer\'s silence on future plans, with Gresini Racing the likely destination.',
+    url: 'https://www.motorsport.com/motogp/news/joan-mir-makes-honda-exit-decision-after-receiving-no-news-on-future/10821359/',
+    source: 'Motorsport.com',
+    publishedAt: '2026-05-21T16:00:00Z',
+    series: ['motogp'],
   },
   {
     id: 'n-008',
@@ -105,16 +138,30 @@ export const NEWS_ITEMS: NormalizedNewsItem[] = [
     publishedAt: '2026-05-21T07:34:00Z',
     series: ['motogp'],
   },
+
+  // ─── DTM ─────────────────────────────────────────────────
   {
-    id: 'n-011',
-    title: 'MotoGP considering reducing riders to one bike from 2027',
+    id: 'n-021',
+    title: 'DTM Zandvoort Qualifying: Pepper takes maiden pole in the rain',
     summary:
-      'MotoGP is evaluating a regulatory change that would limit each rider to a single motorcycle instead of two beginning in the 2027 season.',
-    url: 'https://www.motorsport.com/motogp/news/motogp-considering-reducing-riders-to-one-bike-from-2027/10822381/',
+      'Jordan Pepper secured his first DTM pole with a 1:42.194 in wet conditions at Zandvoort, beating championship leader Maro Engel by just 0.008s.',
+    url: 'https://de.motorsport.com/dtm/news/dtm-qualifying-zandvoort-1-grasser-lamborghini-pole-bei-regen-25060701/3428418/',
     source: 'Motorsport.com',
-    publishedAt: '2026-05-20T14:00:00Z',
-    series: ['motogp'],
+    publishedAt: '2026-05-23T10:00:00Z',
+    series: ['dtm'],
   },
+  {
+    id: 'n-014',
+    title: 'DTM Zandvoort Practice: Ferrari dominance, timing chaos, Lamborghini upturn',
+    summary:
+      'Matteo Cairoli posted the fastest time in disjointed Friday practice at Zandvoort, with Ferrari showing strong performance across the field.',
+    url: 'https://www.motorsport.com/dtm/news/dtm-practice-at-zandvoort-ferrari-dominance-timing-chaos-a-lambo-upturn/10823015/',
+    source: 'Motorsport.com',
+    publishedAt: '2026-05-22T18:13:00Z',
+    series: ['dtm'],
+  },
+
+  // ─── WEC ─────────────────────────────────────────────────
   {
     id: 'n-012',
     title: 'The 2026 Le Mans 24 Hours entry list in full',
@@ -133,26 +180,6 @@ export const NEWS_ITEMS: NormalizedNewsItem[] = [
     url: 'https://www.motorsport.com/wec/news/robin-frijns-relieved-after-bmws-hypercar-win-in-wec-this-was-a-race-we-had-to-win/10819618/',
     source: 'Motorsport.com',
     publishedAt: '2026-05-10T16:00:00Z',
-    series: ['wec'],
-  },
-  {
-    id: 'n-014',
-    title: 'Zandvoort DTM Practice: Ferrari dominance, timing chaos, Lamborghini upturn',
-    summary:
-      'Matteo Cairoli posted the fastest time in disjointed Friday practice at Zandvoort, with Ferrari showing strong performance across the field.',
-    url: 'https://www.motorsport.com/dtm/news/dtm-practice-at-zandvoort-ferrari-dominance-timing-chaos-a-lambo-upturn/10823015/',
-    source: 'Motorsport.com',
-    publishedAt: '2026-05-22T18:13:00Z',
-    series: ['dtm'],
-  },
-  {
-    id: 'n-015',
-    title: "Sargeant hopes for Verstappen in Ford Hypercar: 'He's going to kick everyone's ass'",
-    summary:
-      'Ford Performance is in regular discussions with Verstappen about competing in sportscars, with the manufacturer entering WEC Hypercar in 2027.',
-    url: 'https://www.motorsport.com/wec/news/logan-sargeant-hopes-for-max-verstappen-in-ford-hypercar-hes-going-to-kick-everyones-ass/10819776/',
-    source: 'Motorsport.com',
-    publishedAt: '2026-05-10T14:00:00Z',
     series: ['wec'],
   },
 ];

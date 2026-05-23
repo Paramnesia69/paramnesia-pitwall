@@ -57,8 +57,8 @@ const f1: CalendarEntry[] = [
     { type: 'race', name: 'Race', startTime: '2026-05-03T20:00:00Z', state: 'finished' },
   ]),
   evt('f1', 'Canadian Grand Prix', { name: 'Circuit Gilles Villeneuve', country: 'Canada', countryCode: 'CA', lat: 45.5017, lng: -73.5228 }, '2026-05-22', '2026-05-24', [
-    { type: 'practice', name: 'FP1', startTime: '2026-05-22T17:30:00Z', state: 'upcoming' },
-    { type: 'qualifying', name: 'Sprint Qualifying', startTime: '2026-05-22T21:30:00Z', state: 'upcoming' },
+    { type: 'practice', name: 'FP1', startTime: '2026-05-22T17:30:00Z', state: 'finished' },
+    { type: 'qualifying', name: 'Sprint Qualifying', startTime: '2026-05-22T21:30:00Z', state: 'finished' },
     { type: 'sprint', name: 'Sprint', startTime: '2026-05-23T17:00:00Z', state: 'upcoming' },
     { type: 'qualifying', name: 'Qualifying', startTime: '2026-05-23T21:00:00Z', state: 'upcoming' },
     { type: 'race', name: 'Race', startTime: '2026-05-24T18:00:00Z', state: 'upcoming' },
