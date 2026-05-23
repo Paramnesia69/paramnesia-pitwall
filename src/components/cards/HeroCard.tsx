@@ -33,7 +33,7 @@ export default function HeroCard({ event }: HeroCardProps) {
               alt=""
               fill
               className="object-contain"
-              style={{ filter: 'grayscale(1) brightness(3)' }}
+              style={{ filter: 'grayscale(1) contrast(2) brightness(3)', mixBlendMode: 'screen' }}
               priority
             />
           </div>
