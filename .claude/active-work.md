@@ -1,49 +1,43 @@
 # Active Work — PARAMNESIA PITWALL
 
-## Last Commit
-`f51a9d1` — Replace Box Box photos with F1 CDN circuit maps and faded series logos
-- Added `src/lib/images.ts` (getCircuitImage → F1 CDN URLs)
-- Updated `src/components/ui/CircuitStatsPanel.tsx` to use CDN circuit maps
-- Added F1 CDN remote pattern to `next.config.mjs`
+## Last Commits (session 2026-05-23)
+`296d68d` — feat: OpenGraph preview cards per event
+- `/api/og?event=<id>` → 1200×630 PNG, series accent color, Inter Bold TTF
+- `generateMetadata` in `page.tsx` wires `og:image` + `twitter:card` per `?event=` param
+- Inter Bold TTF (326KB) bundled in `public/fonts/inter-bold.ttf` (downloaded from Google Fonts CDN)
+- Generic fallback card for no/invalid event
 
-## Uncommitted Changes (as of last session)
+`7cee973` — ci: trigger deployment with refreshed Vercel token (empty commit)
 
-### `public/logos/gtwce.png` — REPLACED
-- Old: SRO Fanatec logo with ugly gray/white non-transparent background (57KB)
-- New: Clean "GT WORLD CHALLENGE" transparent PNG downloaded from vhv.rs (27KB)
-- Source: `https://www.vhv.rs/dpng/d/439-4390084_gt-world-challenge-logo-hd-png-download.png`
-- Status: File replaced, NOT YET committed or verified in browser
+All commits pushed. Vercel deployment in progress.
 
-### `src/components/cards/EventCard.tsx` — MODIFIED
-Changes:
-1. Added `h-full` to outer wrapper div (uniform card height)
-2. Added faded series logo watermark with mask-image:
-   - `w-36 h-36`, `right-4 top-1/2 -translate-y-1/2`, `opacity: 0.10`
-   - `filter: grayscale(1) brightness(3)`, `mixBlendMode: screen`
-   - `maskImage: radial-gradient(ellipse at center, black 30%, transparent 70%)`
+## Verified This Session
+- OG route: returns valid 1200×630 PNG for F1, WEC, and fallback
+- Series accent colors work (red for F1, blue for WEC)
+- Font: real Inter Bold TTF (not corrupt HTML — previous download was broken)
+- `generateMetadata` wired: `?event=f1-2026-05-22-canadian-grand-prix` sets correct og:image URL
 
-### `src/components/cards/HeroCard.tsx` — MODIFIED
-- Logo watermark: `right-4`, 45% width, max 420px, `opacity: 0.06`
-- Filter: `grayscale(1) contrast(2) brightness(3)`, `mixBlendMode: screen`
+## Font Note
+`public/fonts/inter-bold.ttf` was initially downloaded as HTML (curl without redirects).
+Fixed by fetching from Google Fonts with Android User-Agent to get TTF format, then curl -L to actual gstatic URL.
 
-### `src/components/EventDetailOverlay.tsx` — MODIFIED
-- Logo watermark filter updated to include `contrast(2)` and `mixBlendMode: screen`
+## IMPORTANT: Launch Directory
+**Always launch Claude Code from inside the project folder:**
+```
+cd /Users/paramnesia/Documents/Claude/paramnesia-pitwall
+claude
+```
 
-### `src/components/Dashboard.tsx` — MODIFIED
-- Added `className="h-full"` to `<StaggerItem>` for uniform card heights
-
-## Immediate Next Steps
-1. **Verify** GTWCE logo looks correct in browser (navigate to localhost:3000, find GT World Challenge card)
-2. **Commit** all uncommitted changes: logo + card height + watermark improvements
-3. **Push** to GitHub so Vercel deploys match local
-
-## Open Questions / Pending Decisions
-- Should Porsche Supercup logo opacity be tuned further? (currently 0.10, was 0.06)
-- Consider applying `contrast(2)` to EventCard watermarks for consistency with HeroCard (currently EventCard omits it, uses mask instead)
-- nurburgring.jpg also has non-transparent background — verify it renders acceptably with current mask approach
+## Backlog (prioritized)
+1. ~~**OpenGraph preview cards**~~ ✅ DONE
+2. **News feed — live RSS** — hardcoded content aging; hook into Autosport/Motorsport.com RSS
+3. **ICS calendar feed** — one-click `.ics` subscribe so races land in Google/Apple Calendar
+4. **Nürburgring/Nordschleife split** — both series share `nurburgring.jpg`; Nordschleife may need its own logo
+5. **Porsche Carrera Cup** — verify calendar has events (same logo/accent as Supercup)
+6. **Live timing (OpenF1)** — free API, no key; real lap data + session info for F1
 
 ## Session Bootstrap Reminder
-- Dev server runs on port 3000 (PID varies; `lsof -i :3000` to check)
-- `npm run dev` in `/Users/paramnesia/Documents/Claude/paramnesia-pitwall/`
-- Vercel auto-deploys from GitHub `main` branch
+- Dev server: `npm run dev` in this directory (port 3000)
+- Preview tool: `.claude/launch.json` — use `preview_start("pitwall-dev")` to register
+- Vercel auto-deploys on push to `main` via GitHub Actions
 - No `.env.local` needed for basic features; OPENWEATHERMAP_API_KEY optional
