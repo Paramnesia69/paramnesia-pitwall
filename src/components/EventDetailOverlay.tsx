@@ -6,7 +6,6 @@ import Image from 'next/image';
 import type { NormalizedRaceEvent } from '@/types';
 import { SERIES_META } from '@/types';
 import { formatDateISR, formatTimeISR } from '@/lib/events';
-import { getCircuitImage } from '@/lib/images';
 import { getCircuitStats } from '@/lib/circuitStats';
 import { useStore } from '@/store';
 import Countdown from '@/components/ui/Countdown';
@@ -71,26 +70,27 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
             exit={{ x: '100%' }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           >
-            {/* Hero image area */}
+            {/* Hero area — accent gradient + faded series logo */}
             <div className="relative h-48 overflow-hidden">
-              {getCircuitImage(event.circuit.name) ? (
-                <>
+              <div
+                className="absolute inset-0"
+                style={{
+                  background: `linear-gradient(135deg, ${SERIES_META[event.series].accent}25 0%, var(--pw-bg-elevated) 70%)`,
+                }}
+              />
+              {/* Large faded series logo */}
+              {SERIES_META[event.series].logo && (
+                <div className="absolute -right-6 top-1/2 -translate-y-1/2 w-52 h-52 pointer-events-none select-none" style={{ opacity: 0.07 }}>
                   <Image
-                    src={getCircuitImage(event.circuit.name)!}
-                    alt={event.circuit.name}
+                    src={SERIES_META[event.series].logo!}
+                    alt=""
                     fill
-                    className="object-cover"
+                    className="object-contain"
+                    style={{ filter: 'grayscale(1) brightness(3)' }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--pw-bg-elevated)] to-transparent" />
-                </>
-              ) : (
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    background: `linear-gradient(135deg, ${SERIES_META[event.series].accent}30 0%, var(--pw-bg-elevated) 100%)`,
-                  }}
-                />
+                </div>
               )}
+              <div className="absolute inset-0 bg-gradient-to-t from-[var(--pw-bg-elevated)] via-transparent to-transparent" />
 
               {/* Close button */}
               <button

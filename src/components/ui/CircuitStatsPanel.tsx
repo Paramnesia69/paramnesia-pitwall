@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import type { CircuitStats } from '@/lib/circuitStats';
+import { getCircuitImage } from '@/lib/images';
 import Circuit3D from './Circuit3D';
 
 interface CircuitStatsPanelProps {
@@ -104,18 +105,18 @@ function StatTile({
 
 /* ── Main panel ────────────────────────────── */
 export default function CircuitStatsPanel({ stats, circuitName, accentColor }: CircuitStatsPanelProps) {
-  const hasImage = !!stats.image3d;
+  const circuitMapUrl = getCircuitImage(circuitName);
 
   return (
     <div className="relative overflow-hidden rounded-xl" style={{ border: '1px solid var(--pw-glass-border)' }}>
-      {/* Circuit visual: image or 3D SVG */}
-      {hasImage ? (
-        <div className="relative w-full" style={{ aspectRatio: '16 / 9' }}>
+      {/* Circuit visual: F1 official map or 3D SVG fallback */}
+      {circuitMapUrl ? (
+        <div className="relative w-full" style={{ aspectRatio: '16 / 9', background: '#15151e' }}>
           <Image
-            src={stats.image3d!}
+            src={circuitMapUrl}
             alt={`${circuitName} circuit`}
             fill
-            className="object-cover"
+            className="object-contain"
             sizes="(max-width: 520px) 100vw, 480px"
           />
           <div

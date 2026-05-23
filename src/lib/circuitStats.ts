@@ -383,8 +383,30 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
   },
 };
 
+/**
+ * Maps alternate circuit names used in the calendar to canonical keys in CIRCUIT_STATS.
+ * Covers name differences between data sources (FIA names, local names, typos).
+ */
+const CIRCUIT_ALIASES: Record<string, string> = {
+  'Suzuka Circuit': 'Suzuka International Racing Course',
+  'Monza Circuit': 'Autodromo Nazionale Monza',
+  'Interlagos Circuit': 'Interlagos',
+  'Imola Circuit': 'Imola',
+  'Autódromo Hermanos Rodríguez': 'Autodromo Hermanos Rodriguez',
+  'Lusail International Circuit': 'Losail International Circuit',
+  'Madring Street Circuit': 'Circuito de Madrid',
+  'Nürburgring': 'Nürburgring GP',
+};
+
 export function getCircuitStats(circuitName: string): CircuitStats | undefined {
+  // Direct match
   if (CIRCUIT_STATS[circuitName]) return CIRCUIT_STATS[circuitName];
+
+  // Alias match
+  const alias = CIRCUIT_ALIASES[circuitName];
+  if (alias && CIRCUIT_STATS[alias]) return CIRCUIT_STATS[alias];
+
+  // Fuzzy match — partial name containment
   for (const [key, value] of Object.entries(CIRCUIT_STATS)) {
     if (circuitName.includes(key) || key.includes(circuitName)) return value;
   }

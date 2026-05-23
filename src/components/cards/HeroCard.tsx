@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import type { NormalizedRaceEvent } from '@/types';
 import { SERIES_META } from '@/types';
 import { formatDateISR, formatTimeISR } from '@/lib/events';
-import { getCircuitImage } from '@/lib/images';
 import Countdown from '@/components/ui/Countdown';
 import { WeatherBadgeCompact } from '@/components/ui/WeatherBadge';
 import ReminderButton from '@/components/ui/ReminderButton';
@@ -17,7 +16,6 @@ interface HeroCardProps {
 export default function HeroCard({ event }: HeroCardProps) {
   const meta = SERIES_META[event.series];
   const nextSession = event.sessions.find((s) => s.state !== 'finished');
-  const circuitImage = getCircuitImage(event.circuit.name);
 
   return (
     <motion.section
@@ -26,22 +24,20 @@ export default function HeroCard({ event }: HeroCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 150, damping: 20 }}
     >
-      {/* Circuit background image with ken burns */}
-      {circuitImage && (
-        <motion.div
-          className="absolute inset-0"
-          animate={{ scale: [1, 1.05, 1] }}
-          transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
-        >
-          <Image
-            src={circuitImage}
-            alt={event.circuit.name}
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--pw-bg-primary)] via-[var(--pw-bg-primary)]/80 to-[var(--pw-bg-primary)]/40" />
-        </motion.div>
+      {/* Large faded series logo — right side */}
+      {meta.logo && (
+        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none select-none" style={{ width: '45%', maxWidth: 420, aspectRatio: '1' }}>
+          <div className="relative w-full h-full" style={{ opacity: 0.06 }}>
+            <Image
+              src={meta.logo}
+              alt=""
+              fill
+              className="object-contain"
+              style={{ filter: 'grayscale(1) brightness(3)' }}
+              priority
+            />
+          </div>
+        </div>
       )}
 
       {/* Gradient overlay with series accent */}
@@ -49,6 +45,14 @@ export default function HeroCard({ event }: HeroCardProps) {
         className="absolute inset-0 opacity-20"
         style={{
           background: `linear-gradient(135deg, ${meta.accent} 0%, transparent 50%)`,
+        }}
+      />
+
+      {/* Subtle corner glow */}
+      <div
+        className="absolute -top-20 -right-20 w-80 h-80 rounded-full pointer-events-none"
+        style={{
+          background: `radial-gradient(circle, ${meta.accent}15 0%, transparent 70%)`,
         }}
       />
 

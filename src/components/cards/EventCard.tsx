@@ -45,6 +45,19 @@ export default memo(function EventCard({ event }: EventCardProps) {
     <div onClick={() => openEvent(event.id)}>
       <TiltCard accentColor={meta.accent}>
 
+        {/* Faded series logo — background watermark */}
+        {meta.logo && (
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 w-36 h-36 pointer-events-none select-none" style={{ opacity: 0.06, zIndex: 0 }}>
+            <Image
+              src={meta.logo}
+              alt=""
+              fill
+              className="object-contain"
+              style={{ filter: 'grayscale(1) brightness(3)' }}
+            />
+          </div>
+        )}
+
         {/* Header row */}
         <div className="flex items-center justify-between gap-2 flex-wrap relative" style={{ transform: 'translateZ(20px)' }}>
           <span
