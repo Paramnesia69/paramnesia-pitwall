@@ -1,6 +1,8 @@
 import type { WeatherData } from '@/types';
 
-const API_KEY = process.env.NEXT_PUBLIC_OPENWEATHER_KEY ?? '';
+// Server-only key — never exposed to client bundle.
+// Falls back to NEXT_PUBLIC_ for backward compat.
+const API_KEY = process.env.OPENWEATHER_KEY ?? process.env.NEXT_PUBLIC_OPENWEATHER_KEY ?? '';
 const CACHE = new Map<string, { data: WeatherData; ts: number }>();
 const TTL = 30 * 60 * 1000; // 30 min cache
 
