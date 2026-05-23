@@ -44,9 +44,9 @@ export default function EventCard({ event }: EventCardProps) {
       <TiltCard accentColor={meta.accent}>
 
         {/* Header row */}
-        <div className="flex items-center justify-between relative" style={{ transform: 'translateZ(20px)' }}>
+        <div className="flex items-center justify-between gap-2 flex-wrap relative" style={{ transform: 'translateZ(20px)' }}>
           <span
-            className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded"
+            className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded whitespace-nowrap shrink-0"
             style={{
               color: meta.accent,
               background: `${meta.accent}15`,
@@ -57,11 +57,11 @@ export default function EventCard({ event }: EventCardProps) {
             )}
             {meta.name}
           </span>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 ml-auto">
             <StateBadge state={event.state} />
             {event.weather && <WeatherBadgeCompact weather={event.weather} />}
-            <span className="text-[11px] font-mono" style={{ color: 'var(--pw-text-tertiary)' }}>
-              {formatDateISR(event.startDate)}
+            <span className="text-[11px] font-mono whitespace-nowrap" style={{ color: 'var(--pw-text-tertiary)' }}>
+              {new Date(event.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'Asia/Jerusalem' })}
             </span>
           </div>
         </div>
