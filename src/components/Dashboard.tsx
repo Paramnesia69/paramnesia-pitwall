@@ -20,8 +20,10 @@ import ThemeToggle from '@/components/ui/ThemeToggle';
 import FadeIn from '@/components/motion/FadeIn';
 import { StaggerGrid, StaggerItem } from '@/components/motion/StaggerGrid';
 import { useServiceWorker } from '@/lib/useSW';
+import { useLiveData } from '@/lib/useLiveData';
 import InstallPrompt from '@/components/ui/InstallPrompt';
 import UpdateBanner from '@/components/ui/UpdateBanner';
+import LiveIndicator from '@/components/ui/LiveIndicator';
 import type { NormalizedNewsItem } from '@/types';
 
 const ALL_SERIES: SeriesId[] = [
@@ -48,6 +50,11 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
   const [activeFilter, setActiveFilter] = useState<SeriesId | 'all'>(initialFilter);
   const { hasUpdate, applyUpdate } = useServiceWorker();
 
+  // Live polling — replaces SSR props with fresh API data every 2 min
+  const live = useLiveData(upcoming, featured);
+  const liveUpcoming = live.events;
+  const liveFeatured = live.featured;
+
   // Sync filter → URL (without full navigation)
   const updateFilter = useCallback((filter: SeriesId | 'all') => {
     setActiveFilter(filter);
@@ -61,11 +68,11 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
   }, [router]);
 
   const filtered = useMemo(() => {
-    if (activeFilter === 'all') return upcoming;
-    return upcoming.filter((e) => e.series === activeFilter);
-  }, [upcoming, activeFilter]);
+    if (activeFilter === 'all') return liveUpcoming;
+    return liveUpcoming.filter((e) => e.series === activeFilter);
+  }, [liveUpcoming, activeFilter]);
 
-  const weekendEvents = useMemo(() => getThisWeekendEvents(upcoming), [upcoming]);
+  const weekendEvents = useMemo(() => getThisWeekendEvents(liveUpcoming), [liveUpcoming]);
 
   const cardEvents = filtered.slice(0, 9);
   const timelineEvents = filtered.slice(9, 20);
@@ -92,6 +99,7 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
             </h1>
           </div>
           <div className="flex items-center gap-3 text-sm" style={{ color: 'var(--pw-text-secondary)' }}>
+            <LiveIndicator lastUpdated={live.lastUpdated} isRefreshing={live.isRefreshing} onRefresh={live.refresh} />
             <span className="hidden sm:inline tracking-widest text-xs uppercase">Motorsport Command Center</span>
             <ThemeToggle />
             <ShareButton />
@@ -136,7 +144,7 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
       </FadeIn>
 
       {/* ── Hero Featured Event ──────────────── */}
-      {featured && activeFilter === 'all' && <HeroCard event={featured} />}
+      {liveFeatured && activeFilter === 'all' && <HeroCard event={liveFeatured} />}
 
       {/* ── This Weekend ─────────────────────── */}
       {activeFilter === 'all' && weekendEvents.length > 0 && (
@@ -197,7 +205,7 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
         <UpcomingTimeline events={timelineEvents} />
       )}
 
-      <EventDetailOverlay events={upcoming} />
+      <EventDetailOverlay events={liveUpcoming} />
 
       <Footer />
     </main>
