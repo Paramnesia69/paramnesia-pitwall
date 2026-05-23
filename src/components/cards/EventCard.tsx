@@ -48,12 +48,12 @@ export default memo(function EventCard({ event }: EventCardProps) {
         {/* Faded series logo — background watermark */}
         {meta.logo && (
           <div
-            className="absolute right-4 top-1/2 -translate-y-1/2 w-36 h-36 pointer-events-none select-none"
+            className="absolute right-3 top-1/2 -translate-y-1/2 w-44 h-44 pointer-events-none select-none"
             style={{
-              opacity: 0.10,
+              opacity: 0.18,
               zIndex: 0,
-              maskImage: 'radial-gradient(ellipse at center, black 30%, transparent 70%)',
-              WebkitMaskImage: 'radial-gradient(ellipse at center, black 30%, transparent 70%)',
+              maskImage: 'radial-gradient(ellipse at center, black 45%, transparent 85%)',
+              WebkitMaskImage: 'radial-gradient(ellipse at center, black 45%, transparent 85%)',
             }}
           >
             <Image
@@ -61,7 +61,7 @@ export default memo(function EventCard({ event }: EventCardProps) {
               alt=""
               fill
               className="object-contain"
-              style={{ filter: 'grayscale(1) brightness(3)', mixBlendMode: 'screen' }}
+              style={{ filter: 'grayscale(1) contrast(2) brightness(3)', mixBlendMode: 'screen' }}
             />
           </div>
         )}
