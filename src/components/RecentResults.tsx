@@ -15,8 +15,54 @@ interface RecentResultsProps {
 
 const MEDAL_COLORS = ['#FFD700', '#C0C0C0', '#CD7F32'];
 
+type ResultClass = 'hypercar' | 'lmgt3' | 'lmp2' | 'lmp3';
+
+function getResultClass(result: RaceResult): ResultClass | null {
+  const name = result.name;
+  if (name.includes('— LMGT3')) return 'lmgt3';
+  if (name.includes('— LMP3')) return 'lmp3';
+  if (name.includes('— LMP2')) return 'lmp2';
+  if (result.series === 'wec') return 'hypercar';
+  if (result.series === 'elms') return 'lmp2';
+  return null;
+}
+
+function getDisplayName(name: string): string {
+  return name.replace(/ — (LMGT3|LMP3|LMP2)$/i, '');
+}
+
+function ClassBadge({ cls }: { cls: ResultClass }) {
+  if (cls === 'hypercar') {
+    return (
+      <span
+        className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded"
+        style={{
+          background: 'rgba(192,192,192,0.12)',
+          color: '#C0C0C0',
+          border: '1px solid rgba(192,192,192,0.25)',
+        }}
+      >
+        HYPERCAR
+      </span>
+    );
+  }
+  const svgMap: Record<Exclude<ResultClass, 'hypercar'>, string> = {
+    lmgt3: '/logos/class-lmgt3.svg',
+    lmp2: '/logos/class-lmp2.svg',
+    lmp3: '/logos/class-lmp3.svg',
+  };
+  return (
+    <img
+      src={svgMap[cls]}
+      alt={cls.toUpperCase()}
+      style={{ height: 18, width: 'auto' }}
+    />
+  );
+}
+
 function PodiumCard({ result }: { result: RaceResult }) {
   const meta = SERIES_META[result.series];
+  const cls = getResultClass(result);
 
   return (
     <motion.div
@@ -38,6 +84,7 @@ function PodiumCard({ result }: { result: RaceResult }) {
           <span className="text-[10px] font-mono" style={{ color: 'var(--pw-text-tertiary)' }}>
             R{result.round}
           </span>
+          {cls && <ClassBadge cls={cls} />}
         </div>
         <span className="text-[10px] font-mono" style={{ color: 'var(--pw-text-tertiary)' }}>
           {new Date(result.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
@@ -45,7 +92,7 @@ function PodiumCard({ result }: { result: RaceResult }) {
       </div>
 
       {/* Race name */}
-      <h4 className="text-sm font-semibold mb-0.5">{result.name}</h4>
+      <h4 className="text-sm font-semibold mb-0.5">{getDisplayName(result.name)}</h4>
       <p className="text-[11px] mb-3" style={{ color: 'var(--pw-text-tertiary)' }}>
         {result.circuit} · {result.country}
       </p>
