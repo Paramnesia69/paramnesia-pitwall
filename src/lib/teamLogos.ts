@@ -213,6 +213,8 @@ export function getTeamLogo(teamName: string, f1Context = false): TeamLogoInfo |
       return { src, white: false, cssFilter: 'brightness(0) invert(1) opacity(0.85)', png: true };
     if (lower.includes('audi') || lower.includes('sauber'))
       return { src, white: false, cssFilter: 'brightness(0) invert(1) opacity(0.85)', png: true };
+    if (lower.includes('mclaren'))
+      return { src, white: false, cssFilter: 'brightness(0) invert(1) opacity(0.85)', png: true };
     return { src, white: false, png: true };
   }
 
