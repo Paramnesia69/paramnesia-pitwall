@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getTeamLogo } from '@/lib/teamLogos';
 import {
   F1_DRIVERS_2026,
   F1_CONSTRUCTORS_2026,
@@ -25,6 +26,29 @@ const TABS: { id: StandingsTab; label: string; accent: string }[] = [
   { id: 'dtm', label: 'DTM', accent: '#1E88E5' },
 ];
 
+function TeamLogo({ teamName, teamColor }: { teamName: string; teamColor: string }) {
+  const logo = getTeamLogo(teamName);
+  if (logo) {
+    return (
+      <div className="w-7 h-5 shrink-0 flex items-center justify-center overflow-hidden">
+        <img
+          src={logo}
+          alt={teamName}
+          style={{
+            height: 16,
+            width: 'auto',
+            maxWidth: 28,
+            objectFit: 'contain',
+            mixBlendMode: 'screen',
+            filter: 'brightness(1.6) saturate(1.2) contrast(1.1)',
+          }}
+        />
+      </div>
+    );
+  }
+  return <div className="w-1 h-4 rounded-full shrink-0" style={{ background: teamColor }} />;
+}
+
 function DriverRow({ d, maxPts }: { d: DriverStanding; maxPts: number }) {
   const barWidth = maxPts > 0 ? (d.points / maxPts) * 100 : 0;
   return (
@@ -40,10 +64,7 @@ function DriverRow({ d, maxPts }: { d: DriverStanding; maxPts: number }) {
       >
         {d.pos}
       </span>
-      <div
-        className="w-1 h-4 rounded-full shrink-0"
-        style={{ background: d.teamColor }}
-      />
+      <TeamLogo teamName={d.team} teamColor={d.teamColor} />
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between mb-0.5">
           <span className="text-xs font-medium truncate">{d.name}</span>
@@ -78,10 +99,7 @@ function ConstructorRow({ c, maxPts }: { c: ConstructorStanding; maxPts: number 
       >
         {c.pos}
       </span>
-      <div
-        className="w-1 h-4 rounded-full shrink-0"
-        style={{ background: c.color }}
-      />
+      <TeamLogo teamName={c.name} teamColor={c.color} />
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between mb-0.5">
           <span className="text-xs font-medium truncate">{c.name}</span>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { getTeamLogo } from '@/lib/teamLogos';
 
 interface TimingResult {
   position: number;
@@ -134,11 +135,31 @@ export default function F1TimingPanel({ eventId, accentColor, eventState }: Prop
                 {r.position}
               </span>
 
-              {/* Team color bar */}
-              <span
-                className="w-1 h-4 rounded-full flex-shrink-0"
-                style={{ background: `#${r.teamColor}` }}
-              />
+              {/* Team logo / color bar */}
+              {(() => {
+                const logo = getTeamLogo(r.team);
+                return logo ? (
+                  <div className="w-7 h-5 flex-shrink-0 flex items-center justify-center overflow-hidden">
+                    <img
+                      src={logo}
+                      alt={r.team}
+                      style={{
+                        height: 16,
+                        width: 'auto',
+                        maxWidth: 28,
+                        objectFit: 'contain',
+                        mixBlendMode: 'screen',
+                        filter: 'brightness(1.6) saturate(1.2) contrast(1.1)',
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <span
+                    className="w-1 h-4 rounded-full flex-shrink-0"
+                    style={{ background: `#${r.teamColor}` }}
+                  />
+                );
+              })()}
 
               {/* Driver acronym */}
               <span

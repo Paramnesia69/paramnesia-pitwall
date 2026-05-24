@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getTeamLogo } from '@/lib/teamLogos';
 import type { SeriesId } from '@/types';
 import { SERIES_META } from '@/types';
 import type { RaceResult } from '@/data/results-2026';
@@ -59,27 +60,49 @@ function PodiumCard({ result }: { result: RaceResult }) {
 
       {/* Podium */}
       <div className="space-y-1.5">
-        {result.podium.map((p, i) => (
-          <div key={p.pos} className="flex items-center gap-2">
-            {/* Position medal */}
-            <div
-              className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0"
-              style={{
-                background: `${MEDAL_COLORS[i]}20`,
-                color: MEDAL_COLORS[i],
-                border: `1px solid ${MEDAL_COLORS[i]}40`,
-              }}
-            >
-              {p.pos}
+        {result.podium.map((p, i) => {
+          const logo = getTeamLogo(p.team);
+          return (
+            <div key={p.pos} className="flex items-center gap-2">
+              {/* Position medal */}
+              <div
+                className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0"
+                style={{
+                  background: `${MEDAL_COLORS[i]}20`,
+                  color: MEDAL_COLORS[i],
+                  border: `1px solid ${MEDAL_COLORS[i]}40`,
+                }}
+              >
+                {p.pos}
+              </div>
+              {/* Manufacturer logo */}
+              {logo ? (
+                <div className="w-6 h-5 shrink-0 flex items-center justify-center overflow-hidden">
+                  <img
+                    src={logo}
+                    alt={p.team}
+                    style={{
+                      height: 15,
+                      width: 'auto',
+                      maxWidth: 24,
+                      objectFit: 'contain',
+                      mixBlendMode: 'screen',
+                      filter: 'brightness(1.6) saturate(1.2) contrast(1.1)',
+                    }}
+                  />
+                </div>
+              ) : (
+                <div className="w-6 shrink-0" />
+              )}
+              <div className="flex-1 min-w-0">
+                <span className="text-xs font-medium truncate block">{p.driver}</span>
+              </div>
+              <span className="text-[10px] shrink-0" style={{ color: 'var(--pw-text-tertiary)' }}>
+                {p.team}
+              </span>
             </div>
-            <div className="flex-1 min-w-0">
-              <span className="text-xs font-medium truncate block">{p.driver}</span>
-            </div>
-            <span className="text-[10px] shrink-0" style={{ color: 'var(--pw-text-tertiary)' }}>
-              {p.team}
-            </span>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Fastest lap */}
