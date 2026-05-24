@@ -1,8 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getTeamLogo } from '@/lib/teamLogos';
+import { SERIES_META } from '@/types';
 import {
   F1_DRIVERS_2026,
   F1_CONSTRUCTORS_2026,
@@ -17,18 +19,73 @@ import {
 } from '@/data/standings-2026';
 import type { DriverStanding, ConstructorStanding } from '@/data/standings-2026';
 
-type StandingsTab = 'f1-drivers' | 'f1-constructors' | 'motogp' | 'wec' | 'wrc' | 'imsa' | 'dtm';
+type SeriesTab = 'f1' | 'motogp' | 'wec' | 'wrc' | 'imsa' | 'dtm';
+type F1Sub = 'drivers' | 'teams';
 
-const TABS: { id: StandingsTab; label: string; accent: string }[] = [
-  { id: 'f1-drivers', label: 'F1 Drivers', accent: '#E10600' },
-  { id: 'f1-constructors', label: 'F1 Teams', accent: '#E10600' },
-  { id: 'motogp', label: 'MotoGP', accent: '#BE0A14' },
-  { id: 'wec', label: 'WEC', accent: '#0090D4' },
-  { id: 'wrc', label: 'WRC', accent: '#003082' },
-  { id: 'imsa', label: 'IMSA', accent: '#C0A062' },
-  { id: 'dtm', label: 'DTM', accent: '#1E88E5' },
-];
+const SERIES_TABS: SeriesTab[] = ['f1', 'motogp', 'wec', 'wrc', 'imsa', 'dtm'];
 
+const LOGO_FILTER = 'grayscale(1) contrast(2) brightness(3)';
+
+/* ── Series logo tab button — matches Dashboard filter bar ── */
+function SeriesTabButton({
+  series,
+  isActive,
+  onClick,
+}: {
+  series: SeriesTab;
+  isActive: boolean;
+  onClick: () => void;
+}) {
+  const meta = SERIES_META[series];
+  if (!meta) return null;
+  return (
+    <motion.button
+      onClick={onClick}
+      whileTap={{ scale: 0.95 }}
+      title={meta.name}
+      className="relative flex-shrink-0 rounded-xl overflow-hidden"
+      style={{
+        width: 64,
+        height: 36,
+        background: isActive ? `${meta.accent}22` : 'var(--pw-glass-bg)',
+        border: `1px solid ${isActive ? meta.accent : 'var(--pw-glass-border)'}`,
+        boxShadow: isActive ? `0 0 16px ${meta.accent}44` : 'none',
+        transition: 'border-color 0.2s, box-shadow 0.2s, background 0.2s',
+      }}
+    >
+      {meta.logo ? (
+        <div
+          className="absolute inset-0"
+          style={{
+            opacity: isActive ? 0.9 : 0.45,
+            maskImage: 'radial-gradient(ellipse at center, black 45%, transparent 85%)',
+            WebkitMaskImage: 'radial-gradient(ellipse at center, black 45%, transparent 85%)',
+            transition: 'opacity 0.2s',
+          }}
+        >
+          <div className="absolute inset-2">
+            <Image
+              src={meta.logo}
+              alt={meta.name}
+              fill
+              className="object-contain"
+              style={{ filter: LOGO_FILTER, mixBlendMode: 'screen' }}
+            />
+          </div>
+        </div>
+      ) : (
+        <span
+          className="absolute inset-0 flex items-center justify-center text-[9px] font-bold uppercase tracking-wider"
+          style={{ color: isActive ? meta.accent : 'var(--pw-text-tertiary)' }}
+        >
+          {meta.name}
+        </span>
+      )}
+    </motion.button>
+  );
+}
+
+/* ── Team constructor logo ── */
 function TeamLogo({ teamName, teamColor, f1 = false }: { teamName: string; teamColor: string; f1?: boolean }) {
   const logo = getTeamLogo(teamName, f1);
   if (logo) {
@@ -50,8 +107,7 @@ function TeamLogo({ teamName, teamColor, f1 = false }: { teamName: string; teamC
               ? { opacity: 0.95 }
               : logo.cssFilter !== undefined
               ? { filter: logo.cssFilter, opacity: 0.92 }
-              : { filter: 'brightness(1.1) saturate(1.4) contrast(1.0)', opacity: 0.95 }
-            ),
+              : { filter: 'brightness(1.1) saturate(1.4) contrast(1.0)', opacity: 0.95 }),
           }}
         />
       </div>
@@ -60,11 +116,12 @@ function TeamLogo({ teamName, teamColor, f1 = false }: { teamName: string; teamC
   return <div className="w-1 h-4 rounded-full shrink-0" style={{ background: teamColor }} />;
 }
 
+/* ── Driver row ── */
 function DriverRow({ d, maxPts, f1 = false }: { d: DriverStanding; maxPts: number; f1?: boolean }) {
   const barWidth = maxPts > 0 ? (d.points / maxPts) * 100 : 0;
   return (
     <motion.div
-      className="flex items-center gap-2 py-1.5 group"
+      className="flex items-center gap-2 py-1.5"
       initial={{ opacity: 0, x: -8 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: d.pos * 0.03 }}
@@ -95,6 +152,7 @@ function DriverRow({ d, maxPts, f1 = false }: { d: DriverStanding; maxPts: numbe
   );
 }
 
+/* ── Constructor row ── */
 function ConstructorRow({ c, maxPts }: { c: ConstructorStanding; maxPts: number }) {
   const barWidth = maxPts > 0 ? (c.points / maxPts) * 100 : 0;
   return (
@@ -110,7 +168,7 @@ function ConstructorRow({ c, maxPts }: { c: ConstructorStanding; maxPts: number 
       >
         {c.pos}
       </span>
-      <TeamLogo teamName={c.name} teamColor={c.color} f1={true} />
+      <TeamLogo teamName={c.name} teamColor={c.color} f1 />
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between mb-0.5">
           <span className="text-xs font-medium truncate">{c.name}</span>
@@ -130,6 +188,7 @@ function ConstructorRow({ c, maxPts }: { c: ConstructorStanding; maxPts: number 
   );
 }
 
+/* ── Multi-class section (WEC / IMSA) ── */
 function ClassSection({
   title,
   data,
@@ -167,11 +226,22 @@ function ClassSection({
   );
 }
 
+/* ── Note footer ── */
+function Note({ children }: { children: string }) {
+  return (
+    <p className="text-[9px] mt-3 text-right" style={{ color: 'var(--pw-text-tertiary)' }}>
+      {children}
+    </p>
+  );
+}
+
+/* ── Main panel ── */
 export default function StandingsPanel() {
-  const [activeTab, setActiveTab] = useState<StandingsTab>('f1-drivers');
+  const [activeTab, setActiveTab] = useState<SeriesTab>('f1');
+  const [f1Sub, setF1Sub] = useState<F1Sub>('drivers');
   const [expanded, setExpanded] = useState(true);
 
-  const currentTab = TABS.find((t) => t.id === activeTab)!;
+  const accent = SERIES_META[activeTab]?.accent ?? '#E10600';
 
   return (
     <motion.section
@@ -208,51 +278,61 @@ export default function StandingsPanel() {
             exit={{ height: 0, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 200, damping: 25 }}
           >
-            {/* Tab selector */}
-            <div className="flex gap-1 mb-4 p-1 rounded-lg overflow-x-auto" style={{ background: 'rgba(255,255,255,0.03)' }}>
-              {TABS.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className="text-[11px] font-medium py-1.5 px-3 rounded-md transition-all duration-200 whitespace-nowrap shrink-0"
-                  style={{
-                    background: activeTab === tab.id ? `${tab.accent}20` : 'transparent',
-                    color: activeTab === tab.id ? tab.accent : 'var(--pw-text-tertiary)',
-                    border: activeTab === tab.id ? `1px solid ${tab.accent}30` : '1px solid transparent',
-                  }}
-                >
-                  {tab.label}
-                </button>
+            {/* Logo tab bar */}
+            <div className="flex gap-1.5 mb-4 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
+              {SERIES_TABS.map((s) => (
+                <SeriesTabButton
+                  key={s}
+                  series={s}
+                  isActive={activeTab === s}
+                  onClick={() => setActiveTab(s)}
+                />
               ))}
             </div>
+
+            {/* F1 sub-toggle: Drivers / Teams */}
+            {activeTab === 'f1' && (
+              <div className="flex gap-1 mb-3 p-0.5 rounded-lg w-fit" style={{ background: 'rgba(255,255,255,0.04)' }}>
+                {(['drivers', 'teams'] as F1Sub[]).map((sub) => (
+                  <button
+                    key={sub}
+                    onClick={() => setF1Sub(sub)}
+                    className="text-[10px] font-semibold uppercase tracking-wider px-3 py-1 rounded-md transition-all duration-150"
+                    style={{
+                      background: f1Sub === sub ? `${accent}22` : 'transparent',
+                      color: f1Sub === sub ? accent : 'var(--pw-text-tertiary)',
+                      border: f1Sub === sub ? `1px solid ${accent}35` : '1px solid transparent',
+                    }}
+                  >
+                    {sub}
+                  </button>
+                ))}
+              </div>
+            )}
 
             {/* Content */}
             <AnimatePresence mode="wait">
               <motion.div
-                key={activeTab}
+                key={`${activeTab}-${f1Sub}`}
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -6 }}
                 transition={{ duration: 0.2 }}
               >
-                {activeTab === 'f1-drivers' && (
+                {activeTab === 'f1' && f1Sub === 'drivers' && (
                   <div className="space-y-0">
                     {F1_DRIVERS_2026.map((d) => (
                       <DriverRow key={d.pos} d={d} maxPts={F1_DRIVERS_2026[0].points} f1 />
                     ))}
-                    <p className="text-[9px] mt-3 text-right" style={{ color: 'var(--pw-text-tertiary)' }}>
-                      After Round 4 · Miami GP
-                    </p>
+                    <Note>After Round 4 · Miami GP</Note>
                   </div>
                 )}
-                {activeTab === 'f1-constructors' && (
+                {activeTab === 'f1' && f1Sub === 'teams' && (
                   <div className="space-y-0">
                     {F1_CONSTRUCTORS_2026.map((c) => (
                       <ConstructorRow key={c.pos} c={c} maxPts={F1_CONSTRUCTORS_2026[0].points} />
                     ))}
-                    <p className="text-[9px] mt-3 text-right" style={{ color: 'var(--pw-text-tertiary)' }}>
-                      After Round 4 · Miami GP
-                    </p>
+                    <Note>After Round 4 · Miami GP</Note>
                   </div>
                 )}
                 {activeTab === 'motogp' && (
@@ -260,9 +340,7 @@ export default function StandingsPanel() {
                     {MOTOGP_RIDERS_2026.map((d) => (
                       <DriverRow key={d.pos} d={d} maxPts={MOTOGP_RIDERS_2026[0].points} />
                     ))}
-                    <p className="text-[9px] mt-3 text-right" style={{ color: 'var(--pw-text-tertiary)' }}>
-                      After Round 6 · Catalan GP
-                    </p>
+                    <Note>After Round 6 · Catalan GP</Note>
                   </div>
                 )}
                 {activeTab === 'wec' && (
@@ -286,9 +364,7 @@ export default function StandingsPanel() {
                     {WRC_DRIVERS_2026.map((d) => (
                       <DriverRow key={d.pos} d={d} maxPts={WRC_DRIVERS_2026[0].points} />
                     ))}
-                    <p className="text-[9px] mt-3 text-right" style={{ color: 'var(--pw-text-tertiary)' }}>
-                      After Round 6 · Rally of Portugal
-                    </p>
+                    <Note>After Round 6 · Rally of Portugal</Note>
                   </div>
                 )}
                 {activeTab === 'imsa' && (
@@ -318,9 +394,7 @@ export default function StandingsPanel() {
                     {DTM_DRIVERS_2026.map((d, i) => (
                       <DriverRow key={`${d.pos}-${d.name}`} d={{ ...d, pos: i + 1 }} maxPts={DTM_DRIVERS_2026[0].points} />
                     ))}
-                    <p className="text-[9px] mt-3 text-right" style={{ color: 'var(--pw-text-tertiary)' }}>
-                      After Round 1 · Red Bull Ring
-                    </p>
+                    <Note>After Round 1 · Red Bull Ring</Note>
                   </div>
                 )}
               </motion.div>
