@@ -137,19 +137,18 @@ export default function F1TimingPanel({ eventId, accentColor, eventState }: Prop
 
               {/* Team logo / color bar */}
               {(() => {
-                const logo = getTeamLogo(r.team);
+                const logo = getTeamLogo(r.team, true); // F1 context → official white logos
                 return logo ? (
                   <div className="w-7 h-5 flex-shrink-0 flex items-center justify-center overflow-hidden">
                     <img
-                      src={logo}
+                      src={logo.src}
                       alt={r.team}
                       style={{
                         height: 16,
                         width: 'auto',
                         maxWidth: 28,
                         objectFit: 'contain',
-                        mixBlendMode: 'screen',
-                        filter: 'brightness(1.6) saturate(1.2) contrast(1.1)',
+                        opacity: 0.9,  // white logos — no blend mode needed
                       }}
                     />
                   </div>

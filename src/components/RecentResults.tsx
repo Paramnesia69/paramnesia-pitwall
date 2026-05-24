@@ -61,7 +61,8 @@ function PodiumCard({ result }: { result: RaceResult }) {
       {/* Podium */}
       <div className="space-y-1.5">
         {result.podium.map((p, i) => {
-          const logo = getTeamLogo(p.team);
+          const isF1 = result.series === 'f1';
+          const logo = getTeamLogo(p.team, isF1);
           return (
             <div key={p.pos} className="flex items-center gap-2">
               {/* Position medal */}
@@ -79,15 +80,17 @@ function PodiumCard({ result }: { result: RaceResult }) {
               {logo ? (
                 <div className="w-6 h-5 shrink-0 flex items-center justify-center overflow-hidden">
                   <img
-                    src={logo}
+                    src={logo.src}
                     alt={p.team}
                     style={{
                       height: 15,
                       width: 'auto',
                       maxWidth: 24,
                       objectFit: 'contain',
-                      mixBlendMode: 'screen',
-                      filter: 'brightness(1.6) saturate(1.2) contrast(1.1)',
+                      ...(logo.white
+                        ? { opacity: 0.9 }
+                        : { mixBlendMode: 'screen', opacity: 0.85 }
+                      ),
                     }}
                   />
                 </div>

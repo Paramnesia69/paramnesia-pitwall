@@ -26,21 +26,23 @@ const TABS: { id: StandingsTab; label: string; accent: string }[] = [
   { id: 'dtm', label: 'DTM', accent: '#1E88E5' },
 ];
 
-function TeamLogo({ teamName, teamColor }: { teamName: string; teamColor: string }) {
-  const logo = getTeamLogo(teamName);
+function TeamLogo({ teamName, teamColor, f1 = false }: { teamName: string; teamColor: string; f1?: boolean }) {
+  const logo = getTeamLogo(teamName, f1);
   if (logo) {
     return (
       <div className="w-7 h-5 shrink-0 flex items-center justify-center overflow-hidden">
         <img
-          src={logo}
+          src={logo.src}
           alt={teamName}
           style={{
             height: 16,
             width: 'auto',
             maxWidth: 28,
             objectFit: 'contain',
-            mixBlendMode: 'screen',
-            filter: 'brightness(1.6) saturate(1.2) contrast(1.1)',
+            ...(logo.white
+              ? { opacity: 0.9 }                          // Official F1 white logos — no manipulation
+              : { mixBlendMode: 'screen', opacity: 0.85 } // Brand SVGs — screen blend hides dark bg
+            ),
           }}
         />
       </div>
@@ -49,7 +51,7 @@ function TeamLogo({ teamName, teamColor }: { teamName: string; teamColor: string
   return <div className="w-1 h-4 rounded-full shrink-0" style={{ background: teamColor }} />;
 }
 
-function DriverRow({ d, maxPts }: { d: DriverStanding; maxPts: number }) {
+function DriverRow({ d, maxPts, f1 = false }: { d: DriverStanding; maxPts: number; f1?: boolean }) {
   const barWidth = maxPts > 0 ? (d.points / maxPts) * 100 : 0;
   return (
     <motion.div
@@ -64,7 +66,7 @@ function DriverRow({ d, maxPts }: { d: DriverStanding; maxPts: number }) {
       >
         {d.pos}
       </span>
-      <TeamLogo teamName={d.team} teamColor={d.teamColor} />
+      <TeamLogo teamName={d.team} teamColor={d.teamColor} f1={f1} />
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between mb-0.5">
           <span className="text-xs font-medium truncate">{d.name}</span>
@@ -99,7 +101,7 @@ function ConstructorRow({ c, maxPts }: { c: ConstructorStanding; maxPts: number 
       >
         {c.pos}
       </span>
-      <TeamLogo teamName={c.name} teamColor={c.color} />
+      <TeamLogo teamName={c.name} teamColor={c.color} f1={true} />
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between mb-0.5">
           <span className="text-xs font-medium truncate">{c.name}</span>
@@ -190,7 +192,7 @@ export default function StandingsPanel() {
                 {activeTab === 'f1-drivers' && (
                   <div className="space-y-0">
                     {F1_DRIVERS_2026.map((d) => (
-                      <DriverRow key={d.pos} d={d} maxPts={F1_DRIVERS_2026[0].points} />
+                      <DriverRow key={d.pos} d={d} maxPts={F1_DRIVERS_2026[0].points} f1 />
                     ))}
                     <p className="text-[9px] mt-3 text-right" style={{ color: 'var(--pw-text-tertiary)' }}>
                       After Round 4 · Miami GP
