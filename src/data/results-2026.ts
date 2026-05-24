@@ -419,6 +419,41 @@ export const ELMS_RESULTS_2026: RaceResult[] = [
   },
 ];
 
+// ─── DTM 2026 Race Results ────────────────────────────────
+// Source: pitdebrief.com, autosport.com, racer.com — Red Bull Ring R1 (Apr 26-27)
+export const DTM_RESULTS_2026: RaceResult[] = [
+  {
+    id: 'dtm-r1-rbr-race1',
+    series: 'dtm',
+    round: 1,
+    name: 'DTM Red Bull Ring — Race 1',
+    circuit: 'Red Bull Ring',
+    country: 'Austria',
+    countryCode: 'AT',
+    date: '2026-04-26',
+    podium: [
+      { pos: 1, driver: 'Thomas Preining', team: 'Porsche' },
+      { pos: 2, driver: 'Lucas Auer', team: 'Mercedes-AMG' },
+      { pos: 3, driver: 'Maro Engel', team: 'Mercedes-AMG' },
+    ],
+  },
+  {
+    id: 'dtm-r1-rbr-race2',
+    series: 'dtm',
+    round: 1,
+    name: 'DTM Red Bull Ring — Race 2',
+    circuit: 'Red Bull Ring',
+    country: 'Austria',
+    countryCode: 'AT',
+    date: '2026-04-27',
+    podium: [
+      { pos: 1, driver: 'Maro Engel', team: 'Mercedes-AMG' },
+      { pos: 2, driver: 'Marco Wittmann', team: 'BMW' },
+      { pos: 3, driver: 'Lucas Auer', team: 'Mercedes-AMG' },
+    ],
+  },
+];
+
 // ─── Combined recent results (latest first) ─────────────
 export const ALL_RESULTS_2026: RaceResult[] = [
   ...F1_RESULTS_2026,
@@ -427,4 +462,5 @@ export const ALL_RESULTS_2026: RaceResult[] = [
   ...WRC_RESULTS_2026,
   ...IMSA_RESULTS_2026,
   ...ELMS_RESULTS_2026,
+  ...DTM_RESULTS_2026,
 ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());

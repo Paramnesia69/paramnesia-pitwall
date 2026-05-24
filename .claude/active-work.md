@@ -96,7 +96,7 @@ claude
 8. ~~**Multi-class standings**~~ ✅ DONE — WEC (Hypercar + LMGT3), IMSA (GTP + GTD Pro + GTD)
 9. ~~**Full MotoGP grid**~~ ✅ DONE — extended to 23 riders; Yamaha/Honda/KTM all visible
 10. **Yamaha logo quality** — wordmark visible but yellowish tint. Could swap filter or find true-color source.
-11. **DTM recent results** — no race results for DTM yet (standings exist after R1)
+11. ~~**DTM recent results**~~ ✅ DONE — Race 1 (Preining/Auer/Engel) + Race 2 (Engel/Wittmann/Auer) at Red Bull Ring
 12. **Nürburgring/Nordschleife split** — both series share `nurburgring.jpg`
 13. **Live timing (OpenF1)** — already built, verify works during Canadian GP weekend
 
