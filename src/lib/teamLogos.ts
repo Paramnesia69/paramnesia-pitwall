@@ -137,6 +137,10 @@ const MFR_MAP: Record<string, string> = {
   KTM:                         '/logos/constructors/brand-ktm.png',
   'Red Bull KTM':              '/logos/constructors/brand-ktm.png',
   'Tech3 KTM':                 '/logos/constructors/brand-ktm.png',
+  Genesis:                     '/logos/constructors/brand-genesis.png',
+  'Genesis Magma Racing':      '/logos/constructors/brand-genesis.png',
+  // AF Corse entries run Ferraris
+  'AF Corse':                  '/logos/constructors/brand-ferrari.png',
 };
 
 function partialF1Match(lower: string): string | null {
@@ -175,6 +179,8 @@ function partialMfrMatch(lower: string): string | null {
   if (lower.includes('mclaren')) return '/logos/constructors/brand-mclaren.png';
   if (lower.includes('aston martin')) return '/logos/constructors/brand-aston-martin.png';
   if (lower.includes('audi') || lower.includes('sauber')) return '/logos/constructors/brand-audi.png';
+  if (lower.includes('genesis')) return '/logos/constructors/brand-genesis.png';
+  if (lower.includes('af corse') || lower.includes('vista af')) return '/logos/constructors/brand-ferrari.png';
   return null;
 }
 
@@ -215,6 +221,15 @@ export function getTeamLogo(teamName: string, f1Context = false): TeamLogoInfo |
       return { src, white: false, cssFilter: 'brightness(0) invert(1) opacity(0.85)', png: true };
     if (lower.includes('mclaren'))
       return { src, white: false, cssFilter: 'brightness(0) invert(1) opacity(0.85)', png: true };
+    // Peugeot: new 2021 shield logo is black-fill with white lion — invert for dark bg
+    if (lower.includes('peugeot'))
+      return { src, white: false, cssFilter: 'brightness(0) invert(1) opacity(0.9)', png: true };
+    // Genesis: chrome emblem OK but black wordmark needs brightening
+    if (lower.includes('genesis'))
+      return { src, white: false, cssFilter: 'brightness(1.8) contrast(1.2)', png: true };
+    // Peugeot: black shield — drop-shadow gives it visibility on dark bg without inverting
+    if (lower.includes('peugeot') || lower.includes('citroen') || lower.includes('citroën'))
+      return { src, white: false, cssFilter: 'drop-shadow(0 0 3px rgba(255,255,255,0.55)) drop-shadow(0 0 6px rgba(255,255,255,0.25))', png: true };
     return { src, white: false, png: true };
   }
 

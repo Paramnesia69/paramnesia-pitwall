@@ -3,14 +3,15 @@
  * F1: After Round 4 (Miami GP, May 3 2026) — source: formulaonehistory.com
  * MotoGP: After Round 6 (Catalan GP, May 17 2026) — source: gpblog.com / motogp.com
  * MotoGP Teams: computed from rider points (team pts = sum of both riders)
- * WEC: After Round 2 (6H Spa, May 10 2026) — source: fiawec.com / pitdebrief.com
- * WEC Manufacturers: derived from car standings; team pts = sum of both cars' pts
+ * WEC: After Round 2 (6H Spa, May 10 2026) — source: fiawec.com / Wikipedia
+ * WEC Manufacturers: official FIA WEC data (fiawec.com/en/page/manufacturers-classification)
  * WRC: After Round 6 (Rally Portugal, May 22 2026) — source: wrc.com
  * WRC Manufacturers: Toyota/Hyundai/Lancia/Ford — derived from driver pts top-3 per mfr
  * IMSA: After Round 4 (Laguna Seca, May 11 2026) — source: imsa.com / speedsport.com
  * IMSA Teams: each car entry IS the team entry — same pts as driver entry
  * DTM: After Round 1 (Red Bull Ring, Apr 2026) — source: dtm.com / autosport.com
  * DTM Manufacturers: top 2 drivers per brand per race — derived from driver standings
+ * ELMS: After Round 2 (Le Castellet, May 18 2026) — source: europeanlemansseries.com
  */
 
 export interface DriverStanding {
@@ -58,13 +59,26 @@ export const F1_CONSTRUCTORS_2026: ConstructorStanding[] = [
 ];
 
 // ─── WEC 2026 Hypercar Drivers Championship (after R2 · 6H Spa-Francorchamps) ─
-// Source: fiawec.com / pitdebrief.com — BMW 1-2 at Spa
+// Source: Wikipedia / fiawec.com — full grid, grouped by car entry
 export const WEC_DRIVERS_2026: DriverStanding[] = [
-  { pos: 1, name: 'Frijns / Rast',                  team: 'BMW M WRT',         points: 35, teamColor: '#1E88E5' },
-  { pos: 2, name: 'Buemi / Hartley / Hirakawa',     team: 'Toyota GR Sport',   points: 26, teamColor: '#EB0A1E' },
-  { pos: 3, name: 'S. van der Linde / co.',         team: 'BMW M WRT',         points: 22, teamColor: '#1E88E5' },
-  { pos: 4, name: 'Estre / Christensen',            team: 'Porsche Penske',    points: 19, teamColor: '#C0A062' },
-  { pos: 5, name: 'Fuoco / Molina / Nielsen',       team: 'Ferrari AF Corse',  points: 15, teamColor: '#E8002D' },
+  { pos: 1,  name: 'Frijns / Rast',                    team: 'BMW M Team WRT #20',           points: 35, teamColor: '#1E88E5' },
+  { pos: 2,  name: 'Buemi / Hartley / Hirakawa',       team: 'Toyota Racing #8',             points: 26, teamColor: '#EB0A1E' },
+  { pos: 3,  name: 'Conway / Kobayashi / de Vries',    team: 'Toyota Racing #7',             points: 25, teamColor: '#EB0A1E' },
+  { pos: 4,  name: 'van der Linde / Magnussen / Marciello', team: 'BMW M Team WRT #15',      points: 24, teamColor: '#1E88E5' },
+  { pos: 5,  name: 'Fuoco / Molina / Nielsen',         team: 'Ferrari AF Corse #50',         points: 23, teamColor: '#E8002D' },
+  { pos: 6,  name: 'Pier Guidi / Giovinazzi / Calado', team: 'Ferrari AF Corse #51',         points: 19, teamColor: '#E8002D' },
+  { pos: 7,  name: 'Vanthoor',                         team: 'BMW M Team WRT #15',           points: 18, teamColor: '#1E88E5' },
+  { pos: 8,  name: 'Tincknell / Gamble',               team: 'Aston Martin THOR #27',        points: 14, teamColor: '#006241' },
+  { pos: 9,  name: 'Félix da Costa / Habsburg / Milesi', team: 'Alpine Endurance #36',       points: 12, teamColor: '#0093CC' },
+  { pos: 10, name: 'Hanson / Kubica / Ye',             team: 'AF Corse #83',                 points: 9,  teamColor: '#E8002D' },
+  { pos: 11, name: 'Cassidy / di Resta / Vandoorne',   team: 'Peugeot TotalEnergies #93',    points: 6,  teamColor: '#AAAAAA' },
+  { pos: 12, name: 'Bamber / Bourdais',                team: 'Cadillac Hertz Jota #12',      points: 4,  teamColor: '#D4AF37' },
+  { pos: 13, name: 'Derani / Jaubert / Lotterer',      team: 'Genesis Magma Racing #4',      points: 4,  teamColor: '#4A90D9' },
+  { pos: 14, name: 'Nato / Stevens / Delétraz',        team: 'Cadillac Hertz Jota #38',      points: 2,  teamColor: '#D4AF37' },
+  { pos: 15, name: 'Duval / Jakobsen / Pourchaire',    team: 'Peugeot TotalEnergies #94',    points: 1,  teamColor: '#AAAAAA' },
+  { pos: 16, name: 'Gounon / Makowiecki / Martins',    team: 'Alpine Endurance #35',         points: 0,  teamColor: '#0093CC' },
+  { pos: 17, name: 'Chatin / Jaminet / Juncadella',    team: 'Genesis Magma Racing #19',     points: 0,  teamColor: '#4A90D9' },
+  { pos: 18, name: 'Riberas / Sørensen',               team: 'Aston Martin THOR #23',        points: 0,  teamColor: '#006241' },
 ];
 
 // ─── WEC 2026 LMGT3 Drivers Championship (after R2 · 6H Spa-Francorchamps) ─
@@ -181,12 +195,16 @@ export const MOTOGP_TEAMS_2026: ConstructorStanding[] = [
 ];
 
 // ─── WEC 2026 Hypercar Manufacturers Championship (after R2 · 6H Spa) ─
-// Manufacturer pts = sum of both entered cars' pts from driver standings
+// Source: fiawec.com/en/page/manufacturers-classification — official FIA data
 export const WEC_MANUFACTURERS_2026: ConstructorStanding[] = [
-  { pos: 1, name: 'BMW M Motorsport',    points: 57, color: '#1E88E5' }, // Frijns/Rast 35 + vdLinde 22
-  { pos: 2, name: 'Toyota Gazoo Racing', points: 26, color: '#EB0A1E' }, // Buemi/Hartley/Hirakawa 26
-  { pos: 3, name: 'Porsche Penske',      points: 19, color: '#C0A062' }, // Estre/Christensen 19
-  { pos: 4, name: 'Ferrari AF Corse',    points: 15, color: '#E8002D' }, // Fuoco/Molina/Nielsen 15
+  { pos: 1, name: 'BMW',          points: 59, color: '#1E88E5' }, // Imola 16 + Spa 43
+  { pos: 2, name: 'Toyota',       points: 52, color: '#EB0A1E' }, // Imola 40 + Spa 12
+  { pos: 3, name: 'Ferrari',      points: 42, color: '#E8002D' }, // Imola 26+1 + Spa 15
+  { pos: 4, name: 'Aston Martin', points: 14, color: '#006241' }, // Imola 2 + Spa 12
+  { pos: 5, name: 'Alpine',       points: 14, color: '#0093CC' }, // Imola 13 + Spa 1
+  { pos: 6, name: 'Peugeot',      points: 9,  color: '#AAAAAA' }, // Imola 0 + Spa 8+1
+  { pos: 7, name: 'Cadillac',     points: 8,  color: '#D4AF37' }, // Imola 4 + Spa 4
+  { pos: 8, name: 'Genesis',      points: 6,  color: '#4A90D9' }, // Imola 0 + Spa 6
 ];
 
 // ─── WEC 2026 LMGT3 Manufacturers Championship (after R2 · 6H Spa) ─
@@ -243,4 +261,95 @@ export const DTM_MANUFACTURERS_2026: ConstructorStanding[] = [
   { pos: 3, name: 'Porsche',      points: 29, color: '#C0A062' }, // Preining 29
   { pos: 4, name: 'Ford',         points: 29, color: '#0032A0' }, // Wiebelhaus 15 + Maini 14
   { pos: 5, name: 'Aston Martin', points: 17, color: '#006241' }, // Thiim 17
+];
+
+// ═══════════════════════════════════════════════════════════════════
+// ELMS 2026 — European Le Mans Series (after R2 · 4H Le Castellet)
+// Source: europeanlemansseries.com/en/page/classification-2?season_id=4180
+// ═══════════════════════════════════════════════════════════════════
+
+// ─── ELMS LMP2 Drivers (after R2 · Le Castellet) ─
+export const ELMS_LMP2_DRIVERS_2026: DriverStanding[] = [
+  { pos: 1,  name: 'Hanley / Saucy / Peebles',            team: 'United Autosports #22',          points: 40, teamColor: '#1E3A5F' },
+  { pos: 2,  name: 'Garg / De Gérus',                     team: 'Inter Europol #34',              points: 37, teamColor: '#D4AF37' },
+  { pos: 3,  name: 'Masson / Rousset / Gray',             team: 'Forestier Racing by Panis #29',  points: 26, teamColor: '#C8102E' },
+  { pos: 4,  name: 'Chadwick / Hörr / Rinicella',         team: 'IDEC Sport #18',                 points: 24, teamColor: '#0059A8' },
+  { pos: 5,  name: 'Fittipaldi / Cullen / Lomko',         team: 'Vector Sport #10',               points: 18, teamColor: '#FF6600' },
+  { pos: 6,  name: 'Van Uitert / Lafargue / Chatin',      team: 'IDEC Sport #28',                 points: 16, teamColor: '#0059A8' },
+  { pos: 7,  name: 'Smiechowski / Dillmann',              team: 'Inter Europol #43',              points: 16, teamColor: '#D4AF37' },
+  { pos: 8,  name: 'Closmenil / Aguilera / Jensen',       team: 'CLX Motorsport #37',             points: 12, teamColor: '#333333' },
+  { pos: 9,  name: 'Pearson / Doohan / Nissany',          team: 'Nielsen Racing #24',             points: 7,  teamColor: '#00A86B' },
+  { pos: 10, name: 'Ried / Rockenfeller / Priaulx',       team: 'Proton Competition #9',          points: 4,  teamColor: '#AAAAAA' },
+  { pos: 11, name: 'Hughes / Kaiser / Vautier',           team: 'Algarve Pro Racing #25',         points: 4,  teamColor: '#006241' },
+];
+
+// ─── ELMS LMP2 Teams (after R2 · Le Castellet) ─
+export const ELMS_LMP2_TEAMS_2026: ConstructorStanding[] = [
+  { pos: 1,  name: 'United Autosports #22',          points: 40, color: '#1E3A5F' },
+  { pos: 2,  name: 'Inter Europol Competition #34',  points: 37, color: '#D4AF37' },
+  { pos: 3,  name: 'Forestier Racing by Panis #29',  points: 26, color: '#C8102E' },
+  { pos: 4,  name: 'IDEC Sport #18',                 points: 24, color: '#0059A8' },
+  { pos: 5,  name: 'Vector Sport #10',               points: 18, color: '#FF6600' },
+  { pos: 6,  name: 'IDEC Sport #28',                 points: 16, color: '#0059A8' },
+  { pos: 7,  name: 'Inter Europol Competition #43',  points: 16, color: '#D4AF37' },
+  { pos: 8,  name: 'CLX Motorsport #37',             points: 12, color: '#333333' },
+  { pos: 9,  name: 'Nielsen Racing #24',             points: 7,  color: '#00A86B' },
+  { pos: 10, name: 'Proton Competition #9',          points: 4,  color: '#AAAAAA' },
+  { pos: 11, name: 'Algarve Pro Racing #25',         points: 4,  color: '#006241' },
+];
+
+// ─── ELMS LMP3 Drivers (after R2 · Le Castellet) ─
+export const ELMS_LMP3_DRIVERS_2026: DriverStanding[] = [
+  { pos: 1,  name: 'Bukhantsov / Chou / Cubides',         team: 'Inter Europol #13',          points: 40, teamColor: '#D4AF37' },
+  { pos: 2,  name: 'Rodella / Cautela / Pedersen',        team: 'Rinaldi Racing #5',          points: 31, teamColor: '#C8102E' },
+  { pos: 3,  name: 'Michal / Schwarze / Provost',         team: 'R-ACE GP #85',               points: 27, teamColor: '#0059A8' },
+  { pos: 4,  name: 'Fecury / Gravlund / Woodward',        team: 'Ultimate #35',               points: 20, teamColor: '#FF6600' },
+  { pos: 5,  name: 'Adcock / Antonel / Imbourg',          team: 'M Racing #68',               points: 18, teamColor: '#333333' },
+  { pos: 6,  name: 'Rammo / Favre / Brichacek',           team: 'DKR Engineering #4',         points: 18, teamColor: '#1E88E5' },
+  { pos: 7,  name: 'Nogales / Stern / Quintarelli',       team: 'Team Virage #8',             points: 14, teamColor: '#8B4FBF' },
+  { pos: 8,  name: 'Jacoby / Ribeiro / Lanchere',         team: 'CLX Motorsport #17',         points: 14, teamColor: '#333333' },
+  { pos: 9,  name: 'Dedecker / Bell / Van Der Snel',      team: 'Eurointernational #11',      points: 12, teamColor: '#006241' },
+  { pos: 10, name: 'De Sybourg / Meichtry',               team: 'Racing Spirit of Léman #31', points: 8,  teamColor: '#AAAAAA' },
+];
+
+// ─── ELMS LMP3 Teams (after R2 · Le Castellet) ─
+export const ELMS_LMP3_TEAMS_2026: ConstructorStanding[] = [
+  { pos: 1,  name: 'Inter Europol Competition #13',  points: 40, color: '#D4AF37' },
+  { pos: 2,  name: 'Rinaldi Racing #5',              points: 31, color: '#C8102E' },
+  { pos: 3,  name: 'R-ACE GP #85',                   points: 27, color: '#0059A8' },
+  { pos: 4,  name: 'Ultimate #35',                   points: 20, color: '#FF6600' },
+  { pos: 5,  name: 'M Racing #68',                   points: 18, color: '#333333' },
+  { pos: 6,  name: 'DKR Engineering #4',             points: 18, color: '#1E88E5' },
+  { pos: 7,  name: 'Team Virage #8',                 points: 14, color: '#8B4FBF' },
+  { pos: 8,  name: 'CLX Motorsport #17',             points: 14, color: '#333333' },
+  { pos: 9,  name: 'Eurointernational #11',          points: 12, color: '#006241' },
+  { pos: 10, name: 'Racing Spirit of Léman #31',     points: 8,  color: '#AAAAAA' },
+];
+
+// ─── ELMS LMGT3 Drivers (after R2 · Le Castellet) ─
+export const ELMS_LMGT3_DRIVERS_2026: DriverStanding[] = [
+  { pos: 1,  name: 'Serra / Jaubert / Kimura',            team: 'Kessel Racing #57',              points: 40, teamColor: '#E8002D' },
+  { pos: 2,  name: 'Kurzejewski / Lietz / Sargent',       team: 'Proton Competition #75',         points: 31, teamColor: '#AAAAAA' },
+  { pos: 3,  name: 'Perel / Cameron / Griffin',           team: 'Spirit of Race #55',             points: 20, teamColor: '#C8102E' },
+  { pos: 4,  name: 'Patterson / Birch',                   team: 'United Autosports #23',          points: 18, teamColor: '#1E3A5F' },
+  { pos: 5,  name: 'Udell / McDonald / Eastwood',         team: 'TF Sport #33',                   points: 18, teamColor: '#FFC906' },
+  { pos: 6,  name: 'Hanafin / Jansen / Wainwright',       team: 'GR Racing #86',                  points: 15, teamColor: '#C0A062' },
+  { pos: 7,  name: 'Al-Khelaifi / Hanses',                team: 'Team Qatar Iron Lynx #62',       points: 14, teamColor: '#8B1A4A' },
+  { pos: 8,  name: 'Bankcy / Van Eijndhoven',             team: 'Proton Competition #77',         points: 14, teamColor: '#AAAAAA' },
+  { pos: 9,  name: 'Naran / Andrade / Sette Câmara',      team: 'Iron Lynx #63',                  points: 14, teamColor: '#00A86B' },
+  { pos: 10, name: 'Toledo / Agostini',                   team: 'RM AF Corse #50',                points: 10, teamColor: '#E8002D' },
+];
+
+// ─── ELMS LMGT3 Teams (after R2 · Le Castellet) ─
+export const ELMS_LMGT3_TEAMS_2026: ConstructorStanding[] = [
+  { pos: 1,  name: 'Kessel Racing #57',              points: 40, color: '#E8002D' },
+  { pos: 2,  name: 'Proton Competition #75',         points: 31, color: '#AAAAAA' },
+  { pos: 3,  name: 'Spirit of Race #55',             points: 20, color: '#C8102E' },
+  { pos: 4,  name: 'United Autosports #23',          points: 18, color: '#1E3A5F' },
+  { pos: 5,  name: 'TF Sport #33',                   points: 18, color: '#FFC906' },
+  { pos: 6,  name: 'GR Racing #86',                  points: 15, color: '#C0A062' },
+  { pos: 7,  name: 'Team Qatar Iron Lynx #62',       points: 14, color: '#8B1A4A' },
+  { pos: 8,  name: 'Proton Competition #77',         points: 14, color: '#AAAAAA' },
+  { pos: 9,  name: 'Iron Lynx #63',                  points: 14, color: '#00A86B' },
+  { pos: 10, name: 'RM AF Corse #50',                points: 10, color: '#E8002D' },
 ];

@@ -24,13 +24,19 @@ import {
   IMSA_GTD_TEAMS_2026,
   DTM_DRIVERS_2026,
   DTM_MANUFACTURERS_2026,
+  ELMS_LMP2_DRIVERS_2026,
+  ELMS_LMP2_TEAMS_2026,
+  ELMS_LMP3_DRIVERS_2026,
+  ELMS_LMP3_TEAMS_2026,
+  ELMS_LMGT3_DRIVERS_2026,
+  ELMS_LMGT3_TEAMS_2026,
 } from '@/data/standings-2026';
 import type { DriverStanding, ConstructorStanding } from '@/data/standings-2026';
 
-type SeriesTab = 'f1' | 'motogp' | 'wec' | 'wrc' | 'imsa' | 'dtm';
+type SeriesTab = 'f1' | 'motogp' | 'wec' | 'wrc' | 'imsa' | 'dtm' | 'elms';
 type SubTab = 'drivers' | 'teams';
 
-const SERIES_TABS: SeriesTab[] = ['f1', 'motogp', 'wec', 'wrc', 'imsa', 'dtm'];
+const SERIES_TABS: SeriesTab[] = ['f1', 'wec', 'elms', 'imsa', 'motogp', 'dtm', 'wrc'];
 const LOGO_FILTER = 'grayscale(1) contrast(2) brightness(3)';
 
 /* ── Series logo tab button — matches Dashboard filter bar ── */
@@ -177,11 +183,12 @@ function ConstructorRow({ c, maxPts, f1 = false }: { c: ConstructorStanding; max
 }
 
 /* ── Multi-class section ── */
-function ClassSection({ title, data, note, accent, f1 = false, isTeams = false }: {
+function ClassSection({ title, data, note, accent, badgeSrc, f1 = false, isTeams = false }: {
   title: string;
   data: (DriverStanding | ConstructorStanding)[];
   note: string;
   accent: string;
+  badgeSrc?: string;
   f1?: boolean;
   isTeams?: boolean;
 }) {
@@ -189,10 +196,14 @@ function ClassSection({ title, data, note, accent, f1 = false, isTeams = false }
   return (
     <div className="mb-3 last:mb-0">
       <div className="flex items-center gap-2 mb-1.5">
-        <span className="text-[9px] font-bold uppercase tracking-[0.15em] px-1.5 py-0.5 rounded"
-          style={{ color: accent, background: `${accent}18`, border: `1px solid ${accent}30` }}>
-          {title}
-        </span>
+        {badgeSrc ? (
+          <img src={badgeSrc} alt={title} style={{ height: 20, width: 'auto', borderRadius: 3, flexShrink: 0 }} />
+        ) : (
+          <span className="text-[9px] font-bold uppercase tracking-[0.15em] px-1.5 py-0.5 rounded"
+            style={{ color: accent, background: `${accent}18`, border: `1px solid ${accent}30` }}>
+            {title}
+          </span>
+        )}
         <div className="flex-1 h-px" style={{ background: 'var(--pw-glass-border)' }} />
       </div>
       <div className="space-y-0">
@@ -299,13 +310,13 @@ export default function StandingsPanel() {
                 {activeTab === 'wec' && sub === 'drivers' && (
                   <div>
                     <ClassSection title="Hypercar" data={WEC_DRIVERS_2026} note="After R2 · 6H Spa-Francorchamps" accent="#0090D4" />
-                    <ClassSection title="LMGT3" data={WEC_LMGT3_DRIVERS_2026} note="After R2 · 6H Spa-Francorchamps" accent="#00B86E" />
+                    <ClassSection title="LMGT3" data={WEC_LMGT3_DRIVERS_2026} note="After R2 · 6H Spa-Francorchamps" accent="#1A6B38" badgeSrc="/logos/class-lmgt3.svg" />
                   </div>
                 )}
                 {activeTab === 'wec' && sub === 'teams' && (
                   <div>
                     <ClassSection title="Hypercar" data={WEC_MANUFACTURERS_2026} note="After R2 · 6H Spa-Francorchamps" accent="#0090D4" isTeams />
-                    <ClassSection title="LMGT3" data={WEC_LMGT3_MANUFACTURERS_2026} note="After R2 · 6H Spa-Francorchamps" accent="#00B86E" isTeams />
+                    <ClassSection title="LMGT3" data={WEC_LMGT3_MANUFACTURERS_2026} note="After R2 · 6H Spa-Francorchamps" accent="#1A6B38" badgeSrc="/logos/class-lmgt3.svg" isTeams />
                   </div>
                 )}
 
@@ -352,6 +363,22 @@ export default function StandingsPanel() {
                   <div className="space-y-0">
                     {DTM_MANUFACTURERS_2026.map((c) => <ConstructorRow key={c.pos} c={c} maxPts={DTM_MANUFACTURERS_2026[0].points} />)}
                     <Note>After Round 1 · Red Bull Ring</Note>
+                  </div>
+                )}
+
+                {/* ── ELMS ── */}
+                {activeTab === 'elms' && sub === 'drivers' && (
+                  <div>
+                    <ClassSection title="LMP2" data={ELMS_LMP2_DRIVERS_2026} note="After R2 · 4H Le Castellet" accent="#1E4B8C" badgeSrc="/logos/class-lmp2.svg" />
+                    <ClassSection title="LMP3" data={ELMS_LMP3_DRIVERS_2026} note="After R2 · 4H Le Castellet" accent="#4A2090" badgeSrc="/logos/class-lmp3.svg" />
+                    <ClassSection title="LMGT3" data={ELMS_LMGT3_DRIVERS_2026} note="After R2 · 4H Le Castellet" accent="#1A6B38" badgeSrc="/logos/class-lmgt3.svg" />
+                  </div>
+                )}
+                {activeTab === 'elms' && sub === 'teams' && (
+                  <div>
+                    <ClassSection title="LMP2" data={ELMS_LMP2_TEAMS_2026} note="After R2 · 4H Le Castellet" accent="#1E4B8C" badgeSrc="/logos/class-lmp2.svg" isTeams />
+                    <ClassSection title="LMP3" data={ELMS_LMP3_TEAMS_2026} note="After R2 · 4H Le Castellet" accent="#4A2090" badgeSrc="/logos/class-lmp3.svg" isTeams />
+                    <ClassSection title="LMGT3" data={ELMS_LMGT3_TEAMS_2026} note="After R2 · 4H Le Castellet" accent="#1A6B38" badgeSrc="/logos/class-lmgt3.svg" isTeams />
                   </div>
                 )}
 

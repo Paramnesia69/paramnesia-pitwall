@@ -204,7 +204,7 @@ export const WEC_RESULTS_2026: RaceResult[] = [
     podium: [
       { pos: 1, driver: 'Buemi / Hartley / Hirakawa', team: 'Toyota Racing #8' },
       { pos: 2, driver: 'Frijns / Rast / van der Linde', team: 'BMW M Team WRT #20' },
-      { pos: 3, driver: 'Estre / Christensen / Makowiecki', team: 'Porsche Penske #6' },
+      { pos: 3, driver: 'Pier Guidi / Giovinazzi / Calado', team: 'Ferrari AF Corse #51' },
     ],
   },
   {
@@ -218,7 +218,7 @@ export const WEC_RESULTS_2026: RaceResult[] = [
     date: '2026-05-09',
     podium: [
       { pos: 1, driver: 'Frijns / Rast / van der Linde', team: 'BMW M Team WRT #20' },
-      { pos: 2, driver: 'Buemi / Hartley / Hirakawa', team: 'Toyota Racing #8' },
+      { pos: 2, driver: 'Magnussen / Marciello / Vanthoor', team: 'BMW M Team WRT #15' },
       { pos: 3, driver: 'Fuoco / Molina / Nielsen', team: 'Ferrari AF Corse #50' },
     ],
   },

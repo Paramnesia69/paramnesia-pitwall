@@ -32,7 +32,7 @@ const EventDetailOverlay = lazy(() => import('@/components/EventDetailOverlay'))
 const Footer = lazy(() => import('@/components/Footer'));
 
 const ALL_SERIES: SeriesId[] = [
-  'f1', 'wec', 'imsa', 'motogp', 'wrc', 'gtwce', 'elms', 'dtm', 'nurburgring', 'porsche-supercup',
+  'f1', 'wec', 'elms', 'imsa', 'nurburgring', 'motogp', 'gtwce', 'dtm', 'wrc', 'porsche-supercup',
 ];
 
 interface DashboardProps {
