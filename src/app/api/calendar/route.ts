@@ -5,6 +5,29 @@ import type { SeriesId, SessionType } from '@/types';
 
 const SITE_URL = 'https://paramnesia-pitwall.vercel.app';
 
+/**
+ * RFC 7986 CSS color keyword + Apple hex color per series.
+ * COLOR      → Thunderbird, Fastmail, Proton Calendar, and other RFC 7986 clients.
+ * X-APPLE-CALENDAR-COLOR → Apple Calendar (macOS / iOS).
+ * Google Calendar ignores per-event colors from ICS; users should subscribe
+ * to per-series feeds (?series=f1) and set the calendar color in GCal UI.
+ */
+const SERIES_COLOR: Record<SeriesId, { css: string; hex: string }> = {
+  f1:                { css: 'red',        hex: '#E10600' },
+  motogp:            { css: 'crimson',    hex: '#BE0A14' },
+  wec:               { css: 'dodgerblue', hex: '#0090D4' },
+  elms:              { css: 'royalblue',  hex: '#3A7BD5' },
+  imsa:              { css: 'goldenrod',  hex: '#C4A747' },
+  wrc:               { css: 'green',      hex: '#00A651' },
+  gtwce:             { css: 'orangered',  hex: '#FF6B00' },
+  dtm:               { css: 'gold',       hex: '#F5C518' },
+  'porsche-supercup':{ css: 'peru',       hex: '#C0A062' },
+  'porsche-carrera': { css: 'peru',       hex: '#C0A062' },
+  nurburgring:       { css: 'mediumseagreen', hex: '#4CAF50' },
+  nordschleife:      { css: 'mediumseagreen', hex: '#4CAF50' },
+  lemans:            { css: 'blue',       hex: '#0D64FF' },
+};
+
 // Default session durations in minutes, used when endTime is absent
 const SESSION_DURATION: Record<SessionType, number> = {
   practice: 60,
@@ -88,6 +111,7 @@ export async function GET(req: NextRequest) {
 
   for (const event of events) {
     const meta = SERIES_META[event.series];
+    const color = SERIES_COLOR[event.series];
     const eventUrl = `${SITE_URL}/?event=${encodeURIComponent(event.id)}`;
 
     for (const session of event.sessions) {
@@ -119,6 +143,11 @@ export async function GET(req: NextRequest) {
       lines.push(`LOCATION:${esc(location)}`);
       lines.push(`DESCRIPTION:${esc(description)}`);
       lines.push(`URL:${eventUrl}`);
+      // Per-event colors (RFC 7986 + Apple extension)
+      if (color) {
+        lines.push(`COLOR:${color.css}`);
+        lines.push(`X-APPLE-CALENDAR-COLOR:${color.hex}`);
+      }
       lines.push('END:VEVENT');
     }
   }
