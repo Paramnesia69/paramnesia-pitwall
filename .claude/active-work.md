@@ -1,5 +1,9 @@
 # Active Work — PARAMNESIA PITWALL
 
+## Trigger Phrase
+**"Renew race weekend results"** → Claude uses WebSearch/WebFetch to find latest results for all non-F1 series and edits `src/data/results-2026.ts` + `src/data/standings-2026.ts` directly. No scripts, no terminal. F1 is excluded (automated via API routes).
+Series: MotoGP, WEC, ELMS, IMSA, WRC, DTM.
+
 ## Last Commit (2026-05-24)
 
 `d96340b` — feat: full WEC/ELMS standings, class plate badges, fixed logos

@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getTeamLogo } from '@/lib/teamLogos';
 import type { SeriesId } from '@/types';
 import { SERIES_META } from '@/types';
 import type { RaceResult } from '@/data/results-2026';
-import { ALL_RESULTS_2026 } from '@/data/results-2026';
+import { ALL_RESULTS_2026, F1_RESULTS_2026 } from '@/data/results-2026';
 import SeriesBadge from '@/components/ui/SeriesBadge';
 
 interface RecentResultsProps {
@@ -118,16 +118,30 @@ function PodiumCard({ result }: { result: RaceResult }) {
   );
 }
 
+const NON_F1_RESULTS = ALL_RESULTS_2026.filter(r => r.series !== 'f1');
+
 export default function RecentResults({ activeFilter = 'all' }: RecentResultsProps) {
   const [expanded, setExpanded] = useState(true);
+  const [f1Results, setF1Results] = useState<RaceResult[]>(F1_RESULTS_2026);
+
+  useEffect(() => {
+    fetch('/api/f1/results')
+      .then(r => r.ok ? r.json() : null)
+      .then(data => { if (Array.isArray(data)) setF1Results(data); })
+      .catch(() => {});
+  }, []);
+
+  const allResults = useMemo(() =>
+    [...f1Results, ...NON_F1_RESULTS].sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    ), [f1Results]);
 
   const filtered = useMemo(() => {
     const results = activeFilter === 'all'
-      ? ALL_RESULTS_2026
-      : ALL_RESULTS_2026.filter((r) => r.series === activeFilter);
-    // Show most recent 6
+      ? allResults
+      : allResults.filter((r) => r.series === activeFilter);
     return results.slice(0, 6);
-  }, [activeFilter]);
+  }, [activeFilter, allResults]);
 
   if (filtered.length === 0) return null;
 

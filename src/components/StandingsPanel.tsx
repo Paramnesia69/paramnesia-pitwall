@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getTeamLogo } from '@/lib/teamLogos';
@@ -228,12 +228,26 @@ export default function StandingsPanel() {
   const [activeTab, setActiveTab] = useState<SeriesTab>('f1');
   const [sub, setSub] = useState<SubTab>('drivers');
   const [expanded, setExpanded] = useState(true);
+  const [f1Drivers, setF1Drivers] = useState<DriverStanding[]>(F1_DRIVERS_2026);
+  const [f1Constructors, setF1Constructors] = useState<ConstructorStanding[]>(F1_CONSTRUCTORS_2026);
+  const [f1Round, setF1Round] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetch('/api/f1/standings')
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (data?.drivers?.length) setF1Drivers(data.drivers);
+        if (data?.constructors?.length) setF1Constructors(data.constructors);
+        if (data?.round) setF1Round(data.round);
+      })
+      .catch(() => {});
+  }, []);
 
   const accent = SERIES_META[activeTab]?.accent ?? '#E10600';
 
   const handleTabChange = (s: SeriesTab) => {
     setActiveTab(s);
-    setSub('drivers'); // always reset to drivers on series switch
+    setSub('drivers');
   };
 
   return (
@@ -281,14 +295,14 @@ export default function StandingsPanel() {
                 {/* ── F1 ── */}
                 {activeTab === 'f1' && sub === 'drivers' && (
                   <div className="space-y-0">
-                    {F1_DRIVERS_2026.map((d) => <DriverRow key={d.pos} d={d} maxPts={F1_DRIVERS_2026[0].points} f1 />)}
-                    <Note>After Round 4 · Miami GP</Note>
+                    {f1Drivers.map((d) => <DriverRow key={d.pos} d={d} maxPts={f1Drivers[0].points} f1 />)}
+                    <Note>{f1Round ? `After Round ${f1Round}` : 'After Round 4 · Miami GP'}</Note>
                   </div>
                 )}
                 {activeTab === 'f1' && sub === 'teams' && (
                   <div className="space-y-0">
-                    {F1_CONSTRUCTORS_2026.map((c) => <ConstructorRow key={c.pos} c={c} maxPts={F1_CONSTRUCTORS_2026[0].points} f1 />)}
-                    <Note>After Round 4 · Miami GP</Note>
+                    {f1Constructors.map((c) => <ConstructorRow key={c.pos} c={c} maxPts={f1Constructors[0].points} f1 />)}
+                    <Note>{f1Round ? `After Round ${f1Round}` : 'After Round 4 · Miami GP'}</Note>
                   </div>
                 )}
 
