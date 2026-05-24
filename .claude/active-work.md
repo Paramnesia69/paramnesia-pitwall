@@ -30,8 +30,8 @@ claude
 
 ## Backlog (prioritized)
 1. ~~**OpenGraph preview cards**~~ ✅ DONE
-2. **News feed — live RSS** — hardcoded content aging; hook into Autosport/Motorsport.com RSS
-3. **ICS calendar feed** — one-click `.ics` subscribe so races land in Google/Apple Calendar
+2. ~~**News feed — live RSS**~~ ✅ DONE — 6 RSS feeds (Motorsport.com × 5, The Race × 1), static fallback
+3. ~~**ICS calendar feed**~~ ✅ DONE — `/api/calendar` (254 sessions, `?series=` filter), Footer "Subscribe" link
 4. **Nürburgring/Nordschleife split** — both series share `nurburgring.jpg`; Nordschleife may need its own logo
 5. **Porsche Carrera Cup** — verify calendar has events (same logo/accent as Supercup)
 6. **Live timing (OpenF1)** — free API, no key; real lap data + session info for F1

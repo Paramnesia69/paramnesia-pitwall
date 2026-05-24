@@ -148,10 +148,7 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
             const isActive = activeFilter === id;
             const meta = SERIES_META[id];
             // JPG photos (nurburgring) need less aggressive brightness to avoid white bleed
-            const isPhoto = meta.logo?.endsWith('.jpg');
-            const logoFilter = isPhoto
-              ? 'grayscale(1) contrast(1.5) brightness(2)'
-              : 'grayscale(1) contrast(2) brightness(3)';
+            const logoFilter = 'grayscale(1) contrast(2) brightness(3)';
             return (
               <motion.button
                 key={id}

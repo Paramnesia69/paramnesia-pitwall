@@ -132,8 +132,8 @@ export const SERIES_META: Record<
   nurburgring: {
     name: 'Nürburgring',
     accent: '#4CAF50',
-    logo: '/logos/nurburgring.jpg',
+    logo: '/logos/nurburgring.svg',
   },
-  nordschleife: { name: 'Nordschleife', accent: '#4CAF50', logo: '/logos/nurburgring.jpg' },
+  nordschleife: { name: 'Nordschleife', accent: '#4CAF50', logo: '/logos/nurburgring.svg' },
   lemans: { name: 'Le Mans', accent: '#0D64FF', logo: '/logos/lemans.svg' },
 };
