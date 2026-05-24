@@ -12,6 +12,7 @@ import Countdown from '@/components/ui/Countdown';
 import CircuitStatsPanel from '@/components/ui/CircuitStatsPanel';
 import WeatherBadge from '@/components/ui/WeatherBadge';
 import EventShareButton from '@/components/ui/EventShareButton';
+import F1TimingPanel from '@/components/ui/F1TimingPanel';
 
 interface EventDetailOverlayProps {
   events: NormalizedRaceEvent[];
@@ -234,6 +235,15 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
                   ))}
                 </div>
               </div>
+
+              {/* F1 Live Timing — OpenF1 */}
+              {event.series === 'f1' && (
+                <F1TimingPanel
+                  eventId={event.id}
+                  accentColor={SERIES_META[event.series].accent}
+                  eventState={event.state}
+                />
+              )}
 
               {/* Watch / stream links */}
               {event.streamLinks.length > 0 && (
