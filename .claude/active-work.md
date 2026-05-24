@@ -1,25 +1,66 @@
 # Active Work — PARAMNESIA PITWALL
 
-## Last Commits (session 2026-05-23)
+## Last Commits (session 2026-05-24)
+
+`54d8ab7` — fix: proper logo colours for all series + add WRC/IMSA/ELMS results
+- teamLogos.ts: replaced `screen: boolean` with `cssFilter?: string` per logo entry
+- Ducati SVG contains real red+white fills → no filter, show naturally
+- Aprilia/Yamaha black-fill SVGs → tint to brand colour via sepia+hue-rotate
+- Brand PNG default: `brightness(1.6) saturate(2.5) contrast(1.2)` — vivid without washing
+- All 3 components (StandingsPanel, F1TimingPanel, RecentResults) updated to use cssFilter
+- results-2026.ts: added WRC R1–6, IMSA GTP R1–4, ELMS R1–2 (12 real races)
+
+`187e4c2` — feat: manufacturer logos across all panels with improved contrast
+- StandingsPanel: TeamLogo component, three-way rendering, w-10 h-6 containers
+- F1TimingPanel: logos at 18/20px with correct filters
+- RecentResults: podium logos 16/18px with correct filters
+- teamLogos.ts: added SVG_MFR_MAP for motorcycle brands
+
+`a10222d` — feat: F1 timing panel via OpenF1 API
+- `/api/openf1/timing?eventId=` → fetches latest session results
+- Polls every 45s during live/starting_soon state
+
 `296d68d` — feat: OpenGraph preview cards per event
-- `/api/og?event=<id>` → 1200×630 PNG, series accent color, Inter Bold TTF
-- `generateMetadata` in `page.tsx` wires `og:image` + `twitter:card` per `?event=` param
-- Inter Bold TTF (326KB) bundled in `public/fonts/inter-bold.ttf` (downloaded from Google Fonts CDN)
-- Generic fallback card for no/invalid event
 
-`7cee973` — ci: trigger deployment with refreshed Vercel token (empty commit)
+All commits pushed. Vercel auto-deploys on push.
 
-All commits pushed. Vercel deployment in progress.
+## Current Logo System (src/lib/teamLogos.ts)
 
-## Verified This Session
-- OG route: returns valid 1200×630 PNG for F1, WEC, and fallback
-- Series accent colors work (red for F1, blue for WEC)
-- Font: real Inter Bold TTF (not corrupt HTML — previous download was broken)
-- `generateMetadata` wired: `?event=f1-2026-05-22-canadian-grand-prix` sets correct og:image URL
+Three tiers — getTeamLogo(name, f1Context=false):
+1. **F1 official white WebPs** (f1Context=true) → `{ white: true }` → opacity 0.95 only
+2. **Motorcycle SVGs** (SVG_MOTO_MAP) → `{ cssFilter: '...' }`:
+   - Ducati family: natural red+white, no filter
+   - Aprilia/Trackhouse: sepia+hue-rotate → red tint
+   - Yamaha: sepia+hue-rotate → blue tint
+3. **Brand PNGs** (MFR_MAP, car-logos-dataset) → `{}` → default `brightness(1.6) saturate(2.5) contrast(1.2)`
 
-## Font Note
-`public/fonts/inter-bold.ttf` was initially downloaded as HTML (curl without redirects).
-Fixed by fetching from Google Fonts with Android User-Agent to get TTF format, then curl -L to actual gstatic URL.
+Component rendering pattern (same in all 3 components):
+```tsx
+logo.white           → { opacity: 0.95 }
+logo.cssFilter!=null → { filter: logo.cssFilter, opacity: 0.92 }
+default              → { filter: 'brightness(1.6) saturate(2.5) contrast(1.2)', opacity: 1 }
+```
+
+Logo files live in `public/logos/constructors/`:
+- `f1-{team}.webp` — official F1 white WebPs (11 teams)
+- `brand-{make}.png` — car-logos-dataset badge PNGs
+- `ducati.svg`, `aprilia.svg`, `yamaha.svg` — Wikimedia SVGs
+
+## Results Data Coverage (src/data/results-2026.ts)
+- F1: R1–4 (Australia → Miami)
+- MotoGP: R1–6 (Thailand → Catalunya)
+- WEC: R1–2 (Imola, Spa)
+- WRC: R1–6 (Monte Carlo → Portugal) ← NEW
+- IMSA GTP: R1–4 (Daytona → Laguna Seca) ← NEW
+- ELMS LMP2: R1–2 (Barcelona, Le Castellet) ← NEW
+
+## Standings Data Coverage (src/data/standings-2026.ts)
+- F1 Drivers + Constructors: after R4 Miami GP
+- MotoGP Riders: after R6 Catalunya
+- WEC Hypercar: after R2 Spa
+- WRC Drivers: after R6 Portugal
+- IMSA GTP: after R4 Laguna Seca
+- DTM: after R1 Red Bull Ring
 
 ## IMPORTANT: Launch Directory
 **Always launch Claude Code from inside the project folder:**
@@ -30,14 +71,16 @@ claude
 
 ## Backlog (prioritized)
 1. ~~**OpenGraph preview cards**~~ ✅ DONE
-2. ~~**News feed — live RSS**~~ ✅ DONE — 6 RSS feeds (Motorsport.com × 5, The Race × 1), static fallback
-3. ~~**ICS calendar feed**~~ ✅ DONE — `/api/calendar` (254 sessions, `?series=` filter), Footer "Subscribe" link
-4. **Nürburgring/Nordschleife split** — both series share `nurburgring.jpg`; Nordschleife may need its own logo
-5. **Porsche Carrera Cup** — verify calendar has events (same logo/accent as Supercup)
-6. **Live timing (OpenF1)** — free API, no key; real lap data + session info for F1
+2. ~~**News feed — live RSS**~~ ✅ DONE
+3. ~~**ICS calendar feed**~~ ✅ DONE
+4. ~~**Manufacturer logos everywhere**~~ ✅ DONE
+5. ~~**WRC/IMSA/ELMS recent results**~~ ✅ DONE
+6. **Logo quality** — Porsche crest is mostly dark gold; may want higher saturation or alternate source. Aprilia/Yamaha currently appear as red/blue tint (from black SVGs). Could improve with true-color PNG downloads.
+7. **DTM recent results** — no race results for DTM yet (standings exist after R1)
+8. **Nürburgring/Nordschleife split** — both series share `nurburgring.jpg`
+9. **Live timing (OpenF1)** — already built, verify works during Canadian GP weekend
 
 ## Session Bootstrap Reminder
 - Dev server: `npm run dev` in this directory (port 3000)
-- Preview tool: `.claude/launch.json` — use `preview_start("pitwall-dev")` to register
 - Vercel auto-deploys on push to `main` via GitHub Actions
 - No `.env.local` needed for basic features; OPENWEATHERMAP_API_KEY optional
