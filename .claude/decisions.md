@@ -8,7 +8,7 @@
 - **REAL data only** — NEVER invent race events, standings, results, news items, or session times
 - Calendar, results, standings, news are manually maintained in `src/data/*.ts`
 - Overrides in `src/data/overrides.json` for admin corrections
-- Sources for results: formula1.com, motogp.com, fiawec.com, wrc.com, imsa.com, europeanlemansseries.com, Wikipedia
+- Sources for results/standings: formula1.com, motogp.com, fiawec.com, wrc.com, imsa.com, europeanlemansseries.com, Wikipedia
 
 ## Architecture Decisions
 | Decision | Choice | Reason |
@@ -29,8 +29,23 @@
 | Motorcycle logos | Wikimedia SVGs + per-brand cssFilter | No car-logos-dataset equivalent for bikes |
 | Ducati SVG | No filter, show naturally | SVG already contains red+white fills — correct brand colours |
 | Aprilia/Yamaha SVGs | sepia+hue-rotate tint | Black-fill SVGs — tint to approximate brand colour |
-| Brand PNG filter | `brightness(1.6) saturate(2.5) contrast(1.2)` | Preserves vivid colours without blowing out (brightness(4) did) |
+| Brand PNG default | `brightness(1.6) saturate(2.5) contrast(1.2)` | Preserves vivid colours without blowing out |
 | F1 context flag | `getTeamLogo(name, true)` | F1 teams need white logos in F1 contexts, brand logos in WEC/DTM contexts |
+| Mercedes-AMG, McLaren, Audi | `brightness(0) invert(1) opacity(0.85)` | Black-fill badges → white on dark bg |
+| Peugeot | `brightness(0) invert(1) opacity(0.9)` | bg-stripped black shield → white; visible on dark bg |
+| Genesis | `brightness(1.8) contrast(1.2)` | Chrome emblem — boost but preserve metallic look |
+| AF Corse / Vista AF | Mapped to brand-ferrari.png | AF Corse and Vista AF run Ferrari cars |
+| `png: true` flag | Set on all brand PNG entries | Components use it to render PNGs larger than SVG moto logos |
+
+## Class Plate Badge Decisions
+| Decision | Choice | Reason |
+|---|---|---|
+| LMP2 colour | Blue (#1E4B8C) | Official ELMS race number plate colour for LMP2 |
+| LMP3 colour | Purple (#4A2090) | Official ELMS race number plate colour for LMP3 |
+| LMGT3 colour | Green (#1A6B38) | Official ELMS race number plate colour for LMGT3 |
+| LMGT3 badge layout | Two-line "LM / GT3" | Matches official ACO/ELMS badge design |
+| Hypercar (WEC) | Text badge only | No standard visual plate available |
+| WEC LMGT3 | Same badge as ELMS LMGT3 | Class is identical across both series |
 
 ## UI Philosophy (NON-NEGOTIABLE)
 - **Cinematic, premium, immersive, restrained** — NOT generic admin dashboard
@@ -53,6 +68,7 @@
 - Card uniform height: `h-full` must chain through StaggerItem → EventCard div → TiltCard
 - Logo watermarks: absolute positioned, z-index 0, pointer-events-none, opacity 0.06–0.10
 - Non-transparent series logos: always apply `filter: grayscale(1) contrast(2) brightness(3)`, `mixBlendMode: screen`, and `maskImage: radial-gradient(ellipse at center, black 30%, transparent 70%)`
+- ClassSection `badgeSrc` prop: use `<img>` at `height: 20px` — the SVG viewBox handles proportions
 
 ## External CDN
 - F1 circuit maps: `https://media.formula1.com/image/upload/f_auto/q_auto/v1677245035/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/{Name}_Circuit.png`

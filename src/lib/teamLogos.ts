@@ -221,15 +221,12 @@ export function getTeamLogo(teamName: string, f1Context = false): TeamLogoInfo |
       return { src, white: false, cssFilter: 'brightness(0) invert(1) opacity(0.85)', png: true };
     if (lower.includes('mclaren'))
       return { src, white: false, cssFilter: 'brightness(0) invert(1) opacity(0.85)', png: true };
-    // Peugeot: new 2021 shield logo is black-fill with white lion — invert for dark bg
-    if (lower.includes('peugeot'))
+    // Peugeot: bg-stripped black shield — invert to white for dark bg visibility
+    if (lower.includes('peugeot') || lower.includes('citroen') || lower.includes('citroën'))
       return { src, white: false, cssFilter: 'brightness(0) invert(1) opacity(0.9)', png: true };
-    // Genesis: chrome emblem OK but black wordmark needs brightening
+    // Genesis: chrome/chrome-on-white emblem — brightness boost makes it read clearly
     if (lower.includes('genesis'))
       return { src, white: false, cssFilter: 'brightness(1.8) contrast(1.2)', png: true };
-    // Peugeot: black shield — drop-shadow gives it visibility on dark bg without inverting
-    if (lower.includes('peugeot') || lower.includes('citroen') || lower.includes('citroën'))
-      return { src, white: false, cssFilter: 'drop-shadow(0 0 3px rgba(255,255,255,0.55)) drop-shadow(0 0 6px rgba(255,255,255,0.25))', png: true };
     return { src, white: false, png: true };
   }
 
