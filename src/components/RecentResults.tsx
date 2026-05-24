@@ -32,21 +32,8 @@ function getDisplayName(name: string): string {
 }
 
 function ClassBadge({ cls }: { cls: ResultClass }) {
-  if (cls === 'hypercar') {
-    return (
-      <span
-        className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded"
-        style={{
-          background: 'rgba(192,192,192,0.12)',
-          color: '#C0C0C0',
-          border: '1px solid rgba(192,192,192,0.25)',
-        }}
-      >
-        HYPERCAR
-      </span>
-    );
-  }
-  const svgMap: Record<Exclude<ResultClass, 'hypercar'>, string> = {
+  const svgMap: Record<ResultClass, string> = {
+    hypercar: '/logos/class-hypercar.svg',
     lmgt3: '/logos/class-lmgt3.svg',
     lmp2: '/logos/class-lmp2.svg',
     lmp3: '/logos/class-lmp3.svg',
