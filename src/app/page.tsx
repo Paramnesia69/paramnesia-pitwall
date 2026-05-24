@@ -51,7 +51,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 export default async function Home() {
   const [featured, upcoming, news] = await Promise.all([
     getFeaturedEvent(),
-    getUpcomingEvents(30),
+    getUpcomingEvents(),
     getNews(40),
   ]);
 
