@@ -7,6 +7,7 @@ import { SERIES_META } from '@/types';
 import { formatTimeISR } from '@/lib/events';
 import { useStore } from '@/store';
 import Countdown from '@/components/ui/Countdown';
+import SeriesBadge from '@/components/ui/SeriesBadge';
 
 interface ThisWeekendProps {
   events: NormalizedRaceEvent[];
@@ -57,15 +58,7 @@ export default function ThisWeekend({ events }: ThisWeekendProps) {
               />
               {/* Series + state */}
               <div className="flex items-center justify-between mb-2 relative">
-                <span
-                  className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded"
-                  style={{ color: meta.accent, background: `${meta.accent}12` }}
-                >
-                  {meta.logo && (
-                    <Image src={meta.logo} alt="" width={12} height={12} className="inline-block" />
-                  )}
-                  {meta.name}
-                </span>
+                <SeriesBadge series={event.series} size="sm" />
                 {event.state === 'live' && (
                   <span className="flex items-center gap-1 text-[10px] font-bold uppercase" style={{ color: '#E10600' }}>
                     <span className="pw-live-dot" style={{ width: 5, height: 5 }} />

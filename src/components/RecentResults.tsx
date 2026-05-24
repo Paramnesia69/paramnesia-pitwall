@@ -7,6 +7,7 @@ import type { SeriesId } from '@/types';
 import { SERIES_META } from '@/types';
 import type { RaceResult } from '@/data/results-2026';
 import { ALL_RESULTS_2026 } from '@/data/results-2026';
+import SeriesBadge from '@/components/ui/SeriesBadge';
 
 interface RecentResultsProps {
   activeFilter?: SeriesId | 'all';
@@ -33,16 +34,7 @@ function PodiumCard({ result }: { result: RaceResult }) {
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <span
-            className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded"
-            style={{
-              background: `${meta.accent}18`,
-              color: meta.accent,
-              border: `1px solid ${meta.accent}25`,
-            }}
-          >
-            {meta.name}
-          </span>
+          <SeriesBadge series={result.series} size="sm" />
           <span className="text-[10px] font-mono" style={{ color: 'var(--pw-text-tertiary)' }}>
             R{result.round}
           </span>

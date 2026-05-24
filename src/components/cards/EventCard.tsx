@@ -11,6 +11,7 @@ import Countdown from '@/components/ui/Countdown';
 import FavoriteButton from '@/components/ui/FavoriteButton';
 import { WeatherBadgeCompact } from '@/components/ui/WeatherBadge';
 import ReminderButton from '@/components/ui/ReminderButton';
+import SeriesBadge from '@/components/ui/SeriesBadge';
 
 interface EventCardProps {
   event: NormalizedRaceEvent;
@@ -68,18 +69,7 @@ export default memo(function EventCard({ event }: EventCardProps) {
 
         {/* Header row */}
         <div className="flex items-center justify-between gap-2 flex-wrap relative" style={{ transform: 'translateZ(20px)' }}>
-          <span
-            className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded whitespace-nowrap shrink-0"
-            style={{
-              color: meta.accent,
-              background: `${meta.accent}15`,
-            }}
-          >
-            {meta.logo && (
-              <Image src={meta.logo} alt="" width={14} height={14} className="inline-block" />
-            )}
-            {meta.name}
-          </span>
+          <SeriesBadge series={event.series} size="md" />
           <div className="flex items-center gap-2 ml-auto">
             <StateBadge state={event.state} />
             {event.weather && <WeatherBadgeCompact weather={event.weather} />}

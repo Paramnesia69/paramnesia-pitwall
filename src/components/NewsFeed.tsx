@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { NormalizedNewsItem, SeriesId } from '@/types';
 import { SERIES_META } from '@/types';
+import SeriesBadge from '@/components/ui/SeriesBadge';
 
 interface NewsFeedProps {
   items: NormalizedNewsItem[];
@@ -42,22 +43,6 @@ function TimeAgo({ date }: { date: string }) {
   );
 }
 
-function SeriesBadge({ series }: { series: SeriesId }) {
-  const meta = SERIES_META[series];
-  if (!meta) return null;
-  return (
-    <span
-      className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded"
-      style={{
-        background: `${meta.accent}18`,
-        color: meta.accent,
-        border: `1px solid ${meta.accent}25`,
-      }}
-    >
-      {meta.name}
-    </span>
-  );
-}
 
 function NewsItem({ item, index }: { item: NormalizedNewsItem; index: number }) {
   return (

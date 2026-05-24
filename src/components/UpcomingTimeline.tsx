@@ -6,6 +6,7 @@ import { SERIES_META } from '@/types';
 import { formatDateISR } from '@/lib/events';
 import { useStore } from '@/store';
 import Countdown from '@/components/ui/Countdown';
+import SeriesBadge from '@/components/ui/SeriesBadge';
 
 interface UpcomingTimelineProps {
   events: NormalizedRaceEvent[];
@@ -74,12 +75,7 @@ export default function UpcomingTimeline({ events }: UpcomingTimelineProps) {
                 } as React.CSSProperties}
                 onClick={() => openEvent(event.id)}
               >
-                <span
-                  className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded shrink-0"
-                  style={{ color: meta.accent, background: `${meta.accent}12` }}
-                >
-                  {meta.name}
-                </span>
+                <SeriesBadge series={event.series} size="sm" />
                 <div className="flex-1 min-w-0">
                   <h4 className="text-sm font-semibold truncate">{event.name}</h4>
                   <p className="text-[11px] truncate" style={{ color: 'var(--pw-text-tertiary)' }}>
