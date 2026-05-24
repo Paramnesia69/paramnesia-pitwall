@@ -115,7 +115,7 @@ export default function F1TimingPanel({ eventId, accentColor, eventState }: Prop
         {data.results.map((r, idx) => {
           const isLeader = r.position === 1;
           const gapText = isLeader
-            ? '—'
+            ? r.bestLap ?? '—'
             : r.gap ?? r.bestLap ?? '—';
 
           return (
@@ -181,7 +181,14 @@ export default function F1TimingPanel({ eventId, accentColor, eventState }: Prop
               {/* Gap / lap time */}
               <span
                 className="text-[11px] font-mono flex-shrink-0"
-                style={{ color: isLeader ? 'var(--pw-text-tertiary)' : 'var(--pw-text-secondary)' }}
+                style={{
+                  color: isLeader && r.bestLap
+                    ? accentColor
+                    : isLeader
+                    ? 'var(--pw-text-tertiary)'
+                    : 'var(--pw-text-secondary)',
+                  fontWeight: isLeader && r.bestLap ? 700 : undefined,
+                }}
               >
                 {gapText}
               </span>
