@@ -3,6 +3,7 @@
 import { useState, useMemo, useCallback, useEffect, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams, useRouter } from 'next/navigation';
+import Image from 'next/image';
 import type { NormalizedRaceEvent, SeriesId } from '@/types';
 import { SERIES_META } from '@/types';
 import { getThisWeekendEvents } from '@/lib/weekend';
@@ -127,9 +128,10 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
 
       {/* ── Category Selector ────────────────── */}
       <FadeIn delay={0.05}>
-        <nav className="flex gap-2 overflow-x-auto pb-4 mb-8">
+        <nav className="flex gap-2 overflow-x-auto pb-4 mb-8" style={{ scrollbarWidth: 'none' }}>
+          {/* All Series pill — text only */}
           <motion.button
-            className="px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all"
+            className="px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap flex-shrink-0 transition-all"
             style={{
               background: activeFilter === 'all' ? 'var(--pw-accent)' : 'var(--pw-glass-bg)',
               border: `1px solid ${activeFilter === 'all' ? 'var(--pw-accent)' : 'var(--pw-glass-border)'}`,
@@ -140,21 +142,63 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
           >
             All Series
           </motion.button>
+
+          {/* Per-series logo buttons */}
           {ALL_SERIES.map((id) => {
             const isActive = activeFilter === id;
+            const meta = SERIES_META[id];
+            // JPG photos (nurburgring) need less aggressive brightness to avoid white bleed
+            const isPhoto = meta.logo?.endsWith('.jpg');
+            const logoFilter = isPhoto
+              ? 'grayscale(1) contrast(1.5) brightness(2)'
+              : 'grayscale(1) contrast(2) brightness(3)';
             return (
               <motion.button
                 key={id}
-                className="px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all"
+                className="relative flex-shrink-0 rounded-xl overflow-hidden"
                 style={{
-                  background: isActive ? `${SERIES_META[id].accent}25` : 'var(--pw-glass-bg)',
-                  border: `1px solid ${isActive ? SERIES_META[id].accent : 'var(--pw-glass-border)'}`,
-                  color: isActive ? SERIES_META[id].accent : 'var(--pw-text-secondary)',
+                  width: 72,
+                  height: 40,
+                  background: isActive ? `${meta.accent}22` : 'var(--pw-glass-bg)',
+                  border: `1px solid ${isActive ? meta.accent : 'var(--pw-glass-border)'}`,
+                  boxShadow: isActive ? `0 0 18px ${meta.accent}44` : 'none',
+                  transition: 'border-color 0.2s, box-shadow 0.2s, background 0.2s',
                 }}
                 onClick={() => updateFilter(isActive ? 'all' : id)}
                 whileTap={{ scale: 0.95 }}
+                title={meta.name}
               >
-                {SERIES_META[id].name}
+                {meta.logo ? (
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      opacity: isActive ? 0.9 : 0.45,
+                      maskImage: 'radial-gradient(ellipse at center, black 45%, transparent 85%)',
+                      WebkitMaskImage: 'radial-gradient(ellipse at center, black 45%, transparent 85%)',
+                      transition: 'opacity 0.2s',
+                    }}
+                  >
+                    <div className="absolute inset-2">
+                      <Image
+                        src={meta.logo}
+                        alt={meta.name}
+                        fill
+                        className="object-contain"
+                        style={{
+                          filter: logoFilter,
+                          mixBlendMode: 'screen',
+                        }}
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <span
+                    className="absolute inset-0 flex items-center justify-center text-[10px] font-bold uppercase tracking-wider"
+                    style={{ color: isActive ? meta.accent : 'var(--pw-text-secondary)' }}
+                  >
+                    {meta.name}
+                  </span>
+                )}
               </motion.button>
             );
           })}
