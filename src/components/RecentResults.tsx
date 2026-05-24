@@ -89,9 +89,9 @@ function PodiumCard({ result }: { result: RaceResult }) {
                       objectFit: 'contain',
                       ...(logo.white
                         ? { opacity: 0.95 }
-                        : logo.screen
-                        ? { mixBlendMode: 'screen' as const, filter: 'brightness(1.8) contrast(1.6) saturate(1.2)', opacity: 1 }
-                        : { filter: 'contrast(1.5) brightness(1.2) saturate(1.1)', opacity: 1 }
+                        : logo.cssFilter !== undefined
+                        ? { filter: logo.cssFilter, opacity: 0.92 }
+                        : { filter: 'brightness(1.6) saturate(2.5) contrast(1.2)', opacity: 1 }
                       ),
                     }}
                   />

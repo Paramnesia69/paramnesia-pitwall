@@ -224,9 +224,207 @@ export const WEC_RESULTS_2026: RaceResult[] = [
   },
 ];
 
+// ─── WRC 2026 Rally Results ──────────────────────────────
+// Source: wrc.com, Wikipedia, DirtFish, TGR press releases
+export const WRC_RESULTS_2026: RaceResult[] = [
+  {
+    id: 'wrc-r1-montecarlo',
+    series: 'wrc',
+    round: 1,
+    name: 'Rallye Monte-Carlo',
+    circuit: 'Monte Carlo',
+    country: 'Monaco',
+    countryCode: 'MC',
+    date: '2026-01-25',
+    podium: [
+      { pos: 1, driver: 'O. Solberg / E. Edmondson', team: 'Toyota' },
+      { pos: 2, driver: 'E. Evans / S. Martin', team: 'Toyota' },
+      { pos: 3, driver: 'S. Ogier / V. Landais', team: 'Toyota' },
+    ],
+  },
+  {
+    id: 'wrc-r2-sweden',
+    series: 'wrc',
+    round: 2,
+    name: 'Rally Sweden',
+    circuit: 'Umeå Service Park',
+    country: 'Sweden',
+    countryCode: 'SE',
+    date: '2026-02-15',
+    podium: [
+      { pos: 1, driver: 'E. Evans / S. Martin', team: 'Toyota' },
+      { pos: 2, driver: 'T. Katsuta / A. Johnston', team: 'Toyota' },
+      { pos: 3, driver: 'S. Pajari / M. Salminen', team: 'Toyota' },
+    ],
+  },
+  {
+    id: 'wrc-r3-kenya',
+    series: 'wrc',
+    round: 3,
+    name: 'Safari Rally Kenya',
+    circuit: 'Naivasha',
+    country: 'Kenya',
+    countryCode: 'KE',
+    date: '2026-03-29',
+    podium: [
+      { pos: 1, driver: 'T. Katsuta / A. Johnston', team: 'Toyota' },
+      { pos: 2, driver: 'A. Fourmaux / A. Coria', team: 'Hyundai Motorsport' },
+      { pos: 3, driver: 'S. Pajari / M. Salminen', team: 'Toyota' },
+    ],
+  },
+  {
+    id: 'wrc-r4-croatia',
+    series: 'wrc',
+    round: 4,
+    name: 'Croatia Rally',
+    circuit: 'Zagreb',
+    country: 'Croatia',
+    countryCode: 'HR',
+    date: '2026-04-27',
+    podium: [
+      { pos: 1, driver: 'T. Katsuta / A. Johnston', team: 'Toyota' },
+      { pos: 2, driver: 'S. Pajari / M. Salminen', team: 'Toyota' },
+      { pos: 3, driver: 'H. Paddon', team: 'Hyundai Motorsport' },
+    ],
+  },
+  {
+    id: 'wrc-r5-canarias',
+    series: 'wrc',
+    round: 5,
+    name: 'Rally Islas Canarias',
+    circuit: 'Las Palmas',
+    country: 'Spain',
+    countryCode: 'ES',
+    date: '2026-05-04',
+    podium: [
+      { pos: 1, driver: 'S. Ogier / V. Landais', team: 'Toyota' },
+      { pos: 2, driver: 'E. Evans / S. Martin', team: 'Toyota' },
+      { pos: 3, driver: 'S. Pajari / M. Salminen', team: 'Toyota' },
+    ],
+  },
+  {
+    id: 'wrc-r6-portugal',
+    series: 'wrc',
+    round: 6,
+    name: 'Rally de Portugal',
+    circuit: 'Matosinhos',
+    country: 'Portugal',
+    countryCode: 'PT',
+    date: '2026-05-11',
+    podium: [
+      { pos: 1, driver: 'T. Neuville / M. Wydaeghe', team: 'Hyundai Motorsport' },
+      { pos: 2, driver: 'O. Solberg / E. Edmondson', team: 'Toyota' },
+      { pos: 3, driver: 'E. Evans / S. Martin', team: 'Toyota' },
+    ],
+  },
+];
+
+// ─── IMSA 2026 GTP Results ────────────────────────────────
+// Source: imsa.com, motorsport.com, porsche.com racing, racer.com
+export const IMSA_RESULTS_2026: RaceResult[] = [
+  {
+    id: 'imsa-r1-daytona',
+    series: 'imsa',
+    round: 1,
+    name: 'Rolex 24 At Daytona',
+    circuit: 'Daytona International Speedway',
+    country: 'United States',
+    countryCode: 'US',
+    date: '2026-01-25',
+    podium: [
+      { pos: 1, driver: 'Nasr / Andlauer / Heinrich', team: 'Porsche Penske Motorsport' },
+      { pos: 2, driver: 'Bamber / Aitken / Vesti', team: 'Whelen Cadillac' },
+      { pos: 3, driver: 'Eng / Wittmann / Yelloly', team: 'BMW M Team WRT' },
+    ],
+  },
+  {
+    id: 'imsa-r2-sebring',
+    series: 'imsa',
+    round: 2,
+    name: '12 Hours of Sebring',
+    circuit: 'Sebring International Raceway',
+    country: 'United States',
+    countryCode: 'US',
+    date: '2026-03-21',
+    podium: [
+      { pos: 1, driver: 'Nasr / Andlauer / Heinrich', team: 'Porsche Penske Motorsport' },
+      { pos: 2, driver: 'Jaminet / Campbell / Estre', team: 'Porsche Penske Motorsport' },
+      { pos: 3, driver: 'Bamber / Aitken / Vesti', team: 'Whelen Cadillac' },
+    ],
+  },
+  {
+    id: 'imsa-r3-longbeach',
+    series: 'imsa',
+    round: 3,
+    name: 'Acura Grand Prix of Long Beach',
+    circuit: 'Long Beach Street Circuit',
+    country: 'United States',
+    countryCode: 'US',
+    date: '2026-04-18',
+    podium: [
+      { pos: 1, driver: 'van der Zande / Yelloly', team: 'MSR Acura' },
+      { pos: 2, driver: 'Aitken / Vesti', team: 'Whelen Cadillac' },
+      { pos: 3, driver: 'Vanthoor / Estre', team: 'Porsche Penske Motorsport' },
+    ],
+  },
+  {
+    id: 'imsa-r4-lagunaseca',
+    series: 'imsa',
+    round: 4,
+    name: 'WeatherTech 240 at Laguna Seca',
+    circuit: 'WeatherTech Raceway Laguna Seca',
+    country: 'United States',
+    countryCode: 'US',
+    date: '2026-05-03',
+    podium: [
+      { pos: 1, driver: 'Heinrich / van der Helm', team: 'JDC-Miller Porsche' },
+      { pos: 2, driver: 'Bamber / Aitken', team: 'Whelen Cadillac' },
+      { pos: 3, driver: 'Eng / Wittmann', team: 'BMW M Team WRT' },
+    ],
+  },
+];
+
+// ─── ELMS 2026 LMP2 Results ───────────────────────────────
+// Source: europeanlemansseries.com, prescottmotorsport.co.uk, autohebdof1.com
+export const ELMS_RESULTS_2026: RaceResult[] = [
+  {
+    id: 'elms-r1-barcelona',
+    series: 'elms',
+    round: 1,
+    name: '4 Hours of Barcelona',
+    circuit: 'Circuit de Barcelona-Catalunya',
+    country: 'Spain',
+    countryCode: 'ES',
+    date: '2026-04-06',
+    podium: [
+      { pos: 1, driver: 'Masson / Gray / Rousset', team: 'Forestier Racing by Panis' },
+      { pos: 2, driver: 'Garg / De Gerus', team: 'Inter Europol Competition' },
+      { pos: 3, driver: 'Hanley / Saucy / Peebles', team: 'United Autosports' },
+    ],
+  },
+  {
+    id: 'elms-r2-lecastellet',
+    series: 'elms',
+    round: 2,
+    name: '4 Hours of Le Castellet',
+    circuit: 'Circuit Paul Ricard',
+    country: 'France',
+    countryCode: 'FR',
+    date: '2026-05-18',
+    podium: [
+      { pos: 1, driver: 'Peebles / Saucy / Hanley', team: 'United Autosports' },
+      { pos: 2, driver: 'De Gerus', team: 'Inter Europol Competition' },
+      { pos: 3, driver: 'Chatin', team: 'IDEC Sport' },
+    ],
+  },
+];
+
 // ─── Combined recent results (latest first) ─────────────
 export const ALL_RESULTS_2026: RaceResult[] = [
   ...F1_RESULTS_2026,
   ...MOTOGP_RESULTS_2026,
   ...WEC_RESULTS_2026,
+  ...WRC_RESULTS_2026,
+  ...IMSA_RESULTS_2026,
+  ...ELMS_RESULTS_2026,
 ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
