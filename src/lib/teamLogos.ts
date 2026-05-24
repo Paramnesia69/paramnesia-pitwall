@@ -22,6 +22,8 @@ export interface TeamLogoInfo {
    * Overrides the default per-tier filter logic in components.
    */
   cssFilter?: string;
+  /** true = brand PNG badge — render at larger size than SVG moto logos */
+  png?: boolean;
 }
 
 // ── Official F1 team logos (white WebP from media.formula1.com) ──────────────
@@ -55,23 +57,35 @@ const F1_MAP: Record<string, string> = {
 // ── Motorcycle brand SVGs — each needs its own colour treatment ───────────────
 // Ducati SVG already has red+white fills → no filter, just slight opacity
 // Aprilia/Yamaha SVGs are black-fill → use cssFilter to tint to brand colour
-const DUCATI_FILTER = undefined; // natural red+white, no distortion
+const DUCATI_FILTER  = undefined; // natural red+white, no distortion
 const APRILIA_FILTER = 'brightness(0) invert(1) sepia(1) saturate(8) hue-rotate(325deg) brightness(0.85)';
 const YAMAHA_FILTER  = 'brightness(0) invert(1) sepia(1) saturate(6) hue-rotate(195deg) brightness(0.9)';
+// ktm.svg has orange background (#f27620) + dark text — shows as orange badge naturally on dark UI
+const KTM_FILTER     = undefined;
 
 const SVG_MOTO_MAP: Record<string, { src: string; cssFilter?: string }> = {
-  Ducati:                  { src: '/logos/constructors/ducati.svg', cssFilter: DUCATI_FILTER },
-  'Ducati Lenovo':         { src: '/logos/constructors/ducati.svg', cssFilter: DUCATI_FILTER },
-  VR46:                    { src: '/logos/constructors/ducati.svg', cssFilter: DUCATI_FILTER },
-  'VR46 Racing':           { src: '/logos/constructors/ducati.svg', cssFilter: DUCATI_FILTER },
-  Gresini:                 { src: '/logos/constructors/ducati.svg', cssFilter: DUCATI_FILTER },
-  'Gresini Racing':        { src: '/logos/constructors/ducati.svg', cssFilter: DUCATI_FILTER },
-  Pramac:                  { src: '/logos/constructors/ducati.svg', cssFilter: DUCATI_FILTER },
+  Ducati:                  { src: '/logos/constructors/ducati.svg',  cssFilter: DUCATI_FILTER },
+  'Ducati Lenovo':         { src: '/logos/constructors/ducati.svg',  cssFilter: DUCATI_FILTER },
+  VR46:                    { src: '/logos/constructors/ducati.svg',  cssFilter: DUCATI_FILTER },
+  'VR46 Racing':           { src: '/logos/constructors/ducati.svg',  cssFilter: DUCATI_FILTER },
+  'Pertamina VR46 Ducati': { src: '/logos/constructors/ducati.svg',  cssFilter: DUCATI_FILTER },
+  Gresini:                 { src: '/logos/constructors/ducati.svg',  cssFilter: DUCATI_FILTER },
+  'Gresini Racing':        { src: '/logos/constructors/ducati.svg',  cssFilter: DUCATI_FILTER },
+  'BK8 Gresini Ducati':    { src: '/logos/constructors/ducati.svg',  cssFilter: DUCATI_FILTER },
+  Pramac:                  { src: '/logos/constructors/ducati.svg',  cssFilter: DUCATI_FILTER },
+  'Pramac Yamaha':         { src: '/logos/constructors/yamaha.svg',  cssFilter: YAMAHA_FILTER },
   Aprilia:                 { src: '/logos/constructors/aprilia.svg', cssFilter: APRILIA_FILTER },
   'Aprilia Racing':        { src: '/logos/constructors/aprilia.svg', cssFilter: APRILIA_FILTER },
   Trackhouse:              { src: '/logos/constructors/aprilia.svg', cssFilter: APRILIA_FILTER },
+  'Trackhouse Aprilia':    { src: '/logos/constructors/aprilia.svg', cssFilter: APRILIA_FILTER },
   Yamaha:                  { src: '/logos/constructors/yamaha.svg',  cssFilter: YAMAHA_FILTER },
+  'Monster Yamaha':        { src: '/logos/constructors/yamaha.svg',  cssFilter: YAMAHA_FILTER },
   'Monster Energy Yamaha': { src: '/logos/constructors/yamaha.svg',  cssFilter: YAMAHA_FILTER },
+  'Yamaha Factory Racing': { src: '/logos/constructors/yamaha.svg',  cssFilter: YAMAHA_FILTER },
+  KTM:                     { src: '/logos/constructors/ktm.svg',     cssFilter: KTM_FILTER },
+  'Red Bull KTM':          { src: '/logos/constructors/ktm.svg',     cssFilter: KTM_FILTER },
+  'Red Bull KTM Tech3':    { src: '/logos/constructors/ktm.svg',     cssFilter: KTM_FILTER },
+  'Tech3 KTM':             { src: '/logos/constructors/ktm.svg',     cssFilter: KTM_FILTER },
 };
 
 // ── Car badge PNGs from filippofilip95/car-logos-dataset (transparent bg) ────
@@ -114,6 +128,9 @@ const MFR_MAP: Record<string, string> = {
   'Wayne Taylor Acura':        '/logos/constructors/brand-acura.png',
   'MSR Acura':                 '/logos/constructors/brand-acura.png',
   'Meyer Shank Acura':         '/logos/constructors/brand-acura.png',
+  Corvette:                    '/logos/constructors/brand-corvette.png',
+  'Corvette Racing':           '/logos/constructors/brand-corvette.png',
+  'TF Sport Corvette':         '/logos/constructors/brand-corvette.png',
   Honda:                       '/logos/constructors/brand-honda.png',
   'Repsol Honda':              '/logos/constructors/brand-honda.png',
   'LCR Honda':                 '/logos/constructors/brand-honda.png',
@@ -151,6 +168,7 @@ function partialMfrMatch(lower: string): string | null {
   if (lower.includes('ford') || lower.includes('m-sport')) return '/logos/constructors/brand-ford.png';
   if (lower.includes('cadillac')) return '/logos/constructors/brand-cadillac.png';
   if (lower.includes('acura')) return '/logos/constructors/brand-acura.png';
+  if (lower.includes('corvette')) return '/logos/constructors/brand-corvette.png';
   if (lower.includes('peugeot') || lower.includes('citroën') || lower.includes('citroen')) return '/logos/constructors/brand-peugeot.png';
   if (lower.includes('lancia')) return '/logos/constructors/brand-lancia.png';
   if (lower.includes('alpine')) return '/logos/constructors/brand-alpine.png';
@@ -184,10 +202,19 @@ export function getTeamLogo(teamName: string, f1Context = false): TeamLogoInfo |
     return { src: '/logos/constructors/aprilia.svg', white: false, cssFilter: APRILIA_FILTER };
   if (lower.includes('yamaha'))
     return { src: '/logos/constructors/yamaha.svg', white: false, cssFilter: YAMAHA_FILTER };
+  if (lower.includes('ktm'))
+    return { src: '/logos/constructors/ktm.svg', white: false, cssFilter: KTM_FILTER };
 
   // Coloured brand PNG badges
   const src = MFR_MAP[teamName] ?? partialMfrMatch(lower);
-  if (src) return { src, white: false };
+  if (src) {
+    // Black-fill logos need inversion to show on dark backgrounds
+    if (lower.includes('mercedes-amg') || lower === 'amg')
+      return { src, white: false, cssFilter: 'brightness(0) invert(1) opacity(0.85)', png: true };
+    if (lower.includes('audi') || lower.includes('sauber'))
+      return { src, white: false, cssFilter: 'brightness(0) invert(1) opacity(0.85)', png: true };
+    return { src, white: false, png: true };
+  }
 
   return null;
 }

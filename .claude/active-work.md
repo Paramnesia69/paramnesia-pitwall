@@ -1,5 +1,21 @@
 # Active Work — PARAMNESIA PITWALL
 
+## Session 2026-05-24 (continued)
+
+### Logo + standings overhaul (uncommitted)
+- `teamLogos.ts`: KTM now uses `ktm.svg` (orange badge, natural colors) via SVG_MOTO_MAP
+- `teamLogos.ts`: Added Pramac Yamaha, Monster Yamaha, Yamaha Factory Racing, all KTM variants to SVG_MOTO_MAP
+- `teamLogos.ts`: KTM partial moto match added
+- `standings-2026.ts`: MotoGP extended to full 23-rider grid (Yamaha P13/19/21/22/23, Honda P11/16/17/18, KTM P12/14/20)
+- `standings-2026.ts`: WEC Hypercar → combined driver names per car
+- `standings-2026.ts`: Added WEC LMGT3 top 8 (pitdebrief.com confirmed)
+- `standings-2026.ts`: IMSA GTP → combined names + van der Zande P5 added
+- `standings-2026.ts`: Added IMSA GTD Pro top 4 (approximate pts, confirmed gaps)
+- `standings-2026.ts`: Added IMSA GTD top 4 (approximate pts, confirmed gaps)
+- `StandingsPanel.tsx`: Added ClassSection component with class badge headers
+- `StandingsPanel.tsx`: WEC tab = Hypercar + LMGT3 sections
+- `StandingsPanel.tsx`: IMSA tab = GTP + GTD Pro + GTD sections
+
 ## Last Commits (session 2026-05-24)
 
 `54d8ab7` — fix: proper logo colours for all series + add WRC/IMSA/ELMS results
@@ -75,10 +91,14 @@ claude
 3. ~~**ICS calendar feed**~~ ✅ DONE
 4. ~~**Manufacturer logos everywhere**~~ ✅ DONE
 5. ~~**WRC/IMSA/ELMS recent results**~~ ✅ DONE
-6. **Logo quality** — Porsche crest is mostly dark gold; may want higher saturation or alternate source. Aprilia/Yamaha currently appear as red/blue tint (from black SVGs). Could improve with true-color PNG downloads.
-7. **DTM recent results** — no race results for DTM yet (standings exist after R1)
-8. **Nürburgring/Nordschleife split** — both series share `nurburgring.jpg`
-9. **Live timing (OpenF1)** — already built, verify works during Canadian GP weekend
+6. ~~**Porsche logo quality**~~ ✅ DONE — custom cssFilter, gold now vivid
+7. ~~**KTM logo quality**~~ ✅ DONE — ktm.svg (natural orange badge), SVG_MOTO_MAP
+8. ~~**Multi-class standings**~~ ✅ DONE — WEC (Hypercar + LMGT3), IMSA (GTP + GTD Pro + GTD)
+9. ~~**Full MotoGP grid**~~ ✅ DONE — extended to 23 riders; Yamaha/Honda/KTM all visible
+10. **Yamaha logo quality** — wordmark visible but yellowish tint. Could swap filter or find true-color source.
+11. **DTM recent results** — no race results for DTM yet (standings exist after R1)
+12. **Nürburgring/Nordschleife split** — both series share `nurburgring.jpg`
+13. **Live timing (OpenF1)** — already built, verify works during Canadian GP weekend
 
 ## Session Bootstrap Reminder
 - Dev server: `npm run dev` in this directory (port 3000)

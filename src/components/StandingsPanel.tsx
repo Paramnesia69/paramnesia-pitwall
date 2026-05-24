@@ -8,8 +8,11 @@ import {
   F1_CONSTRUCTORS_2026,
   MOTOGP_RIDERS_2026,
   WEC_DRIVERS_2026,
+  WEC_LMGT3_DRIVERS_2026,
   WRC_DRIVERS_2026,
   IMSA_GTP_DRIVERS_2026,
+  IMSA_GTD_PRO_DRIVERS_2026,
+  IMSA_GTD_DRIVERS_2026,
   DTM_DRIVERS_2026,
 } from '@/data/standings-2026';
 import type { DriverStanding, ConstructorStanding } from '@/data/standings-2026';
@@ -29,21 +32,25 @@ const TABS: { id: StandingsTab; label: string; accent: string }[] = [
 function TeamLogo({ teamName, teamColor, f1 = false }: { teamName: string; teamColor: string; f1?: boolean }) {
   const logo = getTeamLogo(teamName, f1);
   if (logo) {
+    const isPng = !!logo.png;
     return (
-      <div className="w-10 h-6 shrink-0 flex items-center justify-center overflow-hidden">
+      <div
+        className="shrink-0 flex items-center justify-center overflow-hidden"
+        style={{ width: isPng ? 46 : 40, height: isPng ? 30 : 24 }}
+      >
         <img
           src={logo.src}
           alt={teamName}
           style={{
-            height: logo.white ? 18 : 20,
+            height: logo.white ? 18 : isPng ? 26 : 20,
             width: 'auto',
-            maxWidth: 40,
+            maxWidth: isPng ? 46 : 40,
             objectFit: 'contain',
             ...(logo.white
               ? { opacity: 0.95 }
               : logo.cssFilter !== undefined
               ? { filter: logo.cssFilter, opacity: 0.92 }
-              : { filter: 'brightness(1.6) saturate(2.5) contrast(1.2)', opacity: 1 }
+              : { filter: 'brightness(1.1) saturate(1.4) contrast(1.0)', opacity: 0.95 }
             ),
           }}
         />
@@ -120,6 +127,43 @@ function ConstructorRow({ c, maxPts }: { c: ConstructorStanding; maxPts: number 
         </div>
       </div>
     </motion.div>
+  );
+}
+
+function ClassSection({
+  title,
+  data,
+  note,
+  accent,
+  f1 = false,
+}: {
+  title: string;
+  data: DriverStanding[];
+  note: string;
+  accent: string;
+  f1?: boolean;
+}) {
+  const maxPts = data[0]?.points ?? 1;
+  return (
+    <div className="mb-3 last:mb-0">
+      <div className="flex items-center gap-2 mb-1.5">
+        <span
+          className="text-[9px] font-bold uppercase tracking-[0.15em] px-1.5 py-0.5 rounded"
+          style={{ color: accent, background: `${accent}18`, border: `1px solid ${accent}30` }}
+        >
+          {title}
+        </span>
+        <div className="flex-1 h-px" style={{ background: 'var(--pw-glass-border)' }} />
+      </div>
+      <div className="space-y-0">
+        {data.map((d, i) => (
+          <DriverRow key={`${title}-${i}`} d={{ ...d, pos: i + 1 }} maxPts={maxPts} f1={f1} />
+        ))}
+      </div>
+      <p className="text-[9px] mt-1.5 text-right" style={{ color: 'var(--pw-text-tertiary)' }}>
+        {note}
+      </p>
+    </div>
   );
 }
 
@@ -222,13 +266,19 @@ export default function StandingsPanel() {
                   </div>
                 )}
                 {activeTab === 'wec' && (
-                  <div className="space-y-0">
-                    {WEC_DRIVERS_2026.map((d, i) => (
-                      <DriverRow key={`${d.pos}-${d.name}`} d={{ ...d, pos: i + 1 }} maxPts={WEC_DRIVERS_2026[0].points} />
-                    ))}
-                    <p className="text-[9px] mt-3 text-right" style={{ color: 'var(--pw-text-tertiary)' }}>
-                      After Round 2 · 6H Spa-Francorchamps
-                    </p>
+                  <div>
+                    <ClassSection
+                      title="Hypercar"
+                      data={WEC_DRIVERS_2026}
+                      note="After R2 · 6H Spa-Francorchamps"
+                      accent="#0090D4"
+                    />
+                    <ClassSection
+                      title="LMGT3"
+                      data={WEC_LMGT3_DRIVERS_2026}
+                      note="After R2 · 6H Spa-Francorchamps"
+                      accent="#00B86E"
+                    />
                   </div>
                 )}
                 {activeTab === 'wrc' && (
@@ -242,13 +292,25 @@ export default function StandingsPanel() {
                   </div>
                 )}
                 {activeTab === 'imsa' && (
-                  <div className="space-y-0">
-                    {IMSA_GTP_DRIVERS_2026.map((d, i) => (
-                      <DriverRow key={`${d.pos}-${d.name}`} d={{ ...d, pos: i + 1 }} maxPts={IMSA_GTP_DRIVERS_2026[0].points} />
-                    ))}
-                    <p className="text-[9px] mt-3 text-right" style={{ color: 'var(--pw-text-tertiary)' }}>
-                      GTP Class · After Round 4 · Laguna Seca
-                    </p>
+                  <div>
+                    <ClassSection
+                      title="GTP"
+                      data={IMSA_GTP_DRIVERS_2026}
+                      note="After R4 · Laguna Seca"
+                      accent="#C0A062"
+                    />
+                    <ClassSection
+                      title="GTD Pro"
+                      data={IMSA_GTD_PRO_DRIVERS_2026}
+                      note="After R4 · Laguna Seca"
+                      accent="#FF6B35"
+                    />
+                    <ClassSection
+                      title="GTD"
+                      data={IMSA_GTD_DRIVERS_2026}
+                      note="After R4 · Laguna Seca"
+                      accent="#B8A0D0"
+                    />
                   </div>
                 )}
                 {activeTab === 'dtm' && (
