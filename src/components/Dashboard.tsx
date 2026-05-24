@@ -175,7 +175,7 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
                       transition: 'opacity 0.2s',
                     }}
                   >
-                    <div className="absolute inset-2">
+                    <div className={id === 'nurburgring' || id === 'nordschleife' ? 'absolute inset-0' : 'absolute inset-2'}>
                       <Image
                         src={meta.logo}
                         alt={meta.name}
