@@ -1,7 +1,16 @@
 /**
  * 2026 Championship Standings — real data.
  * F1: After Round 4 (Miami GP, May 3 2026) — source: formulaonehistory.com
- * MotoGP: After Round 6 (Catalan GP, May 17 2026) — source: gpblog.com
+ * MotoGP: After Round 6 (Catalan GP, May 17 2026) — source: gpblog.com / motogp.com
+ * MotoGP Teams: computed from rider points (team pts = sum of both riders)
+ * WEC: After Round 2 (6H Spa, May 10 2026) — source: fiawec.com / pitdebrief.com
+ * WEC Manufacturers: derived from car standings; team pts = sum of both cars' pts
+ * WRC: After Round 6 (Rally Portugal, May 22 2026) — source: wrc.com
+ * WRC Manufacturers: Toyota/Hyundai/Lancia/Ford — derived from driver pts top-3 per mfr
+ * IMSA: After Round 4 (Laguna Seca, May 11 2026) — source: imsa.com / speedsport.com
+ * IMSA Teams: each car entry IS the team entry — same pts as driver entry
+ * DTM: After Round 1 (Red Bull Ring, Apr 2026) — source: dtm.com / autosport.com
+ * DTM Manufacturers: top 2 drivers per brand per race — derived from driver standings
  */
 
 export interface DriverStanding {
@@ -153,4 +162,85 @@ export const DTM_DRIVERS_2026: DriverStanding[] = [
   { pos: 8, name: 'J. Gounon', team: 'Mercedes-AMG', points: 13, teamColor: '#00D2BE' },
   { pos: 8, name: 'T. Kalender', team: 'Mercedes-AMG', points: 13, teamColor: '#00D2BE' },
   { pos: 8, name: 'K. van der Linde', team: 'BMW', points: 13, teamColor: '#1E88E5' },
+];
+
+// ─── MotoGP 2026 Teams Championship (after R6 · Catalan GP) ─
+// Team pts = sum of both riders' championship points (official MotoGP method)
+export const MOTOGP_TEAMS_2026: ConstructorStanding[] = [
+  { pos: 1,  name: 'Aprilia Racing',         points: 269, color: '#C8102E' }, // Bezzecchi 142 + Martín 127
+  { pos: 2,  name: 'Pertamina VR46 Ducati',  points: 152, color: '#FFEB3B' }, // Di Giannantonio 116 + Morbidelli 36
+  { pos: 3,  name: 'Trackhouse Aprilia',      points: 145, color: '#8B4FBF' }, // Ogura 77 + R.Fernández 68
+  { pos: 4,  name: 'Red Bull KTM',            points: 129, color: '#FF6600' }, // Acosta 92 + Binder 37
+  { pos: 5,  name: 'Ducati Lenovo',           points: 120, color: '#E10600' }, // Bagnaia 63 + M.Márquez 57
+  { pos: 6,  name: 'BK8 Gresini Ducati',     points: 114, color: '#E10600' }, // A.Márquez 67 + Aldeguer 47
+  { pos: 7,  name: 'Honda HRC Castrol',       points: 54,  color: '#E50000' }, // Marini 43 + Mir 11
+  { pos: 8,  name: 'LCR Honda',              points: 51,  color: '#E50000' }, // Zarco 34 + Moreira 17
+  { pos: 9,  name: 'Monster Yamaha',          points: 46,  color: '#0059A8' }, // Quartararo 37 + Rins 9
+  { pos: 10, name: 'Red Bull KTM Tech3',      points: 44,  color: '#FF6600' }, // Bastianini 39 + Viñales 5
+  { pos: 11, name: 'Pramac Yamaha',           points: 6,   color: '#0059A8' }, // Razgatlıoğlu 4 + Miller 2
+];
+
+// ─── WEC 2026 Hypercar Manufacturers Championship (after R2 · 6H Spa) ─
+// Manufacturer pts = sum of both entered cars' pts from driver standings
+export const WEC_MANUFACTURERS_2026: ConstructorStanding[] = [
+  { pos: 1, name: 'BMW M Motorsport',    points: 57, color: '#1E88E5' }, // Frijns/Rast 35 + vdLinde 22
+  { pos: 2, name: 'Toyota Gazoo Racing', points: 26, color: '#EB0A1E' }, // Buemi/Hartley/Hirakawa 26
+  { pos: 3, name: 'Porsche Penske',      points: 19, color: '#C0A062' }, // Estre/Christensen 19
+  { pos: 4, name: 'Ferrari AF Corse',    points: 15, color: '#E8002D' }, // Fuoco/Molina/Nielsen 15
+];
+
+// ─── WEC 2026 LMGT3 Manufacturers Championship (after R2 · 6H Spa) ─
+// Manufacturer pts = sum of entered cars' pts for each brand
+export const WEC_LMGT3_MANUFACTURERS_2026: ConstructorStanding[] = [
+  { pos: 1, name: 'Porsche',     points: 48, color: '#C0A062' }, // Manthey #92 30 + Manthey DK 18
+  { pos: 2, name: 'McLaren',     points: 42, color: '#FF8000' }, // G59 #59 26 + G59 #188 16
+  { pos: 3, name: 'BMW',         points: 25, color: '#1E88E5' }, // WRT 25
+  { pos: 4, name: 'Corvette',    points: 22, color: '#FFC906' }, // TF Sport 22
+  { pos: 5, name: 'Ferrari',     points: 20, color: '#E8002D' }, // AF Corse VISTA 20
+  { pos: 6, name: 'Aston Martin',points: 18, color: '#006241' }, // Heart of Racing 18
+];
+
+// ─── WRC 2026 Manufacturers Championship (after R6 · Rally of Portugal) ─
+// Source: wrc.com — manufacturer pts sum top-3 drivers per rally per manufacturer
+export const WRC_MANUFACTURERS_2026: ConstructorStanding[] = [
+  { pos: 1, name: 'Toyota Gazoo Racing',  points: 326, color: '#EB0A1E' }, // Evans+Katsuta+Solberg top-3
+  { pos: 2, name: 'Hyundai Shell WRT',    points: 165, color: '#003082' }, // Fourmaux+Neuville+Lappi
+  { pos: 3, name: 'Lancia Corse WRT',     points: 20,  color: '#0C2340' }, // Y.Rossel
+  { pos: 4, name: 'M-Sport Ford',         points: 18,  color: '#003CB4' }, // L.Rossel / Citroën entry
+];
+
+// ─── IMSA 2026 GTP Teams Championship (after R4 · Laguna Seca) ─
+// IMSA team championship = car entry championship; pts identical to driver entry
+export const IMSA_GTP_TEAMS_2026: ConstructorStanding[] = [
+  { pos: 1, name: 'JDC-Miller Motorsports',    points: 1396, color: '#C0A062' },
+  { pos: 2, name: 'Cadillac Racing (Whelen)',  points: 1375, color: '#D4AF37' },
+  { pos: 3, name: 'Porsche Penske #7',         points: 1323, color: '#C0A062' },
+  { pos: 4, name: 'Porsche Penske #6',         points: 1250, color: '#C0A062' },
+  { pos: 5, name: 'Meyer Shank Racing',        points: 1242, color: '#C8102E' },
+];
+
+// ─── IMSA 2026 GTD Pro Teams Championship (after R4 · Laguna Seca) ─
+export const IMSA_GTDPRO_TEAMS_2026: ConstructorStanding[] = [
+  { pos: 1, name: 'Corvette Racing',        points: 1300, color: '#FFC906' },
+  { pos: 2, name: 'Paul Miller Racing',     points: 1249, color: '#1E88E5' },
+  { pos: 3, name: 'AO Racing',             points: 1237, color: '#C0A062' },
+  { pos: 4, name: 'Multimatic Motorsports', points: 1226, color: '#0032A0' },
+];
+
+// ─── IMSA 2026 GTD Teams Championship (after R4 · Laguna Seca) ─
+export const IMSA_GTD_TEAMS_2026: ConstructorStanding[] = [
+  { pos: 1, name: 'Heart of Racing',   points: 1400, color: '#006241' },
+  { pos: 2, name: 'Turner Motorsport', points: 1260, color: '#1E88E5' },
+  { pos: 3, name: 'Vasser Sullivan',   points: 1200, color: '#C8102E' },
+  { pos: 4, name: 'Winward Racing',    points: 1200, color: '#00BFBF' },
+];
+
+// ─── DTM 2026 Manufacturers Championship (after R1 · Red Bull Ring) ─
+// Top 2 drivers per manufacturer per race, 2 races: derived from driver standings
+export const DTM_MANUFACTURERS_2026: ConstructorStanding[] = [
+  { pos: 1, name: 'Mercedes-AMG', points: 81, color: '#00D2BE' }, // Engel 44 + Auer 37
+  { pos: 2, name: 'BMW',          points: 44, color: '#1E88E5' }, // Wittmann 31 + vdLinde 13
+  { pos: 3, name: 'Porsche',      points: 29, color: '#C0A062' }, // Preining 29
+  { pos: 4, name: 'Ford',         points: 29, color: '#0032A0' }, // Wiebelhaus 15 + Maini 14
+  { pos: 5, name: 'Aston Martin', points: 17, color: '#006241' }, // Thiim 17
 ];
