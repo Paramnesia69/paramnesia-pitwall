@@ -323,13 +323,13 @@ export default function StandingsPanel() {
                 {/* ── WEC ── */}
                 {activeTab === 'wec' && sub === 'drivers' && (
                   <div>
-                    <ClassSection title="Hypercar" data={WEC_DRIVERS_2026} note="After R2 · 6H Spa-Francorchamps" accent="#0090D4" />
+                    <ClassSection title="Hypercar" data={WEC_DRIVERS_2026} note="After R2 · 6H Spa-Francorchamps" accent="#8C1A1A" badgeSrc="/logos/class-hypercar.svg" />
                     <ClassSection title="LMGT3" data={WEC_LMGT3_DRIVERS_2026} note="After R2 · 6H Spa-Francorchamps" accent="#1A6B38" badgeSrc="/logos/class-lmgt3.svg" />
                   </div>
                 )}
                 {activeTab === 'wec' && sub === 'teams' && (
                   <div>
-                    <ClassSection title="Hypercar" data={WEC_MANUFACTURERS_2026} note="After R2 · 6H Spa-Francorchamps" accent="#0090D4" isTeams />
+                    <ClassSection title="Hypercar" data={WEC_MANUFACTURERS_2026} note="After R2 · 6H Spa-Francorchamps" accent="#8C1A1A" badgeSrc="/logos/class-hypercar.svg" isTeams />
                     <ClassSection title="LMGT3" data={WEC_LMGT3_MANUFACTURERS_2026} note="After R2 · 6H Spa-Francorchamps" accent="#1A6B38" badgeSrc="/logos/class-lmgt3.svg" isTeams />
                   </div>
                 )}
