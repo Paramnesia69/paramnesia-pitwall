@@ -13,9 +13,11 @@
 
 export interface TeamLogoInfo {
   src: string;
-  /** true = white pre-rendered logo; render as-is (no blend mode).
-   *  false = coloured brand SVG; use mix-blend-mode:screen on dark bg. */
+  /** true  = official F1 white WebP — display as-is, opacity:0.9 only.
+   *  false = coloured brand asset — apply contrast+brightness filter. */
   white: boolean;
+  /** true = SVG with uncertain/dark bg — also apply mix-blend-mode:screen */
+  screen?: boolean;
 }
 
 // ── Official F1 team logos (white, from media.formula1.com) ──────────────────
@@ -92,19 +94,22 @@ const MFR_MAP: Record<string, string> = {
   KTM:                         '/logos/constructors/brand-ktm.png',
   'Red Bull KTM':              '/logos/constructors/brand-ktm.png',
   'Tech3 KTM':                 '/logos/constructors/brand-ktm.png',
-  // ── MotoGP motorcycle brands (Wikimedia SVG — not in car dataset) ──
-  Ducati:                      '/logos/constructors/ducati.svg',
-  'Ducati Lenovo':             '/logos/constructors/ducati.svg',
-  VR46:                        '/logos/constructors/ducati.svg',
-  'VR46 Racing':               '/logos/constructors/ducati.svg',
-  Gresini:                     '/logos/constructors/ducati.svg',
-  'Gresini Racing':            '/logos/constructors/ducati.svg',
-  Pramac:                      '/logos/constructors/ducati.svg',
-  Aprilia:                     '/logos/constructors/aprilia.svg',
-  'Aprilia Racing':            '/logos/constructors/aprilia.svg',
-  Trackhouse:                  '/logos/constructors/aprilia.svg',
-  Yamaha:                      '/logos/constructors/yamaha.svg',
-  'Monster Energy Yamaha':     '/logos/constructors/yamaha.svg',
+};
+
+// ── SVG motorcycle brands that need mix-blend-mode:screen on dark bg ─────────
+const SVG_MFR_MAP: Record<string, string> = {
+  Ducati:                '/logos/constructors/ducati.svg',
+  'Ducati Lenovo':       '/logos/constructors/ducati.svg',
+  VR46:                  '/logos/constructors/ducati.svg',
+  'VR46 Racing':         '/logos/constructors/ducati.svg',
+  Gresini:               '/logos/constructors/ducati.svg',
+  'Gresini Racing':      '/logos/constructors/ducati.svg',
+  Pramac:                '/logos/constructors/ducati.svg',
+  Aprilia:               '/logos/constructors/aprilia.svg',
+  'Aprilia Racing':      '/logos/constructors/aprilia.svg',
+  Trackhouse:            '/logos/constructors/aprilia.svg',
+  Yamaha:                '/logos/constructors/yamaha.svg',
+  'Monster Energy Yamaha': '/logos/constructors/yamaha.svg',
 };
 
 function partialF1Match(lower: string): string | null {
@@ -161,6 +166,16 @@ export function getTeamLogo(teamName: string, f1Context = false): TeamLogoInfo |
     const src = F1_MAP[teamName] ?? partialF1Match(lower);
     if (src) return { src, white: true };
   }
+
+  // SVG motorcycle logos — need screen blend
+  const svgSrc = SVG_MFR_MAP[teamName];
+  if (svgSrc) return { src: svgSrc, white: false, screen: true };
+  if (lower.includes('ducati') || lower.includes('vr46') || lower.includes('gresini') || lower.includes('pramac'))
+    return { src: '/logos/constructors/ducati.svg', white: false, screen: true };
+  if (lower.includes('aprilia') || lower.includes('trackhouse'))
+    return { src: '/logos/constructors/aprilia.svg', white: false, screen: true };
+  if (lower.includes('yamaha'))
+    return { src: '/logos/constructors/yamaha.svg', white: false, screen: true };
 
   const src = MFR_MAP[teamName] ?? partialMfrMatch(lower);
   if (src) return { src, white: false };

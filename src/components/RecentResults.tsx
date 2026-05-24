@@ -78,21 +78,26 @@ function PodiumCard({ result }: { result: RaceResult }) {
               </div>
               {/* Manufacturer logo */}
               {logo ? (
-                <div className="w-6 h-5 shrink-0 flex items-center justify-center overflow-hidden">
+                <div className="w-8 h-6 shrink-0 flex items-center justify-center overflow-hidden">
                   <img
                     src={logo.src}
                     alt={p.team}
                     style={{
-                      height: 15,
+                      height: logo.white ? 16 : 18,
                       width: 'auto',
-                      maxWidth: 24,
+                      maxWidth: 32,
                       objectFit: 'contain',
-                      opacity: logo.white ? 0.9 : 0.92,
+                      ...(logo.white
+                        ? { opacity: 0.95 }
+                        : logo.screen
+                        ? { mixBlendMode: 'screen' as const, filter: 'brightness(1.8) contrast(1.6) saturate(1.2)', opacity: 1 }
+                        : { filter: 'contrast(1.5) brightness(1.2) saturate(1.1)', opacity: 1 }
+                      ),
                     }}
                   />
                 </div>
               ) : (
-                <div className="w-6 shrink-0" />
+                <div className="w-8 shrink-0" />
               )}
               <div className="flex-1 min-w-0">
                 <span className="text-xs font-medium truncate block">{p.driver}</span>

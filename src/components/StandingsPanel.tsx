@@ -30,16 +30,21 @@ function TeamLogo({ teamName, teamColor, f1 = false }: { teamName: string; teamC
   const logo = getTeamLogo(teamName, f1);
   if (logo) {
     return (
-      <div className="w-7 h-5 shrink-0 flex items-center justify-center overflow-hidden">
+      <div className="w-10 h-6 shrink-0 flex items-center justify-center overflow-hidden">
         <img
           src={logo.src}
           alt={teamName}
           style={{
-            height: 16,
+            height: logo.white ? 18 : 20,
             width: 'auto',
-            maxWidth: 28,
+            maxWidth: 40,
             objectFit: 'contain',
-            opacity: logo.white ? 0.9 : 0.92, // transparent-bg PNGs: no blend needed
+            ...(logo.white
+              ? { opacity: 0.95 }
+              : logo.screen
+              ? { mixBlendMode: 'screen', filter: 'brightness(1.8) contrast(1.6) saturate(1.2)', opacity: 1 }
+              : { filter: 'contrast(1.5) brightness(1.2) saturate(1.1)', opacity: 1 }
+            ),
           }}
         />
       </div>
