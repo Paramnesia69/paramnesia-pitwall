@@ -105,7 +105,7 @@ function StatTile({
 
 /* ── Main panel ────────────────────────────── */
 export default function CircuitStatsPanel({ stats, circuitName, accentColor }: CircuitStatsPanelProps) {
-  const circuitMapUrl = getCircuitImage(circuitName);
+  const circuitMapUrl = stats.image3d ?? getCircuitImage(circuitName);
 
   return (
     <div className="relative overflow-hidden rounded-xl" style={{ border: '1px solid var(--pw-glass-border)' }}>

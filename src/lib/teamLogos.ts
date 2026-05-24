@@ -59,7 +59,7 @@ const F1_MAP: Record<string, string> = {
 // Aprilia/Yamaha SVGs are black-fill → use cssFilter to tint to brand colour
 const DUCATI_FILTER  = undefined; // natural red+white, no distortion
 const APRILIA_FILTER = 'brightness(0) invert(1) sepia(1) saturate(8) hue-rotate(325deg) brightness(0.85)';
-const YAMAHA_FILTER  = 'brightness(0) invert(1) sepia(1) saturate(6) hue-rotate(195deg) brightness(0.9)';
+const YAMAHA_FILTER  = 'brightness(0) invert(1) opacity(0.85)';
 // ktm.svg has orange background (#f27620) + dark text — shows as orange badge naturally on dark UI
 const KTM_FILTER     = undefined;
 

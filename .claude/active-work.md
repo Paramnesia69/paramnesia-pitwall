@@ -95,9 +95,9 @@ claude
 7. ~~**KTM logo quality**~~ ✅ DONE — ktm.svg (natural orange badge), SVG_MOTO_MAP
 8. ~~**Multi-class standings**~~ ✅ DONE — WEC (Hypercar + LMGT3), IMSA (GTP + GTD Pro + GTD)
 9. ~~**Full MotoGP grid**~~ ✅ DONE — extended to 23 riders; Yamaha/Honda/KTM all visible
-10. **Yamaha logo quality** — wordmark visible but yellowish tint. Could swap filter or find true-color source.
+10. ~~**Yamaha logo quality**~~ ✅ DONE — switched to `brightness(0) invert(1) opacity(0.85)` (white wordmark, same as AMG/Audi/McLaren)
 11. ~~**DTM recent results**~~ ✅ DONE — Race 1 (Preining/Auer/Engel) + Race 2 (Engel/Wittmann/Auer) at Red Bull Ring
-12. **Nürburgring/Nordschleife split** — both series share `nurburgring.jpg`
+12. ~~**Nürburgring/Nordschleife split**~~ ✅ DONE — 3D Nordschleife PNG (gamegrid.gg), bg stripped, CircuitStatsPanel uses stats.image3d first
 13. **Live timing (OpenF1)** — already built, verify works during Canadian GP weekend
 
 ## Session Bootstrap Reminder

@@ -296,6 +296,7 @@ const CIRCUIT_STATS: Record<string, CircuitStats> = {
     turns: 170,
     topSpeedKmph: 300.0,
     elevationM: 300.0,
+    image3d: '/circuits/nordschleife.png',
   },
   'Nürburgring GP': {
     lengthKm: 5.148,
