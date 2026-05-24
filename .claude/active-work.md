@@ -98,7 +98,7 @@ claude
 10. ~~**Yamaha logo quality**~~ ✅ DONE — switched to `brightness(0) invert(1) opacity(0.85)` (white wordmark, same as AMG/Audi/McLaren)
 11. ~~**DTM recent results**~~ ✅ DONE — Race 1 (Preining/Auer/Engel) + Race 2 (Engel/Wittmann/Auer) at Red Bull Ring
 12. ~~**Nürburgring/Nordschleife split**~~ ✅ DONE — 3D Nordschleife PNG (gamegrid.gg), bg stripped, CircuitStatsPanel uses stats.image3d first
-13. **Live timing (OpenF1)** — already built, verify works during Canadian GP weekend
+13. ~~**Live timing (OpenF1)**~~ ✅ VERIFIED — Qualifying data live during Canadian GP: RUS P1, ANT P2, NOR P3. Logos, gaps, polling all correct.
 
 ## Session Bootstrap Reminder
 - Dev server: `npm run dev` in this directory (port 3000)
