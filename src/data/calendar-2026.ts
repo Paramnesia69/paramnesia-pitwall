@@ -60,7 +60,7 @@ const f1: CalendarEntry[] = [
     { type: 'practice', name: 'FP1', startTime: '2026-05-22T17:30:00Z', state: 'finished' },
     { type: 'qualifying', name: 'Sprint Qualifying', startTime: '2026-05-22T21:30:00Z', state: 'finished' },
     { type: 'sprint', name: 'Sprint', startTime: '2026-05-23T16:30:00Z', state: 'finished' },
-    { type: 'qualifying', name: 'Qualifying', startTime: '2026-05-23T20:00:00Z', state: 'upcoming' },
+    { type: 'qualifying', name: 'Qualifying', startTime: '2026-05-23T20:00:00Z', state: 'finished' },
     { type: 'race', name: 'Race', startTime: '2026-05-24T18:00:00Z', state: 'upcoming' },
   ]),
   evt('f1', 'Monaco Grand Prix', { name: 'Circuit de Monaco', country: 'Monaco', countryCode: 'MC', lat: 43.7347, lng: 7.4206 }, '2026-06-05', '2026-06-07', [
@@ -187,12 +187,12 @@ const f1: CalendarEntry[] = [
 // ─── WEC 2026 ────────────────────────────────────────────
 const wec: CalendarEntry[] = [
   evt('wec', '6 Hours of Imola', { name: 'Imola Circuit', country: 'Italy', countryCode: 'IT', lat: 44.3439, lng: 11.7167 }, '2026-04-19', '2026-04-19', [
-    { type: 'qualifying', name: 'Qualifying', startTime: '2026-04-19T08:00:00Z', state: 'upcoming' },
-    { type: 'race', name: '6 Hours of Imola', startTime: '2026-04-19T11:00:00Z', state: 'upcoming' },
+    { type: 'qualifying', name: 'Qualifying', startTime: '2026-04-19T08:00:00Z', state: 'finished' },
+    { type: 'race', name: '6 Hours of Imola', startTime: '2026-04-19T11:00:00Z', state: 'finished' },
   ]),
   evt('wec', '6 Hours of Spa-Francorchamps', { name: 'Circuit de Spa-Francorchamps', country: 'Belgium', countryCode: 'BE', lat: 50.4372, lng: 5.9714 }, '2026-05-09', '2026-05-09', [
-    { type: 'qualifying', name: 'Qualifying', startTime: '2026-05-09T08:30:00Z', state: 'upcoming' },
-    { type: 'race', name: '6 Hours of Spa', startTime: '2026-05-09T11:00:00Z', state: 'upcoming' },
+    { type: 'qualifying', name: 'Qualifying', startTime: '2026-05-09T08:30:00Z', state: 'finished' },
+    { type: 'race', name: '6 Hours of Spa', startTime: '2026-05-09T11:00:00Z', state: 'finished' },
   ]),
   evt('wec', '24 Hours of Le Mans', { name: 'Circuit de la Sarthe', country: 'France', countryCode: 'FR', lat: 47.956, lng: 0.2075 }, '2026-06-13', '2026-06-14', [
     { type: 'qualifying', name: 'Hyperpole', startTime: '2026-06-12T18:00:00Z', state: 'upcoming' },
@@ -424,7 +424,7 @@ const dtm: CalendarEntry[] = [
     { type: 'race', name: 'Race 2', startTime: '2026-04-26T11:30:00Z', state: 'finished' },
   ]),
   evt('dtm', 'DTM Zandvoort', { name: 'Circuit Zandvoort', country: 'Netherlands', countryCode: 'NL', lat: 52.3888, lng: 4.5409 }, '2026-05-22', '2026-05-24', [
-    { type: 'race', name: 'Race 1', startTime: '2026-05-23T11:30:00Z', state: 'upcoming' },
+    { type: 'race', name: 'Race 1', startTime: '2026-05-23T11:30:00Z', state: 'finished' },
     { type: 'race', name: 'Race 2', startTime: '2026-05-24T11:30:00Z', state: 'upcoming' },
   ]),
   evt('dtm', 'DTM Lausitzring', { name: 'Dekra Lausitzring', country: 'Germany', countryCode: 'DE', lat: 51.5272, lng: 13.9256 }, '2026-06-19', '2026-06-21', [
