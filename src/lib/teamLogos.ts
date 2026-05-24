@@ -46,62 +46,65 @@ const F1_MAP: Record<string, string> = {
   'Andretti Cadillac':  '/logos/constructors/f1-cadillac.webp',
 };
 
-// ── Coloured manufacturer / brand SVGs (for WEC, MotoGP, IMSA, WRC, DTM) ────
+// ── Car badge PNGs from filippofilip95/car-logos-dataset (transparent bg) ────
+// ── + Wikimedia SVGs for motorcycle brands not in that dataset ───────────────
 const MFR_MAP: Record<string, string> = {
   // ── Car manufacturers (WEC / IMSA / DTM / WRC) ──
-  Ferrari:              '/logos/constructors/ferrari.svg',
-  'Scuderia Ferrari':   '/logos/constructors/ferrari.svg',
-  'Ferrari AF Corse':   '/logos/constructors/ferrari.svg',
-  Toyota:               '/logos/constructors/toyota.svg',
-  'Toyota Racing':      '/logos/constructors/toyota.svg',
-  'Toyota GR Sport':    '/logos/constructors/toyota.svg',
-  BMW:                  '/logos/constructors/bmw.svg',
-  'BMW M WRT':          '/logos/constructors/bmw.svg',
-  'BMW M Team WRT':     '/logos/constructors/bmw.svg',
-  'Mercedes-AMG':       '/logos/constructors/mercedes.svg',
-  'Mercedes-AMG DTM':   '/logos/constructors/mercedes.svg',
-  Mercedes:             '/logos/constructors/mercedes.svg',
-  Porsche:              '/logos/constructors/porsche.svg',
-  'Porsche Penske':     '/logos/constructors/porsche.svg',
-  'Porsche Penske Motorsport': '/logos/constructors/porsche.svg',
-  'JDC-Miller Porsche': '/logos/constructors/porsche.svg',
-  Lamborghini:          '/logos/constructors/lamborghini.svg',
-  'Lamborghini Iron Lynx': '/logos/constructors/lamborghini.svg',
-  McLaren:              '/logos/constructors/mclaren.svg',
-  'Aston Martin':       '/logos/constructors/aston-martin.svg',
-  Alpine:               '/logos/constructors/alpine.svg',
-  Cadillac:             '/logos/constructors/cadillac.svg',
-  'Whelen Cadillac':    '/logos/constructors/cadillac.svg',
-  'Action Express Cadillac': '/logos/constructors/cadillac.svg',
-  Ford:                 '/logos/constructors/ford.svg',
-  'M-Sport Ford':       '/logos/constructors/ford.svg',
-  Hyundai:              '/logos/constructors/hyundai.svg',
-  'Hyundai Motorsport': '/logos/constructors/hyundai.svg',
-  Lancia:               '/logos/constructors/lancia.svg',
-  Peugeot:              '/logos/constructors/peugeot.svg',
-  'Peugeot TotalEnergies': '/logos/constructors/peugeot.svg',
-  Citroën:              '/logos/constructors/peugeot.svg',
-  Acura:                '/logos/constructors/acura.svg',
-  'Wayne Taylor Acura': '/logos/constructors/acura.svg',
-  // ── MotoGP manufacturers / team → manufacturer ──
-  Ducati:               '/logos/constructors/ducati.svg',
-  'Ducati Lenovo':      '/logos/constructors/ducati.svg',
-  VR46:                 '/logos/constructors/ducati.svg',
-  'VR46 Racing':        '/logos/constructors/ducati.svg',
-  Gresini:              '/logos/constructors/ducati.svg',
-  'Gresini Racing':     '/logos/constructors/ducati.svg',
-  Pramac:               '/logos/constructors/ducati.svg',
-  Aprilia:              '/logos/constructors/aprilia.svg',
-  'Aprilia Racing':     '/logos/constructors/aprilia.svg',
-  Trackhouse:           '/logos/constructors/aprilia.svg',
-  KTM:                  '/logos/constructors/ktm.svg',
-  'Red Bull KTM':       '/logos/constructors/ktm.svg',
-  'Tech3 KTM':          '/logos/constructors/ktm.svg',
-  Honda:                '/logos/constructors/honda.svg',
-  'Repsol Honda':       '/logos/constructors/honda.svg',
-  'LCR Honda':          '/logos/constructors/honda.svg',
-  Yamaha:               '/logos/constructors/yamaha.svg',
-  'Monster Energy Yamaha': '/logos/constructors/yamaha.svg',
+  Ferrari:                     '/logos/constructors/brand-ferrari.png',
+  'Scuderia Ferrari':          '/logos/constructors/brand-ferrari.png',
+  'Ferrari AF Corse':          '/logos/constructors/brand-ferrari.png',
+  Toyota:                      '/logos/constructors/brand-toyota.png',
+  'Toyota Racing':             '/logos/constructors/brand-toyota.png',
+  'Toyota GR Sport':           '/logos/constructors/brand-toyota.png',
+  BMW:                         '/logos/constructors/brand-bmw.png',
+  'BMW M WRT':                 '/logos/constructors/brand-bmw.png',
+  'BMW M Team WRT':            '/logos/constructors/brand-bmw.png',
+  Mercedes:                    '/logos/constructors/brand-mercedes-benz.png',
+  'Mercedes-AMG':              '/logos/constructors/brand-mercedes-amg.png',
+  'Mercedes-AMG DTM':          '/logos/constructors/brand-mercedes-amg.png',
+  Porsche:                     '/logos/constructors/brand-porsche.png',
+  'Porsche Penske':            '/logos/constructors/brand-porsche.png',
+  'Porsche Penske Motorsport': '/logos/constructors/brand-porsche.png',
+  'JDC-Miller Porsche':        '/logos/constructors/brand-porsche.png',
+  Lamborghini:                 '/logos/constructors/brand-lamborghini.png',
+  'Lamborghini Iron Lynx':     '/logos/constructors/brand-lamborghini.png',
+  McLaren:                     '/logos/constructors/brand-mclaren.png',
+  'Aston Martin':              '/logos/constructors/brand-aston-martin.png',
+  Alpine:                      '/logos/constructors/brand-alpine.png',
+  'BWT Alpine':                '/logos/constructors/brand-alpine.png',
+  Cadillac:                    '/logos/constructors/brand-cadillac.png',
+  'Whelen Cadillac':           '/logos/constructors/brand-cadillac.png',
+  'Action Express Cadillac':   '/logos/constructors/brand-cadillac.png',
+  Audi:                        '/logos/constructors/brand-audi.png',
+  Ford:                        '/logos/constructors/brand-ford.png',
+  'M-Sport Ford':              '/logos/constructors/brand-ford.png',
+  Hyundai:                     '/logos/constructors/brand-hyundai.png',
+  'Hyundai Motorsport':        '/logos/constructors/brand-hyundai.png',
+  Lancia:                      '/logos/constructors/brand-lancia.png',
+  Peugeot:                     '/logos/constructors/brand-peugeot.png',
+  'Peugeot TotalEnergies':     '/logos/constructors/brand-peugeot.png',
+  Citroën:                     '/logos/constructors/brand-peugeot.png',
+  Acura:                       '/logos/constructors/brand-acura.png',
+  'Wayne Taylor Acura':        '/logos/constructors/brand-acura.png',
+  Honda:                       '/logos/constructors/brand-honda.png',
+  'Repsol Honda':              '/logos/constructors/brand-honda.png',
+  'LCR Honda':                 '/logos/constructors/brand-honda.png',
+  KTM:                         '/logos/constructors/brand-ktm.png',
+  'Red Bull KTM':              '/logos/constructors/brand-ktm.png',
+  'Tech3 KTM':                 '/logos/constructors/brand-ktm.png',
+  // ── MotoGP motorcycle brands (Wikimedia SVG — not in car dataset) ──
+  Ducati:                      '/logos/constructors/ducati.svg',
+  'Ducati Lenovo':             '/logos/constructors/ducati.svg',
+  VR46:                        '/logos/constructors/ducati.svg',
+  'VR46 Racing':               '/logos/constructors/ducati.svg',
+  Gresini:                     '/logos/constructors/ducati.svg',
+  'Gresini Racing':            '/logos/constructors/ducati.svg',
+  Pramac:                      '/logos/constructors/ducati.svg',
+  Aprilia:                     '/logos/constructors/aprilia.svg',
+  'Aprilia Racing':            '/logos/constructors/aprilia.svg',
+  Trackhouse:                  '/logos/constructors/aprilia.svg',
+  Yamaha:                      '/logos/constructors/yamaha.svg',
+  'Monster Energy Yamaha':     '/logos/constructors/yamaha.svg',
 };
 
 function partialF1Match(lower: string): string | null {
@@ -120,26 +123,28 @@ function partialF1Match(lower: string): string | null {
 }
 
 function partialMfrMatch(lower: string): string | null {
-  if (lower.includes('ferrari')) return '/logos/constructors/ferrari.svg';
-  if (lower.includes('toyota')) return '/logos/constructors/toyota.svg';
-  if (lower.includes('bmw')) return '/logos/constructors/bmw.svg';
-  if (lower.includes('porsche')) return '/logos/constructors/porsche.svg';
-  if (lower.includes('lamborghini')) return '/logos/constructors/lamborghini.svg';
-  if (lower.includes('mercedes')) return '/logos/constructors/mercedes.svg';
+  if (lower.includes('ferrari')) return '/logos/constructors/brand-ferrari.png';
+  if (lower.includes('toyota')) return '/logos/constructors/brand-toyota.png';
+  if (lower.includes('bmw')) return '/logos/constructors/brand-bmw.png';
+  if (lower.includes('porsche')) return '/logos/constructors/brand-porsche.png';
+  if (lower.includes('lamborghini')) return '/logos/constructors/brand-lamborghini.png';
+  if (lower.includes('mercedes-amg') || lower.includes('amg')) return '/logos/constructors/brand-mercedes-amg.png';
+  if (lower.includes('mercedes')) return '/logos/constructors/brand-mercedes-benz.png';
   if (lower.includes('ducati') || lower.includes('vr46') || lower.includes('gresini') || lower.includes('pramac')) return '/logos/constructors/ducati.svg';
   if (lower.includes('aprilia') || lower.includes('trackhouse')) return '/logos/constructors/aprilia.svg';
-  if (lower.includes('ktm')) return '/logos/constructors/ktm.svg';
-  if (lower.includes('honda')) return '/logos/constructors/honda.svg';
+  if (lower.includes('ktm')) return '/logos/constructors/brand-ktm.png';
+  if (lower.includes('honda')) return '/logos/constructors/brand-honda.png';
   if (lower.includes('yamaha')) return '/logos/constructors/yamaha.svg';
-  if (lower.includes('hyundai')) return '/logos/constructors/hyundai.svg';
-  if (lower.includes('ford') || lower.includes('m-sport')) return '/logos/constructors/ford.svg';
-  if (lower.includes('cadillac')) return '/logos/constructors/cadillac.svg';
-  if (lower.includes('acura')) return '/logos/constructors/acura.svg';
-  if (lower.includes('peugeot') || lower.includes('citroën') || lower.includes('citroen')) return '/logos/constructors/peugeot.svg';
-  if (lower.includes('lancia')) return '/logos/constructors/lancia.svg';
-  if (lower.includes('alpine')) return '/logos/constructors/alpine.svg';
-  if (lower.includes('mclaren')) return '/logos/constructors/mclaren.svg';
-  if (lower.includes('aston martin')) return '/logos/constructors/aston-martin.svg';
+  if (lower.includes('hyundai')) return '/logos/constructors/brand-hyundai.png';
+  if (lower.includes('ford') || lower.includes('m-sport')) return '/logos/constructors/brand-ford.png';
+  if (lower.includes('cadillac')) return '/logos/constructors/brand-cadillac.png';
+  if (lower.includes('acura')) return '/logos/constructors/brand-acura.png';
+  if (lower.includes('peugeot') || lower.includes('citroën') || lower.includes('citroen')) return '/logos/constructors/brand-peugeot.png';
+  if (lower.includes('lancia')) return '/logos/constructors/brand-lancia.png';
+  if (lower.includes('alpine')) return '/logos/constructors/brand-alpine.png';
+  if (lower.includes('mclaren')) return '/logos/constructors/brand-mclaren.png';
+  if (lower.includes('aston martin')) return '/logos/constructors/brand-aston-martin.png';
+  if (lower.includes('audi') || lower.includes('sauber')) return '/logos/constructors/brand-audi.png';
   return null;
 }
 

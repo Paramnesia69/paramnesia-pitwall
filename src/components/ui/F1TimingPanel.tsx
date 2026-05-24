@@ -148,7 +148,7 @@ export default function F1TimingPanel({ eventId, accentColor, eventState }: Prop
                         width: 'auto',
                         maxWidth: 28,
                         objectFit: 'contain',
-                        opacity: 0.9,  // white logos — no blend mode needed
+                        opacity: logo.white ? 0.9 : 0.92,
                       }}
                     />
                   </div>

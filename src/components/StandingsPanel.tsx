@@ -39,10 +39,7 @@ function TeamLogo({ teamName, teamColor, f1 = false }: { teamName: string; teamC
             width: 'auto',
             maxWidth: 28,
             objectFit: 'contain',
-            ...(logo.white
-              ? { opacity: 0.9 }                          // Official F1 white logos — no manipulation
-              : { mixBlendMode: 'screen', opacity: 0.85 } // Brand SVGs — screen blend hides dark bg
-            ),
+            opacity: logo.white ? 0.9 : 0.92, // transparent-bg PNGs: no blend needed
           }}
         />
       </div>

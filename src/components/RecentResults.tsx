@@ -87,10 +87,7 @@ function PodiumCard({ result }: { result: RaceResult }) {
                       width: 'auto',
                       maxWidth: 24,
                       objectFit: 'contain',
-                      ...(logo.white
-                        ? { opacity: 0.9 }
-                        : { mixBlendMode: 'screen', opacity: 0.85 }
-                      ),
+                      opacity: logo.white ? 0.9 : 0.92,
                     }}
                   />
                 </div>
