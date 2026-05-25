@@ -44,7 +44,7 @@ export default memo(function EventCard({ event }: EventCardProps) {
 
   return (
     <div className="h-full" onClick={() => openEvent(event.id)}>
-      <TiltCard accentColor={meta.accent}>
+      <TiltCard accentColor={meta.accent} className="h-full">
 
         {/* Faded series logo — background watermark */}
         {meta.logo && (
