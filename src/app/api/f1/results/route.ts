@@ -51,6 +51,16 @@ interface JolpicaRace {
   Results?: JolpicaResult[];
 }
 
+// Jolpica uses legal given names; map to racing names where they differ
+const DRIVER_DISPLAY: Record<string, string> = {
+  'Andrea Kimi Antonelli': 'Kimi Antonelli',
+};
+
+function driverName(givenName: string, familyName: string): string {
+  const full = `${givenName} ${familyName}`;
+  return DRIVER_DISPLAY[full] ?? full;
+}
+
 function mapJolpicaRace(race: JolpicaRace): RaceResult | null {
   if (!race.Results?.length) return null;
   const top3 = race.Results.filter(r => parseInt(r.position) <= 3);
@@ -69,12 +79,12 @@ function mapJolpicaRace(race: JolpicaRace): RaceResult | null {
     date: race.date,
     podium: top3.map(r => ({
       pos: parseInt(r.position),
-      driver: `${r.Driver.givenName} ${r.Driver.familyName}`,
+      driver: driverName(r.Driver.givenName, r.Driver.familyName),
       team: r.Constructor.name,
       time: r.position === '1' ? r.Time?.time : undefined,
     })),
     fastestLap: fl ? {
-      driver: `${fl.Driver.givenName} ${fl.Driver.familyName}`,
+      driver: driverName(fl.Driver.givenName, fl.Driver.familyName),
       team: fl.Constructor.name,
     } : undefined,
   };
@@ -91,7 +101,9 @@ export async function GET() {
     .filter((r): r is RaceResult => r !== null);
 
   // ── 2. OpenF1: supplement for races in the last 7 days not yet in Jolpica ──
-  const jolRounds = new Set(jolResults.map(r => r.round));
+  // Deduplicate by DATE — round numbers differ between Jolpica (skips cancelled
+  // rounds) and OpenF1 (counts all scheduled sessions), causing false duplicates.
+  const jolDates = new Set(jolResults.map(r => r.date));
   const now = new Date();
   const cutoff = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
 
@@ -110,8 +122,9 @@ export async function GET() {
     });
 
     for (const session of recentFinished) {
+      const sessionDate = (session.date_start as string).slice(0, 10);
+      if (jolDates.has(sessionDate)) continue; // already covered by Jolpica
       const roundNum = sorted.findIndex(s => s.session_key === session.session_key) + 1;
-      if (jolRounds.has(roundNum)) continue;
 
       const sk = session.session_key as number;
       const [sessionResult, drivers, meetings] = await Promise.all([
@@ -152,7 +165,8 @@ export async function GET() {
   }
 
   // ── 3. Merge: Jolpica authoritative + OpenF1 for unreleased rounds ──
-  const newFromOpenF1 = openf1Results.filter(r => !jolRounds.has(r.round));
+  const jolDatesSet = new Set(jolResults.map(r => r.date));
+  const newFromOpenF1 = openf1Results.filter(r => !jolDatesSet.has(r.date));
   const merged = [...jolResults, ...newFromOpenF1].sort((a, b) => b.round - a.round);
 
   if (merged.length > 0) {

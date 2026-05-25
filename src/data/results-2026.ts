@@ -2,7 +2,7 @@
  * 2026 Race Results — real data.
  * F1: Rounds 1–4 (Australia → Miami) — source: formula1.com, Wikipedia
  *     Bahrain & Saudi Arabia GPs cancelled (Middle East conflict)
- *     Round 5 = Canada (May 24, in progress)
+ *     Round 5 = Canada (May 24) — handled by /api/f1/results (Jolpica)
  * MotoGP: Rounds 1–6 (Thailand → Catalunya) — source: motogp.com, crash.net
  *     Catalunya result reflects post-penalty classification (Mir -16s)
  * WEC: Rounds 1–2 (Imola, Spa) — source: fiawec.com, Wikipedia

@@ -66,7 +66,7 @@ const f1: CalendarEntry[] = [
     { type: 'qualifying', name: 'Sprint Qualifying', startTime: '2026-05-22T21:30:00Z' },
     { type: 'sprint', name: 'Sprint', startTime: '2026-05-23T16:30:00Z' },
     { type: 'qualifying', name: 'Qualifying', startTime: '2026-05-23T20:00:00Z' },
-    { type: 'race', name: 'Race', startTime: '2026-05-24T18:00:00Z' },
+    { type: 'race', name: 'Race', startTime: '2026-05-24T20:00:00Z' },
   ]),
   evt('f1', 'Monaco Grand Prix', { name: 'Circuit de Monaco', country: 'Monaco', countryCode: 'MC', lat: 43.7347, lng: 7.4206 }, '2026-06-05', '2026-06-07', [
     { type: 'practice', name: 'FP1', startTime: '2026-06-05T11:30:00Z' },
