@@ -457,9 +457,9 @@ export const ELMS_RESULTS_2026: RaceResult[] = [
     countryCode: 'ES',
     date: '2026-04-06',
     podium: [
-      { pos: 1, driver: 'Brichacek / Favre / Rammo', team: 'DKR Engineering #4' },
-      { pos: 2, driver: 'Cautela / Pedersen / Rodella', team: 'Rinaldi Racing #5' },
-      { pos: 3, driver: 'Nogales / Quintarelli / Stern', team: 'Team Virage #8' },
+      { pos: 1, driver: 'Cautela / Pedersen / Rodella', team: 'Rinaldi Racing #5' },
+      { pos: 2, driver: 'Brichacek / Favre / Rammo', team: 'DKR Engineering #4' },
+      { pos: 3, driver: 'Bukhantsov / Chou / Cubides', team: 'Inter Europol #13' },
     ],
   },
   {
@@ -487,8 +487,9 @@ export const ELMS_RESULTS_2026: RaceResult[] = [
     countryCode: 'FR',
     date: '2026-05-18',
     podium: [
-      { pos: 1, driver: 'Allen / Lendoudis / Quinn', team: 'Nielsen Racing #27' },
-      { pos: 2, driver: 'Bukhantsov / Chou / Cubides Olarte', team: 'Inter Europol #13' },
+      { pos: 1, driver: 'Bukhantsov / Chou / Cubides', team: 'Inter Europol #13' },
+      { pos: 2, driver: 'Adcock / Antonel / Imbourg', team: 'M Racing #68' },
+      { pos: 3, driver: 'Michal / Schwarze / Provost', team: 'R-ACE GP #85' },
     ],
   },
   {
@@ -509,7 +510,8 @@ export const ELMS_RESULTS_2026: RaceResult[] = [
 ];
 
 // ─── DTM 2026 Race Results ────────────────────────────────
-// Source: pitdebrief.com, autosport.com, racer.com — Red Bull Ring R1 (Apr 26-27)
+// Source: pitdebrief.com, autosport.com, motorsport.com
+// Round 1: Red Bull Ring (Apr 25-26) | Round 2: Zandvoort (May 23-24)
 export const DTM_RESULTS_2026: RaceResult[] = [
   {
     id: 'dtm-r1-rbr-race1',
@@ -519,7 +521,7 @@ export const DTM_RESULTS_2026: RaceResult[] = [
     circuit: 'Red Bull Ring',
     country: 'Austria',
     countryCode: 'AT',
-    date: '2026-04-26',
+    date: '2026-04-25',
     podium: [
       { pos: 1, driver: 'Thomas Preining', team: 'Porsche' },
       { pos: 2, driver: 'Lucas Auer', team: 'Mercedes-AMG' },
@@ -534,11 +536,41 @@ export const DTM_RESULTS_2026: RaceResult[] = [
     circuit: 'Red Bull Ring',
     country: 'Austria',
     countryCode: 'AT',
-    date: '2026-04-27',
+    date: '2026-04-26',
     podium: [
       { pos: 1, driver: 'Maro Engel', team: 'Mercedes-AMG' },
       { pos: 2, driver: 'Marco Wittmann', team: 'BMW' },
       { pos: 3, driver: 'Lucas Auer', team: 'Mercedes-AMG' },
+    ],
+  },
+  {
+    id: 'dtm-r2-zandvoort-race1',
+    series: 'dtm',
+    round: 2,
+    name: 'DTM Zandvoort — Race 1',
+    circuit: 'Circuit Zandvoort',
+    country: 'Netherlands',
+    countryCode: 'NL',
+    date: '2026-05-23',
+    podium: [
+      { pos: 1, driver: 'Matteo Cairoli', team: 'Ferrari' },
+      { pos: 2, driver: 'Lucas Auer', team: 'Mercedes-AMG' },
+      { pos: 3, driver: 'Thierry Vermeulen', team: 'Ferrari' },
+    ],
+  },
+  {
+    id: 'dtm-r2-zandvoort-race2',
+    series: 'dtm',
+    round: 2,
+    name: 'DTM Zandvoort — Race 2',
+    circuit: 'Circuit Zandvoort',
+    country: 'Netherlands',
+    countryCode: 'NL',
+    date: '2026-05-24',
+    podium: [
+      { pos: 1, driver: 'Kelvin van der Linde', team: 'BMW' },
+      { pos: 2, driver: 'Ben Dörr', team: 'McLaren' },
+      { pos: 3, driver: 'Marco Wittmann', team: 'BMW' },
     ],
   },
 ];

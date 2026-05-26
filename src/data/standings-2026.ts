@@ -9,7 +9,7 @@
  * WRC Manufacturers: Toyota/Hyundai/Lancia/Ford — derived from driver pts top-3 per mfr
  * IMSA: After Round 4 (Laguna Seca, May 11 2026) — source: imsa.com / speedsport.com
  * IMSA Teams: each car entry IS the team entry — same pts as driver entry
- * DTM: After Round 1 (Red Bull Ring, Apr 2026) — source: dtm.com / autosport.com
+ * DTM: After Round 2 (Zandvoort, May 24 2026) — source: pitdebrief.com / motorsport.com
  * DTM Manufacturers: top 2 drivers per brand per race — derived from driver standings
  * ELMS: After Round 2 (Le Castellet, May 18 2026) — source: europeanlemansseries.com
  */
@@ -164,18 +164,18 @@ export const IMSA_GTD_DRIVERS_2026: DriverStanding[] = [
   { pos: 4, name: 'R. Ward / P. Ellis',         team: 'Winward Mercedes',   points: 1200, teamColor: '#00BFBF' },
 ];
 
-// ─── DTM 2026 Driver Championship (after R1 · Red Bull Ring) ─
+// ─── DTM 2026 Driver Championship (after R2 · Zandvoort) ─
 export const DTM_DRIVERS_2026: DriverStanding[] = [
-  { pos: 1, name: 'M. Engel', team: 'Mercedes-AMG', points: 44, teamColor: '#00D2BE' },
-  { pos: 2, name: 'L. Auer', team: 'Mercedes-AMG', points: 37, teamColor: '#00D2BE' },
-  { pos: 3, name: 'M. Wittmann', team: 'BMW', points: 31, teamColor: '#1E88E5' },
-  { pos: 4, name: 'T. Preining', team: 'Porsche', points: 29, teamColor: '#C0A062' },
-  { pos: 5, name: 'N. Thiim', team: 'Aston Martin', points: 17, teamColor: '#006241' },
-  { pos: 6, name: 'F. Wiebelhaus', team: 'Ford', points: 15, teamColor: '#0032A0' },
-  { pos: 7, name: 'A. Maini', team: 'Ford', points: 14, teamColor: '#0032A0' },
-  { pos: 8, name: 'J. Gounon', team: 'Mercedes-AMG', points: 13, teamColor: '#00D2BE' },
-  { pos: 8, name: 'T. Kalender', team: 'Mercedes-AMG', points: 13, teamColor: '#00D2BE' },
-  { pos: 8, name: 'K. van der Linde', team: 'BMW', points: 13, teamColor: '#1E88E5' },
+  { pos: 1,  name: 'M. Engel',         team: 'Mercedes-AMG',  points: 67, teamColor: '#00D2BE' },
+  { pos: 2,  name: 'L. Auer',          team: 'Mercedes-AMG',  points: 61, teamColor: '#00D2BE' },
+  { pos: 3,  name: 'M. Wittmann',      team: 'BMW',           points: 52, teamColor: '#1E88E5' },
+  { pos: 4,  name: 'T. Preining',      team: 'Porsche',       points: 46, teamColor: '#C0A062' },
+  { pos: 5,  name: 'M. Cairoli',       team: 'Ferrari',       points: 43, teamColor: '#E8002D' },
+  { pos: 6,  name: 'B. Dörr',          team: 'McLaren',       points: 42, teamColor: '#FF8000' },
+  { pos: 7,  name: 'K. van der Linde', team: 'BMW',           points: 41, teamColor: '#1E88E5' },
+  { pos: 8,  name: 'T. Vermeulen',     team: 'Ferrari',       points: 41, teamColor: '#E8002D' },
+  { pos: 9,  name: 'J. Gounon',        team: 'Mercedes-AMG',  points: 30, teamColor: '#00D2BE' },
+  { pos: 10, name: 'N. Thiim',         team: 'Aston Martin',  points: 24, teamColor: '#006241' },
 ];
 
 // ─── MotoGP 2026 Teams Championship (after R6 · Catalan GP) ─
@@ -253,14 +253,15 @@ export const IMSA_GTD_TEAMS_2026: ConstructorStanding[] = [
   { pos: 4, name: 'Winward Racing',    points: 1200, color: '#00BFBF' },
 ];
 
-// ─── DTM 2026 Manufacturers Championship (after R1 · Red Bull Ring) ─
-// Top 2 drivers per manufacturer per race, 2 races: derived from driver standings
+// ─── DTM 2026 Manufacturers Championship (after R2 · Zandvoort) ─
+// Sum of top 2 drivers per brand from driver standings
 export const DTM_MANUFACTURERS_2026: ConstructorStanding[] = [
-  { pos: 1, name: 'Mercedes-AMG', points: 81, color: '#00D2BE' }, // Engel 44 + Auer 37
-  { pos: 2, name: 'BMW',          points: 44, color: '#1E88E5' }, // Wittmann 31 + vdLinde 13
-  { pos: 3, name: 'Porsche',      points: 29, color: '#C0A062' }, // Preining 29
-  { pos: 4, name: 'Ford',         points: 29, color: '#0032A0' }, // Wiebelhaus 15 + Maini 14
-  { pos: 5, name: 'Aston Martin', points: 17, color: '#006241' }, // Thiim 17
+  { pos: 1, name: 'Mercedes-AMG', points: 128, color: '#00D2BE' }, // Engel 67 + Auer 61
+  { pos: 2, name: 'BMW',          points: 93,  color: '#1E88E5' }, // Wittmann 52 + vdLinde 41
+  { pos: 3, name: 'Ferrari',      points: 84,  color: '#E8002D' }, // Cairoli 43 + Vermeulen 41
+  { pos: 4, name: 'Porsche',      points: 46,  color: '#C0A062' }, // Preining 46
+  { pos: 5, name: 'McLaren',      points: 42,  color: '#FF8000' }, // Dörr 42
+  { pos: 6, name: 'Aston Martin', points: 24,  color: '#006241' }, // Thiim 24
 ];
 
 // ═══════════════════════════════════════════════════════════════════
