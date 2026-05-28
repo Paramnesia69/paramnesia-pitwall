@@ -4,9 +4,25 @@
 **"Renew race weekend results"** → Claude uses WebSearch/WebFetch to find latest results for all non-F1 series and edits `src/data/results-2026.ts` + `src/data/standings-2026.ts` directly. No scripts, no terminal. F1 is excluded (automated via API routes).
 Series: MotoGP, WEC, ELMS, IMSA, WRC, DTM.
 
-## Last Commit (2026-05-28)
+## Last Commits (2026-05-29)
 
-`[pending]` — data: GTWCE + Nürburgring 2026 results
+`9644c9e` — fix: overlay close button left-aligned, series badge shifted right (pl-10) to clear it
+
+`f238d98` — fix: race weekend overlay layout — header and tabs always visible
+- Panel no longer has overflow-y-auto; header (shrink-0) + tabs (shrink-0) always visible
+- Only results content section (flex-1 overflow-y-auto) scrolls
+- Animation: x:600 fixed pixel instead of x:'100%'
+
+`9ba8edd` — feat: race weekend detail overlay — click any result card for full session breakdown
+- RaceWeekendOverlay: framer spring slide-out, session tabs (race/qualifying/sprint/FP disabled),
+  full results table with team logos, position badges, Q1/Q2/Q3 columns, fastest lap
+- F1: /api/f1/weekend/[round] fetches Jolpica live — full 20-driver grid, all sessions
+- Other series: sessions[] added to results-2026.ts (MotoGP R6, WEC Spa, WRC Portugal, DTM Zandvoort R2, GTWCE Brands Hatch R1+2)
+- PodiumCard clickable with hover glow + "Full results →" hint; ?result= deep-link
+- RaceResult type moved to shared types/index.ts with SessionResults/ResultEntry schema
+- Fixed WEC Spa LMGT3 podium order (Vista AF Corse P1, was wrong)
+
+Previous: `[pending]` — data: GTWCE + Nürburgring 2026 results
 - `results-2026.ts`: Added GTWCE_RESULTS_2026 (R1 Paul Ricard 6h, R2 Brands Hatch
   Race 1+2) and NURBURGRING_RESULTS_2026 (NLS2, NLS3, 24h Quali R2, ADAC 24h);
   both included in ALL_RESULTS_2026. NLS1 + 24h Quali R1 were cancelled.
