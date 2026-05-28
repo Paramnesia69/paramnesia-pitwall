@@ -357,8 +357,8 @@ export default function RaceWeekendOverlay() {
               </button>
 
               <div className="relative">
-                {/* Series badge + round + date */}
-                <div className="flex items-center gap-2 mb-3">
+                {/* Series badge + round + date — pl-10 clears the close button on the left */}
+                <div className="flex items-center gap-2 mb-3 pl-10">
                   <span
                     className="inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded whitespace-nowrap"
                     style={{
