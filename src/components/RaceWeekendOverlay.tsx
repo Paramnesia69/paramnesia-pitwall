@@ -6,7 +6,6 @@ import Image from 'next/image';
 import { SERIES_META } from '@/types';
 import type { SessionResults, WeekendSessionType, RaceResult } from '@/types';
 import { useStore } from '@/store';
-import { ALL_RESULTS_2026 } from '@/data/results-2026';
 import { getTeamLogo } from '@/lib/teamLogos';
 
 // ─── Session tab config ────────────────────────────────────────────────────────
@@ -242,8 +241,7 @@ function useF1WeekendData(round: number | null) {
 // ─── Main overlay ──────────────────────────────────────────────────────────────
 
 export default function RaceWeekendOverlay() {
-  const { selectedResultId, closeResult } = useStore();
-  const result: RaceResult | undefined = ALL_RESULTS_2026.find((r) => r.id === selectedResultId);
+  const { selectedResult: result, closeResult } = useStore();
 
   const isF1 = result?.series === 'f1';
   const { data: f1Data, loading: f1Loading } = useF1WeekendData(
@@ -268,17 +266,17 @@ export default function RaceWeekendOverlay() {
       setActiveTab(sortedSessions[0].type);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedResultId, f1Data]);
+  }, [result?.id, f1Data]);
 
   // Lock scroll
   useEffect(() => {
-    if (selectedResultId) {
+    if (result) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
     }
     return () => { document.body.style.overflow = ''; };
-  }, [selectedResultId]);
+  }, [result]);
 
   // Escape key
   useEffect(() => {

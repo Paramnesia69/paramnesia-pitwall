@@ -21,7 +21,8 @@ import { useReminderScheduler } from '@/lib/useReminders';
 import InstallPrompt from '@/components/ui/InstallPrompt';
 import UpdateBanner from '@/components/ui/UpdateBanner';
 import LiveIndicator from '@/components/ui/LiveIndicator';
-import type { NormalizedNewsItem } from '@/types';
+import type { NormalizedNewsItem, RaceResult } from '@/types';
+import { ALL_RESULTS_2026 } from '@/data/results-2026';
 
 /* ── Lazy-loaded below-fold components ──────────── */
 const StandingsPanel = lazy(() => import('@/components/StandingsPanel'));
@@ -80,7 +81,8 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
   useEffect(() => {
     const resultParam = searchParams.get('result');
     if (resultParam) {
-      openResult(resultParam);
+      const found = ALL_RESULTS_2026.find((r: RaceResult) => r.id === resultParam);
+      if (found) openResult(found);
     }
     // Only run once on mount
     // eslint-disable-next-line react-hooks/exhaustive-deps

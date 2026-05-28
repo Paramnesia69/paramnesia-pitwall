@@ -2,7 +2,7 @@
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { SeriesId } from '@/types';
+import type { SeriesId, RaceResult } from '@/types';
 
 export type Theme = 'dark' | 'light';
 
@@ -31,8 +31,8 @@ interface PitwallStore {
   openEvent: (id: string) => void;
   closeEvent: () => void;
 
-  selectedResultId: string | null;
-  openResult: (id: string) => void;
+  selectedResult: RaceResult | null;
+  openResult: (result: RaceResult) => void;
   closeResult: () => void;
 
   theme: Theme;
@@ -78,17 +78,17 @@ export const useStore = create<PitwallStore>()(
         }
       },
 
-      selectedResultId: null,
-      openResult: (id) => {
-        set({ selectedResultId: id });
+      selectedResult: null,
+      openResult: (result) => {
+        set({ selectedResult: result });
         if (typeof window !== 'undefined') {
           const url = new URL(window.location.href);
-          url.searchParams.set('result', id);
+          url.searchParams.set('result', result.id);
           window.history.replaceState({}, '', url.toString());
         }
       },
       closeResult: () => {
-        set({ selectedResultId: null });
+        set({ selectedResult: null });
         if (typeof window !== 'undefined') {
           const url = new URL(window.location.href);
           url.searchParams.delete('result');

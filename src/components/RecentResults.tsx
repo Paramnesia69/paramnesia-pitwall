@@ -52,7 +52,7 @@ function PodiumCard({ result }: { result: RaceResult }) {
   const meta = SERIES_META[result.series];
   const cls = getResultClass(result);
   const { openResult } = useStore();
-  const handleClick = useCallback(() => openResult(result.id), [openResult, result.id]);
+  const handleClick = useCallback(() => openResult(result), [openResult, result]);
 
   return (
     <motion.div
