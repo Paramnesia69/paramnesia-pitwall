@@ -332,7 +332,7 @@ export default function RaceWeekendOverlay() {
               />
               {/* Series watermark logo */}
               {meta?.logo && (
-                <div className="absolute right-4 top-4 pointer-events-none select-none opacity-[0.06]">
+                <div className="absolute right-4 top-10 pointer-events-none select-none opacity-[0.06]">
                   <Image
                     src={meta.logo}
                     alt=""
@@ -347,7 +347,7 @@ export default function RaceWeekendOverlay() {
               {/* Close button */}
               <button
                 onClick={closeResult}
-                className="absolute top-4 left-4 w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+                className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center transition-colors"
                 style={{ background: 'rgba(255,255,255,0.08)' }}
                 aria-label="Close"
               >
@@ -357,8 +357,8 @@ export default function RaceWeekendOverlay() {
               </button>
 
               <div className="relative">
-                {/* Series badge + round + date — pl-10 clears the close button on the left */}
-                <div className="flex items-center gap-2 mb-3 pl-10">
+                {/* Series badge + round — pr-10 clears the close button on the right */}
+                <div className="flex items-center gap-2 mb-3 pr-10">
                   <span
                     className="inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded whitespace-nowrap"
                     style={{
@@ -375,14 +375,14 @@ export default function RaceWeekendOverlay() {
                   <span className="text-[10px] font-mono" style={{ color: 'var(--pw-text-tertiary)' }}>
                     R{result.round}
                   </span>
-                  <span className="text-[10px] font-mono ml-auto" style={{ color: 'var(--pw-text-tertiary)' }}>
-                    {new Date(result.date).toLocaleDateString('en-GB', { month: 'short', day: 'numeric', year: 'numeric' })}
-                  </span>
                 </div>
 
                 <h2 className="text-xl font-bold leading-tight mb-1">{result.name}</h2>
                 <p className="text-sm" style={{ color: 'var(--pw-text-tertiary)' }}>
                   {result.circuit} · {result.country}
+                </p>
+                <p className="text-[10px] font-mono mt-1" style={{ color: 'var(--pw-text-tertiary)' }}>
+                  {new Date(result.date).toLocaleDateString('en-GB', { month: 'short', day: 'numeric', year: 'numeric' })}
                 </p>
 
                 {/* Podium quick-glance */}
