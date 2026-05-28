@@ -6,6 +6,7 @@
  * MotoGP: Rounds 1–6 (Thailand → Catalunya) — source: motogp.com, crash.net
  *     Catalunya result reflects post-penalty classification (Mir -16s)
  * WEC: Rounds 1–2 (Imola, Spa) — source: fiawec.com, Wikipedia
+ * GTWCE: R1 Paul Ricard (6h), R2 Brands Hatch (Race 1+2) — source: gt-world-challenge-europe.com
  */
 
 import type { SeriesId } from '@/types';
@@ -575,6 +576,129 @@ export const DTM_RESULTS_2026: RaceResult[] = [
   },
 ];
 
+// ─── GTWCE 2026 Race Results ──────────────────────────────
+// Source: gt-world-challenge-europe.com official results
+// R1: 6 Hours of Paul Ricard (Apr 11) — Endurance Cup
+// R2: Sprint Cup Brands Hatch (May 2–3) — Race 1 + Race 2
+export const GTWCE_RESULTS_2026: RaceResult[] = [
+  {
+    id: 'gtwce-r1-paulricard',
+    series: 'gtwce',
+    round: 1,
+    name: '6 Hours of Paul Ricard',
+    circuit: 'Circuit Paul Ricard',
+    country: 'France',
+    countryCode: 'FR',
+    date: '2026-04-11',
+    podium: [
+      { pos: 1, driver: 'Drudi / Sorensen / Thiim', team: 'Comtoyou Racing — Aston Martin' },
+      { pos: 2, driver: 'Auer / Stolz / Engel', team: 'Mercedes-AMG Team MANN-FILTER' },
+      { pos: 3, driver: 'Fleming / Prette / Goethe', team: 'Garage 59 — McLaren' },
+    ],
+  },
+  {
+    id: 'gtwce-r2-brandshatch-race1',
+    series: 'gtwce',
+    round: 2,
+    name: 'Sprint Cup Brands Hatch — Race 1',
+    circuit: 'Brands Hatch',
+    country: 'United Kingdom',
+    countryCode: 'GB',
+    date: '2026-05-02',
+    podium: [
+      { pos: 1, driver: 'Leclerc / Neubauer', team: 'AF Corse — Ferrari' },
+      { pos: 2, driver: 'Schuring / Boccolacci', team: 'Boutsen VDS — Porsche' },
+      { pos: 3, driver: 'Weerts / van der Linde', team: 'Team WRT — BMW' },
+    ],
+  },
+  {
+    id: 'gtwce-r2-brandshatch-race2',
+    series: 'gtwce',
+    round: 2,
+    name: 'Sprint Cup Brands Hatch — Race 2',
+    circuit: 'Brands Hatch',
+    country: 'United Kingdom',
+    countryCode: 'GB',
+    date: '2026-05-03',
+    podium: [
+      { pos: 1, driver: 'Feller / Buus', team: 'Lionspeed GP — Porsche' },
+      { pos: 2, driver: 'Juncadella / Lulham', team: 'Verstappen Racing — Mercedes-AMG' },
+      { pos: 3, driver: 'Auer / Engel', team: 'Winward Racing — Mercedes-AMG' },
+    ],
+  },
+];
+
+// ─── Nürburgring 2026 Results ─────────────────────────────
+// Source: nuerburgring-langstrecken-serie.de, motorsport.com, pitdebrief.com
+// NLS1 (Mar 14): Cancelled for safety reasons
+// NLS2 (Mar 21): Verstappen/Winward DSQ → Harper/Pepper (Rowe BMW) inherit win
+// NLS3 (Apr 11): Schubert BMW wins after KCMG Mercedes 85s penalty
+// 24h Quali R1 (Apr 18): Cancelled — fatal accident (Juha Miettinen), race not resumed
+// 24h Quali R2 (Apr 19): Haase/Green/Sims (Scherer-Phx Audi)
+// 24h Nürburgring (May 16–17): Engel/Stolz/Schiller/Martin (Winward Mercedes)
+export const NURBURGRING_RESULTS_2026: RaceResult[] = [
+  {
+    id: 'nurburgring-nls2-2026',
+    series: 'nurburgring',
+    round: 2,
+    name: '58. ADAC Barbarossapreis (NLS2)',
+    circuit: 'Nürburgring Nordschleife',
+    country: 'Germany',
+    countryCode: 'DE',
+    date: '2026-03-21',
+    podium: [
+      { pos: 1, driver: 'Dan Harper / Jordan Pepper', team: 'Rowe Racing — BMW M4 GT3' },
+      { pos: 2, driver: 'Tim Heinemann / Sven Müller', team: 'Falken Motorsports — Porsche' },
+      { pos: 3, driver: 'Kaya / Piana / Stursberg', team: 'LOSCH Motorsport by Black Falcon — Porsche 911 GT3 R' },
+    ],
+  },
+  {
+    id: 'nurburgring-nls3-2026',
+    series: 'nurburgring',
+    round: 3,
+    name: '57. Adenauer ADAC Rundstrecken-Trophy (NLS3)',
+    circuit: 'Nürburgring Nordschleife',
+    country: 'Germany',
+    countryCode: 'DE',
+    date: '2026-04-11',
+    podium: [
+      { pos: 1, driver: 'Eng / Wittmann / Frijns', team: 'Schubert Motorsport #77 — BMW M4 GT3 EVO' },
+      { pos: 2, driver: 'Güven / Campbell', team: 'Manthey Racing #911 — Porsche GT3 R' },
+      { pos: 3, driver: 'Olsen / Vervisch / Mies / Kolb', team: 'HRT Ford Racing #65 — Ford Mustang GT3' },
+    ],
+  },
+  {
+    id: 'nurburgring-24hq2-2026',
+    series: 'nurburgring',
+    round: 4,
+    name: 'ADAC 24h Qualifying Race 2',
+    circuit: 'Nürburgring Nordschleife',
+    country: 'Germany',
+    countryCode: 'DE',
+    date: '2026-04-19',
+    podium: [
+      { pos: 1, driver: 'Haase / Green / Sims', team: 'Scherer-Phx #16 — Audi R8 LMS GT3' },
+      { pos: 2, driver: 'Engstler / Bortolotti / Niederhauser', team: 'Red Bull Team Abt #84 — Lamborghini' },
+      { pos: 3, driver: 'Preining / Campbell', team: 'Manthey Racing #911 — Porsche GT3 R "Grello"' },
+    ],
+  },
+  {
+    id: 'nurburgring-24h-2026',
+    series: 'nurburgring',
+    round: 6,
+    name: 'ADAC RAVENOL 24h Nürburgring',
+    circuit: 'Nürburgring Nordschleife',
+    country: 'Germany',
+    countryCode: 'DE',
+    date: '2026-05-17',
+    podium: [
+      { pos: 1, driver: 'Engel / Stolz / Schiller / Martin', team: 'Winward Racing Ravenol #80 — Mercedes-AMG GT3 EVO' },
+      { pos: 2, driver: 'Engstler / Bortolotti / Niederhauser', team: 'Red Bull Team Abt #84 — Lamborghini Huracán GT3' },
+      { pos: 3, driver: 'Drudi / Krognes / Thiim / Fernandez Laser', team: 'Walkenhorst Motorsport #34 — Aston Martin Vantage GT3' },
+    ],
+  },
+];
+
 // ─── Combined recent results (latest first) ─────────────
 export const ALL_RESULTS_2026: RaceResult[] = [
   ...F1_RESULTS_2026,
@@ -584,4 +708,6 @@ export const ALL_RESULTS_2026: RaceResult[] = [
   ...IMSA_RESULTS_2026,
   ...ELMS_RESULTS_2026,
   ...DTM_RESULTS_2026,
+  ...GTWCE_RESULTS_2026,
+  ...NURBURGRING_RESULTS_2026,
 ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());

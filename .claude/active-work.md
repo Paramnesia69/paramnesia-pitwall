@@ -6,16 +6,14 @@ Series: MotoGP, WEC, ELMS, IMSA, WRC, DTM.
 
 ## Last Commit (2026-05-28)
 
-`[pending]` — feat: per-series hero card and standings on filtered pages
-- `Dashboard.tsx`: HeroCard now shows next event for the active series filter
-  (was only shown on "All Series"); StandingsPanel now shown for all 7 series
-  with standings data (f1/wec/elms/imsa/motogp/dtm/wrc), hidden for others
-  (gtwce/nurburgring/porsche); `key={activeFilter}` forces remount on filter change
-- `StandingsPanel.tsx`: accepts optional `defaultTab` prop — opens pre-selected
-  to the active series; falls back to 'f1' when not provided (All Series unchanged)
+`[pending]` — data: GTWCE + Nürburgring 2026 results
+- `results-2026.ts`: Added GTWCE_RESULTS_2026 (R1 Paul Ricard 6h, R2 Brands Hatch
+  Race 1+2) and NURBURGRING_RESULTS_2026 (NLS2, NLS3, 24h Quali R2, ADAC 24h);
+  both included in ALL_RESULTS_2026. NLS1 + 24h Quali R1 were cancelled.
+  Sources: gt-world-challenge-europe.com (official HTML), nuerburgring-langstrecken-serie.de (official articles)
 
-Previous commit: `3b6c1cc` (2026-05-28) — data: DTM Round 2 results + standings,
-fix ELMS LMP3 R1-R2 winners
+Previous commit: `1d649c3` (2026-05-28) — feat: per-series hero card and standings
+on filtered pages (Dashboard + StandingsPanel)
 
 All commits on `main`, Vercel auto-deploys.
 
@@ -37,6 +35,8 @@ F1 results and standings are **fully automated** via live API routes — never u
 - ELMS LMP3: R1 Barcelona, R2 Le Castellet
 - ELMS LMGT3: R1 Barcelona, R2 Le Castellet
 - DTM: R1 Red Bull Ring (Race 1 + 2), R2 Zandvoort (Race 1 + 2)
+- GTWCE: R1 Paul Ricard (6h endurance), R2 Brands Hatch (Race 1 + 2)
+- Nürburgring: NLS2, NLS3, 24h Quali R2, ADAC 24h Nürburgring (NLS1 + 24h Quali R1 cancelled)
 
 ### Standings (src/data/standings-2026.ts)
 - F1 Drivers + Constructors: after R4 Miami (live data via /api/f1/standings)
@@ -99,6 +99,9 @@ Class plate badges in `public/logos/`:
 - **WEC results**: add R3 (Le Mans 24H, June 14–15)
 - **DTM results**: add R3 onwards
 - **ELMS results**: add R3 onwards (Imola, July 5)
+- **GTWCE results**: add R3 onwards (3 Hours of Monza, May 31)
+- **Nürburgring results**: add NLS6 onwards (Eifel Trophy, Jun 20)
+- **Porsche Supercup results**: season starts Jun 4 (Monaco)
 - **Logo quality**: better Porsche crest; Aprilia/Yamaha not true-colour
 - **Manual override CMS**: currently JSON file editing only
 - **Live race mode**: real-time lap data, gap to leader

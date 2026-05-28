@@ -13,7 +13,7 @@
 - **Upcoming timeline** — Events 10–20 shown in a minimal list below the grid
 
 ### Data Panels
-- **Recent results** — Real 2026 results for F1, MotoGP, WEC, WRC, IMSA, ELMS; filterable by series; manufacturer logos on podium
+- **Recent results** — Real 2026 results for F1, MotoGP, WEC, WRC, IMSA, ELMS, DTM, GTWCE, Nürburgring; filterable by series; manufacturer logos on podium
 - **Championship standings** — Real 2026 data; shown on "All Series" and on any filtered page for series with standings data (f1/wec/elms/imsa/motogp/dtm/wrc); pre-selected to the active series tab when filtering; hidden for series without standings (gtwce/nurburgring/porsche); tab switcher (F1, WEC, ELMS, IMSA, MotoGP, DTM, WRC); multi-class sections with class plate badge headers:
   - F1: Drivers + Constructors
   - WEC: Hypercar + LMGT3 (drivers + manufacturers); LMGT3 shows green class plate badge
