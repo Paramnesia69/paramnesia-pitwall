@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { SERIES_META } from '@/types';
@@ -242,7 +242,6 @@ function useF1WeekendData(round: number | null) {
 
 export default function RaceWeekendOverlay() {
   const { selectedResult: result, closeResult } = useStore();
-  const panelRef = useRef<HTMLDivElement>(null);
 
   const isF1 = result?.series === 'f1';
   const { data: f1Data, loading: f1Loading } = useF1WeekendData(
@@ -269,11 +268,10 @@ export default function RaceWeekendOverlay() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result?.id, f1Data]);
 
-  // Lock scroll + scroll panel to top on open
+  // Lock body scroll when overlay open
   useEffect(() => {
     if (result) {
       document.body.style.overflow = 'hidden';
-      panelRef.current?.scrollTo({ top: 0 });
     } else {
       document.body.style.overflow = '';
     }
@@ -308,14 +306,13 @@ export default function RaceWeekendOverlay() {
             onClick={closeResult}
           />
 
-          {/* Panel */}
+          {/* Panel — flex col, NO overflow on panel itself so header+tabs never scroll away */}
           <motion.div
-            ref={panelRef}
-            className="fixed right-0 top-0 bottom-0 w-full max-w-[540px] overflow-y-auto flex flex-col"
+            className="fixed right-0 top-0 bottom-0 w-full max-w-[540px] flex flex-col"
             style={{ zIndex: 'var(--pw-z-modal)', background: 'var(--pw-bg-elevated)' }}
-            initial={{ x: '100%' }}
+            initial={{ x: 600 }}
             animate={{ x: 0 }}
-            exit={{ x: '100%' }}
+            exit={{ x: 600 }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           >
             {/* Accent top border */}
@@ -324,8 +321,8 @@ export default function RaceWeekendOverlay() {
               style={{ background: `linear-gradient(90deg, transparent, ${accentColor}, transparent)` }}
             />
 
-            {/* Header hero area */}
-            <div className="relative pt-8 pb-5 px-5 overflow-hidden">
+            {/* Header hero area — shrink-0 so it never scrolls away */}
+            <div className="shrink-0 relative pt-8 pb-4 px-5 overflow-hidden">
               {/* Background gradient */}
               <div
                 className="absolute inset-0"
@@ -403,10 +400,10 @@ export default function RaceWeekendOverlay() {
               </div>
             </div>
 
-            {/* Session tabs */}
+            {/* Session tabs — shrink-0 so always visible, never scrolls away */}
             <div
-              className="sticky top-0 px-4 py-2 flex gap-1 overflow-x-auto scrollbar-hide"
-              style={{ background: 'var(--pw-bg-elevated)', borderBottom: '1px solid rgba(255,255,255,0.07)', zIndex: 10 }}
+              className="shrink-0 px-4 py-2 flex gap-1 overflow-x-auto scrollbar-hide"
+              style={{ background: 'var(--pw-bg-elevated)', borderBottom: '1px solid rgba(255,255,255,0.07)' }}
             >
               {sortedSessions.map((s) => {
                 const isActive = activeTab === s.type;
@@ -440,8 +437,8 @@ export default function RaceWeekendOverlay() {
               )}
             </div>
 
-            {/* Session content */}
-            <div className="flex-1 px-3 py-4">
+            {/* Session content — flex-1 + overflow-y-auto: ONLY this section scrolls */}
+            <div className="flex-1 overflow-y-auto px-3 py-4">
               {f1Loading && isF1 ? (
                 <div className="flex items-center justify-center py-16 gap-2" style={{ color: 'var(--pw-text-tertiary)' }}>
                   <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
