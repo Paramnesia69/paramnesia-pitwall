@@ -203,7 +203,10 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
       </FadeIn>
 
       {/* ── Hero Featured Event ──────────────── */}
-      {liveFeatured && activeFilter === 'all' && <HeroCard event={liveFeatured} />}
+      {activeFilter === 'all'
+        ? liveFeatured && <HeroCard event={liveFeatured} />
+        : filtered[0] && <HeroCard event={filtered[0]} />
+      }
 
       {/* ── This Weekend ─────────────────────── */}
       {activeFilter === 'all' && weekendEvents.length > 0 && (
@@ -211,9 +214,12 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
       )}
 
       {/* ── Championship Standings ─────────────── */}
-      {activeFilter === 'all' && (
+      {(activeFilter === 'all' || ['f1','wec','elms','imsa','motogp','dtm','wrc'].includes(activeFilter)) && (
         <Suspense>
-          <StandingsPanel />
+          <StandingsPanel
+            key={activeFilter}
+            defaultTab={activeFilter !== 'all' ? activeFilter as 'f1'|'wec'|'elms'|'imsa'|'motogp'|'dtm'|'wrc' : undefined}
+          />
         </Suspense>
       )}
 

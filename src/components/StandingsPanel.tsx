@@ -224,8 +224,8 @@ function Note({ children }: { children: string }) {
 }
 
 /* ── Main panel ── */
-export default function StandingsPanel() {
-  const [activeTab, setActiveTab] = useState<SeriesTab>('f1');
+export default function StandingsPanel({ defaultTab }: { defaultTab?: SeriesTab } = {}) {
+  const [activeTab, setActiveTab] = useState<SeriesTab>(defaultTab ?? 'f1');
   const [sub, setSub] = useState<SubTab>('drivers');
   const [expanded, setExpanded] = useState(true);
   const [f1Drivers, setF1Drivers] = useState<DriverStanding[]>(F1_DRIVERS_2026);

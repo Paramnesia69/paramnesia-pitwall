@@ -6,17 +6,16 @@ Series: MotoGP, WEC, ELMS, IMSA, WRC, DTM.
 
 ## Last Commit (2026-05-28)
 
-`3b6c1cc` — data: DTM Round 2 results + standings, fix ELMS LMP3 R1-R2 winners
-- `results-2026.ts`: DTM Round 2 Zandvoort added (Race 1: Cairoli/Auer/Vermeulen,
-  Race 2: van der Linde/Dörr/Wittmann); ELMS LMP3 R1 winner corrected to Rinaldi
-  Racing (was DKR); ELMS LMP3 R2 winner corrected to Inter Europol (was Nielsen)
-- `standings-2026.ts`: DTM drivers updated to after Round 2 (Engel 67, Auer 61,
-  Wittmann 52...); Ferrari + McLaren added as new manufacturer entries;
-  DTM manufacturers rebuilt from driver standings
+`[pending]` — feat: per-series hero card and standings on filtered pages
+- `Dashboard.tsx`: HeroCard now shows next event for the active series filter
+  (was only shown on "All Series"); StandingsPanel now shown for all 7 series
+  with standings data (f1/wec/elms/imsa/motogp/dtm/wrc), hidden for others
+  (gtwce/nurburgring/porsche); `key={activeFilter}` forces remount on filter change
+- `StandingsPanel.tsx`: accepts optional `defaultTab` prop — opens pre-selected
+  to the active series; falls back to 'f1' when not provided (All Series unchanged)
 
-Previous notable commit: `d96340b` (2026-05-24) — full WEC/ELMS standings,
-class plate badges, fixed logos (WEC Hypercar 18-car grid, ELMS 6 class arrays,
-class-lmp2/lmp3/lmgt3.svg badges, Genesis/AF Corse/Peugeot logo fixes)
+Previous commit: `3b6c1cc` (2026-05-28) — data: DTM Round 2 results + standings,
+fix ELMS LMP3 R1-R2 winners
 
 All commits on `main`, Vercel auto-deploys.
 

@@ -4,7 +4,7 @@
 
 ### Event Display
 - **Event grid** — 3-col responsive grid (sm:2, lg:3), first 9 events, uniform height via h-full chain
-- **Hero card** — Featured/live/next event with animated scan line, series logo watermark, countdown
+- **Hero card** — On "All Series": shows global featured/live/next event. On series filter: shows next event for that specific series. Animated scan line, series logo watermark, countdown
 - **EventDetailOverlay** — Right-panel slide-out (framer spring), Escape key, backdrop click, deep-link `?event=id`
 - **Series filter** — Category nav pills synced to `?series=` URL param (no page navigation); order: F1→WEC→ELMS→IMSA→Nürburgring→MotoGP→GTWCE→DTM→WRC→Porsche
 - **Countdown** — Live ticking, compact and full modes
@@ -14,7 +14,7 @@
 
 ### Data Panels
 - **Recent results** — Real 2026 results for F1, MotoGP, WEC, WRC, IMSA, ELMS; filterable by series; manufacturer logos on podium
-- **Championship standings** — Real 2026 data; tab switcher (F1, WEC, ELMS, IMSA, MotoGP, DTM, WRC); multi-class sections with class plate badge headers:
+- **Championship standings** — Real 2026 data; shown on "All Series" and on any filtered page for series with standings data (f1/wec/elms/imsa/motogp/dtm/wrc); pre-selected to the active series tab when filtering; hidden for series without standings (gtwce/nurburgring/porsche); tab switcher (F1, WEC, ELMS, IMSA, MotoGP, DTM, WRC); multi-class sections with class plate badge headers:
   - F1: Drivers + Constructors
   - WEC: Hypercar + LMGT3 (drivers + manufacturers); LMGT3 shows green class plate badge
   - ELMS: LMP2 + LMP3 + LMGT3 (drivers + teams); each class has its official-colour plate badge (blue/purple/green)
