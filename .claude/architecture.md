@@ -97,7 +97,7 @@ Three tiers (resolved in order):
 2. **Motorcycle SVGs** (`SVG_MOTO_MAP`) → `{ src, white: false, cssFilter? }`:
    - Ducati family → `ducati.svg` — no filter (SVG already has red+white fills)
    - Aprilia/Trackhouse → `aprilia.svg` — sepia+hue-rotate to red tint
-   - Yamaha → `yamaha.svg` — `brightness(0) invert(1)` → white wordmark
+   - Yamaha → `yamaha.svg` — `brightness(0) invert(1) opacity(0.85)` → white wordmark
    - KTM → `ktm.svg` — no filter (orange background badge, natural)
 3. **Brand PNGs** (`MFR_MAP + partialMfrMatch`) → `{ src, white: false, png: true, cssFilter? }`:
    - Mercedes-AMG, Audi, McLaren: `brightness(0) invert(1) opacity(0.85)` (black badge → white)
@@ -106,11 +106,16 @@ Three tiers (resolved in order):
    - AF Corse / Vista AF: mapped to `brand-ferrari.png`
    - Default: no cssFilter → component applies `brightness(1.6) saturate(2.5) contrast(1.2)`
 
-Component rendering pattern (identical in StandingsPanel, F1TimingPanel, RecentResults):
+Component rendering pattern (all four components share the white + cssFilter branches; default differs):
 ```tsx
 logo.white           → { opacity: 0.95 }
 logo.cssFilter!=null → { filter: logo.cssFilter, opacity: 0.92 }
-default              → { filter: 'brightness(1.6) saturate(2.5) contrast(1.2)', opacity: 1 }
+
+// StandingsPanel (intentionally muted for table context):
+default → { filter: 'brightness(1.1) saturate(1.4) contrast(1.0)', opacity: 0.95 }
+
+// F1TimingPanel, RecentResults, RaceWeekendOverlay (vivid for card/results context):
+default → { filter: 'brightness(1.6) saturate(2.5) contrast(1.2)', opacity: 1 }
 ```
 
 ## Key Types
