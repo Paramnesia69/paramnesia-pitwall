@@ -48,6 +48,8 @@ const F1_MAP: Record<string, string> = {
   'Aston Martin':       '/logos/constructors/f1-astonmartin.webp',
   'Aston Martin Aramco':'/logos/constructors/f1-astonmartin.webp',
   'Racing Bulls':       '/logos/constructors/f1-racingbulls.webp',
+  'RB F1 Team':         '/logos/constructors/f1-racingbulls.webp',
+  'RB':                 '/logos/constructors/f1-racingbulls.webp',
   VCARB:                '/logos/constructors/f1-racingbulls.webp',
   'Visa Cash App RB':   '/logos/constructors/f1-racingbulls.webp',
   Cadillac:             '/logos/constructors/f1-cadillac.webp',

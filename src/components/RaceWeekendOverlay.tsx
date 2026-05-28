@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { SERIES_META } from '@/types';
@@ -242,6 +242,7 @@ function useF1WeekendData(round: number | null) {
 
 export default function RaceWeekendOverlay() {
   const { selectedResult: result, closeResult } = useStore();
+  const panelRef = useRef<HTMLDivElement>(null);
 
   const isF1 = result?.series === 'f1';
   const { data: f1Data, loading: f1Loading } = useF1WeekendData(
@@ -268,10 +269,11 @@ export default function RaceWeekendOverlay() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result?.id, f1Data]);
 
-  // Lock scroll
+  // Lock scroll + scroll panel to top on open
   useEffect(() => {
     if (result) {
       document.body.style.overflow = 'hidden';
+      panelRef.current?.scrollTo({ top: 0 });
     } else {
       document.body.style.overflow = '';
     }
@@ -308,6 +310,7 @@ export default function RaceWeekendOverlay() {
 
           {/* Panel */}
           <motion.div
+            ref={panelRef}
             className="fixed right-0 top-0 bottom-0 w-full max-w-[540px] overflow-y-auto flex flex-col"
             style={{ zIndex: 'var(--pw-z-modal)', background: 'var(--pw-bg-elevated)' }}
             initial={{ x: '100%' }}
