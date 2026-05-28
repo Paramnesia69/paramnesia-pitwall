@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getTeamLogo } from '@/lib/teamLogos';
 import type { SeriesId } from '@/types';
@@ -8,6 +8,7 @@ import { SERIES_META } from '@/types';
 import type { RaceResult } from '@/data/results-2026';
 import { ALL_RESULTS_2026, F1_RESULTS_2026 } from '@/data/results-2026';
 import SeriesBadge from '@/components/ui/SeriesBadge';
+import { useStore } from '@/store';
 
 interface RecentResultsProps {
   activeFilter?: SeriesId | 'all';
@@ -50,13 +51,21 @@ function ClassBadge({ cls }: { cls: ResultClass }) {
 function PodiumCard({ result }: { result: RaceResult }) {
   const meta = SERIES_META[result.series];
   const cls = getResultClass(result);
+  const { openResult } = useStore();
+  const handleClick = useCallback(() => openResult(result.id), [openResult, result.id]);
 
   return (
     <motion.div
-      className="pw-glass p-4 relative overflow-hidden"
+      className="pw-glass p-4 relative overflow-hidden cursor-pointer"
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
+      whileHover={{ scale: 1.015, boxShadow: `0 0 0 1px ${meta.accent}30, 0 8px 32px ${meta.accent}10` }}
+      onClick={handleClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleClick(); }}
+      aria-label={`View full results for ${result.name}`}
     >
       {/* Accent glow */}
       <div
@@ -136,18 +145,26 @@ function PodiumCard({ result }: { result: RaceResult }) {
         })}
       </div>
 
-      {/* Fastest lap */}
-      {result.fastestLap && (
-        <div className="flex items-center gap-1.5 mt-2.5 pt-2" style={{ borderTop: '1px solid var(--pw-glass-border)' }}>
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#A855F7" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10" />
-            <polyline points="12 6 12 12 16 14" />
+      {/* Fastest lap + view details */}
+      <div className="flex items-center gap-1.5 mt-2.5 pt-2" style={{ borderTop: '1px solid var(--pw-glass-border)' }}>
+        {result.fastestLap ? (
+          <>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#A855F7" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            <span className="text-[10px]" style={{ color: '#A855F7' }}>
+              FL: {result.fastestLap.driver}
+            </span>
+          </>
+        ) : <span className="flex-1" />}
+        <span className="ml-auto text-[9px] font-semibold uppercase tracking-wider flex items-center gap-0.5" style={{ color: meta.accent, opacity: 0.7 }}>
+          Full results
+          <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+            <path d="M1.5 4h5M4.5 1.5L7 4l-2.5 2.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          <span className="text-[10px]" style={{ color: '#A855F7' }}>
-            FL: {result.fastestLap.driver}
-          </span>
-        </div>
-      )}
+        </span>
+      </div>
     </motion.div>
   );
 }

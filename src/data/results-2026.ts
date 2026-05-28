@@ -9,25 +9,8 @@
  * GTWCE: R1 Paul Ricard (6h), R2 Brands Hatch (Race 1+2) — source: gt-world-challenge-europe.com
  */
 
-import type { SeriesId } from '@/types';
-
-export interface RaceResult {
-  id: string;
-  series: SeriesId;
-  round: number;
-  name: string;
-  circuit: string;
-  country: string;
-  countryCode: string;
-  date: string;
-  podium: {
-    pos: number;
-    driver: string;
-    team: string;
-    time?: string;
-  }[];
-  fastestLap?: { driver: string; team: string };
-}
+import type { RaceResult } from '@/types';
+export type { RaceResult };
 
 // ─── F1 2026 Race Results ───────────────────────────────
 export const F1_RESULTS_2026: RaceResult[] = [
@@ -188,6 +171,57 @@ export const MOTOGP_RESULTS_2026: RaceResult[] = [
       { pos: 2, driver: 'Fermín Aldeguer', team: 'Gresini Racing' },
       { pos: 3, driver: 'Francesco Bagnaia', team: 'Ducati' },
     ],
+    sessions: [
+      {
+        type: 'race',
+        fastestLap: 'Fabio Di Giannantonio',
+        entries: [
+          { pos: 1, driver: 'Fabio Di Giannantonio', team: 'Ducati', time: '20m 6.243s' },
+          { pos: 2, driver: 'Fermín Aldeguer', team: 'Ducati', gap: '+1.466s' },
+          { pos: 3, driver: 'Francesco Bagnaia', team: 'Ducati', gap: '+4.320s' },
+          { pos: 4, driver: 'Marco Bezzecchi', team: 'Aprilia', gap: '+4.679s' },
+          { pos: 5, driver: 'Fabio Quartararo', team: 'Yamaha', gap: '+4.876s' },
+          { pos: 6, driver: 'Luca Marini', team: 'Honda', gap: '+4.971s' },
+          { pos: 7, driver: 'Brad Binder', team: 'KTM', gap: '+5.137s' },
+          { pos: 8, driver: 'Ai Ogura', team: 'Aprilia', gap: '+5.377s' },
+          { pos: 9, driver: 'Diogo Moreira', team: 'Honda', gap: '+6.839s' },
+          { pos: 10, driver: 'Franco Morbidelli', team: 'Ducati', gap: '+7.160s' },
+        ],
+      },
+      {
+        type: 'sprint',
+        entries: [
+          { pos: 1, driver: 'Alex Márquez', team: 'Ducati', time: '20m 2.258s' },
+          { pos: 2, driver: 'Pedro Acosta', team: 'KTM', gap: '+0.041s' },
+          { pos: 3, driver: 'Fabio Di Giannantonio', team: 'Ducati', gap: '+0.457s' },
+          { pos: 4, driver: 'Raúl Fernández', team: 'Aprilia', gap: '+2.928s' },
+          { pos: 5, driver: 'Johann Zarco', team: 'Honda', gap: '+4.764s' },
+          { pos: 6, driver: 'Francesco Bagnaia', team: 'Ducati', gap: '+4.894s' },
+          { pos: 7, driver: 'Franco Morbidelli', team: 'Ducati', gap: '+6.175s' },
+          { pos: 8, driver: 'Ai Ogura', team: 'Aprilia', gap: '+6.871s' },
+          { pos: 9, driver: 'Marco Bezzecchi', team: 'Aprilia', gap: '+7.381s' },
+          { pos: 10, driver: 'Enea Bastianini', team: 'KTM', gap: '+7.869s' },
+        ],
+      },
+      {
+        type: 'qualifying',
+        label: 'Qualifying',
+        entries: [
+          { pos: 1, driver: 'Pedro Acosta', team: 'KTM', time: '1\'38.068s' },
+          { pos: 2, driver: 'Franco Morbidelli', team: 'Ducati', gap: '+0.233s' },
+          { pos: 3, driver: 'Alex Márquez', team: 'Ducati', gap: '+0.274s' },
+          { pos: 4, driver: 'Raúl Fernández', team: 'Aprilia', gap: '+0.385s' },
+          { pos: 5, driver: 'Johann Zarco', team: 'Honda', gap: '+0.406s' },
+          { pos: 6, driver: 'Fabio Di Giannantonio', team: 'Ducati', gap: '+0.409s' },
+          { pos: 7, driver: 'Fabio Quartararo', team: 'Yamaha', gap: '+0.443s' },
+          { pos: 8, driver: 'Brad Binder', team: 'KTM', gap: '+0.529s' },
+          { pos: 9, driver: 'Jorge Martín', team: 'Aprilia', gap: '+0.584s' },
+          { pos: 10, driver: 'Joan Mir', team: 'Honda', gap: '+0.618s' },
+          { pos: 11, driver: 'Jack Miller', team: 'Yamaha', gap: '+0.705s' },
+          { pos: 12, driver: 'Marco Bezzecchi', team: 'Aprilia', gap: '+0.717s' },
+        ],
+      },
+    ],
   },
 ];
 
@@ -222,6 +256,24 @@ export const WEC_RESULTS_2026: RaceResult[] = [
       { pos: 2, driver: 'Magnussen / Marciello / Vanthoor', team: 'BMW M Team WRT #15' },
       { pos: 3, driver: 'Fuoco / Molina / Nielsen', team: 'Ferrari AF Corse #50' },
     ],
+    sessions: [
+      {
+        type: 'race',
+        label: 'Race — Hypercar',
+        entries: [
+          { pos: 1, driver: 'Frijns / Rast / van der Linde', team: 'BMW' },
+          { pos: 2, driver: 'Magnussen / Marciello / Vanthoor', team: 'BMW' },
+          { pos: 3, driver: 'Fuoco / Molina / Nielsen', team: 'Ferrari' },
+          { pos: 4, driver: 'Tincknell / Gamble', team: 'Aston Martin' },
+          { pos: 5, driver: 'Conway / Kobayashi / De Vries', team: 'Toyota' },
+          { pos: 6, driver: 'Ye / Kubica / Hanson', team: 'Ferrari' },
+          { pos: 7, driver: 'Di Resta / Vandoorne / Cassidy', team: 'Peugeot' },
+          { pos: 8, driver: 'Lotterer / Derani / Jaubert', team: 'Genesis' },
+          { pos: 9, driver: 'Deletraz / Stevens / Nato', team: 'Cadillac' },
+          { pos: 10, driver: 'Buemi / Hartley / Hirakawa', team: 'Toyota' },
+        ],
+      },
+    ],
   },
   {
     id: 'wec-r1-imola-lmgt3',
@@ -248,9 +300,27 @@ export const WEC_RESULTS_2026: RaceResult[] = [
     countryCode: 'BE',
     date: '2026-05-09',
     podium: [
-      { pos: 1, driver: 'Au / Fleming / Kirchhöfer', team: 'Garage 59 McLaren #10' },
-      { pos: 2, driver: 'James / Robichon / Drudi', team: 'Heart of Racing Aston Martin #27' },
-      { pos: 3, driver: 'Shahin / Pera / Lietz', team: 'Manthey Porsche #92' },
+      { pos: 1, driver: 'Heriau / Mann / Rovera', team: 'Vista AF Corse — Ferrari #21' },
+      { pos: 2, driver: 'Au / Fleming / Kirchhöfer', team: 'Garage 59 McLaren #10' },
+      { pos: 3, driver: 'James / Robichon / Drudi', team: 'Heart of Racing Aston Martin #27' },
+    ],
+    sessions: [
+      {
+        type: 'race',
+        label: 'Race — LMGT3',
+        entries: [
+          { pos: 1, driver: 'Heriau / Mann / Rovera', team: 'Ferrari' },
+          { pos: 2, driver: 'Au / Fleming / Kirchhöfer', team: 'McLaren' },
+          { pos: 3, driver: 'James / Robichon / Drudi', team: 'Aston Martin' },
+          { pos: 4, driver: 'Shahin / Pera / Lietz', team: 'Porsche' },
+          { pos: 5, driver: 'Dempsey / Yoluc / Eastwood', team: 'Ferrari' },
+          { pos: 6, driver: 'West / Gehrsitz / Goethe', team: 'McLaren' },
+          { pos: 7, driver: 'Umbrarescu / Schmid / Lopez', team: 'Mercedes-AMG' },
+          { pos: 8, driver: 'Cottingham / Boguslavskiy / Güven', team: 'Porsche' },
+          { pos: 9, driver: 'Mcdonald / Edgar / Catsburg', team: 'Corvette' },
+          { pos: 10, driver: 'Berry / Andrade / Martin', team: 'Ferrari' },
+        ],
+      },
     ],
   },
 ];
@@ -346,6 +416,24 @@ export const WRC_RESULTS_2026: RaceResult[] = [
       { pos: 1, driver: 'T. Neuville / M. Wydaeghe', team: 'Hyundai Motorsport' },
       { pos: 2, driver: 'O. Solberg / E. Edmondson', team: 'Toyota' },
       { pos: 3, driver: 'E. Evans / S. Martin', team: 'Toyota' },
+    ],
+    sessions: [
+      {
+        type: 'race',
+        label: 'Overall Classification',
+        entries: [
+          { pos: 1, driver: 'T. Neuville / M. Wydaeghe', team: 'Hyundai', time: '3h 53m 01.7s' },
+          { pos: 2, driver: 'O. Solberg / E. Edmondson', team: 'Toyota', gap: '+16.3s' },
+          { pos: 3, driver: 'E. Evans / S. Martin', team: 'Toyota', gap: '+29.1s' },
+          { pos: 4, driver: 'A. Fourmaux / A. Coria', team: 'Hyundai', gap: '+54.8s' },
+          { pos: 5, driver: 'T. Katsuta / A. Johnston', team: 'Toyota', gap: '+1m 12.6s' },
+          { pos: 6, driver: 'S. Ogier / V. Landais', team: 'Toyota', gap: '+1m 26.6s' },
+          { pos: 7, driver: 'S. Pajari / M. Salminen', team: 'Toyota', gap: '+2m 50.9s' },
+          { pos: 8, driver: 'D. Sordo / C. Carrera', team: 'Hyundai', gap: '+4m 10.0s' },
+          { pos: 9, driver: 'M. Sesks / R. Francis', team: 'Ford', gap: '+6m 49.2s' },
+          { pos: 10, driver: 'T. Suninen / J. Hussi', team: 'Toyota', gap: '+11m 13.8s' },
+        ],
+      },
     ],
   },
 ];
@@ -573,6 +661,23 @@ export const DTM_RESULTS_2026: RaceResult[] = [
       { pos: 2, driver: 'Ben Dörr', team: 'McLaren' },
       { pos: 3, driver: 'Marco Wittmann', team: 'BMW' },
     ],
+    sessions: [
+      {
+        type: 'race',
+        entries: [
+          { pos: 1, driver: 'Kelvin van der Linde', team: 'BMW' },
+          { pos: 2, driver: 'Ben Dörr', team: 'McLaren' },
+          { pos: 3, driver: 'Marco Wittmann', team: 'BMW' },
+          { pos: 4, driver: 'Maro Engel', team: 'Mercedes-AMG' },
+          { pos: 5, driver: 'Thierry Vermeulen', team: 'Ferrari' },
+          { pos: 6, driver: 'Luca Engstler', team: 'Lamborghini' },
+          { pos: 7, driver: 'Marco Mapelli', team: 'Lamborghini' },
+          { pos: 8, driver: 'Thomas Preining', team: 'Porsche' },
+          { pos: 9, driver: 'Mirko Bortolotti', team: 'Lamborghini' },
+          { pos: 10, driver: 'Ricardo Feller', team: 'Porsche' },
+        ],
+      },
+    ],
   },
 ];
 
@@ -610,6 +715,23 @@ export const GTWCE_RESULTS_2026: RaceResult[] = [
       { pos: 2, driver: 'Schuring / Boccolacci', team: 'Boutsen VDS — Porsche' },
       { pos: 3, driver: 'Weerts / van der Linde', team: 'Team WRT — BMW' },
     ],
+    sessions: [
+      {
+        type: 'race',
+        entries: [
+          { pos: 1, driver: 'A. Leclerc / T. Neubauer', team: 'Ferrari' },
+          { pos: 2, driver: 'M. Schuring / D. Boccolacci', team: 'Porsche' },
+          { pos: 3, driver: 'C. Weerts / K. van der Linde', team: 'BMW' },
+          { pos: 4, driver: 'A. Cordeel / J. Pepper', team: 'BMW' },
+          { pos: 5, driver: 'K. Lappalainen / M. Cairoli', team: 'Ferrari' },
+          { pos: 6, driver: 'L. Auer / M. Engel', team: 'Mercedes-AMG' },
+          { pos: 7, driver: 'T. Mosca / M. Zagazeta', team: 'Ferrari' },
+          { pos: 8, driver: 'T. Fleming / L. Prette', team: 'McLaren' },
+          { pos: 9, driver: 'N. Thiim / K. Pauwels', team: 'Aston Martin' },
+          { pos: 10, driver: 'B. Green / T. Vermeulen', team: 'Ferrari' },
+        ],
+      },
+    ],
   },
   {
     id: 'gtwce-r2-brandshatch-race2',
@@ -624,6 +746,23 @@ export const GTWCE_RESULTS_2026: RaceResult[] = [
       { pos: 1, driver: 'Feller / Buus', team: 'Lionspeed GP — Porsche' },
       { pos: 2, driver: 'Juncadella / Lulham', team: 'Verstappen Racing — Mercedes-AMG' },
       { pos: 3, driver: 'Auer / Engel', team: 'Winward Racing — Mercedes-AMG' },
+    ],
+    sessions: [
+      {
+        type: 'race',
+        entries: [
+          { pos: 1, driver: 'R. Feller / B. Buus', team: 'Porsche' },
+          { pos: 2, driver: 'D. Juncadella / C. Lulham', team: 'Mercedes-AMG' },
+          { pos: 3, driver: 'L. Auer / M. Engel', team: 'Mercedes-AMG' },
+          { pos: 4, driver: 'M. Hesse / V. Rossi', team: 'BMW' },
+          { pos: 5, driver: 'D. Macdonald / M. Kirchhöfer', team: 'McLaren' },
+          { pos: 6, driver: 'C. Weerts / K. van der Linde', team: 'BMW' },
+          { pos: 7, driver: 'A. Cordeel / J. Pepper', team: 'BMW' },
+          { pos: 8, driver: 'M. Lismont / I. Montenegro', team: 'BMW' },
+          { pos: 9, driver: 'K. Lappalainen / M. Cairoli', team: 'Ferrari' },
+          { pos: 10, driver: 'R. Andriolo / S. Gachet', team: 'McLaren' },
+        ],
+      },
     ],
   },
 ];

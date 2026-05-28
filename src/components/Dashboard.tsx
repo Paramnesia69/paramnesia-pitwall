@@ -29,6 +29,7 @@ const RecentResults = lazy(() => import('@/components/RecentResults'));
 const NewsFeed = lazy(() => import('@/components/NewsFeed'));
 const UpcomingTimeline = lazy(() => import('@/components/UpcomingTimeline'));
 const EventDetailOverlay = lazy(() => import('@/components/EventDetailOverlay'));
+const RaceWeekendOverlay = lazy(() => import('@/components/RaceWeekendOverlay'));
 const Footer = lazy(() => import('@/components/Footer'));
 
 const ALL_SERIES: SeriesId[] = [
@@ -73,6 +74,17 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
     // Only run once on mount + when events load
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [liveUpcoming.length]);
+
+  // Deep link: auto-open result overlay from ?result= URL param
+  const openResult = useStore((s) => s.openResult);
+  useEffect(() => {
+    const resultParam = searchParams.get('result');
+    if (resultParam) {
+      openResult(resultParam);
+    }
+    // Only run once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Sync filter → URL (without full navigation)
   const updateFilter = useCallback((filter: SeriesId | 'all') => {
@@ -284,6 +296,9 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
 
       <Suspense>
         <EventDetailOverlay events={liveUpcoming} />
+      </Suspense>
+      <Suspense>
+        <RaceWeekendOverlay />
       </Suspense>
 
       <Suspense>

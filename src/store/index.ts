@@ -31,6 +31,10 @@ interface PitwallStore {
   openEvent: (id: string) => void;
   closeEvent: () => void;
 
+  selectedResultId: string | null;
+  openResult: (id: string) => void;
+  closeResult: () => void;
+
   theme: Theme;
   toggleTheme: () => void;
 
@@ -70,6 +74,24 @@ export const useStore = create<PitwallStore>()(
         if (typeof window !== 'undefined') {
           const url = new URL(window.location.href);
           url.searchParams.delete('event');
+          window.history.replaceState({}, '', url.toString());
+        }
+      },
+
+      selectedResultId: null,
+      openResult: (id) => {
+        set({ selectedResultId: id });
+        if (typeof window !== 'undefined') {
+          const url = new URL(window.location.href);
+          url.searchParams.set('result', id);
+          window.history.replaceState({}, '', url.toString());
+        }
+      },
+      closeResult: () => {
+        set({ selectedResultId: null });
+        if (typeof window !== 'undefined') {
+          const url = new URL(window.location.href);
+          url.searchParams.delete('result');
           window.history.replaceState({}, '', url.toString());
         }
       },

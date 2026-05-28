@@ -100,6 +100,60 @@ export interface NormalizedRaceEvent {
   overrides?: ManualOverride;
 }
 
+// ─── Race Weekend Detail Types ────────────────────────────────────────────────
+
+export type WeekendSessionType =
+  | 'race'
+  | 'qualifying'
+  | 'sprint'
+  | 'sprint_qualifying'
+  | 'fp1'
+  | 'fp2'
+  | 'fp3';
+
+export interface ResultEntry {
+  pos: number;
+  driver: string;
+  team: string;
+  time?: string;
+  gap?: string;
+  /** Qualifying-specific */
+  q1Time?: string;
+  q2Time?: string;
+  q3Time?: string;
+  /** Eliminated in Q1/Q2 for qualifying */
+  eliminatedInQ?: 1 | 2;
+  /** Did not finish */
+  dnf?: boolean;
+  /** Points scored (race/sprint) */
+  points?: number;
+}
+
+export interface SessionResults {
+  type: WeekendSessionType;
+  label?: string; // Override display label e.g. "Race 1", "Sprint Race"
+  entries: ResultEntry[];
+  fastestLap?: string; // Driver name (for display in session tab)
+  fastestLapTime?: string;
+}
+
+export interface RaceResult {
+  id: string;
+  series: SeriesId;
+  round: number;
+  name: string;
+  circuit: string;
+  country: string;
+  countryCode: string;
+  date: string;
+  podium: { pos: number; driver: string; team: string; time?: string }[];
+  fastestLap?: { driver: string; team: string };
+  /** Full weekend session results — optional; populated for F1 via API, others manually */
+  sessions?: SessionResults[];
+}
+
+// ─── News ─────────────────────────────────────────────────────────────────────
+
 export interface NormalizedNewsItem {
   id: string;
   title: string;
