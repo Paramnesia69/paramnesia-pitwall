@@ -4,44 +4,57 @@
 **"Renew race weekend results"** → Claude uses WebSearch/WebFetch to find latest results for all non-F1 series and edits `src/data/results-2026.ts` + `src/data/standings-2026.ts` directly. No scripts, no terminal. F1 is excluded (automated via API routes).
 Series: MotoGP, WEC, ELMS, IMSA, WRC, DTM.
 
-## Last Commit (2026-05-24)
+## Last Commit (2026-05-28)
 
-`d96340b` — feat: full WEC/ELMS standings, class plate badges, fixed logos
-- `standings-2026.ts`: WEC Hypercar → full 18-car grid; Manufacturers rebuilt
-  from FIA data (BMW 59, Toyota 52, Ferrari 42 — Porsche NOT in 2026 WEC);
-  ELMS — 6 new arrays: LMP2/LMP3/LMGT3 drivers + teams (60+ entries)
-- `results-2026.ts`: Spa R2 P2 = BMW #15 Magnussen/Marciello/Vanthoor;
-  Imola R1 P3 = Ferrari AF Corse #51 Pier Guidi/Giovinazzi/Calado
-- `teamLogos.ts`: Genesis → pngwing PNG + brightness filter; AF Corse / Vista
-  AF → Ferrari logo; Peugeot → bg stripped, invert(1) filter for dark bg
-- `StandingsPanel.tsx`: ELMS tab (LMP2/LMP3/LMGT3 ClassSections); ClassSection
-  accepts `badgeSrc` prop; ELMS + WEC LMGT3 wired to class plate SVGs
-- `public/logos/class-lmp2/lmp3/lmgt3.svg`: ELMS-colour class plates
-  (blue/purple/green matching official race number plate colours)
-- `Dashboard.tsx`: series order → F1→WEC→ELMS→IMSA→Nürburgring→MotoGP→
-  GTWCE→DTM→WRC→Porsche Supercup
+`3b6c1cc` — data: DTM Round 2 results + standings, fix ELMS LMP3 R1-R2 winners
+- `results-2026.ts`: DTM Round 2 Zandvoort added (Race 1: Cairoli/Auer/Vermeulen,
+  Race 2: van der Linde/Dörr/Wittmann); ELMS LMP3 R1 winner corrected to Rinaldi
+  Racing (was DKR); ELMS LMP3 R2 winner corrected to Inter Europol (was Nielsen)
+- `standings-2026.ts`: DTM drivers updated to after Round 2 (Engel 67, Auer 61,
+  Wittmann 52...); Ferrari + McLaren added as new manufacturer entries;
+  DTM manufacturers rebuilt from driver standings
+
+Previous notable commit: `d96340b` (2026-05-24) — full WEC/ELMS standings,
+class plate badges, fixed logos (WEC Hypercar 18-car grid, ELMS 6 class arrays,
+class-lmp2/lmp3/lmgt3.svg badges, Genesis/AF Corse/Peugeot logo fixes)
 
 All commits on `main`, Vercel auto-deploys.
+
+## F1 Automation
+F1 results and standings are **fully automated** via live API routes — never update manually:
+- `/api/f1/results` — Jolpica (Ergast mirror) + OpenF1 fallback, revalidates 5min
+- `/api/f1/standings` — Jolpica, revalidates 1hr
+- Static `F1_RESULTS_2026` / `F1_DRIVERS_2026` in data files = last-resort fallback only
 
 ## Current Data Coverage
 
 ### Results (src/data/results-2026.ts)
-- F1: R1–4 (Australia → Miami GP)
+- F1: R1–4 static fallback (Australia → Miami); R5+ served live by /api/f1/results
 - MotoGP: R1–6 (Thailand → Catalunya GP)
-- WEC: R1 Imola, R2 Spa-Francorchamps
+- WEC: R1 Imola, R2 Spa-Francorchamps (Hypercar + LMGT3 for each)
 - WRC: R1–6 (Monte Carlo → Rally Portugal)
 - IMSA GTP: R1–4 (Daytona → Laguna Seca)
 - ELMS LMP2: R1 Barcelona, R2 Le Castellet
+- ELMS LMP3: R1 Barcelona, R2 Le Castellet
+- ELMS LMGT3: R1 Barcelona, R2 Le Castellet
+- DTM: R1 Red Bull Ring (Race 1 + 2), R2 Zandvoort (Race 1 + 2)
 
 ### Standings (src/data/standings-2026.ts)
-- F1 Drivers + Constructors: after R4 Miami GP
+- F1 Drivers + Constructors: after R4 Miami (live data via /api/f1/standings)
 - MotoGP Riders + Teams: after R6 Catalunya GP
 - WEC Hypercar + LMGT3 (drivers + manufacturers): after R2 Spa
-- WEC LMGT3 (drivers + manufacturers): after R2 Spa
 - ELMS LMP2 / LMP3 / LMGT3 (drivers + teams): after R2 Le Castellet
 - WRC Drivers + Manufacturers: after R6 Rally Portugal
 - IMSA GTP + GTD Pro + GTD (drivers + teams): after R4 Laguna Seca
-- DTM Drivers + Manufacturers: after R1 Red Bull Ring
+- DTM Drivers + Manufacturers: after R2 Zandvoort
+
+## Upcoming Races (next to add after completion)
+- **MotoGP R7**: Italian GP Mugello — May 29–31 2026
+- **WRC R7**: Rally Japan — May 28–31 2026
+- **IMSA R5**: Detroit Street Circuit — May 30 2026
+- **WEC R3**: 24 Hours of Le Mans — June 14–15 2026
+- **DTM R3**: unknown venue/date
+- **ELMS R3**: 4 Hours of Imola — July 5 2026
 
 ## Logo System (src/lib/teamLogos.ts)
 
@@ -81,11 +94,13 @@ Class plate badges in `public/logos/`:
 - `class-lmgt3.svg` — green (#1A6B38) two-line "LM/GT3" badge
 
 ## Backlog (next up)
-- **F1 results**: add R5 onwards (next race after Miami — Canadian GP R5)
-- **MotoGP results**: add R7 onwards (next race after Catalunya)
-- **WEC results**: add R3 onwards (Le Mans 24H, June 14–15)
-- **ELMS results**: add LMGT3 / LMP3 class winners for R1–2
-- **Logo quality**: better Porsche crest (currently dark gold badge); Aprilia/Yamaha not true-colour
+- **MotoGP results**: add R7 onwards (Italian GP Mugello, May 31)
+- **WRC results**: add R7 onwards (Rally Japan, May 31)
+- **IMSA results**: add R5 onwards (Detroit, May 30)
+- **WEC results**: add R3 (Le Mans 24H, June 14–15)
+- **DTM results**: add R3 onwards
+- **ELMS results**: add R3 onwards (Imola, July 5)
+- **Logo quality**: better Porsche crest; Aprilia/Yamaha not true-colour
 - **Manual override CMS**: currently JSON file editing only
 - **Live race mode**: real-time lap data, gap to leader
 - **Redis caching**: currently ISR only
