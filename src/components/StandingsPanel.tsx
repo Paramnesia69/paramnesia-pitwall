@@ -263,8 +263,18 @@ export default function StandingsPanel({ defaultTab }: { defaultTab?: SeriesTab 
     fetch('/api/f1/standings')
       .then(r => r.ok ? r.json() : null)
       .then(data => {
-        if (data?.drivers?.length) setF1Drivers(data.drivers);
-        if (data?.constructors?.length) setF1Constructors(data.constructors);
+        if (data?.drivers?.length) {
+          setF1Drivers(data.drivers.map((d: DriverStanding) => {
+            const s = F1_DRIVERS_2026.find(x => x.name === d.name);
+            return s?.roundPoints ? { ...d, roundPoints: s.roundPoints } : d;
+          }));
+        }
+        if (data?.constructors?.length) {
+          setF1Constructors(data.constructors.map((c: ConstructorStanding) => {
+            const s = F1_CONSTRUCTORS_2026.find(x => x.name === c.name);
+            return s?.roundPoints ? { ...c, roundPoints: s.roundPoints } : c;
+          }));
+        }
         if (data?.round) setF1Round(data.round);
       })
       .catch(() => {});
