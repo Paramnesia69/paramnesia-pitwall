@@ -30,7 +30,15 @@ export default function HeroCard({ event }: HeroCardProps) {
     >
       {/* Circuit map — background diagram */}
       {circuitImg && (
-        <div className="absolute inset-0 pointer-events-none select-none" style={{ opacity: 0.13, zIndex: 0 }}>
+        <div
+          className="absolute inset-0 pointer-events-none select-none"
+          style={{
+            opacity: 0.13,
+            zIndex: 0,
+            maskImage: 'linear-gradient(to right, transparent 0%, black 20%, black 48%, transparent 68%)',
+            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 20%, black 48%, transparent 68%)',
+          }}
+        >
           <Image
             src={circuitImg}
             alt=""
@@ -39,7 +47,7 @@ export default function HeroCard({ event }: HeroCardProps) {
             style={{
               filter: 'brightness(3) contrast(1.2) saturate(0.5)',
               mixBlendMode: 'screen',
-              objectPosition: 'right center',
+              objectPosition: 'center center',
             }}
           />
         </div>
