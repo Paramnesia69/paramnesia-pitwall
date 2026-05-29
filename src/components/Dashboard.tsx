@@ -164,7 +164,7 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
             // JPG photos (nurburgring) need less aggressive brightness to avoid white bleed
             // Porsche SVG is dark-fill — invert before grayscale+brightness so it shows on dark bg
             const logoFilter = meta.logo === '/logos/porsche.svg'
-              ? 'grayscale(1) invert(1) contrast(2) brightness(3)'
+              ? 'brightness(2.5) contrast(1.2)'
               : 'grayscale(1) contrast(2) brightness(3)';
             return (
               <motion.button

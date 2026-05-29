@@ -37,7 +37,7 @@ export default function HeroCard({ event }: HeroCardProps) {
               alt=""
               fill
               className="object-contain"
-              style={{ filter: `grayscale(1)${meta.logo === '/logos/porsche.svg' ? ' invert(1)' : ''} contrast(2) brightness(3)`, mixBlendMode: 'screen' }}
+              style={{ filter: meta.logo === '/logos/porsche.svg' ? 'brightness(2.5) contrast(1.2)' : 'grayscale(1) contrast(2) brightness(3)', mixBlendMode: 'screen' }}
               priority
             />
           </div>
