@@ -151,7 +151,6 @@ function TeamLogo({ teamName, teamColor, f1 = false }: { teamName: string; teamC
 
 /* ── Driver row ── */
 function DriverRow({ d, maxPts, f1 = false }: { d: DriverStanding; maxPts: number; f1?: boolean }) {
-  const barWidth = maxPts > 0 ? (d.points / maxPts) * 100 : 0;
   return (
     <motion.div className="flex items-center gap-2 py-1.5"
       initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: d.pos * 0.03 }}>
@@ -165,15 +164,10 @@ function DriverRow({ d, maxPts, f1 = false }: { d: DriverStanding; maxPts: numbe
           <span className="text-xs font-medium truncate">{d.name}</span>
           <span className="text-xs font-bold tabular-nums ml-2 shrink-0">{d.points}</span>
         </div>
-        {d.roundPoints ? (
-          <Sparkline points={d.roundPoints} color={d.teamColor} maxPts={maxPts} />
-        ) : (
-          <div className="h-1 rounded-full overflow-hidden" style={{ background: 'var(--pw-glass-bg)' }}>
-            <motion.div className="h-full rounded-full" style={{ background: d.teamColor }}
-              initial={{ width: 0 }} animate={{ width: `${barWidth}%` }}
-              transition={{ duration: 0.6, delay: d.pos * 0.05, ease: 'easeOut' }} />
-          </div>
-        )}
+        {d.roundPoints
+          ? <Sparkline points={d.roundPoints} color={d.teamColor} maxPts={maxPts} />
+          : <div style={{ height: 14 }} />
+        }
       </div>
     </motion.div>
   );
@@ -181,7 +175,6 @@ function DriverRow({ d, maxPts, f1 = false }: { d: DriverStanding; maxPts: numbe
 
 /* ── Constructor / team row ── */
 function ConstructorRow({ c, maxPts, f1 = false }: { c: ConstructorStanding; maxPts: number; f1?: boolean }) {
-  const barWidth = maxPts > 0 ? (c.points / maxPts) * 100 : 0;
   return (
     <motion.div className="flex items-center gap-2 py-1.5"
       initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: c.pos * 0.03 }}>
@@ -195,15 +188,10 @@ function ConstructorRow({ c, maxPts, f1 = false }: { c: ConstructorStanding; max
           <span className="text-xs font-medium truncate">{c.name}</span>
           <span className="text-xs font-bold tabular-nums ml-2 shrink-0">{c.points}</span>
         </div>
-        {c.roundPoints ? (
-          <Sparkline points={c.roundPoints} color={c.color} maxPts={maxPts} />
-        ) : (
-          <div className="h-1 rounded-full overflow-hidden" style={{ background: 'var(--pw-glass-bg)' }}>
-            <motion.div className="h-full rounded-full" style={{ background: c.color }}
-              initial={{ width: 0 }} animate={{ width: `${barWidth}%` }}
-              transition={{ duration: 0.6, delay: c.pos * 0.05, ease: 'easeOut' }} />
-          </div>
-        )}
+        {c.roundPoints
+          ? <Sparkline points={c.roundPoints} color={c.color} maxPts={maxPts} />
+          : <div style={{ height: 14 }} />
+        }
       </div>
     </motion.div>
   );
@@ -320,26 +308,35 @@ export default function StandingsPanel({ defaultTab }: { defaultTab?: SeriesTab 
               ))}
             </div>
 
-            {/* Drivers / Teams sub-toggle — all series */}
-            <SubToggle sub={sub} setSub={setSub} accent={accent} />
+            {/* Drivers / Teams sub-toggle — non-F1 only */}
+            {activeTab !== 'f1' && <SubToggle sub={sub} setSub={setSub} accent={accent} />}
 
             {/* Content */}
             <AnimatePresence mode="wait">
-              <motion.div key={`${activeTab}-${sub}`}
+              <motion.div key={activeTab === 'f1' ? 'f1' : `${activeTab}-${sub}`}
                 initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
                 transition={{ duration: 0.2 }}>
 
-                {/* ── F1 ── */}
-                {activeTab === 'f1' && sub === 'drivers' && (
-                  <div className="space-y-0">
-                    {f1Drivers.map((d) => <DriverRow key={d.pos} d={d} maxPts={f1Drivers[0].points} f1 />)}
-                    <Note>{f1Round ? `After Round ${f1Round}` : 'After Round 4 · Miami GP'}</Note>
-                  </div>
-                )}
-                {activeTab === 'f1' && sub === 'teams' && (
-                  <div className="space-y-0">
-                    {f1Constructors.map((c) => <ConstructorRow key={c.pos} c={c} maxPts={f1Constructors[0].points} f1 />)}
-                    <Note>{f1Round ? `After Round ${f1Round}` : 'After Round 4 · Miami GP'}</Note>
+                {/* ── F1 — side-by-side drivers + constructors ── */}
+                {activeTab === 'f1' && (
+                  <div>
+                    <div className="grid grid-cols-2 gap-x-6">
+                      <div>
+                        <p className="text-[9px] font-bold uppercase tracking-[0.15em] mb-2"
+                          style={{ color: 'var(--pw-text-tertiary)' }}>Drivers</p>
+                        <div className="space-y-0">
+                          {f1Drivers.map((d) => <DriverRow key={d.pos} d={d} maxPts={f1Drivers[0].points} f1 />)}
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-[9px] font-bold uppercase tracking-[0.15em] mb-2"
+                          style={{ color: 'var(--pw-text-tertiary)' }}>Constructors</p>
+                        <div className="space-y-0">
+                          {f1Constructors.map((c) => <ConstructorRow key={c.pos} c={c} maxPts={f1Constructors[0].points} f1 />)}
+                        </div>
+                      </div>
+                    </div>
+                    <Note>{f1Round ? `After Round ${f1Round}` : 'After Round 5 · Canadian GP'}</Note>
                   </div>
                 )}
 
