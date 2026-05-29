@@ -6,7 +6,13 @@ Series: MotoGP, WEC, ELMS, IMSA, WRC, DTM.
 
 ## Last Commits (2026-05-29)
 
-`(pending)` — feat: UI improvements, stream links audit, Porsche logo filter
+`941c68e` — perf: stream news feed via Suspense — off critical render path (Fix 2)
+- AsyncNewsFeed async server component; NewsFeed reads activeFilter from useSearchParams; Dashboard drops news prop; page.tsx news behind Suspense skeleton
+
+`094e1d2` — perf: call getEventsWithState() once per render (Fix 1)
+- Extract deriveUpcomingEvents + deriveFeaturedEvent sync helpers; page.tsx calls getEventsWithState() once, halving weather API calls per ISR render
+
+`(2a21e99)` — feat: UI improvements, stream links audit, Porsche logo filter
 - **UI**: ThisWeekend respects series filter; Results Show All (9 default, toggle all); UpcomingTimeline series accent left-border; HeroCard Watch Live CTA; EventCard "Details" button removed; F1 standings sparkline (roundPoints per driver/constructor)
 - **Stream links**: full audit — fixed IMSA (→@imsaofficial), ELMS (→@EuropeanLeMansSeries), DTM (removed broken grid link), Nürburgring (→@VLNOFFICIAL + nls.racing), Porsche Supercup (→@PorscheSupercup), Le Mans YouTube (→channel URL), Rolex 24 + Sebring event overrides consolidated; removed: formula1.com, motogp.com, Peacock, NBC Sports, Sky Sports F1
 - **Logo**: Porsche brand PNG filter toned down — `brightness(1.1) saturate(1.8) contrast(1.05)` (was vivid default)
@@ -51,6 +57,11 @@ F1 results and standings are **fully automated** via live API routes — never u
 - WRC Drivers + Manufacturers: after R6 Rally Portugal
 - IMSA GTP + GTD Pro + GTD (drivers + teams): after R4 Laguna Seca
 - DTM Drivers + Manufacturers: after R2 Zandvoort
+
+## Performance (done)
+- Fix 1: `getEventsWithState()` called once per render — halved weather API calls (`094e1d2`)
+- Fix 2: News feed streamed via Suspense — off critical render path (`941c68e`)
+- Fix 3: Upstash Redis wired in `cache.ts` — activate by adding `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` env vars to Vercel (no code change needed)
 
 ## Backlog (next up)
 - **MotoGP results**: add R7 onwards (Italian GP Mugello, May 31)

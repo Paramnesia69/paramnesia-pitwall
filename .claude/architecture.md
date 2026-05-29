@@ -12,7 +12,7 @@
 ```
 src/
 ├── app/
-│   ├── page.tsx              # SSR entry: fetches featured + upcoming events, ISR 2min
+│   ├── page.tsx              # SSR entry: one getEventsWithState() call, ISR 2min; news streamed via Suspense+AsyncNewsFeed
 │   ├── layout.tsx            # Root layout: fonts, theme, AmbientBackground
 │   ├── globals.css           # Design tokens (--pw-*), Tailwind v4 @theme, .pw-glass
 │   └── api/
@@ -23,13 +23,14 @@ src/
 │       └── openf1/
 │           └── timing/route.ts # /api/openf1/timing?eventId= — F1 live timing proxy
 ├── components/
-│   ├── Dashboard.tsx         # Client shell: series filter, event grid, lazy-loaded panels
+│   ├── Dashboard.tsx         # Client shell: series filter, event grid, lazy-loaded panels; accepts newsFeedSlot ReactNode
 │   │                         # Series order: F1→WEC→ELMS→IMSA→Nürburgring→MotoGP→GTWCE→DTM→WRC→Porsche
+│   ├── AsyncNewsFeed.tsx     # Async server component — fetches news + renders NewsFeed; used behind Suspense in page.tsx
 │   ├── EventDetailOverlay.tsx # Right-panel slide-out (framer spring), Escape key, backdrop click
 │   ├── StandingsPanel.tsx    # Championship standings; tabs: F1/WEC/ELMS/IMSA/MotoGP/DTM/WRC
 │   │                         # Multi-class sections via ClassSection (badgeSrc prop for plate SVGs)
 │   ├── RecentResults.tsx     # Podium cards grid; filterable by series; manufacturer logos
-│   ├── NewsFeed.tsx          # RSS news feed with static fallback; filterable
+│   ├── NewsFeed.tsx          # RSS news feed; reads activeFilter from useSearchParams(?series=); no longer needs prop
 │   ├── HeroCard.tsx          # Featured event hero (motion.section, series watermark, countdown)
 │   ├── ThisWeekend.tsx       # Events happening this Fri–Sun
 │   ├── UpcomingTimeline.tsx  # Events 10–20 in minimal list
@@ -158,12 +159,20 @@ Persisted: `favorites`, `theme`, `reminders`
 ## Data Flow
 ```
 CALENDAR_2026 (static)
-  → getEventsWithState() [ISR 2min, server]
+  → getEventsWithState() [called ONCE per render, ISR 2min, server]
   → applyOverrides() [overrides.json]
   → fetchWeather() → OpenWeatherMap (parallel, max 15 events)
+  → deriveFeaturedEvent() + deriveUpcomingEvents() [sync, from same result]
   → page.tsx renders Dashboard with SSR props
+  → AsyncNewsFeed [streamed separately behind Suspense — off critical path]
+      → getNews(40) → 6 RSS feeds → NewsFeed (client, reads ?series= from URL)
   → useLiveData polls /api/events every 2min (client, tab-visible only)
   → Dashboard re-renders with live data
+
+Caching:
+  → src/lib/cache.ts: get-or-set wrapper; uses Upstash Redis when UPSTASH_REDIS_REST_URL
+    + UPSTASH_REDIS_REST_TOKEN env vars are set; falls back to in-memory Map
+  → /api/events caches getEventsWithState() result for 2min via cached()
 ```
 
 ## CSS Patterns
