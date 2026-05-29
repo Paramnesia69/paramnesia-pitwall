@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
-import { getUpcomingEvents, getFeaturedEvent } from '@/lib/events';
+import { getEventsWithState, deriveFeaturedEvent, deriveUpcomingEvents } from '@/lib/events';
 import { getNews } from '@/lib/news';
 import { CALENDAR_2026 } from '@/data/calendar-2026';
 import { SERIES_META } from '@/types';
@@ -49,11 +49,12 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 }
 
 export default async function Home() {
-  const [featured, upcoming, news] = await Promise.all([
-    getFeaturedEvent(),
-    getUpcomingEvents(),
+  const [events, news] = await Promise.all([
+    getEventsWithState(),
     getNews(40),
   ]);
+  const featured = deriveFeaturedEvent(events);
+  const upcoming = deriveUpcomingEvents(events);
 
   return (
     <Suspense>

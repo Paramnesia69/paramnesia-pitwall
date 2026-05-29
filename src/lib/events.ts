@@ -63,17 +63,14 @@ export async function getEventsWithState(): Promise<NormalizedRaceEvent[]> {
   });
 }
 
-export async function getUpcomingEvents(limit?: number): Promise<NormalizedRaceEvent[]> {
-  const events = (await getEventsWithState())
+export function deriveUpcomingEvents(events: NormalizedRaceEvent[], limit?: number): NormalizedRaceEvent[] {
+  const sorted = events
     .filter((e) => e.state !== 'finished')
     .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
-  return limit ? events.slice(0, limit) : events;
+  return limit ? sorted.slice(0, limit) : sorted;
 }
 
-export async function getFeaturedEvent(): Promise<NormalizedRaceEvent | undefined> {
-  const events = await getEventsWithState();
-
-  // Check for manually forced featured event via overrides.json
+export function deriveFeaturedEvent(events: NormalizedRaceEvent[]): NormalizedRaceEvent | undefined {
   const forcedId = getForcedFeaturedId();
   if (forcedId) {
     const forced = events.find((e) => e.id === forcedId);
@@ -90,6 +87,14 @@ export async function getFeaturedEvent(): Promise<NormalizedRaceEvent | undefine
     .filter((e) => e.state === 'upcoming')
     .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
   return upcoming[0];
+}
+
+export async function getUpcomingEvents(limit?: number): Promise<NormalizedRaceEvent[]> {
+  return deriveUpcomingEvents(await getEventsWithState(), limit);
+}
+
+export async function getFeaturedEvent(): Promise<NormalizedRaceEvent | undefined> {
+  return deriveFeaturedEvent(await getEventsWithState());
 }
 
 export function formatDateISR(isoDate: string): string {
