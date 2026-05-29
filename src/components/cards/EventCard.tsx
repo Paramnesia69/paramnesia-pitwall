@@ -51,10 +51,10 @@ export default memo(function EventCard({ event }: EventCardProps) {
           <div
             className="absolute right-3 top-1/2 -translate-y-1/2 w-44 h-44 pointer-events-none select-none"
             style={{
-              opacity: 0.18,
+              opacity: 0.28,
               zIndex: 0,
-              maskImage: 'radial-gradient(ellipse at center, black 45%, transparent 85%)',
-              WebkitMaskImage: 'radial-gradient(ellipse at center, black 45%, transparent 85%)',
+              maskImage: 'radial-gradient(ellipse at center, black 55%, transparent 90%)',
+              WebkitMaskImage: 'radial-gradient(ellipse at center, black 55%, transparent 90%)',
             }}
           >
             <Image

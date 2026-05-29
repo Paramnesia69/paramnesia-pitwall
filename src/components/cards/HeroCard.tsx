@@ -27,7 +27,11 @@ export default function HeroCard({ event }: HeroCardProps) {
       {/* Large faded series logo — right side */}
       {meta.logo && (
         <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none select-none" style={{ width: '45%', maxWidth: 420, aspectRatio: '1' }}>
-          <div className="relative w-full h-full" style={{ opacity: 0.06 }}>
+          <div className="relative w-full h-full" style={{
+            opacity: 0.14,
+            maskImage: 'radial-gradient(ellipse at center, black 50%, transparent 85%)',
+            WebkitMaskImage: 'radial-gradient(ellipse at center, black 50%, transparent 85%)',
+          }}>
             <Image
               src={meta.logo}
               alt=""
