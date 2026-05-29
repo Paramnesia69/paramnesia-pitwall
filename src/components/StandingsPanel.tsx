@@ -34,12 +34,11 @@ import {
 import type { DriverStanding, ConstructorStanding } from '@/data/standings-2026';
 
 type SeriesTab = 'f1' | 'motogp' | 'wec' | 'wrc' | 'imsa' | 'dtm' | 'elms';
-type SubTab = 'drivers' | 'teams';
 
 const SERIES_TABS: SeriesTab[] = ['f1', 'wec', 'elms', 'imsa', 'motogp', 'dtm', 'wrc'];
 const LOGO_FILTER = 'grayscale(1) contrast(2) brightness(3)';
 
-/* ── Series logo tab button — matches Dashboard filter bar ── */
+/* ── Series logo tab button ── */
 function SeriesTabButton({ series, isActive, onClick }: { series: SeriesTab; isActive: boolean; onClick: () => void }) {
   const meta = SERIES_META[series];
   if (!meta) return null;
@@ -80,28 +79,6 @@ function SeriesTabButton({ series, isActive, onClick }: { series: SeriesTab; isA
         </span>
       )}
     </motion.button>
-  );
-}
-
-/* ── Sub-toggle: Drivers / Teams ── */
-function SubToggle({ sub, setSub, accent }: { sub: SubTab; setSub: (s: SubTab) => void; accent: string }) {
-  return (
-    <div className="flex gap-1 mb-3 p-0.5 rounded-lg w-fit" style={{ background: 'rgba(255,255,255,0.04)' }}>
-      {(['drivers', 'teams'] as SubTab[]).map((s) => (
-        <button
-          key={s}
-          onClick={() => setSub(s)}
-          className="text-[10px] font-semibold uppercase tracking-wider px-3 py-1 rounded-md transition-all duration-150"
-          style={{
-            background: sub === s ? `${accent}22` : 'transparent',
-            color: sub === s ? accent : 'var(--pw-text-tertiary)',
-            border: sub === s ? `1px solid ${accent}35` : '1px solid transparent',
-          }}
-        >
-          {s}
-        </button>
-      ))}
-    </div>
   );
 }
 
@@ -197,20 +174,82 @@ function ConstructorRow({ c, maxPts, f1 = false }: { c: ConstructorStanding; max
   );
 }
 
-/* ── Multi-class section ── */
-function ClassSection({ title, data, note, accent, badgeSrc, f1 = false, isTeams = false }: {
+/* ── Side-by-side two-column grid with optional expand ── */
+function ExpandableGrid({
+  leftLabel, leftData, rightLabel, rightData,
+  maxLeftPts, maxRightPts, defaultLimit = Infinity, note, f1 = false,
+}: {
+  leftLabel: string;
+  leftData: DriverStanding[];
+  rightLabel: string;
+  rightData: ConstructorStanding[];
+  maxLeftPts: number;
+  maxRightPts: number;
+  defaultLimit?: number;
+  note?: string;
+  f1?: boolean;
+}) {
+  const [expanded, setExpanded] = useState(false);
+  const needsExpand = leftData.length > defaultLimit || rightData.length > defaultLimit;
+  const visLeft = expanded ? leftData : leftData.slice(0, defaultLimit);
+  const visRight = expanded ? rightData : rightData.slice(0, defaultLimit);
+  const totalAll = Math.max(leftData.length, rightData.length);
+
+  return (
+    <div>
+      <div className="grid grid-cols-2 gap-x-6">
+        <div>
+          <p className="text-[9px] font-bold uppercase tracking-[0.15em] mb-2"
+            style={{ color: 'var(--pw-text-tertiary)' }}>{leftLabel}</p>
+          <div className="space-y-0">
+            {visLeft.map((d, i) =>
+              <DriverRow key={i} d={{ ...d, pos: i + 1 }} maxPts={maxLeftPts} f1={f1} />
+            )}
+          </div>
+        </div>
+        <div>
+          <p className="text-[9px] font-bold uppercase tracking-[0.15em] mb-2"
+            style={{ color: 'var(--pw-text-tertiary)' }}>{rightLabel}</p>
+          <div className="space-y-0">
+            {visRight.map((c, i) =>
+              <ConstructorRow key={i} c={{ ...c, pos: i + 1 }} maxPts={maxRightPts} f1={f1} />
+            )}
+          </div>
+        </div>
+      </div>
+      {needsExpand && (
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className="w-full mt-3 py-1.5 text-[10px] uppercase tracking-wider rounded-lg transition-colors hover:bg-white/5"
+          style={{ color: 'var(--pw-text-tertiary)', border: '1px solid var(--pw-glass-border)' }}
+        >
+          {expanded ? 'Show top 10' : `Show all ${totalAll}`}
+        </button>
+      )}
+      {note && <p className="text-[9px] mt-3 text-right" style={{ color: 'var(--pw-text-tertiary)' }}>{note}</p>}
+    </div>
+  );
+}
+
+/* ── Multi-class section (badge header + side-by-side grid) ── */
+function ClassSection({
+  title, driverData, driverLabel = 'Drivers', teamData, teamLabel = 'Teams',
+  note, accent, badgeSrc, f1 = false, defaultLimit = Infinity,
+}: {
   title: string;
-  data: (DriverStanding | ConstructorStanding)[];
+  driverData: DriverStanding[];
+  driverLabel?: string;
+  teamData: ConstructorStanding[];
+  teamLabel?: string;
   note: string;
   accent: string;
   badgeSrc?: string;
   f1?: boolean;
-  isTeams?: boolean;
+  defaultLimit?: number;
 }) {
-  const maxPts = (data[0]?.points ?? 1) as number;
   return (
-    <div className="mb-3 last:mb-0">
-      <div className="flex items-center gap-2 mb-1.5">
+    <div className="mb-4 last:mb-0">
+      <div className="flex items-center gap-2 mb-2">
         {badgeSrc ? (
           <img src={badgeSrc} alt={title} style={{ height: 20, width: 'auto', borderRadius: 3, flexShrink: 0 }} />
         ) : (
@@ -221,32 +260,22 @@ function ClassSection({ title, data, note, accent, badgeSrc, f1 = false, isTeams
         )}
         <div className="flex-1 h-px" style={{ background: 'var(--pw-glass-border)' }} />
       </div>
-      <div className="space-y-0">
-        {data.map((item, i) =>
-          isTeams
-            ? <ConstructorRow key={i} c={item as ConstructorStanding} maxPts={maxPts} f1={f1} />
-            : <DriverRow key={i} d={{ ...(item as DriverStanding), pos: i + 1 }} maxPts={maxPts} f1={f1} />
-        )}
-      </div>
-      <p className="text-[9px] mt-1.5 text-right" style={{ color: 'var(--pw-text-tertiary)' }}>{note}</p>
+      <ExpandableGrid
+        leftLabel={driverLabel} leftData={driverData} maxLeftPts={driverData[0]?.points ?? 1}
+        rightLabel={teamLabel} rightData={teamData} maxRightPts={teamData[0]?.points ?? 1}
+        note={note} defaultLimit={defaultLimit} f1={f1}
+      />
     </div>
   );
-}
-
-/* ── Note footer ── */
-function Note({ children }: { children: string }) {
-  return <p className="text-[9px] mt-3 text-right" style={{ color: 'var(--pw-text-tertiary)' }}>{children}</p>;
 }
 
 /* ── Main panel ── */
 export default function StandingsPanel({ defaultTab }: { defaultTab?: SeriesTab } = {}) {
   const [activeTab, setActiveTab] = useState<SeriesTab>(defaultTab ?? 'f1');
-  const [sub, setSub] = useState<SubTab>('drivers');
   const [expanded, setExpanded] = useState(true);
   const [f1Drivers, setF1Drivers] = useState<DriverStanding[]>(F1_DRIVERS_2026);
   const [f1Constructors, setF1Constructors] = useState<ConstructorStanding[]>(F1_CONSTRUCTORS_2026);
   const [f1Round, setF1Round] = useState<number | null>(null);
-  const [f1AllExpanded, setF1AllExpanded] = useState(false);
 
   useEffect(() => {
     fetch('/api/f1/standings')
@@ -268,13 +297,6 @@ export default function StandingsPanel({ defaultTab }: { defaultTab?: SeriesTab 
       })
       .catch(() => {});
   }, []);
-
-  const accent = SERIES_META[activeTab]?.accent ?? '#E10600';
-
-  const handleTabChange = (s: SeriesTab) => {
-    setActiveTab(s);
-    setSub('drivers');
-  };
 
   return (
     <motion.section className="mb-8"
@@ -305,142 +327,114 @@ export default function StandingsPanel({ defaultTab }: { defaultTab?: SeriesTab 
             {/* Logo tab bar */}
             <div className="flex gap-1.5 mb-4 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
               {SERIES_TABS.map((s) => (
-                <SeriesTabButton key={s} series={s} isActive={activeTab === s} onClick={() => handleTabChange(s)} />
+                <SeriesTabButton key={s} series={s} isActive={activeTab === s} onClick={() => setActiveTab(s)} />
               ))}
             </div>
 
-            {/* Drivers / Teams sub-toggle — non-F1 only */}
-            {activeTab !== 'f1' && <SubToggle sub={sub} setSub={setSub} accent={accent} />}
-
             {/* Content */}
             <AnimatePresence mode="wait">
-              <motion.div key={activeTab === 'f1' ? 'f1' : `${activeTab}-${sub}`}
+              <motion.div key={activeTab}
                 initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
                 transition={{ duration: 0.2 }}>
 
-                {/* ── F1 — side-by-side drivers + constructors ── */}
+                {/* ── F1 ── */}
                 {activeTab === 'f1' && (
-                  <div>
-                    <div className="grid grid-cols-2 gap-x-6">
-                      <div>
-                        <p className="text-[9px] font-bold uppercase tracking-[0.15em] mb-2"
-                          style={{ color: 'var(--pw-text-tertiary)' }}>Drivers</p>
-                        <div className="space-y-0">
-                          {(f1AllExpanded ? f1Drivers : f1Drivers.slice(0, 10)).map((d) =>
-                            <DriverRow key={d.pos} d={d} maxPts={f1Drivers[0].points} f1 />
-                          )}
-                        </div>
-                      </div>
-                      <div>
-                        <p className="text-[9px] font-bold uppercase tracking-[0.15em] mb-2"
-                          style={{ color: 'var(--pw-text-tertiary)' }}>Constructors</p>
-                        <div className="space-y-0">
-                          {(f1AllExpanded ? f1Constructors : f1Constructors.slice(0, 10)).map((c) =>
-                            <ConstructorRow key={c.pos} c={c} maxPts={f1Constructors[0].points} f1 />
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                    {f1Drivers.length > 10 && (
-                      <button
-                        onClick={() => setF1AllExpanded(!f1AllExpanded)}
-                        className="w-full mt-3 py-1.5 text-[10px] uppercase tracking-wider rounded-lg transition-colors hover:bg-white/5"
-                        style={{ color: 'var(--pw-text-tertiary)', border: '1px solid var(--pw-glass-border)' }}
-                      >
-                        {f1AllExpanded ? `Show top 10` : `Show all ${f1Drivers.length}`}
-                      </button>
-                    )}
-                    <Note>{f1Round ? `After Round ${f1Round}` : 'After Round 5 · Canadian GP'}</Note>
-                  </div>
+                  <ExpandableGrid
+                    leftLabel="Drivers" leftData={f1Drivers} maxLeftPts={f1Drivers[0]?.points ?? 1}
+                    rightLabel="Constructors" rightData={f1Constructors} maxRightPts={f1Constructors[0]?.points ?? 1}
+                    defaultLimit={10} f1
+                    note={f1Round ? `After Round ${f1Round}` : 'After Round 5 · Canadian GP'}
+                  />
                 )}
 
                 {/* ── MotoGP ── */}
-                {activeTab === 'motogp' && sub === 'drivers' && (
-                  <div className="space-y-0">
-                    {MOTOGP_RIDERS_2026.map((d) => <DriverRow key={d.pos} d={d} maxPts={MOTOGP_RIDERS_2026[0].points} />)}
-                    <Note>After Round 6 · Catalan GP</Note>
-                  </div>
-                )}
-                {activeTab === 'motogp' && sub === 'teams' && (
-                  <div className="space-y-0">
-                    {MOTOGP_TEAMS_2026.map((c) => <ConstructorRow key={c.pos} c={c} maxPts={MOTOGP_TEAMS_2026[0].points} />)}
-                    <Note>After Round 6 · Catalan GP</Note>
-                  </div>
+                {activeTab === 'motogp' && (
+                  <ExpandableGrid
+                    leftLabel="Riders" leftData={MOTOGP_RIDERS_2026} maxLeftPts={MOTOGP_RIDERS_2026[0].points}
+                    rightLabel="Teams" rightData={MOTOGP_TEAMS_2026} maxRightPts={MOTOGP_TEAMS_2026[0].points}
+                    defaultLimit={10}
+                    note="After Round 6 · Catalan GP"
+                  />
                 )}
 
                 {/* ── WEC ── */}
-                {activeTab === 'wec' && sub === 'drivers' && (
+                {activeTab === 'wec' && (
                   <div>
-                    <ClassSection title="Hypercar" data={WEC_DRIVERS_2026} note="After R2 · 6H Spa-Francorchamps" accent="#8C1A1A" badgeSrc="/logos/class-hypercar.svg" />
-                    <ClassSection title="LMGT3" data={WEC_LMGT3_DRIVERS_2026} note="After R2 · 6H Spa-Francorchamps" accent="#1A6B38" badgeSrc="/logos/class-lmgt3.svg" />
-                  </div>
-                )}
-                {activeTab === 'wec' && sub === 'teams' && (
-                  <div>
-                    <ClassSection title="Hypercar" data={WEC_MANUFACTURERS_2026} note="After R2 · 6H Spa-Francorchamps" accent="#8C1A1A" badgeSrc="/logos/class-hypercar.svg" isTeams />
-                    <ClassSection title="LMGT3" data={WEC_LMGT3_MANUFACTURERS_2026} note="After R2 · 6H Spa-Francorchamps" accent="#1A6B38" badgeSrc="/logos/class-lmgt3.svg" isTeams />
+                    <ClassSection
+                      title="Hypercar" driverLabel="Drivers" teamLabel="Manufacturers"
+                      driverData={WEC_DRIVERS_2026} teamData={WEC_MANUFACTURERS_2026}
+                      note="After R2 · 6H Spa-Francorchamps" accent="#8C1A1A"
+                      badgeSrc="/logos/class-hypercar.svg" defaultLimit={10}
+                    />
+                    <ClassSection
+                      title="LMGT3" driverLabel="Drivers" teamLabel="Manufacturers"
+                      driverData={WEC_LMGT3_DRIVERS_2026} teamData={WEC_LMGT3_MANUFACTURERS_2026}
+                      note="After R2 · 6H Spa-Francorchamps" accent="#1A6B38"
+                      badgeSrc="/logos/class-lmgt3.svg"
+                    />
                   </div>
                 )}
 
                 {/* ── WRC ── */}
-                {activeTab === 'wrc' && sub === 'drivers' && (
-                  <div className="space-y-0">
-                    {WRC_DRIVERS_2026.map((d) => <DriverRow key={d.pos} d={d} maxPts={WRC_DRIVERS_2026[0].points} />)}
-                    <Note>After Round 6 · Rally of Portugal</Note>
-                  </div>
-                )}
-                {activeTab === 'wrc' && sub === 'teams' && (
-                  <div className="space-y-0">
-                    {WRC_MANUFACTURERS_2026.map((c) => <ConstructorRow key={c.pos} c={c} maxPts={WRC_MANUFACTURERS_2026[0].points} />)}
-                    <Note>After Round 6 · Rally of Portugal</Note>
-                  </div>
+                {activeTab === 'wrc' && (
+                  <ExpandableGrid
+                    leftLabel="Drivers" leftData={WRC_DRIVERS_2026} maxLeftPts={WRC_DRIVERS_2026[0].points}
+                    rightLabel="Manufacturers" rightData={WRC_MANUFACTURERS_2026} maxRightPts={WRC_MANUFACTURERS_2026[0].points}
+                    note="After Round 6 · Rally of Portugal"
+                  />
                 )}
 
                 {/* ── IMSA ── */}
-                {activeTab === 'imsa' && sub === 'drivers' && (
+                {activeTab === 'imsa' && (
                   <div>
-                    <ClassSection title="GTP" data={IMSA_GTP_DRIVERS_2026} note="After R4 · Laguna Seca" accent="#C0A062" />
-                    <ClassSection title="GTD Pro" data={IMSA_GTD_PRO_DRIVERS_2026} note="After R4 · Laguna Seca" accent="#FF6B35" />
-                    <ClassSection title="GTD" data={IMSA_GTD_DRIVERS_2026} note="After R4 · Laguna Seca" accent="#B8A0D0" />
-                  </div>
-                )}
-                {activeTab === 'imsa' && sub === 'teams' && (
-                  <div>
-                    <ClassSection title="GTP" data={IMSA_GTP_TEAMS_2026} note="After R4 · Laguna Seca" accent="#C0A062" isTeams />
-                    <ClassSection title="GTD Pro" data={IMSA_GTDPRO_TEAMS_2026} note="After R4 · Laguna Seca" accent="#FF6B35" isTeams />
-                    <ClassSection title="GTD" data={IMSA_GTD_TEAMS_2026} note="After R4 · Laguna Seca" accent="#B8A0D0" isTeams />
+                    <ClassSection
+                      title="GTP"
+                      driverData={IMSA_GTP_DRIVERS_2026} teamData={IMSA_GTP_TEAMS_2026}
+                      note="After R4 · Laguna Seca" accent="#C0A062"
+                    />
+                    <ClassSection
+                      title="GTD Pro"
+                      driverData={IMSA_GTD_PRO_DRIVERS_2026} teamData={IMSA_GTDPRO_TEAMS_2026}
+                      note="After R4 · Laguna Seca" accent="#FF6B35"
+                    />
+                    <ClassSection
+                      title="GTD"
+                      driverData={IMSA_GTD_DRIVERS_2026} teamData={IMSA_GTD_TEAMS_2026}
+                      note="After R4 · Laguna Seca" accent="#B8A0D0"
+                    />
                   </div>
                 )}
 
                 {/* ── DTM ── */}
-                {activeTab === 'dtm' && sub === 'drivers' && (
-                  <div className="space-y-0">
-                    {DTM_DRIVERS_2026.map((d, i) => (
-                      <DriverRow key={`${d.pos}-${d.name}`} d={{ ...d, pos: i + 1 }} maxPts={DTM_DRIVERS_2026[0].points} />
-                    ))}
-                    <Note>After Round 1 · Red Bull Ring</Note>
-                  </div>
-                )}
-                {activeTab === 'dtm' && sub === 'teams' && (
-                  <div className="space-y-0">
-                    {DTM_MANUFACTURERS_2026.map((c) => <ConstructorRow key={c.pos} c={c} maxPts={DTM_MANUFACTURERS_2026[0].points} />)}
-                    <Note>After Round 1 · Red Bull Ring</Note>
-                  </div>
+                {activeTab === 'dtm' && (
+                  <ExpandableGrid
+                    leftLabel="Drivers" leftData={DTM_DRIVERS_2026} maxLeftPts={DTM_DRIVERS_2026[0].points}
+                    rightLabel="Manufacturers" rightData={DTM_MANUFACTURERS_2026} maxRightPts={DTM_MANUFACTURERS_2026[0].points}
+                    note="After Round 2 · Zandvoort"
+                  />
                 )}
 
                 {/* ── ELMS ── */}
-                {activeTab === 'elms' && sub === 'drivers' && (
+                {activeTab === 'elms' && (
                   <div>
-                    <ClassSection title="LMP2" data={ELMS_LMP2_DRIVERS_2026} note="After R2 · 4H Le Castellet" accent="#1E4B8C" badgeSrc="/logos/class-lmp2.svg" />
-                    <ClassSection title="LMP3" data={ELMS_LMP3_DRIVERS_2026} note="After R2 · 4H Le Castellet" accent="#4A2090" badgeSrc="/logos/class-lmp3.svg" />
-                    <ClassSection title="LMGT3" data={ELMS_LMGT3_DRIVERS_2026} note="After R2 · 4H Le Castellet" accent="#1A6B38" badgeSrc="/logos/class-lmgt3.svg" />
-                  </div>
-                )}
-                {activeTab === 'elms' && sub === 'teams' && (
-                  <div>
-                    <ClassSection title="LMP2" data={ELMS_LMP2_TEAMS_2026} note="After R2 · 4H Le Castellet" accent="#1E4B8C" badgeSrc="/logos/class-lmp2.svg" isTeams />
-                    <ClassSection title="LMP3" data={ELMS_LMP3_TEAMS_2026} note="After R2 · 4H Le Castellet" accent="#4A2090" badgeSrc="/logos/class-lmp3.svg" isTeams />
-                    <ClassSection title="LMGT3" data={ELMS_LMGT3_TEAMS_2026} note="After R2 · 4H Le Castellet" accent="#1A6B38" badgeSrc="/logos/class-lmgt3.svg" isTeams />
+                    <ClassSection
+                      title="LMP2"
+                      driverData={ELMS_LMP2_DRIVERS_2026} teamData={ELMS_LMP2_TEAMS_2026}
+                      note="After R2 · 4H Le Castellet" accent="#1E4B8C"
+                      badgeSrc="/logos/class-lmp2.svg" defaultLimit={10}
+                    />
+                    <ClassSection
+                      title="LMP3"
+                      driverData={ELMS_LMP3_DRIVERS_2026} teamData={ELMS_LMP3_TEAMS_2026}
+                      note="After R2 · 4H Le Castellet" accent="#4A2090"
+                      badgeSrc="/logos/class-lmp3.svg"
+                    />
+                    <ClassSection
+                      title="LMGT3"
+                      driverData={ELMS_LMGT3_DRIVERS_2026} teamData={ELMS_LMGT3_TEAMS_2026}
+                      note="After R2 · 4H Le Castellet" accent="#1A6B38"
+                      badgeSrc="/logos/class-lmgt3.svg"
+                    />
                   </div>
                 )}
 
