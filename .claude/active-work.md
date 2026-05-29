@@ -61,7 +61,7 @@ F1 results and standings are **fully automated** via live API routes — never u
 ## Performance (done)
 - Fix 1: `getEventsWithState()` called once per render — halved weather API calls (`094e1d2`)
 - Fix 2: News feed streamed via Suspense — off critical render path (`941c68e`)
-- Fix 3: Upstash Redis wired in `cache.ts` — activate by adding `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` env vars to Vercel (no code change needed)
+- Fix 3: Upstash Redis wired in `cache.ts` — env vars added to Vercel via API (`cc579a6`); **pending verification**: log into site once, then check Upstash `keys *` to confirm `events:all` key is written
 
 ## Backlog (next up)
 - **MotoGP results**: add R7 onwards (Italian GP Mugello, May 31)
