@@ -27,8 +27,11 @@ src/
 │   │                         # Series order: F1→WEC→ELMS→IMSA→Nürburgring→MotoGP→GTWCE→DTM→WRC→Porsche
 │   ├── AsyncNewsFeed.tsx     # Async server component — fetches news + renders NewsFeed; used behind Suspense in page.tsx
 │   ├── EventDetailOverlay.tsx # Right-panel slide-out (framer spring), Escape key, backdrop click
-│   ├── StandingsPanel.tsx    # Championship standings; tabs: F1/WEC/ELMS/IMSA/MotoGP/DTM/WRC
-│   │                         # Multi-class sections via ClassSection (badgeSrc prop for plate SVGs)
+│   ├── StandingsPanel.tsx    # Championship standings; series logo tab bar (F1/WEC/ELMS/IMSA/MotoGP/DTM/WRC)
+│   │                         # All series side-by-side via ExpandableGrid (3-col CSS grid: 1fr 1px 1fr, glass divider)
+│   │                         # ExpandableGrid: premium headers (10px semibold + bottom border), defaultLimit=10 + expand button
+│   │                         # ClassSection: badge header + ExpandableGrid; takes driverData+teamData (no sub-toggle)
+│   │                         # F1: roundPoints merged from static into live API response by name → SVG sparkline per row
 │   ├── RecentResults.tsx     # Podium cards grid; filterable by series; manufacturer logos
 │   ├── NewsFeed.tsx          # RSS news feed; reads activeFilter from useSearchParams(?series=); no longer needs prop
 │   ├── HeroCard.tsx          # Featured event hero (motion.section, series watermark, countdown)

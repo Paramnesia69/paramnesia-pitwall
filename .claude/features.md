@@ -15,15 +15,14 @@
 
 ### Data Panels
 - **Recent results** — Real 2026 results for F1, MotoGP, WEC, WRC, IMSA, ELMS, DTM, GTWCE, Nürburgring; filterable by series; manufacturer logos on podium; default 9 shown, "Show All" toggle when more exist (resets on filter change)
-- **Championship standings** — Real 2026 data; shown on "All Series" and on any filtered page for series with standings data (f1/wec/elms/imsa/motogp/dtm/wrc); pre-selected to the active series tab when filtering; hidden for series without standings (gtwce/nurburgring/porsche); tab switcher (F1, WEC, ELMS, IMSA, MotoGP, DTM, WRC); multi-class sections with class plate badge headers:
-  - F1: Drivers + Constructors
-  - WEC: Hypercar + LMGT3 (drivers + manufacturers); LMGT3 shows green class plate badge
-  - ELMS: LMP2 + LMP3 + LMGT3 (drivers + teams); each class has its official-colour plate badge (blue/purple/green)
-  - IMSA: GTP + GTD Pro + GTD (drivers + teams)
-  - MotoGP: Riders + Teams (full 23-rider grid)
+- **Championship standings** — Real 2026 data; shown on "All Series" and on any filtered page for series with standings data (f1/wec/elms/imsa/motogp/dtm/wrc); pre-selected to the active series tab when filtering; hidden for series without standings (gtwce/nurburgring/porsche); series logo tab bar (F1, WEC, ELMS, IMSA, MotoGP, DTM, WRC); all series show **drivers + teams/constructors side by side** (no Drivers/Teams sub-toggle); `ExpandableGrid` component: 3-col CSS grid (1fr 1px 1fr) with glass-border vertical divider, premium column headers (10px semibold + bottom border), collapses to top 10 by default with "Show all N" expand button:
+  - F1: Drivers + Constructors; `roundPoints` from static data merged into live API response by name → SVG sparkline per row; rows without roundPoints get a fixed-height spacer (no progress bar)
+  - WEC: Hypercar (top 10 default, 18 drivers) + LMGT3; each class has badge header + side-by-side drivers/manufacturers
+  - ELMS: LMP2 (top 10 default, 11 entries) + LMP3 + LMGT3; class plate badge headers (blue/purple/green)
+  - IMSA: GTP + GTD Pro + GTD; side-by-side drivers/teams per class
+  - MotoGP: Riders + Teams; top 10 default (23 riders total)
   - DTM: Drivers + Manufacturers
   - WRC: Drivers + Manufacturers
-  - F1 standings rows show SVG sparkline (points trajectory per round) when `roundPoints` data is present; falls back to progress bar otherwise
 - **News feed** — RSS-backed (6 feeds); static fallback; filterable by series
 - **F1 live timing** — Via OpenF1 API; polls every 45s during live/starting_soon; shown in event detail overlay; manufacturer logos
 
@@ -54,9 +53,9 @@
 - TiltCard `overflow-hidden` clips absolute children — logo watermarks must fit within card bounds
 
 ## Planned / Backlog
-- **More results**: F1 R5+, MotoGP R7+, WEC R3 (Le Mans), ELMS LMP3/LMGT3 class winners, GTWCE R3+, DTM R3+, Nürburgring NLS6+, Porsche Supercup R1+
+- **More results**: MotoGP R7+, WEC R3 (Le Mans), ELMS R3+, GTWCE R3+, DTM R3+, Nürburgring NLS6+, Porsche Supercup R1+
+- **roundPoints data**: only top 10 F1 drivers/constructors have per-round sparkline data; remaining rows show blank spacer
 - **Logo quality**: true-colour Aprilia/Yamaha sources
 - **Stream links**: Porsche Carrera has no links — find correct channel/site
 - **Manual override CMS**: currently JSON file editing only
 - **Live race mode**: real-time lap data, gap to leader
-- **Redis caching**: currently ISR only; add Redis layer for instant updates
