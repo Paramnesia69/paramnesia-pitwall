@@ -321,6 +321,18 @@ export default function RaceWeekendOverlay() {
               style={{ background: `linear-gradient(90deg, transparent, ${accentColor}, transparent)` }}
             />
 
+            {/* Close button — lives at panel level, never clipped */}
+            <button
+              onClick={closeResult}
+              className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+              style={{ background: 'rgba(255,255,255,0.08)', zIndex: 10 }}
+              aria-label="Close"
+            >
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            </button>
+
             {/* Header hero area — shrink-0 so it never scrolls away */}
             <div className="shrink-0 relative pt-8 pb-4 px-5 overflow-hidden">
               {/* Background gradient */}
@@ -332,29 +344,17 @@ export default function RaceWeekendOverlay() {
               />
               {/* Series watermark logo */}
               {meta?.logo && (
-                <div className="absolute right-4 top-10 pointer-events-none select-none opacity-[0.06]">
+                <div className="absolute right-4 top-10 pointer-events-none select-none opacity-[0.12]">
                   <Image
                     src={meta.logo}
                     alt=""
                     width={96}
                     height={96}
                     className="object-contain"
-                    style={{ width: 96, height: 96 }}
+                    style={{ width: 96, height: 96, filter: 'brightness(2)' }}
                   />
                 </div>
               )}
-
-              {/* Close button */}
-              <button
-                onClick={closeResult}
-                className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center transition-colors"
-                style={{ background: 'rgba(255,255,255,0.08)' }}
-                aria-label="Close"
-              >
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                </svg>
-              </button>
 
               <div className="relative">
                 {/* Series badge + round — pr-10 clears the close button on the right */}
