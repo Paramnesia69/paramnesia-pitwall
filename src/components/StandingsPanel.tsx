@@ -246,6 +246,7 @@ export default function StandingsPanel({ defaultTab }: { defaultTab?: SeriesTab 
   const [f1Drivers, setF1Drivers] = useState<DriverStanding[]>(F1_DRIVERS_2026);
   const [f1Constructors, setF1Constructors] = useState<ConstructorStanding[]>(F1_CONSTRUCTORS_2026);
   const [f1Round, setF1Round] = useState<number | null>(null);
+  const [f1AllExpanded, setF1AllExpanded] = useState(false);
 
   useEffect(() => {
     fetch('/api/f1/standings')
@@ -325,17 +326,30 @@ export default function StandingsPanel({ defaultTab }: { defaultTab?: SeriesTab 
                         <p className="text-[9px] font-bold uppercase tracking-[0.15em] mb-2"
                           style={{ color: 'var(--pw-text-tertiary)' }}>Drivers</p>
                         <div className="space-y-0">
-                          {f1Drivers.map((d) => <DriverRow key={d.pos} d={d} maxPts={f1Drivers[0].points} f1 />)}
+                          {(f1AllExpanded ? f1Drivers : f1Drivers.slice(0, 10)).map((d) =>
+                            <DriverRow key={d.pos} d={d} maxPts={f1Drivers[0].points} f1 />
+                          )}
                         </div>
                       </div>
                       <div>
                         <p className="text-[9px] font-bold uppercase tracking-[0.15em] mb-2"
                           style={{ color: 'var(--pw-text-tertiary)' }}>Constructors</p>
                         <div className="space-y-0">
-                          {f1Constructors.map((c) => <ConstructorRow key={c.pos} c={c} maxPts={f1Constructors[0].points} f1 />)}
+                          {(f1AllExpanded ? f1Constructors : f1Constructors.slice(0, 10)).map((c) =>
+                            <ConstructorRow key={c.pos} c={c} maxPts={f1Constructors[0].points} f1 />
+                          )}
                         </div>
                       </div>
                     </div>
+                    {f1Drivers.length > 10 && (
+                      <button
+                        onClick={() => setF1AllExpanded(!f1AllExpanded)}
+                        className="w-full mt-3 py-1.5 text-[10px] uppercase tracking-wider rounded-lg transition-colors hover:bg-white/5"
+                        style={{ color: 'var(--pw-text-tertiary)', border: '1px solid var(--pw-glass-border)' }}
+                      >
+                        {f1AllExpanded ? `Show top 10` : `Show all ${f1Drivers.length}`}
+                      </button>
+                    )}
                     <Note>{f1Round ? `After Round ${f1Round}` : 'After Round 5 · Canadian GP'}</Note>
                   </div>
                 )}
