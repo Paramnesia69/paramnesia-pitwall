@@ -34,8 +34,8 @@ const SERIES_STREAM_LINKS: Record<SeriesId, StreamLink[]> = {
     { label: 'DTM YouTube', url: 'https://www.youtube.com/@DTM', type: 'youtube' },
   ],
   gtwce: [
-    { label: 'GT World YouTube', url: 'https://www.youtube.com/@GTWorld', type: 'youtube' },
-    { label: 'gt-world-challenge-europe.com', url: 'https://www.gt-world-challenge-europe.com', type: 'official' },
+    { label: 'GT World YouTube', url: 'https://www.youtube.com/@GTWorld', type: 'official' },
+    { label: 'gt-world-challenge-europe.com', url: 'https://www.gt-world-challenge-europe.com', type: 'broadcast' },
   ],
   nurburgring: [
     { label: 'NLS YouTube', url: 'https://www.youtube.com/@VLNOFFICIAL', type: 'youtube' },
@@ -51,8 +51,8 @@ const SERIES_STREAM_LINKS: Record<SeriesId, StreamLink[]> = {
   ],
   'porsche-carrera': [],
   lemans: [
-    { label: 'FIA WEC Live', url: 'https://www.fiawec.com/en/live', type: 'official' },
-    { label: '24h-lemans.com', url: 'https://www.24h-lemans.com', type: 'official' },
+    { label: 'WEC+', url: 'https://plus.fiawec.com/en/', type: 'official' },
+    { label: '24h-lemans.com', url: 'https://www.24h-lemans.com', type: 'broadcast' },
     { label: 'WEC YouTube', url: 'https://www.youtube.com/channel/UCcidF1lygZPegIz7kgX8COw', type: 'youtube' },
   ],
 };
@@ -65,8 +65,8 @@ const EVENT_OVERRIDES: { match: string; links: StreamLink[] }[] = [
   {
     match: '24 Hours of Le Mans',
     links: [
-      { label: '24h-lemans.com', url: 'https://www.24h-lemans.com', type: 'official' },
-      { label: 'FIA WEC Live', url: 'https://www.fiawec.com/en/live', type: 'official' },
+      { label: 'WEC+', url: 'https://plus.fiawec.com/en/', type: 'official' },
+      { label: '24h-lemans.com', url: 'https://www.24h-lemans.com', type: 'broadcast' },
       { label: 'Eurosport', url: 'https://www.eurosport.com', type: 'broadcast' },
       { label: 'WEC YouTube', url: 'https://www.youtube.com/channel/UCcidF1lygZPegIz7kgX8COw', type: 'youtube' },
     ],
