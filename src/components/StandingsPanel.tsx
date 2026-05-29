@@ -197,19 +197,26 @@ function ExpandableGrid({
 
   return (
     <div>
-      <div className="grid grid-cols-2 gap-x-6">
-        <div>
-          <p className="text-[9px] font-bold uppercase tracking-[0.15em] mb-2"
-            style={{ color: 'var(--pw-text-tertiary)' }}>{leftLabel}</p>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1px 1fr', gap: '0 0' }}>
+        <div className="pr-5">
+          <div className="flex items-center gap-2 mb-2 pb-1.5" style={{ borderBottom: '1px solid var(--pw-glass-border)' }}>
+            <div className="w-0.5 h-3 rounded-full shrink-0" style={{ background: 'rgba(255,255,255,0.35)' }} />
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em]"
+              style={{ color: 'rgba(255,255,255,0.65)' }}>{leftLabel}</p>
+          </div>
           <div className="space-y-0">
             {visLeft.map((d, i) =>
               <DriverRow key={i} d={{ ...d, pos: i + 1 }} maxPts={maxLeftPts} f1={f1} />
             )}
           </div>
         </div>
-        <div>
-          <p className="text-[9px] font-bold uppercase tracking-[0.15em] mb-2"
-            style={{ color: 'var(--pw-text-tertiary)' }}>{rightLabel}</p>
+        <div style={{ background: 'var(--pw-glass-border)', margin: '0 12px' }} />
+        <div className="pl-5">
+          <div className="flex items-center gap-2 mb-2 pb-1.5" style={{ borderBottom: '1px solid var(--pw-glass-border)' }}>
+            <div className="w-0.5 h-3 rounded-full shrink-0" style={{ background: 'rgba(255,255,255,0.35)' }} />
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em]"
+              style={{ color: 'rgba(255,255,255,0.65)' }}>{rightLabel}</p>
+          </div>
           <div className="space-y-0">
             {visRight.map((c, i) =>
               <ConstructorRow key={i} c={{ ...c, pos: i + 1 }} maxPts={maxRightPts} f1={f1} />
