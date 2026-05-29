@@ -162,7 +162,10 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
             const isActive = activeFilter === id;
             const meta = SERIES_META[id];
             // JPG photos (nurburgring) need less aggressive brightness to avoid white bleed
-            const logoFilter = 'grayscale(1) contrast(2) brightness(3)';
+            // Porsche SVG is dark-fill — invert before grayscale+brightness so it shows on dark bg
+            const logoFilter = meta.logo === '/logos/porsche.svg'
+              ? 'grayscale(1) invert(1) contrast(2) brightness(3)'
+              : 'grayscale(1) contrast(2) brightness(3)';
             return (
               <motion.button
                 key={id}
