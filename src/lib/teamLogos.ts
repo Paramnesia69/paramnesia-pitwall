@@ -229,6 +229,9 @@ export function getTeamLogo(teamName: string, f1Context = false): TeamLogoInfo |
     // Genesis: chrome/chrome-on-white emblem — brightness boost makes it read clearly
     if (lower.includes('genesis'))
       return { src, white: false, cssFilter: 'brightness(1.8) contrast(1.2)', png: true };
+    // Porsche: dark gold badge — gentle boost to preserve the gold tones without washing out
+    if (lower.includes('porsche'))
+      return { src, white: false, cssFilter: 'brightness(1.1) saturate(1.8) contrast(1.05)', png: true };
     return { src, white: false, png: true };
   }
 

@@ -137,16 +137,6 @@ export default memo(function EventCard({ event }: EventCardProps) {
 
         {/* Action row */}
         <div className="flex items-center gap-2 mt-auto pt-2" style={{ transform: 'translateZ(25px)' }}>
-          <button
-            className="text-xs px-3 py-1.5 rounded-full transition-all duration-200 hover:bg-white/10"
-            style={{
-              background: 'var(--pw-glass-bg)',
-              border: '1px solid var(--pw-glass-border)',
-              color: 'var(--pw-text-secondary)',
-            }}
-          >
-            Details
-          </button>
           {event.streamLinks.length > 0 && (() => {
             const primary = event.streamLinks.find((l) => l.type === 'official') ?? event.streamLinks[0];
             return (

@@ -105,7 +105,11 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
     return liveUpcoming.filter((e) => e.series === activeFilter);
   }, [liveUpcoming, activeFilter]);
 
-  const weekendEvents = useMemo(() => getThisWeekendEvents(liveUpcoming), [liveUpcoming]);
+  const weekendEvents = useMemo(() => {
+    const all = getThisWeekendEvents(liveUpcoming);
+    if (activeFilter === 'all') return all;
+    return all.filter((e) => e.series === activeFilter);
+  }, [liveUpcoming, activeFilter]);
 
   const cardEvents = filtered.slice(0, 9);
   const timelineEvents = filtered.slice(9, 20);
@@ -226,7 +230,7 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
       }
 
       {/* ── This Weekend ─────────────────────── */}
-      {activeFilter === 'all' && weekendEvents.length > 0 && (
+      {weekendEvents.length > 0 && (
         <ThisWeekend events={weekendEvents} />
       )}
 

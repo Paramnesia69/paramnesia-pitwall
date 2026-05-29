@@ -10,7 +10,6 @@ import type { StreamLink, SeriesId } from '@/types';
 const SERIES_STREAM_LINKS: Record<SeriesId, StreamLink[]> = {
   f1: [
     { label: 'F1 TV', url: 'https://f1tv.formula1.com', type: 'official' },
-    { label: 'formula1.com', url: 'https://www.formula1.com/en/racing', type: 'official' },
     { label: 'F1 YouTube', url: 'https://www.youtube.com/@Formula1', type: 'youtube' },
   ],
   wec: [
@@ -18,13 +17,10 @@ const SERIES_STREAM_LINKS: Record<SeriesId, StreamLink[]> = {
     { label: 'WEC YouTube', url: 'https://www.youtube.com/@FIAWEC', type: 'youtube' },
   ],
   imsa: [
-    { label: 'IMSA TV', url: 'https://www.imsa.com/tv-streaming', type: 'official' },
-    { label: 'Peacock', url: 'https://www.peacocktv.com', type: 'broadcast' },
-    { label: 'IMSA YouTube', url: 'https://www.youtube.com/@ABORNEUSA', type: 'youtube' },
+    { label: 'IMSA YouTube', url: 'https://www.youtube.com/@imsaofficial', type: 'youtube' },
   ],
   motogp: [
     { label: 'MotoGP VideoPass', url: 'https://www.motogp.com/en/videopass', type: 'official' },
-    { label: 'motogp.com', url: 'https://www.motogp.com', type: 'official' },
     { label: 'MotoGP YouTube', url: 'https://www.youtube.com/@MotoGP', type: 'youtube' },
   ],
   wrc: [
@@ -32,11 +28,9 @@ const SERIES_STREAM_LINKS: Record<SeriesId, StreamLink[]> = {
     { label: 'WRC YouTube', url: 'https://www.youtube.com/@WRC', type: 'youtube' },
   ],
   elms: [
-    { label: 'ELMS Live', url: 'https://www.europeanlemansseries.com/en/live', type: 'official' },
     { label: 'ELMS YouTube', url: 'https://www.youtube.com/@EuropeanLeMansSeries', type: 'youtube' },
   ],
   dtm: [
-    { label: 'DTM Grid', url: 'https://www.dtm.com/en/dtm-grid', type: 'official' },
     { label: 'DTM YouTube', url: 'https://www.youtube.com/@DTM', type: 'youtube' },
   ],
   gtwce: [
@@ -44,25 +38,22 @@ const SERIES_STREAM_LINKS: Record<SeriesId, StreamLink[]> = {
     { label: 'gt-world-challenge-europe.com', url: 'https://www.gt-world-challenge-europe.com', type: 'official' },
   ],
   nurburgring: [
-    { label: 'NLS YouTube', url: 'https://www.youtube.com/@nuerburgring', type: 'youtube' },
-    { label: 'nuerburgring.de', url: 'https://www.nuerburgring-langstrecken-serie.de', type: 'official' },
+    { label: 'NLS YouTube', url: 'https://www.youtube.com/@VLNOFFICIAL', type: 'youtube' },
+    { label: 'nls.racing', url: 'https://www.nls.racing', type: 'official' },
   ],
   nordschleife: [
-    { label: 'NLS YouTube', url: 'https://www.youtube.com/@nuerburgring', type: 'youtube' },
-    { label: 'nuerburgring.de', url: 'https://www.nuerburgring-langstrecken-serie.de', type: 'official' },
+    { label: 'NLS YouTube', url: 'https://www.youtube.com/@VLNOFFICIAL', type: 'youtube' },
+    { label: 'nls.racing', url: 'https://www.nls.racing', type: 'official' },
   ],
   'porsche-supercup': [
-    { label: 'Porsche YouTube', url: 'https://www.youtube.com/@Porsche', type: 'youtube' },
+    { label: 'Porsche Supercup', url: 'https://www.youtube.com/@PorscheSupercup', type: 'youtube' },
     { label: 'Porsche Motorsport', url: 'https://motorsports.porsche.com/international/en/category/supercup', type: 'official' },
   ],
-  'porsche-carrera': [
-    { label: 'Porsche YouTube', url: 'https://www.youtube.com/@Porsche', type: 'youtube' },
-    { label: 'Porsche Motorsport', url: 'https://motorsports.porsche.com', type: 'official' },
-  ],
+  'porsche-carrera': [],
   lemans: [
     { label: 'FIA WEC Live', url: 'https://www.fiawec.com/en/live', type: 'official' },
     { label: '24h-lemans.com', url: 'https://www.24h-lemans.com', type: 'official' },
-    { label: 'WEC YouTube', url: 'https://www.youtube.com/@FIAWEC', type: 'youtube' },
+    { label: 'WEC YouTube', url: 'https://www.youtube.com/channel/UCcidF1lygZPegIz7kgX8COw', type: 'youtube' },
   ],
 };
 
@@ -77,7 +68,7 @@ const EVENT_OVERRIDES: { match: string; links: StreamLink[] }[] = [
       { label: '24h-lemans.com', url: 'https://www.24h-lemans.com', type: 'official' },
       { label: 'FIA WEC Live', url: 'https://www.fiawec.com/en/live', type: 'official' },
       { label: 'Eurosport', url: 'https://www.eurosport.com', type: 'broadcast' },
-      { label: 'WEC YouTube', url: 'https://www.youtube.com/@FIAWEC', type: 'youtube' },
+      { label: 'WEC YouTube', url: 'https://www.youtube.com/channel/UCcidF1lygZPegIz7kgX8COw', type: 'youtube' },
     ],
   },
   {
@@ -91,10 +82,7 @@ const EVENT_OVERRIDES: { match: string; links: StreamLink[] }[] = [
   {
     match: 'Rolex 24',
     links: [
-      { label: 'IMSA TV', url: 'https://www.imsa.com/tv-streaming', type: 'official' },
-      { label: 'Peacock', url: 'https://www.peacocktv.com', type: 'broadcast' },
-      { label: 'NBC Sports', url: 'https://www.nbcsports.com', type: 'broadcast' },
-      { label: 'IMSA YouTube', url: 'https://www.youtube.com/@ABORNEUSA', type: 'youtube' },
+      { label: 'IMSA YouTube', url: 'https://www.youtube.com/@imsaofficial', type: 'youtube' },
     ],
   },
   {
@@ -108,9 +96,7 @@ const EVENT_OVERRIDES: { match: string; links: StreamLink[] }[] = [
   {
     match: '12 Hours of Sebring',
     links: [
-      { label: 'IMSA TV', url: 'https://www.imsa.com/tv-streaming', type: 'official' },
-      { label: 'Peacock', url: 'https://www.peacocktv.com', type: 'broadcast' },
-      { label: 'IMSA YouTube', url: 'https://www.youtube.com/@ADORNEUSA', type: 'youtube' },
+      { label: 'IMSA YouTube', url: 'https://www.youtube.com/@imsaofficial', type: 'youtube' },
     ],
   },
 ];

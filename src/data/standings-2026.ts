@@ -20,6 +20,8 @@ export interface DriverStanding {
   team: string;
   points: number;
   teamColor: string;
+  /** Cumulative points after each completed round, in order. Optional — sparkline only renders when present. */
+  roundPoints?: number[];
 }
 
 export interface ConstructorStanding {
@@ -27,33 +29,38 @@ export interface ConstructorStanding {
   name: string;
   points: number;
   color: string;
+  /** Cumulative points after each completed round, in order. Optional — sparkline only renders when present. */
+  roundPoints?: number[];
 }
 
 // ─── F1 2026 Drivers Championship (after R4 · Miami GP) ─
+// roundPoints: cumulative after [R1 AUS, R2 CHN (sprint+race), R3 JPN, R4 MIA (sprint+race)]
+// Source: formula1.com race & sprint result pages
 export const F1_DRIVERS_2026: DriverStanding[] = [
-  { pos: 1, name: 'K. Antonelli', team: 'Mercedes', points: 100, teamColor: '#27F4D2' },
-  { pos: 2, name: 'G. Russell', team: 'Mercedes', points: 80, teamColor: '#27F4D2' },
-  { pos: 3, name: 'C. Leclerc', team: 'Ferrari', points: 59, teamColor: '#E8002D' },
-  { pos: 4, name: 'L. Norris', team: 'McLaren', points: 51, teamColor: '#FF8000' },
-  { pos: 5, name: 'L. Hamilton', team: 'Ferrari', points: 51, teamColor: '#E8002D' },
-  { pos: 6, name: 'O. Piastri', team: 'McLaren', points: 43, teamColor: '#FF8000' },
-  { pos: 7, name: 'M. Verstappen', team: 'Red Bull Racing', points: 26, teamColor: '#3671C6' },
-  { pos: 8, name: 'O. Bearman', team: 'Haas', points: 17, teamColor: '#B6BABD' },
-  { pos: 9, name: 'P. Gasly', team: 'Alpine', points: 16, teamColor: '#0093CC' },
-  { pos: 10, name: 'L. Lawson', team: 'Racing Bulls', points: 10, teamColor: '#6692FF' },
+  { pos: 1, name: 'K. Antonelli', team: 'Mercedes', points: 100, teamColor: '#27F4D2', roundPoints: [18, 47, 72, 100] },
+  { pos: 2, name: 'G. Russell', team: 'Mercedes', points: 80, teamColor: '#27F4D2', roundPoints: [25, 51, 63, 80] },
+  { pos: 3, name: 'C. Leclerc', team: 'Ferrari', points: 59, teamColor: '#E8002D', roundPoints: [15, 34, 49, 59] },
+  { pos: 4, name: 'L. Norris', team: 'McLaren', points: 51, teamColor: '#FF8000', roundPoints: [10, 15, 25, 51] },
+  { pos: 5, name: 'L. Hamilton', team: 'Ferrari', points: 51, teamColor: '#E8002D', roundPoints: [12, 33, 41, 51] },
+  { pos: 6, name: 'O. Piastri', team: 'McLaren', points: 43, teamColor: '#FF8000', roundPoints: [0, 3, 21, 43] },
+  { pos: 7, name: 'M. Verstappen', team: 'Red Bull Racing', points: 26, teamColor: '#3671C6', roundPoints: [8, 8, 12, 26] },
+  { pos: 8, name: 'O. Bearman', team: 'Haas', points: 17, teamColor: '#B6BABD', roundPoints: [6, 17, 17, 17] },
+  { pos: 9, name: 'P. Gasly', team: 'Alpine', points: 16, teamColor: '#0093CC', roundPoints: [1, 9, 15, 16] },
+  { pos: 10, name: 'L. Lawson', team: 'Racing Bulls', points: 10, teamColor: '#6692FF', roundPoints: [0, 8, 10, 10] },
 ];
 
 // ─── F1 2026 Constructors Championship (after R4 · Miami GP) ─
+// roundPoints: cumulative after [R1 AUS, R2 CHN (sprint+race), R3 JPN, R4 MIA (sprint+race)]
 export const F1_CONSTRUCTORS_2026: ConstructorStanding[] = [
-  { pos: 1, name: 'Mercedes', points: 180, color: '#27F4D2' },
-  { pos: 2, name: 'Ferrari', points: 110, color: '#E8002D' },
-  { pos: 3, name: 'McLaren', points: 94, color: '#FF8000' },
-  { pos: 4, name: 'Red Bull Racing', points: 30, color: '#3671C6' },
-  { pos: 5, name: 'Alpine', points: 23, color: '#0093CC' },
-  { pos: 6, name: 'Haas', points: 18, color: '#B6BABD' },
-  { pos: 7, name: 'Racing Bulls', points: 14, color: '#6692FF' },
-  { pos: 8, name: 'Williams', points: 5, color: '#1868DB' },
-  { pos: 9, name: 'Audi', points: 2, color: '#990000' },
+  { pos: 1, name: 'Mercedes', points: 180, color: '#27F4D2', roundPoints: [43, 98, 135, 180] },
+  { pos: 2, name: 'Ferrari', points: 110, color: '#E8002D', roundPoints: [27, 67, 90, 110] },
+  { pos: 3, name: 'McLaren', points: 94, color: '#FF8000', roundPoints: [10, 18, 46, 94] },
+  { pos: 4, name: 'Red Bull Racing', points: 30, color: '#3671C6', roundPoints: [8, 12, 16, 30] },
+  { pos: 5, name: 'Alpine', points: 23, color: '#0093CC', roundPoints: [1, 10, 16, 23] },
+  { pos: 6, name: 'Haas', points: 18, color: '#B6BABD', roundPoints: [6, 17, 18, 18] },
+  { pos: 7, name: 'Racing Bulls', points: 14, color: '#6692FF', roundPoints: [4, 12, 14, 14] },
+  { pos: 8, name: 'Williams', points: 5, color: '#1868DB', roundPoints: [0, 2, 2, 5] },
+  { pos: 9, name: 'Audi', points: 2, color: '#990000', roundPoints: [2, 2, 2, 2] },
   { pos: 10, name: 'Cadillac', points: 0, color: '#1E1E1E' },
   { pos: 11, name: 'Aston Martin', points: 0, color: '#358C75' },
 ];

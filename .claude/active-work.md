@@ -6,12 +6,20 @@ Series: MotoGP, WEC, ELMS, IMSA, WRC, DTM.
 
 ## Last Commits (2026-05-29)
 
-`9644c9e` — fix: overlay close button left-aligned, series badge shifted right (pl-10) to clear it
+`(pending)` — feat: UI improvements, stream links audit, Porsche logo filter
+- **UI**: ThisWeekend respects series filter; Results Show All (9 default, toggle all); UpcomingTimeline series accent left-border; HeroCard Watch Live CTA; EventCard "Details" button removed; F1 standings sparkline (roundPoints per driver/constructor)
+- **Stream links**: full audit — fixed IMSA (→@imsaofficial), ELMS (→@EuropeanLeMansSeries), DTM (removed broken grid link), Nürburgring (→@VLNOFFICIAL + nls.racing), Porsche Supercup (→@PorscheSupercup), Le Mans YouTube (→channel URL), Rolex 24 + Sebring event overrides consolidated; removed: formula1.com, motogp.com, Peacock, NBC Sports, Sky Sports F1
+- **Logo**: Porsche brand PNG filter toned down — `brightness(1.1) saturate(1.8) contrast(1.05)` (was vivid default)
 
-`f238d98` — fix: race weekend overlay layout — header and tabs always visible
-- Panel no longer has overflow-y-auto; header (shrink-0) + tabs (shrink-0) always visible
-- Only results content section (flex-1 overflow-y-auto) scrolls
-- Animation: x:600 fixed pixel instead of x:'100%'
+`979bcbd` — fix: Porsche logo all-white via brightness(0) invert(1) — revert SVG to original
+- HeroCard, EventCard, Dashboard filter bar: use `brightness(0) invert(1)` when `meta.logo === '/logos/porsche.svg'`
+- SVG reverted to original `fill="#ffffff"` on SUPERCUP path
+
+`a2d17fb` — fix: RaceWeekendOverlay header layout
+- X button lifted out of overflow-hidden header to panel level, `absolute top-4 right-4`, zIndex 10
+- Series badge row shifted `pr-10` to clear X button
+- Date moved below circuit/country subtitle as separate `<p>`
+- Password protection: middleware.ts + /api/auth + /app/login/page.tsx added
 
 
 ## F1 Automation

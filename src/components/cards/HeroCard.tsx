@@ -198,6 +198,37 @@ export default function HeroCard({ event }: HeroCardProps) {
             ))}
           </motion.div>
         )}
+
+        {/* Watch Live CTA */}
+        {event.streamLinks.length > 0 && (() => {
+          const primary = event.streamLinks.find((l) => l.type === 'official') ?? event.streamLinks[0];
+          return (
+            <motion.div
+              className="mt-4"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              <a
+                href={primary.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-bold uppercase tracking-widest transition-all duration-200 hover:brightness-110 hover:scale-[1.02]"
+                style={{
+                  background: meta.accent,
+                  color: '#fff',
+                }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2" />
+                  <path d="M10 8l6 4-6 4V8z" fill="white" />
+                </svg>
+                Watch Live
+                {primary.label && <span className="opacity-75 font-normal normal-case tracking-normal">— {primary.label}</span>}
+              </a>
+            </motion.div>
+          );
+        })()}
       </div>
     </motion.section>
   );

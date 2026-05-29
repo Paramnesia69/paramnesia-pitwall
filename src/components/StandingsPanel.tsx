@@ -105,6 +105,25 @@ function SubToggle({ sub, setSub, accent }: { sub: SubTab; setSub: (s: SubTab) =
   );
 }
 
+/* ── Points trajectory sparkline ── */
+function Sparkline({ points, color, maxPts }: { points: number[]; color: string; maxPts: number }) {
+  const W = 56, H = 14;
+  const n = points.length;
+  if (n < 2) return null;
+  const xStep = W / (n - 1);
+  const norm = (v: number) => H - Math.max(0, (v / maxPts) * H * 0.88);
+  const pts = points.map((p, i) => `${(i * xStep).toFixed(1)},${norm(p).toFixed(1)}`).join(' ');
+  const lastX = ((n - 1) * xStep).toFixed(1);
+  const lastY = norm(points[n - 1]).toFixed(1);
+  return (
+    <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} className="shrink-0 overflow-visible">
+      <polyline points={pts} fill="none" stroke={color} strokeWidth="1.5"
+        strokeLinecap="round" strokeLinejoin="round" opacity={0.65} />
+      <circle cx={lastX} cy={lastY} r="2.2" fill={color} opacity={0.9} />
+    </svg>
+  );
+}
+
 /* ── Team constructor logo ── */
 function TeamLogo({ teamName, teamColor, f1 = false }: { teamName: string; teamColor: string; f1?: boolean }) {
   const logo = getTeamLogo(teamName, f1);
@@ -146,11 +165,15 @@ function DriverRow({ d, maxPts, f1 = false }: { d: DriverStanding; maxPts: numbe
           <span className="text-xs font-medium truncate">{d.name}</span>
           <span className="text-xs font-bold tabular-nums ml-2 shrink-0">{d.points}</span>
         </div>
-        <div className="h-1 rounded-full overflow-hidden" style={{ background: 'var(--pw-glass-bg)' }}>
-          <motion.div className="h-full rounded-full" style={{ background: d.teamColor }}
-            initial={{ width: 0 }} animate={{ width: `${barWidth}%` }}
-            transition={{ duration: 0.6, delay: d.pos * 0.05, ease: 'easeOut' }} />
-        </div>
+        {d.roundPoints ? (
+          <Sparkline points={d.roundPoints} color={d.teamColor} maxPts={maxPts} />
+        ) : (
+          <div className="h-1 rounded-full overflow-hidden" style={{ background: 'var(--pw-glass-bg)' }}>
+            <motion.div className="h-full rounded-full" style={{ background: d.teamColor }}
+              initial={{ width: 0 }} animate={{ width: `${barWidth}%` }}
+              transition={{ duration: 0.6, delay: d.pos * 0.05, ease: 'easeOut' }} />
+          </div>
+        )}
       </div>
     </motion.div>
   );
@@ -172,11 +195,15 @@ function ConstructorRow({ c, maxPts, f1 = false }: { c: ConstructorStanding; max
           <span className="text-xs font-medium truncate">{c.name}</span>
           <span className="text-xs font-bold tabular-nums ml-2 shrink-0">{c.points}</span>
         </div>
-        <div className="h-1 rounded-full overflow-hidden" style={{ background: 'var(--pw-glass-bg)' }}>
-          <motion.div className="h-full rounded-full" style={{ background: c.color }}
-            initial={{ width: 0 }} animate={{ width: `${barWidth}%` }}
-            transition={{ duration: 0.6, delay: c.pos * 0.05, ease: 'easeOut' }} />
-        </div>
+        {c.roundPoints ? (
+          <Sparkline points={c.roundPoints} color={c.color} maxPts={maxPts} />
+        ) : (
+          <div className="h-1 rounded-full overflow-hidden" style={{ background: 'var(--pw-glass-bg)' }}>
+            <motion.div className="h-full rounded-full" style={{ background: c.color }}
+              initial={{ width: 0 }} animate={{ width: `${barWidth}%` }}
+              transition={{ duration: 0.6, delay: c.pos * 0.05, ease: 'easeOut' }} />
+          </div>
+        )}
       </div>
     </motion.div>
   );

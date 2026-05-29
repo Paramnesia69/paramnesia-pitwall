@@ -36,6 +36,7 @@
 | Mercedes-AMG, McLaren, Audi | `brightness(0) invert(1) opacity(0.85)` | Black-fill badges → white on dark bg |
 | Peugeot | `brightness(0) invert(1) opacity(0.9)` | bg-stripped black shield → white; visible on dark bg |
 | Genesis | `brightness(1.8) contrast(1.2)` | Chrome emblem — boost but preserve metallic look |
+| Porsche brand PNG | `brightness(1.1) saturate(1.8) contrast(1.05)` | Dark gold badge — gentle boost to preserve gold tones without blowing out |
 | AF Corse / Vista AF | Mapped to brand-ferrari.png | AF Corse and Vista AF run Ferrari cars |
 | `png: true` flag | Set on all brand PNG entries | Components use it to render PNGs larger than SVG moto logos |
 

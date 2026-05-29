@@ -173,7 +173,10 @@ const NON_F1_RESULTS = ALL_RESULTS_2026.filter(r => r.series !== 'f1');
 
 export default function RecentResults({ activeFilter = 'all' }: RecentResultsProps) {
   const [expanded, setExpanded] = useState(true);
+  const [showAll, setShowAll] = useState(false);
   const [f1Results, setF1Results] = useState<RaceResult[]>(F1_RESULTS_2026);
+
+  useEffect(() => { setShowAll(false); }, [activeFilter]);
 
   useEffect(() => {
     fetch('/api/f1/results')
@@ -187,12 +190,12 @@ export default function RecentResults({ activeFilter = 'all' }: RecentResultsPro
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     ), [f1Results]);
 
-  const filtered = useMemo(() => {
+  const { filtered, total } = useMemo(() => {
     const results = activeFilter === 'all'
       ? allResults
       : allResults.filter((r) => r.series === activeFilter);
-    return results.slice(0, 6);
-  }, [activeFilter, allResults]);
+    return { filtered: showAll ? results : results.slice(0, 9), total: results.length };
+  }, [activeFilter, allResults, showAll]);
 
   if (filtered.length === 0) return null;
 
@@ -211,7 +214,7 @@ export default function RecentResults({ activeFilter = 'all' }: RecentResultsPro
           style={{ color: 'var(--pw-text-tertiary)' }}
         >
           Recent Results
-          <span className="ml-2 font-mono">({filtered.length})</span>
+          <span className="ml-2 font-mono">({total})</span>
         </h3>
         <div className="flex-1 h-px" style={{ background: 'var(--pw-glass-border)' }} />
         <button
@@ -237,6 +240,19 @@ export default function RecentResults({ activeFilter = 'all' }: RecentResultsPro
                 <PodiumCard key={result.id} result={result} />
               ))}
             </div>
+            {total > 9 && (
+              <button
+                onClick={() => setShowAll((v) => !v)}
+                className="mt-3 w-full py-2 rounded-lg text-[10px] font-semibold uppercase tracking-[0.15em] transition-colors hover:bg-white/5"
+                style={{
+                  background: 'rgba(255,255,255,0.02)',
+                  border: '1px solid var(--pw-glass-border)',
+                  color: 'var(--pw-text-tertiary)',
+                }}
+              >
+                {showAll ? '↑ Show Less' : `↓ Show All ${total} Results`}
+              </button>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

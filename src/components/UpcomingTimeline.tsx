@@ -70,6 +70,7 @@ export default function UpcomingTimeline({ events }: UpcomingTimelineProps) {
               <motion.div
                 className="pw-glass p-3 flex items-center gap-3 cursor-pointer group transition-all"
                 style={{
+                  borderLeft: `3px solid ${meta.accent}55`,
                   '--pw-hover-border': `${meta.accent}40`,
                   '--pw-hover-shadow': `0 4px 24px rgba(0,0,0,0.4), 0 0 0 1px ${meta.accent}40, 0 0 20px ${meta.accent}15`,
                 } as React.CSSProperties}

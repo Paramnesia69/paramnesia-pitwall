@@ -5,8 +5,7 @@
   "f1-2026-05-22-canadian-grand-prix": {
     "note": "Sprint weekend format",
     "streamLinks": [
-      { "label": "F1 TV Pro", "url": "https://f1tv.formula1.com", "type": "official" },
-      { "label": "Sky Sports F1", "url": "https://www.skysports.com/f1", "type": "broadcast" }
+      { "label": "F1 TV Pro", "url": "https://f1tv.formula1.com", "type": "official" }
     ]
   }
 }
