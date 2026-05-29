@@ -87,11 +87,13 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
                 if (!circuitImg) return null;
                 return (
                   <div
-                    className="absolute inset-0 pointer-events-none select-none"
+                    className="absolute pointer-events-none select-none"
                     style={{
+                      top: 0,
+                      left: 0,
+                      right: '45%',
+                      bottom: 0,
                       opacity: 0.16,
-                      maskImage: 'linear-gradient(to right, black 0%, black 42%, transparent 70%)',
-                      WebkitMaskImage: 'linear-gradient(to right, black 0%, black 42%, transparent 70%)',
                     }}
                   >
                     <Image
@@ -99,7 +101,7 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
                       alt=""
                       fill
                       className="object-contain"
-                      style={{ filter: 'brightness(3) contrast(1.2) saturate(0.5)', mixBlendMode: 'screen', objectPosition: 'left center' }}
+                      style={{ filter: 'brightness(3) contrast(1.2) saturate(0.5)', mixBlendMode: 'screen' }}
                     />
                   </div>
                 );
