@@ -343,18 +343,35 @@ export default function RaceWeekendOverlay() {
                 }}
               />
               {/* Series watermark logo */}
-              {meta?.logo && (
-                <div className="absolute right-4 top-10 pointer-events-none select-none opacity-[0.22]">
-                  <Image
-                    src={meta.logo}
-                    alt=""
-                    width={96}
-                    height={96}
-                    className="object-contain"
-                    style={{ width: 96, height: 96, filter: 'brightness(3)' }}
-                  />
-                </div>
-              )}
+              {meta?.logo && (() => {
+                const isNonTransparent = /\.(png|jpg|jpeg)$/i.test(meta.logo);
+                return (
+                  <div
+                    className="absolute right-4 top-10 pointer-events-none select-none"
+                    style={isNonTransparent ? {
+                      opacity: 0.55,
+                      mixBlendMode: 'screen',
+                      maskImage: 'radial-gradient(ellipse at center, black 30%, transparent 70%)',
+                      WebkitMaskImage: 'radial-gradient(ellipse at center, black 30%, transparent 70%)',
+                    } : {
+                      opacity: 0.18,
+                    }}
+                  >
+                    <Image
+                      src={meta.logo}
+                      alt=""
+                      width={96}
+                      height={96}
+                      className="object-contain"
+                      style={{
+                        width: 96,
+                        height: 96,
+                        ...(isNonTransparent && { filter: 'grayscale(1) contrast(2) brightness(3)' }),
+                      }}
+                    />
+                  </div>
+                );
+              })()}
 
               <div className="relative">
                 {/* Series badge + round — pr-10 clears the close button on the right */}
