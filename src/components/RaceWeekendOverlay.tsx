@@ -344,14 +344,14 @@ export default function RaceWeekendOverlay() {
               />
               {/* Series watermark logo */}
               {meta?.logo && (
-                <div className="absolute right-4 top-10 pointer-events-none select-none opacity-[0.12]">
+                <div className="absolute right-4 top-10 pointer-events-none select-none opacity-[0.22]">
                   <Image
                     src={meta.logo}
                     alt=""
                     width={96}
                     height={96}
                     className="object-contain"
-                    style={{ width: 96, height: 96, filter: 'brightness(2)' }}
+                    style={{ width: 96, height: 96, filter: 'brightness(3)' }}
                   />
                 </div>
               )}
