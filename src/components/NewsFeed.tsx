@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { NormalizedNewsItem, SeriesId } from '@/types';
 import { SERIES_META } from '@/types';
@@ -8,7 +9,6 @@ import SeriesBadge from '@/components/ui/SeriesBadge';
 
 interface NewsFeedProps {
   items: NormalizedNewsItem[];
-  activeFilter?: SeriesId | 'all';
 }
 
 function timeAgo(dateStr: string): string {
@@ -120,7 +120,10 @@ function NewsItem({ item, index }: { item: NormalizedNewsItem; index: number }) 
   );
 }
 
-export default function NewsFeed({ items, activeFilter = 'all' }: NewsFeedProps) {
+export default function NewsFeed({ items }: NewsFeedProps) {
+  const searchParams = useSearchParams();
+  const activeFilter = (searchParams.get('series') ?? 'all') as SeriesId | 'all';
+
   const [expanded, setExpanded] = useState(true);
   const [showCount, setShowCount] = useState(6);
 

@@ -21,13 +21,12 @@ import { useReminderScheduler } from '@/lib/useReminders';
 import InstallPrompt from '@/components/ui/InstallPrompt';
 import UpdateBanner from '@/components/ui/UpdateBanner';
 import LiveIndicator from '@/components/ui/LiveIndicator';
-import type { NormalizedNewsItem, RaceResult } from '@/types';
+import type { RaceResult } from '@/types';
 import { ALL_RESULTS_2026 } from '@/data/results-2026';
 
 /* ── Lazy-loaded below-fold components ──────────── */
 const StandingsPanel = lazy(() => import('@/components/StandingsPanel'));
 const RecentResults = lazy(() => import('@/components/RecentResults'));
-const NewsFeed = lazy(() => import('@/components/NewsFeed'));
 const UpcomingTimeline = lazy(() => import('@/components/UpcomingTimeline'));
 const EventDetailOverlay = lazy(() => import('@/components/EventDetailOverlay'));
 const RaceWeekendOverlay = lazy(() => import('@/components/RaceWeekendOverlay'));
@@ -40,10 +39,10 @@ const ALL_SERIES: SeriesId[] = [
 interface DashboardProps {
   featured: NormalizedRaceEvent | null;
   upcoming: NormalizedRaceEvent[];
-  news: NormalizedNewsItem[];
+  newsFeedSlot?: React.ReactNode;
 }
 
-export default function Dashboard({ featured, upcoming, news }: DashboardProps) {
+export default function Dashboard({ featured, upcoming, newsFeedSlot }: DashboardProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -249,12 +248,8 @@ export default function Dashboard({ featured, upcoming, news }: DashboardProps) 
         <RecentResults activeFilter={activeFilter} />
       </Suspense>
 
-      {/* ── Latest News ─────────────────────── */}
-      {news.length > 0 && (
-        <Suspense>
-          <NewsFeed items={news} activeFilter={activeFilter} />
-        </Suspense>
-      )}
+      {/* ── Latest News — streamed from server ── */}
+      {newsFeedSlot}
 
       {/* ── Event Cards Grid ─────────────────── */}
       <FadeIn delay={0.1}>
