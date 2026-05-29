@@ -77,7 +77,14 @@ function PodiumCard({ result }: { result: RaceResult }) {
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <SeriesBadge series={result.series} size="sm" />
-          <span className="text-[10px] font-mono" style={{ color: 'var(--pw-text-tertiary)' }}>
+          <span
+            className="text-[10px] font-bold font-mono px-1.5 py-0.5 rounded"
+            style={{
+              background: `${meta.accent}18`,
+              color: meta.accent,
+              border: `1px solid ${meta.accent}30`,
+            }}
+          >
             R{result.round}
           </span>
           {cls && <ClassBadge cls={cls} />}

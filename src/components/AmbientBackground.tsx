@@ -19,19 +19,21 @@ export default function AmbientBackground() {
         }}
       />
 
-      {/* Gradient mesh orbs */}
+      {/* Primary orb — tracks active series accent */}
       <div
         className="pw-ambient-orb"
         style={{
           width: '600px',
           height: '600px',
-          background: 'radial-gradient(circle, #E10600 0%, transparent 70%)',
+          background: 'radial-gradient(circle, var(--pw-series-accent, #E10600) 0%, transparent 70%)',
           top: '-10%',
           right: '-5%',
           animationDelay: '0s',
           animationDuration: '30s',
+          transition: 'background 0.8s ease',
         }}
       />
+      {/* Secondary orb — fixed complement */}
       <div
         className="pw-ambient-orb"
         style={{
@@ -58,12 +60,13 @@ export default function AmbientBackground() {
         }}
       />
 
-      {/* Top edge light */}
+      {/* Top edge light — tracks active series accent */}
       <div
         className="absolute top-0 left-0 right-0 h-px"
         style={{
           background:
-            'linear-gradient(90deg, transparent, rgba(225,6,0,0.3) 30%, rgba(225,6,0,0.5) 50%, rgba(225,6,0,0.3) 70%, transparent)',
+            'linear-gradient(90deg, transparent, color-mix(in srgb, var(--pw-series-accent, #E10600) 30%, transparent) 30%, color-mix(in srgb, var(--pw-series-accent, #E10600) 50%, transparent) 50%, color-mix(in srgb, var(--pw-series-accent, #E10600) 30%, transparent) 70%, transparent)',
+          transition: 'background 0.8s ease',
         }}
       />
 

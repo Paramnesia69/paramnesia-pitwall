@@ -8,6 +8,8 @@ import { formatDateISR, formatTimeISR } from '@/lib/events';
 import Countdown from '@/components/ui/Countdown';
 import { WeatherBadgeCompact } from '@/components/ui/WeatherBadge';
 import ReminderButton from '@/components/ui/ReminderButton';
+import { getCircuitImage } from '@/lib/images';
+import { getCountryFlag } from '@/lib/countryFlag';
 
 interface HeroCardProps {
   event: NormalizedRaceEvent;
@@ -16,6 +18,8 @@ interface HeroCardProps {
 export default function HeroCard({ event }: HeroCardProps) {
   const meta = SERIES_META[event.series];
   const nextSession = event.sessions.find((s) => s.state !== 'finished');
+  const circuitImg = getCircuitImage(event.circuit.name);
+  const flag = getCountryFlag(event.circuit.countryCode);
 
   return (
     <motion.section
@@ -24,6 +28,23 @@ export default function HeroCard({ event }: HeroCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 150, damping: 20 }}
     >
+      {/* Circuit map — faint background diagram */}
+      {circuitImg && (
+        <div className="absolute inset-0 pointer-events-none select-none" style={{ opacity: 0.065, zIndex: 0 }}>
+          <Image
+            src={circuitImg}
+            alt=""
+            fill
+            className="object-contain"
+            style={{
+              filter: 'brightness(2) contrast(1.5)',
+              mixBlendMode: 'screen',
+              objectPosition: 'right center',
+            }}
+          />
+        </div>
+      )}
+
       {/* Large faded series logo — right side */}
       {meta.logo && (
         <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none select-none" style={{ width: '45%', maxWidth: 420, aspectRatio: '1' }}>
@@ -137,7 +158,7 @@ export default function HeroCard({ event }: HeroCardProps) {
           transition={{ delay: 0.3 }}
         >
           <p style={{ color: 'var(--pw-text-secondary)' }} className="text-sm sm:text-base mb-1">
-            {event.circuit.name} — {event.circuit.country}
+            {flag && <span className="mr-1">{flag}</span>}{event.circuit.name} — {event.circuit.country}
           </p>
           <div className="flex items-center gap-3 mb-4">
             <p className="text-xs font-mono" style={{ color: 'var(--pw-text-tertiary)' }}>
@@ -173,9 +194,9 @@ export default function HeroCard({ event }: HeroCardProps) {
             {event.sessions.map((s, i) => (
               <div
                 key={i}
-                className="text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5 transition-all duration-200"
+                className={`text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5 transition-all duration-200${s.state === 'live' ? ' pw-live-pill' : ''}`}
                 style={{
-                  background: s.state === 'live' ? 'rgba(225,6,0,0.15)' : 'var(--pw-glass-bg)',
+                  ...(s.state !== 'live' && { background: 'var(--pw-glass-bg)' }),
                   border: `1px solid ${s.state === 'live' ? 'rgba(225,6,0,0.4)' : 'var(--pw-glass-border)'}`,
                   color: s.state === 'finished' ? 'var(--pw-text-tertiary)' : 'var(--pw-text-secondary)',
                   textDecoration: s.state === 'finished' ? 'line-through' : 'none',

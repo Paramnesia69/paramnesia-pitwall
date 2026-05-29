@@ -12,6 +12,7 @@ import FavoriteButton from '@/components/ui/FavoriteButton';
 import { WeatherBadgeCompact } from '@/components/ui/WeatherBadge';
 import ReminderButton from '@/components/ui/ReminderButton';
 import SeriesBadge from '@/components/ui/SeriesBadge';
+import { getCountryFlag } from '@/lib/countryFlag';
 
 interface EventCardProps {
   event: NormalizedRaceEvent;
@@ -41,6 +42,7 @@ export default memo(function EventCard({ event }: EventCardProps) {
   const openEvent = useStore((s) => s.openEvent);
   const nextSession = event.sessions.find((s) => s.state !== 'finished');
   const upcomingSessions = event.sessions.filter((s) => s.state !== 'finished').slice(0, 3);
+  const flag = getCountryFlag(event.circuit.countryCode);
 
   return (
     <div className="h-full" onClick={() => openEvent(event.id)}>
@@ -102,7 +104,7 @@ export default memo(function EventCard({ event }: EventCardProps) {
         <div style={{ transform: 'translateZ(30px)' }}>
           <h4 className="text-lg font-semibold tracking-tight leading-tight">{event.name}</h4>
           <p className="text-sm mt-1" style={{ color: 'var(--pw-text-secondary)' }}>
-            {event.circuit.name} — {event.circuit.country}
+            {flag && <span className="mr-1">{flag}</span>}{event.circuit.name} — {event.circuit.country}
           </p>
         </div>
 
@@ -110,6 +112,23 @@ export default memo(function EventCard({ event }: EventCardProps) {
         {nextSession && event.state !== 'live' && (
           <div style={{ transform: 'translateZ(15px)' }}>
             <Countdown targetDate={nextSession.startTime} compact />
+          </div>
+        )}
+
+        {/* Session progress dots */}
+        {event.sessions.length > 0 && (
+          <div className="flex items-center gap-1.5" style={{ transform: 'translateZ(10px)' }}>
+            {event.sessions.map((s, i) => (
+              <div
+                key={i}
+                style={{
+                  width: 5, height: 5, borderRadius: '50%', flexShrink: 0,
+                  background: s.state === 'live' ? '#E10600' : s.state === 'finished' ? 'rgba(255,255,255,0.18)' : meta.accent,
+                  opacity: s.state === 'finished' ? 0.4 : 0.85,
+                  boxShadow: s.state === 'live' ? '0 0 6px rgba(225,6,0,0.7)' : 'none',
+                }}
+              />
+            ))}
           </div>
         )}
 

@@ -13,6 +13,8 @@ import CircuitStatsPanel from '@/components/ui/CircuitStatsPanel';
 import WeatherBadge from '@/components/ui/WeatherBadge';
 import EventShareButton from '@/components/ui/EventShareButton';
 import F1TimingPanel from '@/components/ui/F1TimingPanel';
+import { getCircuitImage } from '@/lib/images';
+import { getCountryFlag } from '@/lib/countryFlag';
 
 interface EventDetailOverlayProps {
   events: NormalizedRaceEvent[];
@@ -71,7 +73,7 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
             exit={{ x: '100%' }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           >
-            {/* Hero area — accent gradient + faded series logo */}
+            {/* Hero area — accent gradient + circuit map + series logo */}
             <div className="relative h-48 overflow-hidden">
               <div
                 className="absolute inset-0"
@@ -79,6 +81,22 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
                   background: `linear-gradient(135deg, ${SERIES_META[event.series].accent}25 0%, var(--pw-bg-elevated) 70%)`,
                 }}
               />
+              {/* Circuit map bleed */}
+              {(() => {
+                const circuitImg = getCircuitImage(event.circuit.name);
+                if (!circuitImg) return null;
+                return (
+                  <div className="absolute inset-0 pointer-events-none select-none" style={{ opacity: 0.09 }}>
+                    <Image
+                      src={circuitImg}
+                      alt=""
+                      fill
+                      className="object-contain"
+                      style={{ filter: 'brightness(2) contrast(1.5)', mixBlendMode: 'screen' }}
+                    />
+                  </div>
+                );
+              })()}
               {/* Large faded series logo */}
               {SERIES_META[event.series].logo && (
                 <div className="absolute -right-6 top-1/2 -translate-y-1/2 w-52 h-52 pointer-events-none select-none" style={{ opacity: 0.07 }}>
@@ -155,7 +173,7 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
               {/* Title */}
               <h2 className="text-2xl font-bold tracking-tight mb-1">{event.name}</h2>
               <p className="text-sm mb-1" style={{ color: 'var(--pw-text-secondary)' }}>
-                {event.circuit.name} — {event.circuit.country}
+                {getCountryFlag(event.circuit.countryCode) && <span className="mr-1">{getCountryFlag(event.circuit.countryCode)}</span>}{event.circuit.name} — {event.circuit.country}
               </p>
               <div className="flex items-center justify-between mb-6">
                 <p className="text-xs font-mono" style={{ color: 'var(--pw-text-tertiary)' }}>

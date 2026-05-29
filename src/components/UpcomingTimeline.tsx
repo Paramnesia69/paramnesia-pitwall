@@ -7,6 +7,7 @@ import { formatDateISR } from '@/lib/events';
 import { useStore } from '@/store';
 import Countdown from '@/components/ui/Countdown';
 import SeriesBadge from '@/components/ui/SeriesBadge';
+import { getCountryFlag } from '@/lib/countryFlag';
 
 interface UpcomingTimelineProps {
   events: NormalizedRaceEvent[];
@@ -80,7 +81,7 @@ export default function UpcomingTimeline({ events }: UpcomingTimelineProps) {
                 <div className="flex-1 min-w-0">
                   <h4 className="text-sm font-semibold truncate">{event.name}</h4>
                   <p className="text-[11px] truncate" style={{ color: 'var(--pw-text-tertiary)' }}>
-                    {event.circuit.name} — {event.circuit.country}
+                    {getCountryFlag(event.circuit.countryCode) && <span className="mr-1">{getCountryFlag(event.circuit.countryCode)}</span>}{event.circuit.name} — {event.circuit.country}
                   </p>
                 </div>
                 <div className="shrink-0">

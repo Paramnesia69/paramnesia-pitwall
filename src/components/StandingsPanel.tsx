@@ -126,20 +126,41 @@ function TeamLogo({ teamName, teamColor, f1 = false }: { teamName: string; teamC
   return <div className="w-1 h-4 rounded-full shrink-0" style={{ background: teamColor }} />;
 }
 
+/* ── Delta badge (▲2 / ▼1) ── */
+function DeltaBadge({ current, prev }: { current: number; prev: number }) {
+  if (prev === current) return null;
+  const gained = prev > current;
+  const n = Math.abs(prev - current);
+  return (
+    <span className="shrink-0 text-[9px] font-bold tabular-nums" style={{ color: gained ? '#22c55e' : '#ef4444' }}>
+      {gained ? '▲' : '▼'}{n}
+    </span>
+  );
+}
+
 /* ── Driver row ── */
 function DriverRow({ d, maxPts, f1 = false }: { d: DriverStanding; maxPts: number; f1?: boolean }) {
+  const gap = maxPts - d.points;
   return (
     <motion.div className="flex items-center gap-2 py-1.5"
       initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: d.pos * 0.03 }}>
-      <span className="w-5 text-[11px] font-bold tabular-nums text-right shrink-0"
-        style={{ color: d.pos <= 3 ? 'var(--pw-text-primary)' : 'var(--pw-text-tertiary)' }}>
-        {d.pos}
-      </span>
+      <div className="flex items-center gap-1 shrink-0" style={{ minWidth: 28 }}>
+        <span className="text-[11px] font-bold tabular-nums"
+          style={{ color: d.pos <= 3 ? 'var(--pw-text-primary)' : 'var(--pw-text-tertiary)' }}>
+          {d.pos}
+        </span>
+        {d.prevPos !== undefined && <DeltaBadge current={d.pos} prev={d.prevPos} />}
+      </div>
       <TeamLogo teamName={d.team} teamColor={d.teamColor} f1={f1} />
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between mb-0.5">
           <span className="text-xs font-medium truncate">{d.name}</span>
-          <span className="text-xs font-bold tabular-nums ml-2 shrink-0">{d.points}</span>
+          <div className="flex items-center gap-1.5 shrink-0 ml-2">
+            {gap > 0 && (
+              <span className="text-[9px] tabular-nums" style={{ color: 'var(--pw-text-tertiary)' }}>–{gap}</span>
+            )}
+            <span className="text-xs font-bold tabular-nums">{d.points}</span>
+          </div>
         </div>
         {d.roundPoints
           ? <Sparkline points={d.roundPoints} color={d.teamColor} maxPts={maxPts} />
@@ -152,18 +173,27 @@ function DriverRow({ d, maxPts, f1 = false }: { d: DriverStanding; maxPts: numbe
 
 /* ── Constructor / team row ── */
 function ConstructorRow({ c, maxPts, f1 = false }: { c: ConstructorStanding; maxPts: number; f1?: boolean }) {
+  const gap = maxPts - c.points;
   return (
     <motion.div className="flex items-center gap-2 py-1.5"
       initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: c.pos * 0.03 }}>
-      <span className="w-5 text-[11px] font-bold tabular-nums text-right shrink-0"
-        style={{ color: c.pos <= 3 ? 'var(--pw-text-primary)' : 'var(--pw-text-tertiary)' }}>
-        {c.pos}
-      </span>
+      <div className="flex items-center gap-1 shrink-0" style={{ minWidth: 28 }}>
+        <span className="text-[11px] font-bold tabular-nums"
+          style={{ color: c.pos <= 3 ? 'var(--pw-text-primary)' : 'var(--pw-text-tertiary)' }}>
+          {c.pos}
+        </span>
+        {c.prevPos !== undefined && <DeltaBadge current={c.pos} prev={c.prevPos} />}
+      </div>
       <TeamLogo teamName={c.name} teamColor={c.color} f1={f1} />
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between mb-0.5">
           <span className="text-xs font-medium truncate">{c.name}</span>
-          <span className="text-xs font-bold tabular-nums ml-2 shrink-0">{c.points}</span>
+          <div className="flex items-center gap-1.5 shrink-0 ml-2">
+            {gap > 0 && (
+              <span className="text-[9px] tabular-nums" style={{ color: 'var(--pw-text-tertiary)' }}>–{gap}</span>
+            )}
+            <span className="text-xs font-bold tabular-nums">{c.points}</span>
+          </div>
         </div>
         {c.roundPoints
           ? <Sparkline points={c.roundPoints} color={c.color} maxPts={maxPts} />

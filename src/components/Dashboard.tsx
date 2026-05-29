@@ -113,6 +113,12 @@ export default function Dashboard({ featured, upcoming, newsFeedSlot }: Dashboar
   const cardEvents = filtered.slice(0, 9);
   const timelineEvents = filtered.slice(9, 20);
 
+  // Sync active series accent to CSS var so AmbientBackground reacts
+  useEffect(() => {
+    const accent = activeFilter === 'all' ? '#E10600' : SERIES_META[activeFilter].accent;
+    document.documentElement.style.setProperty('--pw-series-accent', accent);
+  }, [activeFilter]);
+
   return (
     <>
     {/* PWA banners */}
@@ -145,7 +151,23 @@ export default function Dashboard({ featured, upcoming, newsFeedSlot }: Dashboar
 
       {/* ── Category Selector ────────────────── */}
       <FadeIn delay={0.05}>
-        <nav className="flex gap-2 overflow-x-auto pb-4 mb-8" style={{ scrollbarWidth: 'none' }}>
+        <nav
+          className="flex gap-2 overflow-x-auto pb-3 mb-8 sticky top-0 z-[100]"
+          style={{
+            scrollbarWidth: 'none',
+            maskImage: 'linear-gradient(to right, black 88%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to right, black 88%, transparent 100%)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            background: 'rgba(6, 6, 11, 0.82)',
+            borderBottom: '1px solid var(--pw-glass-border)',
+            paddingTop: '10px',
+            marginLeft: '-16px',
+            marginRight: '-16px',
+            paddingLeft: '16px',
+            paddingRight: '16px',
+          }}
+        >
           {/* All Series pill — text only */}
           <motion.button
             className="px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap flex-shrink-0 transition-all"
