@@ -177,6 +177,13 @@ body {
 
 /* ── Ambient Gradient Mesh ─────────────────────────────── */
 
+/* Register --pw-series-accent as a typed color so background-color can transition it */
+@property --pw-series-accent {
+  syntax: '<color>';
+  initial-value: #E10600;
+  inherits: true;
+}
+
 @keyframes mesh-drift {
   0% { transform: translate(0%, 0%) rotate(0deg); }
   33% { transform: translate(5%, -3%) rotate(120deg); }
@@ -188,9 +195,16 @@ body {
   position: absolute;
   border-radius: 50%;
   filter: blur(80px);
-  opacity: 0.15;
+  opacity: 0.18;
   animation: mesh-drift 25s ease-in-out infinite;
   will-change: transform;
+}
+
+/* Primary orb reacts to series filter — smooth color transition */
+.pw-ambient-orb-primary {
+  background-color: var(--pw-series-accent, #E10600);
+  transition: background-color 0.7s ease;
+  opacity: 0.22;
 }
 
 /* ── Reduced Motion ────────────────────────────────────── */

@@ -28,16 +28,16 @@ export default function HeroCard({ event }: HeroCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 150, damping: 20 }}
     >
-      {/* Circuit map — faint background diagram */}
+      {/* Circuit map — background diagram */}
       {circuitImg && (
-        <div className="absolute inset-0 pointer-events-none select-none" style={{ opacity: 0.065, zIndex: 0 }}>
+        <div className="absolute inset-0 pointer-events-none select-none" style={{ opacity: 0.13, zIndex: 0 }}>
           <Image
             src={circuitImg}
             alt=""
             fill
             className="object-contain"
             style={{
-              filter: 'brightness(2) contrast(1.5)',
+              filter: 'brightness(3) contrast(1.2) saturate(0.5)',
               mixBlendMode: 'screen',
               objectPosition: 'right center',
             }}

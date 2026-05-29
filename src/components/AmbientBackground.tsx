@@ -19,18 +19,16 @@ export default function AmbientBackground() {
         }}
       />
 
-      {/* Primary orb — tracks active series accent */}
+      {/* Primary orb — tracks active series accent via backgroundColor (transitionable) */}
       <div
-        className="pw-ambient-orb"
+        className="pw-ambient-orb pw-ambient-orb-primary"
         style={{
-          width: '600px',
-          height: '600px',
-          background: 'radial-gradient(circle, var(--pw-series-accent, #E10600) 0%, transparent 70%)',
-          top: '-10%',
-          right: '-5%',
+          width: '700px',
+          height: '700px',
+          top: '-15%',
+          right: '-8%',
           animationDelay: '0s',
           animationDuration: '30s',
-          transition: 'background 0.8s ease',
         }}
       />
       {/* Secondary orb — fixed complement */}
@@ -60,13 +58,14 @@ export default function AmbientBackground() {
         }}
       />
 
-      {/* Top edge light — tracks active series accent */}
+      {/* Top edge accent line — uses backgroundColor so it transitions with @property */}
       <div
-        className="absolute top-0 left-0 right-0 h-px"
+        className="absolute top-0 left-[15%] right-[15%] h-px"
         style={{
-          background:
-            'linear-gradient(90deg, transparent, color-mix(in srgb, var(--pw-series-accent, #E10600) 30%, transparent) 30%, color-mix(in srgb, var(--pw-series-accent, #E10600) 50%, transparent) 50%, color-mix(in srgb, var(--pw-series-accent, #E10600) 30%, transparent) 70%, transparent)',
-          transition: 'background 0.8s ease',
+          backgroundColor: 'var(--pw-series-accent, #E10600)',
+          opacity: 0.5,
+          transition: 'background-color 0.7s ease',
+          filter: 'blur(1px)',
         }}
       />
 
