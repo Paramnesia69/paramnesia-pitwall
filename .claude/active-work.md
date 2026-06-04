@@ -27,6 +27,7 @@ F1 results and standings are **fully automated** via live API routes — never u
 MotoGP results and standings are **fully automated** via the PulseLive (unofficial) API — never update manually:
 - `/api/motogp/results` — podiums per finished round, revalidates 5min
 - `/api/motogp/standings` — riders + teams (teams = sum of riders' pts), revalidates 1hr
+- `/api/motogp/weekend/[round]` — full race + sprint classifications (pos, gaps, DNFs) for the RaceWeekendOverlay session tabs; revalidates 5min. (Qualifying omitted — overlay forces F1-style Q1/Q2/Q3 columns.)
 - All logic in `src/lib/motogp.ts`; routes are thin proxies (same pattern as F1)
 - Base `api.motogp.pulselive.com/motogp/v1`, GET only, no auth; season/category UUIDs hardcoded in lib
 - Stable per-season metadata in `src/lib/motogp.ts`: API long team name → app short name (logos+colours), bar-colour maps, rider-name formatter. Update only on team/livery changes, never per-race.
