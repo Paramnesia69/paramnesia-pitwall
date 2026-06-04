@@ -42,6 +42,16 @@ export function useServiceWorker(): SWState {
           registration.update().catch(() => {});
         }, 5 * 60 * 1000);
 
+        // Also check whenever the app is brought back to the foreground —
+        // installed PWAs are often resumed (not cold-launched), so without this
+        // a reopened app can run stale code until the 5-min tick.
+        const onVisible = () => {
+          if (document.visibilityState === 'visible') {
+            registration.update().catch(() => {});
+          }
+        };
+        document.addEventListener('visibilitychange', onVisible);
+
         // Detect waiting worker (new version available)
         if (registration.waiting) {
           setWaitingWorker(registration.waiting);
@@ -61,7 +71,10 @@ export function useServiceWorker(): SWState {
           });
         });
 
-        return () => clearInterval(interval);
+        return () => {
+          clearInterval(interval);
+          document.removeEventListener('visibilitychange', onVisible);
+        };
       })
       .catch(() => {
         // SW registration failed — not critical
