@@ -105,43 +105,44 @@ export const WEC_LMGT3_DRIVERS_2026: DriverStanding[] = [
   { pos: 8, name: 'West / Goethe / Gehrsitz',          team: 'Garage 59 McLaren',        points: 16, teamColor: '#FF8000' },
 ];
 
-// ─── MotoGP 2026 Riders Championship (after R6 · Catalan GP) ─
-// Source: crash.net standings table (after penalties applied)
+// ─── MotoGP 2026 Riders Championship (after R7 · Italian GP) ─
+// Source: autohebdof1.com, crash.net standings (post-race)
 export const MOTOGP_RIDERS_2026: DriverStanding[] = [
-  { pos: 1,  name: 'M. Bezzecchi',       team: 'Aprilia Racing',        points: 142, teamColor: '#41434C', prevPos: 1  },
-  { pos: 2,  name: 'J. Martín',          team: 'Aprilia Racing',        points: 127, teamColor: '#41434C', prevPos: 2  },
-  { pos: 3,  name: 'F. Di Giannantonio', team: 'Pertamina VR46 Ducati', points: 116, teamColor: '#FFEB3B', prevPos: 3  },
-  { pos: 4,  name: 'P. Acosta',          team: 'Red Bull KTM',          points: 92,  teamColor: '#FF6600', prevPos: 4  },
-  { pos: 5,  name: 'A. Ogura',           team: 'Trackhouse Aprilia',    points: 77,  teamColor: '#8B4FBF', prevPos: 5  },
-  { pos: 6,  name: 'R. Fernández',       team: 'Trackhouse Aprilia',    points: 68,  teamColor: '#8B4FBF', prevPos: 6  },
-  { pos: 7,  name: 'A. Márquez',         team: 'BK8 Gresini Ducati',    points: 67,  teamColor: '#E10600', prevPos: 8  },
-  { pos: 8,  name: 'F. Bagnaia',         team: 'Ducati Lenovo',         points: 63,  teamColor: '#E10600', prevPos: 9  },
-  { pos: 9,  name: 'M. Márquez',         team: 'Ducati Lenovo',         points: 57,  teamColor: '#E10600', prevPos: 7  },
-  { pos: 10, name: 'F. Aldeguer',        team: 'BK8 Gresini Ducati',    points: 47,  teamColor: '#E10600', prevPos: 14 },
+  { pos: 1,  name: 'M. Bezzecchi',       team: 'Aprilia Racing',        points: 173, teamColor: '#41434C', prevPos: 1  },
+  { pos: 2,  name: 'J. Martín',          team: 'Aprilia Racing',        points: 156, teamColor: '#41434C', prevPos: 2  },
+  { pos: 3,  name: 'F. Di Giannantonio', team: 'Pertamina VR46 Ducati', points: 134, teamColor: '#FFEB3B', prevPos: 3  },
+  { pos: 4,  name: 'P. Acosta',          team: 'Red Bull KTM',          points: 103, teamColor: '#FF6600', prevPos: 4  },
+  { pos: 5,  name: 'A. Ogura',           team: 'Trackhouse Aprilia',    points: 92,  teamColor: '#8B4FBF', prevPos: 5  },
+  { pos: 6,  name: 'R. Fernández',       team: 'Trackhouse Aprilia',    points: 87,  teamColor: '#8B4FBF', prevPos: 6  },
+  { pos: 7,  name: 'F. Bagnaia',         team: 'Ducati Lenovo',         points: 82,  teamColor: '#E10600', prevPos: 8  },
+  { pos: 8,  name: 'M. Márquez',         team: 'Ducati Lenovo',         points: 71,  teamColor: '#E10600', prevPos: 9  },
+  { pos: 9,  name: 'A. Márquez',         team: 'BK8 Gresini Ducati',    points: 67,  teamColor: '#E10600', prevPos: 7  },
+  { pos: 10, name: 'F. Aldeguer',        team: 'BK8 Gresini Ducati',    points: 59,  teamColor: '#E10600', prevPos: 10 },
   { pos: 11, name: 'L. Marini',          team: 'Honda HRC Castrol',     points: 43,  teamColor: '#E50000', prevPos: 11 },
-  { pos: 12, name: 'E. Bastianini',      team: 'Red Bull KTM Tech3',    points: 39,  teamColor: '#FF6600', prevPos: 10 },
-  { pos: 13, name: 'F. Quartararo',      team: 'Monster Yamaha',        points: 37,  teamColor: '#0059A8', prevPos: 16 },
-  { pos: 14, name: 'B. Binder',          team: 'Red Bull KTM',          points: 37,  teamColor: '#FF6600', prevPos: 13 },
+  { pos: 12, name: 'E. Bastianini',      team: 'Red Bull KTM Tech3',    points: 39,  teamColor: '#FF6600', prevPos: 12 },
+  { pos: 13, name: 'F. Quartararo',      team: 'Monster Yamaha',        points: 37,  teamColor: '#0059A8', prevPos: 13 },
+  { pos: 14, name: 'B. Binder',          team: 'Red Bull KTM',          points: 37,  teamColor: '#FF6600', prevPos: 14 },
   { pos: 15, name: 'F. Morbidelli',      team: 'Pertamina VR46 Ducati', points: 36,  teamColor: '#FFEB3B', prevPos: 15 },
-  { pos: 16, name: 'J. Zarco',           team: 'Castrol Honda LCR',     points: 34,  teamColor: '#E50000', prevPos: 12 },
+  { pos: 16, name: 'J. Zarco',           team: 'Castrol Honda LCR',     points: 34,  teamColor: '#E50000', prevPos: 16 },
   { pos: 17, name: 'D. Moreira',         team: 'Pro Honda LCR',         points: 17,  teamColor: '#E50000', prevPos: 17 },
   { pos: 18, name: 'J. Mir',             team: 'Honda HRC Castrol',     points: 11,  teamColor: '#E50000', prevPos: 18 },
   { pos: 19, name: 'A. Rins',            team: 'Monster Yamaha',        points: 9,   teamColor: '#0059A8', prevPos: 19 },
   { pos: 20, name: 'M. Viñales',         team: 'Red Bull KTM Tech3',    points: 5,   teamColor: '#FF6600' },
   { pos: 21, name: 'A. Fernández',       team: 'Yamaha Factory Racing', points: 4,   teamColor: '#0059A8' },
-  { pos: 22, name: 'T. Razgatlıoğlu',   team: 'Pramac Yamaha',         points: 4,   teamColor: '#0059A8', prevPos: 20 },
-  { pos: 23, name: 'J. Miller',          team: 'Pramac Yamaha',         points: 2,   teamColor: '#0059A8', prevPos: 21 },
+  { pos: 22, name: 'T. Razgatlıoğlu',   team: 'Pramac Yamaha',         points: 4,   teamColor: '#0059A8', prevPos: 22 },
+  { pos: 23, name: 'J. Miller',          team: 'Pramac Yamaha',         points: 2,   teamColor: '#0059A8', prevPos: 23 },
 ];
 
-// ─── WRC 2026 Drivers Championship (after R6 · Rally of Portugal) ─
+// ─── WRC 2026 Drivers Championship (after R7 · FORUM8 Rally Japan) ─
+// Source: autohebdof1.com post-Japan standings
 export const WRC_DRIVERS_2026: DriverStanding[] = [
-  { pos: 1,  name: 'E. Evans',    team: 'Toyota',  points: 123, teamColor: '#EB0A1E', prevPos: 1  },
-  { pos: 2,  name: 'T. Katsuta', team: 'Toyota',  points: 111, teamColor: '#EB0A1E', prevPos: 2  },
-  { pos: 3,  name: 'O. Solberg', team: 'Toyota',  points: 92,  teamColor: '#EB0A1E', prevPos: 4  },
-  { pos: 4,  name: 'A. Fourmaux', team: 'Hyundai', points: 79, teamColor: '#003082', prevPos: 5  },
-  { pos: 5,  name: 'S. Pajari',  team: 'Toyota',  points: 78,  teamColor: '#EB0A1E', prevPos: 3  },
-  { pos: 6,  name: 'S. Ogier',   team: 'Toyota',  points: 67,  teamColor: '#EB0A1E', prevPos: 6  },
-  { pos: 7,  name: 'T. Neuville', team: 'Hyundai', points: 65, teamColor: '#003082', prevPos: 7  },
+  { pos: 1,  name: 'E. Evans',    team: 'Toyota',  points: 151, teamColor: '#EB0A1E', prevPos: 1  },
+  { pos: 2,  name: 'T. Katsuta', team: 'Toyota',  points: 131, teamColor: '#EB0A1E', prevPos: 2  },
+  { pos: 3,  name: 'O. Solberg', team: 'Toyota',  points: 102, teamColor: '#EB0A1E', prevPos: 3  },
+  { pos: 4,  name: 'S. Pajari',  team: 'Toyota',  points: 96,  teamColor: '#EB0A1E', prevPos: 5  },
+  { pos: 5,  name: 'S. Ogier',   team: 'Toyota',  points: 90,  teamColor: '#EB0A1E', prevPos: 6  },
+  { pos: 6,  name: 'A. Fourmaux', team: 'Hyundai', points: 83, teamColor: '#003082', prevPos: 4  },
+  { pos: 7,  name: 'T. Neuville', team: 'Hyundai', points: 69, teamColor: '#003082', prevPos: 7  },
   { pos: 8,  name: 'E. Lappi',   team: 'Hyundai', points: 21,  teamColor: '#003082', prevPos: 8  },
   { pos: 9,  name: 'Y. Rossel',  team: 'Lancia',  points: 20,  teamColor: '#0C2340', prevPos: 9  },
   { pos: 10, name: 'L. Rossel',  team: 'Citroën', points: 18,  teamColor: '#CC0000', prevPos: 10 },
@@ -189,15 +190,15 @@ export const DTM_DRIVERS_2026: DriverStanding[] = [
   { pos: 10, name: 'N. Thiim',         team: 'Aston Martin',  points: 24, teamColor: '#006241', prevPos: 5,  roundPoints: [17, 24] },
 ];
 
-// ─── MotoGP 2026 Teams Championship (after R6 · Catalan GP) ─
+// ─── MotoGP 2026 Teams Championship (after R7 · Italian GP) ─
 // Team pts = sum of both riders' championship points (official MotoGP method)
 export const MOTOGP_TEAMS_2026: ConstructorStanding[] = [
-  { pos: 1,  name: 'Aprilia Racing',         points: 269, color: '#C8102E' }, // Bezzecchi 142 + Martín 127
-  { pos: 2,  name: 'Pertamina VR46 Ducati',  points: 152, color: '#FFEB3B' }, // Di Giannantonio 116 + Morbidelli 36
-  { pos: 3,  name: 'Trackhouse Aprilia',      points: 145, color: '#8B4FBF' }, // Ogura 77 + R.Fernández 68
-  { pos: 4,  name: 'Red Bull KTM',            points: 129, color: '#FF6600' }, // Acosta 92 + Binder 37
-  { pos: 5,  name: 'Ducati Lenovo',           points: 120, color: '#E10600' }, // Bagnaia 63 + M.Márquez 57
-  { pos: 6,  name: 'BK8 Gresini Ducati',     points: 114, color: '#E10600' }, // A.Márquez 67 + Aldeguer 47
+  { pos: 1,  name: 'Aprilia Racing',         points: 329, color: '#C8102E' }, // Bezzecchi 173 + Martín 156
+  { pos: 2,  name: 'Trackhouse Aprilia',      points: 179, color: '#8B4FBF' }, // Ogura 92 + R.Fernández 87
+  { pos: 3,  name: 'Pertamina VR46 Ducati',  points: 170, color: '#FFEB3B' }, // Di Giannantonio 134 + Morbidelli 36
+  { pos: 4,  name: 'Ducati Lenovo',           points: 153, color: '#E10600' }, // Bagnaia 82 + M.Márquez 71
+  { pos: 5,  name: 'Red Bull KTM',            points: 140, color: '#FF6600' }, // Acosta 103 + Binder 37
+  { pos: 6,  name: 'BK8 Gresini Ducati',     points: 126, color: '#E10600' }, // A.Márquez 67 + Aldeguer 59
   { pos: 7,  name: 'Honda HRC Castrol',       points: 54,  color: '#E50000' }, // Marini 43 + Mir 11
   { pos: 8,  name: 'LCR Honda',              points: 51,  color: '#E50000' }, // Zarco 34 + Moreira 17
   { pos: 9,  name: 'Monster Yamaha',          points: 46,  color: '#0059A8' }, // Quartararo 37 + Rins 9

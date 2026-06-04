@@ -3,10 +3,10 @@
  * F1: Rounds 1–4 (Australia → Miami) — source: formula1.com, Wikipedia
  *     Bahrain & Saudi Arabia GPs cancelled (Middle East conflict)
  *     Round 5 = Canada (May 24) — handled by /api/f1/results (Jolpica)
- * MotoGP: Rounds 1–6 (Thailand → Catalunya) — source: motogp.com, crash.net
+ * MotoGP: Rounds 1–7 (Thailand → Italy) — source: motogp.com, crash.net
  *     Catalunya result reflects post-penalty classification (Mir -16s)
  * WEC: Rounds 1–2 (Imola, Spa) — source: fiawec.com, Wikipedia
- * GTWCE: R1 Paul Ricard (6h), R2 Brands Hatch (Race 1+2) — source: gt-world-challenge-europe.com
+ * GTWCE: R1 Paul Ricard (6h), R2 Brands Hatch (Race 1+2), R3 Monza (3h) — source: gt-world-challenge-europe.com, pitdebrief.com
  */
 
 import type { RaceResult } from '@/types';
@@ -223,6 +223,22 @@ export const MOTOGP_RESULTS_2026: RaceResult[] = [
       },
     ],
   },
+  {
+    id: 'motogp-r7-italy',
+    series: 'motogp',
+    round: 7,
+    name: 'Italian Grand Prix',
+    circuit: 'Autodromo Internazionale del Mugello',
+    country: 'Italy',
+    countryCode: 'IT',
+    date: '2026-05-31',
+    podium: [
+      { pos: 1, driver: 'Marco Bezzecchi', team: 'Aprilia Racing' },
+      { pos: 2, driver: 'Jorge Martín', team: 'Aprilia Racing' },
+      { pos: 3, driver: 'Francesco Bagnaia', team: 'Ducati Lenovo' },
+    ],
+    fastestLap: { driver: 'Marco Bezzecchi', team: 'Aprilia Racing' },
+  },
 ];
 
 // ─── WEC 2026 Hypercar Results ──────────────────────────
@@ -436,6 +452,21 @@ export const WRC_RESULTS_2026: RaceResult[] = [
       },
     ],
   },
+  {
+    id: 'wrc-r7-japan',
+    series: 'wrc',
+    round: 7,
+    name: 'FORUM8 Rally Japan',
+    circuit: 'Aichi / Nagoya',
+    country: 'Japan',
+    countryCode: 'JP',
+    date: '2026-05-31',
+    podium: [
+      { pos: 1, driver: 'E. Evans / S. Martin', team: 'Toyota' },
+      { pos: 2, driver: 'S. Ogier / V. Landais', team: 'Toyota' },
+      { pos: 3, driver: 'S. Pajari / M. Salminen', team: 'Toyota' },
+    ],
+  },
 ];
 
 // ─── IMSA 2026 GTP Results ────────────────────────────────
@@ -499,6 +530,21 @@ export const IMSA_RESULTS_2026: RaceResult[] = [
       { pos: 1, driver: 'Heinrich / van der Helm', team: 'JDC-Miller Porsche' },
       { pos: 2, driver: 'Bamber / Aitken', team: 'Whelen Cadillac' },
       { pos: 3, driver: 'Eng / Wittmann', team: 'BMW M Team WRT' },
+    ],
+  },
+  {
+    id: 'imsa-r5-detroit',
+    series: 'imsa',
+    round: 5,
+    name: 'Chevrolet Detroit Sports Car Classic',
+    circuit: 'Detroit Street Circuit',
+    country: 'United States',
+    countryCode: 'US',
+    date: '2026-05-30',
+    podium: [
+      { pos: 1, driver: 'Aitken / Bamber', team: 'Whelen Cadillac' },
+      { pos: 2, driver: 'Eng / Wittmann', team: 'BMW M Team WRT' },
+      { pos: 3, driver: 'R. Taylor / Albuquerque', team: 'Wayne Taylor Cadillac' },
     ],
   },
 ];
@@ -763,6 +809,21 @@ export const GTWCE_RESULTS_2026: RaceResult[] = [
           { pos: 10, driver: 'R. Andriolo / S. Gachet', team: 'McLaren' },
         ],
       },
+    ],
+  },
+  {
+    id: 'gtwce-r3-monza',
+    series: 'gtwce',
+    round: 3,
+    name: 'Endurance Cup Monza',
+    circuit: 'Autodromo Nazionale di Monza',
+    country: 'Italy',
+    countryCode: 'IT',
+    date: '2026-05-31',
+    podium: [
+      { pos: 1, driver: 'Levi / Øgaard / Mazzola', team: 'Tresor Attempto — Audi' },
+      { pos: 2, driver: 'Winward Racing', team: 'Winward Racing — Mercedes-AMG' },
+      { pos: 3, driver: 'CSA Racing', team: 'CSA Racing — McLaren' },
     ],
   },
 ];

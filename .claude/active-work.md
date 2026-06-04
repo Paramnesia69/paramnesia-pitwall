@@ -33,15 +33,15 @@ F1 results and standings are **fully automated** via live API routes — never u
 - IMSA GTP: R1–4 (Daytona → Laguna Seca)
 - ELMS LMP2/LMP3/LMGT3: R1 Barcelona, R2 Le Castellet
 - DTM: R1 Red Bull Ring (Race 1+2), R2 Zandvoort (Race 1+2)
-- GTWCE: R1 Paul Ricard, R2 Brands Hatch
+- GTWCE: R1 Paul Ricard, R2 Brands Hatch, R3 Monza (May 31)
 - Nürburgring: NLS2, NLS3, 24h Quali R2, ADAC 24h
 
 ### Standings (src/data/standings-2026.ts)
 - F1: after R5 Canadian GP (live via /api/f1/standings)
-- MotoGP: after R6 Catalunya GP
+- MotoGP: after R7 Italian GP · Bezzecchi 173 leads
 - WEC Hypercar + LMGT3: after R2 Spa
 - ELMS LMP2/LMP3/LMGT3: after R2 Le Castellet
-- WRC: after R6 Rally Portugal
+- WRC: after R7 Rally Japan · Evans 151 leads
 - IMSA GTP/GTD Pro/GTD: after R4 Laguna Seca
 - DTM: after R2 Zandvoort
 
@@ -51,11 +51,10 @@ F1 results and standings are **fully automated** via live API routes — never u
 - Fix 3: Upstash Redis — `events:all` key verified in Upstash dashboard 2026-05-29 ✓
 
 ## Backlog (next up)
-- **MotoGP results**: R7+ (Italian GP Mugello, May 31)
-- **WRC results**: R7+ (Rally Japan, May 31)
-- **IMSA results**: R5+ (Detroit, May 30)
-- **WEC results**: R3 (Le Mans 24H, June 14–15)
-- **DTM/ELMS/GTWCE results**: R3+
+- **WEC results**: R3 Le Mans 24H (June 14–15)
+- **Porsche Supercup**: R1 Monaco (June 7)
+- **DTM/ELMS results**: R3+
 - **Nürburgring**: NLS6+ (Eifel Trophy, Jun 20)
+- **IMSA standings**: update after Detroit R5
 - **Porsche Supercup**: season starts Jun 4 (Monaco)
 - **Logo quality**: Aprilia/Yamaha not true-colour
