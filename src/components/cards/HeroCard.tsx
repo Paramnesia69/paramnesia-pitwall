@@ -155,9 +155,19 @@ export default function HeroCard({ event }: HeroCardProps) {
           </motion.div>
         )}
 
-        {/* Event title */}
+        {/* Event title — Orbitron (racy/motorsport) with a metallic sheen +
+            light emboss. Sized down vs Geist since Orbitron runs wider. */}
         <motion.h2
-          className="text-3xl sm:text-5xl font-bold mb-2 tracking-tight"
+          className="text-2xl sm:text-[2.5rem] font-extrabold mb-2 tracking-tight leading-[1.05]"
+          style={{
+            fontFamily: 'var(--font-orbitron), var(--pw-font-display)',
+            backgroundImage: 'linear-gradient(180deg, #ffffff 0%, #fbfcff 38%, #aeb4c2 100%)',
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            color: 'transparent',
+            filter: 'drop-shadow(0 1px 0 rgba(255,255,255,0.12)) drop-shadow(0 2px 12px rgba(0,0,0,0.5))',
+          }}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, type: 'spring', stiffness: 150, damping: 20 }}
