@@ -13,7 +13,9 @@ const F1_CDN_BASE =
  * screen-blend watermark treatment works (HeroCard, EventCard, overlay).
  */
 const LOCAL_CIRCUIT_MAPS: Record<string, string> = {
-  'Circuit de la Sarthe': '/circuits/le-mans.svg',
+  // Versioned filename: service worker caches /circuits/* cache-first, so a new
+  // URL is required to bust a stale copy when the asset changes.
+  'Circuit de la Sarthe': '/circuits/le-mans-sarthe.svg',
 };
 
 /** Maps circuit names → F1 CDN image filename (without _Circuit.png suffix) */
