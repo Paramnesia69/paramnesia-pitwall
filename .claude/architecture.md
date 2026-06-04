@@ -8,6 +8,10 @@
 - **Deployment**: Vercel + GitHub (auto-deploy on push to main)
 - `images: { unoptimized: true }` in next.config.mjs (required for Vercel static export compat)
 
+## Auth (whole site is private)
+- `middleware.ts` (repo root) gates the ENTIRE app behind a single login. Cookie `pw-auth` must equal `btoa(PITWALL_USER:PITWALL_PASS)` (env vars on Vercel); otherwise 307 → `/login?from=...`.
+- Exempt: `/login`, `/api/auth`, and static assets (see matcher). So **every page and API route returns 307→/login when hit without the auth cookie** — intended, not a bug. Don't anonymously curl production to "verify" a deploy; verify data against the upstream API locally instead.
+
 ## Folder Structure
 ```
 src/
