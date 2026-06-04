@@ -81,7 +81,7 @@ export default memo(function EventCard({ event }: EventCardProps) {
               left: 0,
               top: '52%',
               right: '48%',
-              opacity: circuitImg.startsWith('/circuits/') ? 0.2 : 0.14,
+              opacity: circuitImg.startsWith('/circuits/') ? 0.16 : 0.14,
               zIndex: 0,
             }}
           >

@@ -93,7 +93,7 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
                       left: 0,
                       right: '45%',
                       bottom: 0,
-                      opacity: circuitImg.startsWith('/circuits/') ? 0.22 : 0.16,
+                      opacity: circuitImg.startsWith('/circuits/') ? 0.18 : 0.16,
                     }}
                   >
                     <Image
