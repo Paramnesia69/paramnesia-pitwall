@@ -28,31 +28,36 @@ export default function HeroCard({ event }: HeroCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 150, damping: 20 }}
     >
-      {/* Circuit map — background diagram */}
-      {circuitImg && (
-        <div
-          className="absolute pointer-events-none select-none"
-          style={{
-            top: 0,
-            left: '30%',
-            right: '44%',
-            bottom: '32%',
-            opacity: 0.15,
-            zIndex: 0,
-          }}
-        >
-          <Image
-            src={circuitImg}
-            alt=""
-            fill
-            className="object-contain"
+      {/* Circuit map — background diagram. Local /circuits/* maps are plain white
+          outlines (fainter than the colourful F1 CDN maps) → nudge opacity up and
+          shift right to clear long titles like "24 Hours of Le Mans". */}
+      {circuitImg && (() => {
+        const isLocal = circuitImg.startsWith('/circuits/');
+        return (
+          <div
+            className="absolute pointer-events-none select-none"
             style={{
-              filter: 'brightness(3) contrast(1.2) saturate(0.5)',
-              mixBlendMode: 'screen',
+              top: 0,
+              left: isLocal ? '36%' : '30%',
+              right: isLocal ? '39%' : '44%',
+              bottom: '32%',
+              opacity: isLocal ? 0.24 : 0.15,
+              zIndex: 0,
             }}
-          />
-        </div>
-      )}
+          >
+            <Image
+              src={circuitImg}
+              alt=""
+              fill
+              className="object-contain"
+              style={{
+                filter: 'brightness(3) contrast(1.2) saturate(0.5)',
+                mixBlendMode: 'screen',
+              }}
+            />
+          </div>
+        );
+      })()}
 
       {/* Large faded series logo — right side */}
       {meta.logo && (
