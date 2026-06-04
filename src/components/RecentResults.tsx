@@ -176,12 +176,15 @@ function PodiumCard({ result }: { result: RaceResult }) {
   );
 }
 
-const NON_F1_RESULTS = ALL_RESULTS_2026.filter(r => r.series !== 'f1');
+// F1 + MotoGP come from live API routes; everything else is static.
+const STATIC_RESULTS = ALL_RESULTS_2026.filter(r => r.series !== 'f1' && r.series !== 'motogp');
+const STATIC_MOTOGP = ALL_RESULTS_2026.filter(r => r.series === 'motogp');
 
 export default function RecentResults({ activeFilter = 'all' }: RecentResultsProps) {
   const [expanded, setExpanded] = useState(true);
   const [showAll, setShowAll] = useState(false);
   const [f1Results, setF1Results] = useState<RaceResult[]>(F1_RESULTS_2026);
+  const [motoResults, setMotoResults] = useState<RaceResult[]>(STATIC_MOTOGP);
 
   useEffect(() => { setShowAll(false); }, [activeFilter]);
 
@@ -190,12 +193,17 @@ export default function RecentResults({ activeFilter = 'all' }: RecentResultsPro
       .then(r => r.ok ? r.json() : null)
       .then(data => { if (Array.isArray(data)) setF1Results(data); })
       .catch(() => {});
+
+    fetch('/api/motogp/results')
+      .then(r => r.ok ? r.json() : null)
+      .then(data => { if (Array.isArray(data) && data.length) setMotoResults(data); })
+      .catch(() => {});
   }, []);
 
   const allResults = useMemo(() =>
-    [...f1Results, ...NON_F1_RESULTS].sort(
+    [...f1Results, ...motoResults, ...STATIC_RESULTS].sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    ), [f1Results]);
+    ), [f1Results, motoResults]);
 
   const { filtered, total } = useMemo(() => {
     const results = activeFilter === 'all'

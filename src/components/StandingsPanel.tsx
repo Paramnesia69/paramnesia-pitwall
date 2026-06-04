@@ -313,6 +313,9 @@ export default function StandingsPanel({ defaultTab }: { defaultTab?: SeriesTab 
   const [f1Drivers, setF1Drivers] = useState<DriverStanding[]>(F1_DRIVERS_2026);
   const [f1Constructors, setF1Constructors] = useState<ConstructorStanding[]>(F1_CONSTRUCTORS_2026);
   const [f1Round, setF1Round] = useState<number | null>(null);
+  const [motoRiders, setMotoRiders] = useState<DriverStanding[]>(MOTOGP_RIDERS_2026);
+  const [motoTeams, setMotoTeams] = useState<ConstructorStanding[]>(MOTOGP_TEAMS_2026);
+  const [motoRound, setMotoRound] = useState<number | null>(null);
 
   useEffect(() => {
     fetch('/api/f1/standings')
@@ -331,6 +334,15 @@ export default function StandingsPanel({ defaultTab }: { defaultTab?: SeriesTab 
           }));
         }
         if (data?.round) setF1Round(data.round);
+      })
+      .catch(() => {});
+
+    fetch('/api/motogp/standings')
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (data?.riders?.length) setMotoRiders(data.riders);
+        if (data?.teams?.length) setMotoTeams(data.teams);
+        if (data?.round) setMotoRound(data.round);
       })
       .catch(() => {});
   }, []);
@@ -387,10 +399,10 @@ export default function StandingsPanel({ defaultTab }: { defaultTab?: SeriesTab 
                 {/* ── MotoGP ── */}
                 {activeTab === 'motogp' && (
                   <ExpandableGrid
-                    leftLabel="Riders" leftData={MOTOGP_RIDERS_2026} maxLeftPts={MOTOGP_RIDERS_2026[0].points}
-                    rightLabel="Teams" rightData={MOTOGP_TEAMS_2026} maxRightPts={MOTOGP_TEAMS_2026[0].points}
+                    leftLabel="Riders" leftData={motoRiders} maxLeftPts={motoRiders[0]?.points ?? 1}
+                    rightLabel="Teams" rightData={motoTeams} maxRightPts={motoTeams[0]?.points ?? 1}
                     defaultLimit={10}
-                    note="After Round 6 · Catalan GP"
+                    note={motoRound ? `After Round ${motoRound}` : 'After Round 7 · Italian GP'}
                   />
                 )}
 

@@ -1,8 +1,8 @@
 # Active Work — PARAMNESIA PITWALL
 
 ## Trigger Phrase
-**"Renew race weekend results"** → Claude uses WebSearch/WebFetch to find latest results for all non-F1 series and edits `src/data/results-2026.ts` + `src/data/standings-2026.ts` directly. No scripts, no terminal. F1 is excluded (automated via API routes).
-Series: MotoGP, WEC, ELMS, IMSA, WRC, DTM.
+**"Renew race weekend results"** → Claude uses WebSearch/WebFetch to find latest results for the manually-maintained series and edits `src/data/results-2026.ts` + `src/data/standings-2026.ts` directly. No scripts, no terminal. F1 **and MotoGP** are excluded (automated via API routes).
+Series: WEC, ELMS, IMSA, WRC, DTM.
 
 ## Last Commits (2026-05-29)
 
@@ -23,11 +23,21 @@ F1 results and standings are **fully automated** via live API routes — never u
 - Static `F1_RESULTS_2026` / `F1_DRIVERS_2026` in data files = last-resort fallback only
 - `roundPoints` for sparklines merged from static data into live API response (by name match)
 
+## MotoGP Automation
+MotoGP results and standings are **fully automated** via the PulseLive (unofficial) API — never update manually:
+- `/api/motogp/results` — podiums per finished round, revalidates 5min
+- `/api/motogp/standings` — riders + teams (teams = sum of riders' pts), revalidates 1hr
+- All logic in `src/lib/motogp.ts`; routes are thin proxies (same pattern as F1)
+- Base `api.motogp.pulselive.com/motogp/v1`, GET only, no auth; season/category UUIDs hardcoded in lib
+- Stable per-season metadata in `src/lib/motogp.ts`: API long team name → app short name (logos+colours), bar-colour maps, rider-name formatter. Update only on team/livery changes, never per-race.
+- Static `MOTOGP_RIDERS_2026` / `MOTOGP_TEAMS_2026` / static MotoGP results = last-resort fallback only
+- Note: teams derived by summing rider points by team → includes one-rider wildcard entries (e.g. Yamaha Factory Racing) the official table omits
+
 ## Current Data Coverage
 
 ### Results (src/data/results-2026.ts)
 - F1: R1–4 static fallback (Australia → Miami); R5+ served live by /api/f1/results
-- MotoGP: R1–6 (Thailand → Catalunya GP)
+- MotoGP: R1–6 static fallback; all rounds served live by /api/motogp/results
 - WEC: R1 Imola, R2 Spa-Francorchamps (Hypercar + LMGT3 for each)
 - WRC: R1–6 (Monte Carlo → Rally Portugal)
 - IMSA GTP: R1–4 (Daytona → Laguna Seca)
