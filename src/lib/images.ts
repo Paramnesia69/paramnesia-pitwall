@@ -15,7 +15,7 @@ const F1_CDN_BASE =
 const LOCAL_CIRCUIT_MAPS: Record<string, string> = {
   // Versioned filename: service worker caches /circuits/* cache-first, so a new
   // URL is required to bust a stale copy when the asset changes.
-  'Circuit de la Sarthe': '/circuits/le-mans-sarthe.svg',
+  'Circuit de la Sarthe': '/circuits/le-mans-sarthe-v2.svg',
 };
 
 /** Maps circuit names → F1 CDN image filename (without _Circuit.png suffix) */

@@ -81,12 +81,10 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
                   background: `linear-gradient(135deg, ${SERIES_META[event.series].accent}25 0%, var(--pw-bg-elevated) 70%)`,
                 }}
               />
-              {/* Circuit map bleed. Local /circuits/* maps carry their own glow+shadow
-                  → render premium (normal blend); F1 CDN maps use screen-blend ghost. */}
+              {/* Circuit map bleed */}
               {(() => {
                 const circuitImg = getCircuitImage(event.circuit.name);
                 if (!circuitImg) return null;
-                const premium = circuitImg.startsWith('/circuits/');
                 return (
                   <div
                     className="absolute pointer-events-none select-none"
@@ -95,7 +93,7 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
                       left: 0,
                       right: '45%',
                       bottom: 0,
-                      opacity: premium ? 0.5 : 0.16,
+                      opacity: 0.16,
                     }}
                   >
                     <Image
@@ -103,7 +101,7 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
                       alt=""
                       fill
                       className="object-contain"
-                      style={premium ? undefined : { filter: 'brightness(3) contrast(1.2) saturate(0.5)', mixBlendMode: 'screen' }}
+                      style={{ filter: 'brightness(3) contrast(1.2) saturate(0.5)', mixBlendMode: 'screen' }}
                     />
                   </div>
                 );

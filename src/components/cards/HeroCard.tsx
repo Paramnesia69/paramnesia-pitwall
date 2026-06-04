@@ -28,35 +28,31 @@ export default function HeroCard({ event }: HeroCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 150, damping: 20 }}
     >
-      {/* Circuit map — background diagram. Local /circuits/* maps carry their own
-          glow+shadow → render premium (normal blend); F1 CDN maps use screen-blend ghost. */}
-      {circuitImg && (() => {
-        const premium = circuitImg.startsWith('/circuits/');
-        return (
-          <div
-            className="absolute pointer-events-none select-none"
+      {/* Circuit map — background diagram */}
+      {circuitImg && (
+        <div
+          className="absolute pointer-events-none select-none"
+          style={{
+            top: 0,
+            left: '30%',
+            right: '44%',
+            bottom: '32%',
+            opacity: 0.15,
+            zIndex: 0,
+          }}
+        >
+          <Image
+            src={circuitImg}
+            alt=""
+            fill
+            className="object-contain"
             style={{
-              top: premium ? '6%' : 0,
-              left: premium ? '34%' : '30%',
-              right: premium ? '8%' : '44%',
-              bottom: premium ? '14%' : '32%',
-              opacity: premium ? 0.55 : 0.15,
-              zIndex: 0,
+              filter: 'brightness(3) contrast(1.2) saturate(0.5)',
+              mixBlendMode: 'screen',
             }}
-          >
-            <Image
-              src={circuitImg}
-              alt=""
-              fill
-              className="object-contain"
-              style={premium ? undefined : {
-                filter: 'brightness(3) contrast(1.2) saturate(0.5)',
-                mixBlendMode: 'screen',
-              }}
-            />
-          </div>
-        );
-      })()}
+          />
+        </div>
+      )}
 
       {/* Large faded series logo — right side */}
       {meta.logo && (

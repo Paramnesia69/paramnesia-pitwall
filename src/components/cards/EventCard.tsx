@@ -71,33 +71,28 @@ export default memo(function EventCard({ event }: EventCardProps) {
           </div>
         )}
 
-        {/* Circuit map watermark — lower-left zone, clear of series logo.
-            Local /circuits/* maps carry their own glow+shadow → render premium
-            (normal blend, higher opacity); F1 CDN maps use the screen-blend ghost. */}
-        {circuitImg && (() => {
-          const premium = circuitImg.startsWith('/circuits/');
-          return (
-            <div
-              className="absolute pointer-events-none select-none"
-              style={{
-                bottom: 0,
-                left: 0,
-                top: '52%',
-                right: '48%',
-                opacity: premium ? 0.5 : 0.14,
-                zIndex: 0,
-              }}
-            >
-              <Image
-                src={circuitImg}
-                alt=""
-                fill
-                className="object-contain"
-                style={premium ? undefined : { filter: 'brightness(3) contrast(1.2) saturate(0.5)', mixBlendMode: 'screen' }}
-              />
-            </div>
-          );
-        })()}
+        {/* Circuit map watermark — lower-left zone, clear of series logo */}
+        {circuitImg && (
+          <div
+            className="absolute pointer-events-none select-none"
+            style={{
+              bottom: 0,
+              left: 0,
+              top: '52%',
+              right: '48%',
+              opacity: 0.14,
+              zIndex: 0,
+            }}
+          >
+            <Image
+              src={circuitImg}
+              alt=""
+              fill
+              className="object-contain"
+              style={{ filter: 'brightness(3) contrast(1.2) saturate(0.5)', mixBlendMode: 'screen' }}
+            />
+          </div>
+        )}
 
         {/* Header row */}
         <div className="flex items-center justify-between gap-2 flex-wrap relative" style={{ transform: 'translateZ(20px)' }}>
