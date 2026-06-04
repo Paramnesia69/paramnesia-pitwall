@@ -11,6 +11,7 @@
  */
 import type { DriverStanding, ConstructorStanding } from '@/data/standings-2026';
 import type { RaceResult } from '@/data/results-2026';
+import type { SessionResults, ResultEntry, WeekendSessionType } from '@/types';
 
 const API = 'https://api.motogp.pulselive.com/motogp/v1';
 const SEASON_2026 = 'e88b4e43-2209-47aa-8e83-0e0b1cedde6e';
@@ -218,4 +219,74 @@ export async function getMotoGpResults(): Promise<RaceResult[] | null> {
   if (!results.length) return null;
 
   return results.sort((a, b) => b.round - a.round);
+}
+
+/* ── Weekend session results (race + sprint full classifications) ── */
+interface ApiWeekendEntry {
+  position: number | null;
+  rider: { full_name: string };
+  team: { name: string };
+  time?: string;
+  gap?: { first?: string; lap?: string };
+  status?: string; // INSTND = classified, OUTSTND = DNF
+}
+
+function formatGap(gap?: { first?: string; lap?: string }): string | undefined {
+  if (!gap) return undefined;
+  const lap = parseInt(gap.lap ?? '0', 10);
+  if (lap > 0) return `+${lap} lap${lap > 1 ? 's' : ''}`;
+  return gap.first && gap.first !== '0.000' ? `+${gap.first}` : undefined;
+}
+
+// Map a race/sprint classification to ResultEntry[]. DNFs (position null) are
+// listed after finishers and flagged.
+function mapClassification(cls: ApiWeekendEntry[]): ResultEntry[] {
+  const maxPos = cls.reduce((m, c) => Math.max(m, c.position ?? 0), 0);
+  let dnfPos = maxPos;
+  return cls.map((c) => {
+    const finished = c.status === 'INSTND' && c.position != null;
+    const pos = c.position ?? ++dnfPos;
+    return {
+      pos,
+      driver: c.rider.full_name,
+      team: teamName(c.team.name),
+      time: finished && pos === 1 ? c.time : undefined,
+      gap: finished && pos > 1 ? formatGap(c.gap) : undefined,
+      dnf: !finished,
+    };
+  });
+}
+
+export async function getMotoGpWeekend(
+  round: number,
+): Promise<{ round: number; sessions: SessionResults[] } | null> {
+  const rounds = await getFinishedRounds();
+  const event = rounds.find((e) => e.round === round);
+  if (!event) return null;
+
+  const sessionsList = await get<ApiSession[] | { sessions: ApiSession[] }>(
+    `/results/sessions?eventUuid=${event.id}&categoryUuid=${CATEGORY_MOTOGP}`,
+    3600,
+  );
+  const list = Array.isArray(sessionsList) ? sessionsList : sessionsList?.sessions;
+  if (!list?.length) return null;
+
+  const wanted: { api: string; type: WeekendSessionType }[] = [
+    { api: 'RAC', type: 'race' },
+    { api: 'SPR', type: 'sprint' },
+  ];
+
+  const sessions: SessionResults[] = [];
+  for (const w of wanted) {
+    const sess = list.find((s) => s.type === w.api);
+    if (!sess) continue;
+    const cls = await get<{ classification: ApiWeekendEntry[] }>(
+      `/results/session/${sess.id}/classification?seasonYear=2026`,
+      300,
+    );
+    if (!cls?.classification?.length) continue;
+    sessions.push({ type: w.type, entries: mapClassification(cls.classification) });
+  }
+
+  return sessions.length ? { round, sessions } : null;
 }

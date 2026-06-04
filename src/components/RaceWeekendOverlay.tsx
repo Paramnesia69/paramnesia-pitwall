@@ -212,14 +212,16 @@ interface WeekendApiResponse {
   sessions: SessionResults[];
 }
 
-function useF1WeekendData(round: number | null) {
+// Fetches /api/{series}/weekend/{round} — works for F1 (Jolpica) and MotoGP
+// (PulseLive). Other series have no live weekend endpoint → series is null.
+function useWeekendData(series: 'f1' | 'motogp' | null, round: number | null) {
   const [data, setData] = useState<WeekendApiResponse | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchData = useCallback(async (r: number) => {
+  const fetchData = useCallback(async (s: string, r: number) => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/f1/weekend/${r}`);
+      const res = await fetch(`/api/${s}/weekend/${r}`);
       if (res.ok) {
         const json = await res.json() as WeekendApiResponse;
         setData(json);
@@ -230,10 +232,11 @@ function useF1WeekendData(round: number | null) {
   }, []);
 
   useEffect(() => {
-    if (round !== null) {
-      fetchData(round);
+    setData(null);
+    if (series && round !== null) {
+      fetchData(series, round);
     }
-  }, [round, fetchData]);
+  }, [series, round, fetchData]);
 
   return { data, loading };
 }
@@ -244,13 +247,18 @@ export default function RaceWeekendOverlay() {
   const { selectedResult: result, closeResult } = useStore();
 
   const isF1 = result?.series === 'f1';
-  const { data: f1Data, loading: f1Loading } = useF1WeekendData(
-    isF1 && result ? result.round : null,
+  // F1 + MotoGP have live weekend endpoints; other series fall back to static.
+  const liveSeries = result?.series === 'f1' ? 'f1'
+    : result?.series === 'motogp' ? 'motogp'
+    : null;
+  const { data: weekendData, loading: weekendLoading } = useWeekendData(
+    liveSeries,
+    liveSeries && result ? result.round : null,
   );
 
-  // Sessions: F1 uses API data; others use static data
-  const sessions: SessionResults[] = isF1
-    ? (f1Data?.sessions ?? [])
+  // Sessions: F1/MotoGP use API data; others use static data
+  const sessions: SessionResults[] = liveSeries
+    ? (weekendData?.sessions ?? [])
     : (result?.sessions ?? []);
 
   // Sort sessions in display order (race first)
@@ -266,7 +274,7 @@ export default function RaceWeekendOverlay() {
       setActiveTab(sortedSessions[0].type);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [result?.id, f1Data]);
+  }, [result?.id, weekendData]);
 
   // Lock body scroll when overlay open
   useEffect(() => {
@@ -456,7 +464,7 @@ export default function RaceWeekendOverlay() {
 
             {/* Session content — flex-1 + overflow-y-auto: ONLY this section scrolls */}
             <div className="flex-1 overflow-y-auto px-3 py-4">
-              {f1Loading && isF1 ? (
+              {weekendLoading && liveSeries ? (
                 <div className="flex items-center justify-center py-16 gap-2" style={{ color: 'var(--pw-text-tertiary)' }}>
                   <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
