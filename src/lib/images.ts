@@ -7,6 +7,15 @@
 const F1_CDN_BASE =
   'https://media.formula1.com/image/upload/f_auto/q_auto/v1677245035/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/';
 
+/**
+ * Local circuit-map assets for non-F1 circuits the F1 CDN doesn't cover.
+ * White line-art on transparent bg — matches the F1 CDN style so the same
+ * screen-blend watermark treatment works (HeroCard, EventCard, overlay).
+ */
+const LOCAL_CIRCUIT_MAPS: Record<string, string> = {
+  'Circuit de la Sarthe': '/circuits/le-mans.svg',
+};
+
 /** Maps circuit names → F1 CDN image filename (without _Circuit.png suffix) */
 const CIRCUIT_CDN_NAMES: Record<string, string> = {
   // ── F1 circuits ──────────────────────────────────────────
@@ -49,6 +58,10 @@ const CIRCUIT_CDN_NAMES: Record<string, string> = {
  * Falls back to fuzzy matching if no direct match is found.
  */
 export function getCircuitImage(circuitName: string): string | undefined {
+  // Local assets first (non-F1 circuits)
+  const local = LOCAL_CIRCUIT_MAPS[circuitName];
+  if (local) return local;
+
   // Direct match
   const cdnName = CIRCUIT_CDN_NAMES[circuitName];
   if (cdnName) return `${F1_CDN_BASE}${cdnName}_Circuit.png`;
