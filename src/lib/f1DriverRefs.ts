@@ -23,6 +23,33 @@ export const F1_DRIVER_REFS_FULL: Record<string, string> = {
   'Liam Lawson': 'lawson',
 };
 
+/**
+ * Maps Jolpica driverRef → slug used in F1 official CDN driver profile images.
+ * URL pattern: https://media.formula1.com/image/upload/f_auto,c_limit,q_auto,w_1320/content/dam/fom-website/drivers/2026Drivers/{slug}.png
+ */
+export const F1_CDN_SLUGS: Record<string, string> = {
+  russell:       'george-russell',
+  antonelli:     'kimi-antonelli',
+  leclerc:       'charles-leclerc',
+  hamilton:      'lewis-hamilton',
+  norris:        'lando-norris',
+  piastri:       'oscar-piastri',
+  max_verstappen:'max-verstappen',
+  lawson:        'liam-lawson',
+  alonso:        'fernando-alonso',
+  stroll:        'lance-stroll',
+  gasly:         'pierre-gasly',
+  ocon:          'esteban-ocon',
+  bearman:       'oliver-bearman',
+  hulkenberg:    'nico-hulkenberg',
+  carlos_sainz:  'carlos-sainz',
+  colapinto:     'franco-colapinto',
+  tsunoda:       'yuki-tsunoda',
+  hadjar:        'isack-hadjar',
+  bortoleto:     'gabriel-bortoleto',
+  doohan:        'jack-doohan',
+};
+
 /** Maps abbreviated driver names (as shown in standings) → Jolpica driverRef */
 export const F1_DRIVER_REFS: Record<string, string> = {
   'G. Russell':    'russell',

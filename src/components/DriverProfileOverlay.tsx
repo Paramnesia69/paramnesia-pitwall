@@ -209,13 +209,14 @@ export default function DriverProfileOverlay() {
                   <img
                     src={profile.headshotUrl}
                     alt={d.name}
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
                     style={{
                       height: 220,
                       width: 'auto',
                       objectFit: 'contain',
                       borderRadius: 12,
                       opacity: 1,
-                      filter: 'url(#driver-sharpen) drop-shadow(0 8px 24px rgba(0,0,0,0.65))',
+                      filter: 'drop-shadow(0 8px 24px rgba(0,0,0,0.65))',
                     }}
                   />
                 </div>

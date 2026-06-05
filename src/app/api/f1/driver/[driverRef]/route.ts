@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import type { DriverProfile } from '@/types';
+import { F1_CDN_SLUGS } from '@/lib/f1DriverRefs';
 
 export const runtime = 'nodejs';
 
@@ -47,8 +48,14 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ dri
       }
     : null;
 
-  let headshotUrl: string | null = null;
-  if (d.permanentNumber) {
+  // Primary: F1 official CDN — high-res 1320px driver profile cutout
+  const cdnSlug = F1_CDN_SLUGS[driverRef];
+  let headshotUrl: string | null = cdnSlug
+    ? `https://media.formula1.com/image/upload/f_auto,c_limit,q_auto,w_1320/content/dam/fom-website/drivers/2026Drivers/${cdnSlug}.png`
+    : null;
+
+  // Fallback: OpenF1 thumbnail (low-res but covers edge cases)
+  if (!headshotUrl && d.permanentNumber) {
     try {
       const openF1Res = await fetch(
         `${OPENF1}/drivers?driver_number=${d.permanentNumber}&session_key=latest`,
@@ -56,13 +63,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ dri
       );
       if (openF1Res.ok) {
         const of1 = await openF1Res.json();
-        const raw: string | null = of1?.[0]?.headshot_url ?? null;
-        // Boost Cloudinary quality and request 2× display size for crisp rendering
-        headshotUrl = raw ? raw
-          .replace(/q_auto/g, 'q_100')
-          .replace(/w_\d+/g, 'w_400')
-          .replace(/h_\d+/g, 'h_400')
-          : null;
+        headshotUrl = of1?.[0]?.headshot_url ?? null;
       }
     } catch { /* headshot is optional */ }
   }
