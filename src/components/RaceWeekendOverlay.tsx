@@ -7,6 +7,60 @@ import { SERIES_META } from '@/types';
 import type { SessionResults, WeekendSessionType, RaceResult } from '@/types';
 import { useStore } from '@/store';
 import { getTeamLogo } from '@/lib/teamLogos';
+import StarRating from '@/components/ui/StarRating';
+
+// ─── Diary editor (feature 5) ───────────────────────────────────────────────────
+// Watched + rating + note for a finished race. Persists to the diary store with a
+// denormalized snapshot so the DiaryView survives after the race leaves the feed.
+function DiaryEditor({ result, accentColor }: { result: RaceResult; accentColor: string }) {
+  const entry = useStore((s) => s.diary[result.id]);
+  const setDiaryEntry = useStore((s) => s.setDiaryEntry);
+  const toggleWatched = useStore((s) => s.toggleWatched);
+  const meta = { eventName: result.name, series: result.series, eventDate: result.date };
+  const watched = entry?.watched ?? false;
+
+  return (
+    <div className="relative mt-4 p-3 rounded-lg" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--pw-glass-border)' }}>
+      <div className="flex items-center justify-between mb-2.5">
+        <span className="text-[9px] font-bold uppercase tracking-[0.18em]" style={{ color: 'var(--pw-text-tertiary)' }}>
+          Your Log
+        </span>
+        <button
+          onClick={() => toggleWatched(result.id, meta)}
+          className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider px-2 py-1 rounded-full transition-colors"
+          style={{
+            background: watched ? `${accentColor}20` : 'var(--pw-glass-bg)',
+            border: `1px solid ${watched ? accentColor : 'var(--pw-glass-border)'}`,
+            color: watched ? accentColor : 'var(--pw-text-tertiary)',
+          }}
+        >
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            {watched ? <polyline points="20 6 9 17 4 12" /> : <><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></>}
+          </svg>
+          {watched ? 'Watched' : 'Mark watched'}
+        </button>
+      </div>
+      <div className="flex items-center gap-2 mb-2.5">
+        <StarRating
+          value={entry?.rating ?? 0}
+          onChange={(n) => setDiaryEntry(result.id, { rating: n, ...meta })}
+          size={18}
+        />
+        {entry?.rating ? (
+          <span className="text-[10px] font-mono" style={{ color: 'var(--pw-text-tertiary)' }}>{entry.rating}/5</span>
+        ) : null}
+      </div>
+      <textarea
+        value={entry?.note ?? ''}
+        onChange={(e) => setDiaryEntry(result.id, { note: e.target.value, ...meta })}
+        placeholder="Add a note — best overtake, last-lap drama, verdict…"
+        rows={2}
+        className="w-full text-xs rounded-md px-2.5 py-2 resize-none outline-none transition-colors"
+        style={{ background: 'var(--pw-bg-primary)', border: '1px solid var(--pw-glass-border)', color: 'var(--pw-text-secondary)' }}
+      />
+    </div>
+  );
+}
 
 // ─── Session tab config ────────────────────────────────────────────────────────
 
@@ -422,6 +476,9 @@ export default function RaceWeekendOverlay() {
                     </div>
                   ))}
                 </div>
+
+                {/* Personal race diary — watched / rating / note */}
+                <DiaryEditor result={result} accentColor={accentColor} />
               </div>
             </div>
 

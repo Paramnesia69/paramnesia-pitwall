@@ -8,6 +8,8 @@ import { SERIES_META } from '@/types';
 import type { RaceResult } from '@/data/results-2026';
 import { ALL_RESULTS_2026, F1_RESULTS_2026 } from '@/data/results-2026';
 import SeriesBadge from '@/components/ui/SeriesBadge';
+import WatchedButton from '@/components/ui/WatchedButton';
+import StarRating from '@/components/ui/StarRating';
 import { useStore } from '@/store';
 
 interface RecentResultsProps {
@@ -51,16 +53,19 @@ function ClassBadge({ cls }: { cls: ResultClass }) {
 function PodiumCard({ result }: { result: RaceResult }) {
   const meta = SERIES_META[result.series];
   const cls = getResultClass(result);
-  const { openResult } = useStore();
+  const openResult = useStore((s) => s.openResult);
+  const entry = useStore((s) => s.diary[result.id]);
+  const watched = entry?.watched ?? false;
+  const rating = entry?.rating ?? 0;
   const handleClick = useCallback(() => openResult(result), [openResult, result]);
 
   return (
     <motion.div
       className="pw-glass p-4 relative overflow-hidden cursor-pointer"
       initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
+      animate={{ opacity: watched ? 0.5 : 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      whileHover={{ scale: 1.015, boxShadow: `0 0 0 1px ${meta.accent}30, 0 8px 32px ${meta.accent}10` }}
+      whileHover={{ scale: 1.015, opacity: 1, boxShadow: `0 0 0 1px ${meta.accent}30, 0 8px 32px ${meta.accent}10` }}
       onClick={handleClick}
       role="button"
       tabIndex={0}
@@ -89,9 +94,19 @@ function PodiumCard({ result }: { result: RaceResult }) {
           </span>
           {cls && <ClassBadge cls={cls} />}
         </div>
-        <span className="text-[10px] font-mono" style={{ color: 'var(--pw-text-tertiary)' }}>
-          {new Date(result.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] font-mono" style={{ color: 'var(--pw-text-tertiary)' }}>
+            {new Date(result.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+          </span>
+          <WatchedButton
+            id={result.id}
+            name={result.name}
+            series={result.series}
+            date={result.date}
+            accentColor={meta.accent}
+            size="sm"
+          />
+        </div>
       </div>
 
       {/* Race name */}
@@ -152,9 +167,11 @@ function PodiumCard({ result }: { result: RaceResult }) {
         })}
       </div>
 
-      {/* Fastest lap + view details */}
+      {/* Fastest lap + rating + view details */}
       <div className="flex items-center gap-1.5 mt-2.5 pt-2" style={{ borderTop: '1px solid var(--pw-glass-border)' }}>
-        {result.fastestLap ? (
+        {rating > 0 ? (
+          <StarRating value={rating} size={11} />
+        ) : result.fastestLap ? (
           <>
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#A855F7" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10" />

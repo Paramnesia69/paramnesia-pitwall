@@ -7,6 +7,7 @@ import Image from 'next/image';
 import type { NormalizedRaceEvent, SeriesId } from '@/types';
 import { SERIES_META } from '@/types';
 import { getThisWeekendEvents } from '@/lib/weekend';
+import { getWeekendConflicts } from '@/lib/conflicts';
 import HeroCard from '@/components/cards/HeroCard';
 import EventCard from '@/components/cards/EventCard';
 import ThisWeekend from '@/components/ThisWeekend';
@@ -27,6 +28,7 @@ import { ALL_RESULTS_2026 } from '@/data/results-2026';
 /* ── Lazy-loaded below-fold components ──────────── */
 const StandingsPanel = lazy(() => import('@/components/StandingsPanel'));
 const RecentResults = lazy(() => import('@/components/RecentResults'));
+const DiaryView = lazy(() => import('@/components/DiaryView'));
 const UpcomingTimeline = lazy(() => import('@/components/UpcomingTimeline'));
 const EventDetailOverlay = lazy(() => import('@/components/EventDetailOverlay'));
 const RaceWeekendOverlay = lazy(() => import('@/components/RaceWeekendOverlay'));
@@ -109,6 +111,13 @@ export default function Dashboard({ featured, upcoming, newsFeedSlot }: Dashboar
     if (activeFilter === 'all') return all;
     return all.filter((e) => e.series === activeFilter);
   }, [liveUpcoming, activeFilter]);
+
+  // Schedule conflicts among favorited series this weekend (computed on the full set)
+  const favorites = useStore((s) => s.favorites);
+  const conflicts = useMemo(
+    () => getWeekendConflicts(liveUpcoming, favorites),
+    [liveUpcoming, favorites],
+  );
 
   const cardEvents = filtered.slice(0, 9);
   const timelineEvents = filtered.slice(9, 20);
@@ -252,7 +261,7 @@ export default function Dashboard({ featured, upcoming, newsFeedSlot }: Dashboar
 
       {/* ── This Weekend ─────────────────────── */}
       {weekendEvents.length > 0 && (
-        <ThisWeekend events={weekendEvents} />
+        <ThisWeekend events={weekendEvents} conflicts={conflicts} />
       )}
 
       {/* ── Championship Standings ─────────────── */}
@@ -268,6 +277,11 @@ export default function Dashboard({ featured, upcoming, newsFeedSlot }: Dashboar
       {/* ── Recent Results ──────────────────── */}
       <Suspense>
         <RecentResults activeFilter={activeFilter} />
+      </Suspense>
+
+      {/* ── Race Diary — your watched/rated races ── */}
+      <Suspense>
+        <DiaryView activeFilter={activeFilter} />
       </Suspense>
 
       {/* ── Latest News — streamed from server ── */}

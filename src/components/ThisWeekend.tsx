@@ -10,9 +10,11 @@ import Countdown from '@/components/ui/Countdown';
 import SeriesBadge from '@/components/ui/SeriesBadge';
 import { WeatherBadgeCompact } from '@/components/ui/WeatherBadge';
 import { getCountryFlag } from '@/lib/countryFlag';
+import { sessionKey, type ConflictInfo } from '@/lib/conflicts';
 
 interface ThisWeekendProps {
   events: NormalizedRaceEvent[];
+  conflicts?: ConflictInfo;
 }
 
 function getDayLabel(event: NormalizedRaceEvent): string {
@@ -21,9 +23,10 @@ function getDayLabel(event: NormalizedRaceEvent): string {
   return date.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric', timeZone: 'Asia/Jerusalem' });
 }
 
-export default function ThisWeekend({ events }: ThisWeekendProps) {
+export default function ThisWeekend({ events, conflicts }: ThisWeekendProps) {
   const openEvent = useStore((s) => s.openEvent);
   if (events.length === 0) return null;
+  const clashCount = conflicts?.count ?? 0;
 
   // Group events by their next session's day
   const groups: { label: string; events: NormalizedRaceEvent[] }[] = [];
@@ -50,6 +53,20 @@ export default function ThisWeekend({ events }: ThisWeekendProps) {
         <h3 className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: 'var(--pw-text-tertiary)' }}>
           This Weekend in Motorsport
         </h3>
+        {clashCount > 0 && (
+          <span
+            className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full"
+            style={{ color: '#FFB800', background: '#FFB80012', border: '1px solid #FFB80030' }}
+            title="Two or more of your favorited series have overlapping sessions this weekend"
+          >
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+              <line x1="12" y1="9" x2="12" y2="13" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+            {clashCount} clash{clashCount > 1 ? 'es' : ''}
+          </span>
+        )}
         <div className="flex-1 h-px" style={{ background: 'var(--pw-glass-border)' }} />
       </div>
 
@@ -69,6 +86,9 @@ export default function ThisWeekend({ events }: ThisWeekendProps) {
                 const meta = SERIES_META[event.series];
                 const nextSession = event.sessions.find((s) => s.state !== 'finished');
                 const flag = getCountryFlag(event.circuit.countryCode);
+                const clashes = nextSession
+                  ? conflicts?.byKey.get(sessionKey(event.id, nextSession.startTime))
+                  : undefined;
 
                 return (
                   <motion.div
@@ -113,8 +133,19 @@ export default function ThisWeekend({ events }: ThisWeekendProps) {
                     {/* Next session countdown or time */}
                     {nextSession && (
                       <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-mono" style={{ color: 'var(--pw-text-tertiary)' }}>
-                          {nextSession.name} {formatTimeISR(nextSession.startTime)}
+                        <span className="text-[10px] font-mono flex items-center gap-1" style={{ color: clashes ? '#FFB800' : 'var(--pw-text-tertiary)' }}>
+                          {clashes && (
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+                              aria-label="Schedule clash"
+                            >
+                              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                              <line x1="12" y1="9" x2="12" y2="13" />
+                              <line x1="12" y1="17" x2="12.01" y2="17" />
+                            </svg>
+                          )}
+                          <span title={clashes ? `Clashes with: ${clashes.join(', ')}` : undefined}>
+                            {nextSession.name} {formatTimeISR(nextSession.startTime)}
+                          </span>
                         </span>
                         <Countdown targetDate={nextSession.startTime} compact />
                       </div>

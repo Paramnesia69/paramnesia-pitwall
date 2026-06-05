@@ -22,6 +22,24 @@ export interface Reminder {
   fired: boolean;
 }
 
+export interface DiaryEntry {
+  /** Whether the user has marked this event as watched */
+  watched: boolean;
+  /** Personal star rating 1–5 */
+  rating?: number;
+  /** Free-text note */
+  note?: string;
+  /** ISO timestamp of last edit — drives chronological diary ordering */
+  updatedAt: string;
+  /** Denormalized snapshot so the diary survives after the event leaves the live feed */
+  eventName?: string;
+  series?: SeriesId;
+  eventDate?: string;
+}
+
+/** Snapshot passed when creating a diary entry so it can render standalone */
+export type DiaryMeta = Pick<DiaryEntry, 'eventName' | 'series' | 'eventDate'>;
+
 interface PitwallStore {
   favorites: SeriesId[];
   toggleFavorite: (series: SeriesId) => void;
@@ -44,6 +62,13 @@ interface PitwallStore {
   markFired: (id: string) => void;
   getReminder: (eventId: string, sessionName: string) => Reminder | undefined;
   clearExpiredReminders: () => void;
+
+  /** Race diary — keyed by eventId; unifies watched-state (7) + rating/note (5) */
+  diary: Record<string, DiaryEntry>;
+  setDiaryEntry: (eventId: string, partial: Partial<Omit<DiaryEntry, 'updatedAt'>>) => void;
+  toggleWatched: (eventId: string, meta?: DiaryMeta) => void;
+  getDiaryEntry: (eventId: string) => DiaryEntry | undefined;
+  removeDiaryEntry: (eventId: string) => void;
 }
 
 export const useStore = create<PitwallStore>()(
@@ -137,6 +162,40 @@ export const useStore = create<PitwallStore>()(
             (r) => new Date(r.sessionStart).getTime() > Date.now() - 3600_000,
           ),
         })),
+
+      diary: {},
+      setDiaryEntry: (eventId, partial) =>
+        set((state) => {
+          const existing = state.diary[eventId] ?? { watched: false };
+          return {
+            diary: {
+              ...state.diary,
+              [eventId]: { ...existing, ...partial, updatedAt: new Date().toISOString() },
+            },
+          };
+        }),
+      toggleWatched: (eventId, meta) =>
+        set((state) => {
+          const existing = state.diary[eventId] ?? { watched: false };
+          return {
+            diary: {
+              ...state.diary,
+              [eventId]: {
+                ...existing,
+                ...meta,
+                watched: !existing.watched,
+                updatedAt: new Date().toISOString(),
+              },
+            },
+          };
+        }),
+      getDiaryEntry: (eventId) => get().diary[eventId],
+      removeDiaryEntry: (eventId) =>
+        set((state) => {
+          const next = { ...state.diary };
+          delete next[eventId];
+          return { diary: next };
+        }),
     }),
     {
       name: 'pitwall-store',
@@ -144,6 +203,7 @@ export const useStore = create<PitwallStore>()(
         favorites: state.favorites,
         theme: state.theme,
         reminders: state.reminders,
+        diary: state.diary,
       }),
     },
   ),
