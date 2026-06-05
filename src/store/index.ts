@@ -4,6 +4,18 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { SeriesId, RaceResult } from '@/types';
 
+/** Transient — not persisted; represents an open driver-profile card */
+export interface SelectedDriver {
+  /** Jolpica driverRef (e.g. "max_verstappen"). Empty string for non-F1. */
+  ref: string;
+  name: string;       // display name as shown in standings ("M. Verstappen")
+  team: string;
+  teamColor: string;
+  series: SeriesId;
+  points: number;
+  pos: number;
+}
+
 export type Theme = 'dark' | 'light';
 
 export interface Reminder {
@@ -52,6 +64,10 @@ interface PitwallStore {
   selectedResult: RaceResult | null;
   openResult: (result: RaceResult) => void;
   closeResult: () => void;
+
+  selectedDriver: SelectedDriver | null;
+  openDriver: (driver: SelectedDriver) => void;
+  closeDriver: () => void;
 
   theme: Theme;
   toggleTheme: () => void;
@@ -102,6 +118,10 @@ export const useStore = create<PitwallStore>()(
           window.history.replaceState({}, '', url.toString());
         }
       },
+
+      selectedDriver: null,
+      openDriver: (driver) => set({ selectedDriver: driver }),
+      closeDriver: () => set({ selectedDriver: null }),
 
       selectedResult: null,
       openResult: (result) => {

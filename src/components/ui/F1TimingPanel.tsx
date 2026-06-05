@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { getTeamLogo } from '@/lib/teamLogos';
+import { useStore } from '@/store';
 
 interface TyreStint {
   compound: string;
@@ -209,9 +210,21 @@ const SESSION_LABEL: Record<string, string> = {
   'Sprint Qualifying': 'Sprint Qualifying', 'Practice 1': 'FP1', 'Practice 2': 'FP2', 'Practice 3': 'FP3',
 };
 
+const F1_REFS: Record<string, string> = {
+  'MAX VERSTAPPEN': 'max_verstappen', 'LEWIS HAMILTON': 'hamilton', 'CHARLES LECLERC': 'leclerc',
+  'LANDO NORRIS': 'norris', 'OSCAR PIASTRI': 'piastri', 'GEORGE RUSSELL': 'russell',
+  'ANDREA KIMI ANTONELLI': 'antonelli', 'KIMI ANTONELLI': 'antonelli',
+  'FERNANDO ALONSO': 'alonso', 'LANCE STROLL': 'stroll', 'PIERRE GASLY': 'gasly',
+  'ESTEBAN OCON': 'ocon', 'OLIVER BEARMAN': 'bearman', 'NICO HULKENBERG': 'hulkenberg',
+  'CARLOS SAINZ': 'carlos_sainz', 'FRANCO COLAPINTO': 'colapinto', 'YUKI TSUNODA': 'tsunoda',
+  'ISACK HADJAR': 'hadjar', 'GABRIEL BORTOLETO': 'bortoleto', 'JACK DOOHAN': 'doohan',
+  'LIAM LAWSON': 'lawson',
+};
+
 export default function F1TimingPanel({ eventId, accentColor, eventState }: Props) {
   const [data, setData] = useState<TimingData | null>(null);
   const [loading, setLoading] = useState(true);
+  const openDriver = useStore((s) => s.openDriver);
 
   const fetchTiming = useCallback(async () => {
     try {
@@ -332,7 +345,17 @@ export default function F1TimingPanel({ eventId, accentColor, eventState }: Prop
                   <span className="w-1 h-4 rounded-full flex-shrink-0" style={{ background: `#${r.teamColor}` }} />
                 )}
 
-                <span className="w-9 text-xs font-bold tracking-wider flex-shrink-0">{r.acronym}</span>
+                {F1_REFS[r.fullName.toUpperCase()] ? (
+                  <button
+                    className="w-9 text-xs font-bold tracking-wider flex-shrink-0 text-left hover:opacity-70 transition-opacity"
+                    onClick={() => openDriver({ ref: F1_REFS[r.fullName.toUpperCase()], name: r.acronym, team: r.team, teamColor: `#${r.teamColor}`, series: 'f1', points: 0, pos: r.position })}
+                    title={r.fullName}
+                  >
+                    {r.acronym}
+                  </button>
+                ) : (
+                  <span className="w-9 text-xs font-bold tracking-wider flex-shrink-0">{r.acronym}</span>
+                )}
                 <span className="text-[11px] flex-1 truncate" style={{ color: 'var(--pw-text-tertiary)' }}>{r.team}</span>
 
                 {/* Current tyre compound (feature 2) */}

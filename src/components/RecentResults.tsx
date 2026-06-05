@@ -54,10 +54,22 @@ function PodiumCard({ result }: { result: RaceResult }) {
   const meta = SERIES_META[result.series];
   const cls = getResultClass(result);
   const openResult = useStore((s) => s.openResult);
+  const openDriver = useStore((s) => s.openDriver);
   const entry = useStore((s) => s.diary[result.id]);
   const watched = entry?.watched ?? false;
   const rating = entry?.rating ?? 0;
   const handleClick = useCallback(() => openResult(result), [openResult, result]);
+
+  const F1_DRIVER_REFS: Record<string, string> = {
+    'Max Verstappen': 'max_verstappen', 'Lewis Hamilton': 'hamilton', 'Charles Leclerc': 'leclerc',
+    'Lando Norris': 'norris', 'Oscar Piastri': 'piastri', 'George Russell': 'russell',
+    'Andrea Kimi Antonelli': 'antonelli', 'Kimi Antonelli': 'antonelli',
+    'Fernando Alonso': 'alonso', 'Lance Stroll': 'stroll', 'Pierre Gasly': 'gasly',
+    'Esteban Ocon': 'ocon', 'Oliver Bearman': 'bearman', 'Nico Hulkenberg': 'hulkenberg',
+    'Carlos Sainz': 'carlos_sainz', 'Franco Colapinto': 'colapinto', 'Yuki Tsunoda': 'tsunoda',
+    'Isack Hadjar': 'hadjar', 'Gabriel Bortoleto': 'bortoleto', 'Jack Doohan': 'doohan',
+    'Liam Lawson': 'lawson',
+  };
 
   return (
     <motion.div
@@ -157,7 +169,19 @@ function PodiumCard({ result }: { result: RaceResult }) {
                 <div className="w-8 shrink-0" />
               )}
               <div className="flex-1 min-w-0">
-                <span className="text-xs font-medium truncate block">{p.driver}</span>
+                {result.series === 'f1' && F1_DRIVER_REFS[p.driver] ? (
+                  <button
+                    className="text-xs font-medium truncate block text-left hover:underline hover:opacity-80 transition-opacity"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openDriver({ ref: F1_DRIVER_REFS[p.driver], name: p.driver, team: p.team, teamColor: meta.accent, series: 'f1', points: 0, pos: p.pos });
+                    }}
+                  >
+                    {p.driver}
+                  </button>
+                ) : (
+                  <span className="text-xs font-medium truncate block">{p.driver}</span>
+                )}
               </div>
               <span className="text-[10px] shrink-0" style={{ color: 'var(--pw-text-tertiary)' }}>
                 {p.team}
