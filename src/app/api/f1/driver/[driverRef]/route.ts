@@ -56,7 +56,13 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ dri
       );
       if (openF1Res.ok) {
         const of1 = await openF1Res.json();
-        headshotUrl = of1?.[0]?.headshot_url ?? null;
+        const raw: string | null = of1?.[0]?.headshot_url ?? null;
+        // Boost Cloudinary quality and request 2× display size for crisp rendering
+        headshotUrl = raw ? raw
+          .replace(/q_auto/g, 'q_100')
+          .replace(/w_\d+/g, 'w_400')
+          .replace(/h_\d+/g, 'h_400')
+          : null;
       }
     } catch { /* headshot is optional */ }
   }
