@@ -43,7 +43,7 @@
 - **OpenGraph cards** — `/api/og?event=<id>` → 1200×630 PNG with series accent; wired via `generateMetadata`
 - **Manual overrides** — `src/data/overrides.json` → note banners, state overrides, stream links, forced hero
 
-### Live Intelligence & Personal Layer (Phases 1–3, shipped 2026-06-05)
+### Live Intelligence & Personal Layer (Phases 1–4, shipped 2026-06-05)
 - **Race Diary** — "Watched" toggle on result cards + event detail overlay; star rating (1–5) + free-text note; `DiaryView` component shows chronological watched/rated races; persisted in Zustand `diary` map
 - **Conflict Detector** — `getWeekendConflicts()` in `src/lib/conflicts.ts` detects overlapping sessions among favorited series; warning badge in `ThisWeekend.tsx` header
 - **Watched State** — `WatchedButton` on podium cards dims watched results (opacity 0.5); checkmark overlay; `StarRating` sub-component for diary ratings
@@ -53,6 +53,9 @@
 - **F1 timing: live_blocked state** — OpenF1 blocks anonymous access during live sessions; shows friendly "Timing paused" message with premium glass card instead of crashing
 - **Mini-Leaderboard** — Fixed bottom strip (`z-[190]`); Framer spring slide-up; collapsed = thin 44px bar with live session pills; expanded = glass cards per live session with series logo + event + circuit flag; collapse toggle; auto-hides when nothing live
 - **What's Live Badge** — Floating pill bottom-right (`z-[200]`); pulsing red dot + series logo + Live/Starting Soon + session name; arrow nav for multiple live sessions; click → `openEvent`; auto-hides when nothing live
+- **Driver Profiles** (Phase 4) — Click any F1 driver name in standings or results → right-panel slide-in (`DriverProfileOverlay`); career wins, seasons, nationality, DOB, headshot, 2026 pos/points; data from Jolpica + OpenF1 headshot; `SelectedDriver` state in Zustand (transient, not persisted)
+- **Points Trajectory chart** (Phase 4) — Expandable SVG multi-line chart below F1 standings in `StandingsPanel`; top-6 drivers; rounds as X-axis labels; built from `roundPoints` static data via `ChampionshipChart.tsx`
+- **Teammate H2H** (Phase 4) — Expandable qualifying battle bars per team pair below the points chart; lazy-loads `/api/f1/h2h` on first open; 10 hardcoded 2026 team pairings; Jolpica qualifying data
 
 ## Known Issues / Workarounds
 - `gtwce.png`, `wec.png`, `elms.png`, `nurburgring.jpg` have non-transparent backgrounds → use `mixBlendMode: screen` + `maskImage: radial-gradient(ellipse at center, black 30%, transparent 70%)` + `grayscale(1) contrast(2) brightness(3)` for series watermarks; never use these raw

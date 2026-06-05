@@ -49,10 +49,19 @@
       "Bash(cp /tmp/le-mans.svg public/circuits/le-mans.svg)",
       "Bash(python3 -c \"import xml.etree.ElementTree as ET; ET.parse\\('public/circuits/le-mans.svg'\\); print\\('valid svg'\\)\")",
       "Bash(sed -n '95,110p' src/components/EventDetailOverlay.tsx)",
-      "Bash(npx next *)"
+      "Bash(npx next *)",
+      "Bash(git -C /Users/paramnesia/Documents/Claude/paramnesia-pitwall show 7440aa7 -- src/components/StandingsPanel.tsx)",
+      "Bash(npm run *)",
+      "Bash(echo \"PID: $!\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/)",
+      "Bash(kill 21304)",
+      "Bash(npm run start > /tmp/pitwall-prod.log 2>&1 & *)",
+      "Bash(curl -s http://localhost:3000/)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('scripts',{}\\), indent=2\\)\\)\")"
     ],
     "additionalDirectories": [
-      "/private/tmp/src/data"
+      "/private/tmp/src/data",
+      "/tmp"
     ]
   }
 }
