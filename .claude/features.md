@@ -53,11 +53,12 @@
 - **F1 timing: live_blocked state** — OpenF1 blocks anonymous access during live sessions; shows friendly "Timing paused" message with premium glass card instead of crashing
 - **Mini-Leaderboard** — Fixed bottom strip (`z-[190]`); Framer spring slide-up; collapsed = thin 44px bar with live session pills; expanded = glass cards per live session with series logo + event + circuit flag; collapse toggle; auto-hides when nothing live
 - **What's Live Badge** — Floating pill bottom-right (`z-[200]`); pulsing red dot + series logo + Live/Starting Soon + session name; arrow nav for multiple live sessions; click → `openEvent`; auto-hides when nothing live
-- **Driver Profiles** (Phase 4) — Click any F1 driver name in standings or results → right-panel slide-in (`DriverProfileOverlay`); career wins, seasons, nationality, DOB, headshot, 2026 pos/points; data from Jolpica + OpenF1 headshot; `SelectedDriver` state in Zustand (transient, not persisted)
+- **Driver Profiles** (Phase 4) — Click any F1 driver name in standings or results → right-panel slide-in (`DriverProfileOverlay`); career wins, seasons, nationality, DOB, headshot, 2026 pos/points; data from Jolpica + OpenF1 headshot (`q_100` quality boost); `SelectedDriver` state in Zustand (transient, not persisted); hover on driver name = 2px team-color bar slides in left + text → white (no underline)
 - **Points Trajectory chart** (Phase 4) — Expandable SVG multi-line chart below F1 standings in `StandingsPanel`; top-6 drivers; rounds as X-axis labels; built from `roundPoints` static data via `ChampionshipChart.tsx`
 - **Teammate H2H** (Phase 4) — Expandable qualifying battle bars per team pair below the points chart; lazy-loads `/api/f1/h2h` on first open; 10 hardcoded 2026 team pairings; Jolpica qualifying data
 
 ## Known Issues / Workarounds
+- **Driver headshots** — Source is OpenF1 `headshot_url` (small F1 CDN thumbnails, ~100–130px native). Displayed at `maxHeight: 140` to avoid upscale blur. Quality ceiling is set by the source. F1 official CDN high-res path (`content/dam/fom-website/drivers/2026Drivers/`) was tried and does NOT exist — do not attempt again without a verified URL from the F1 website source.
 - `gtwce.png`, `wec.png`, `elms.png`, `nurburgring.jpg` have non-transparent backgrounds → use `mixBlendMode: screen` + `maskImage: radial-gradient(ellipse at center, black 30%, transparent 70%)` + `grayscale(1) contrast(2) brightness(3)` for series watermarks; never use these raw
 - Peugeot logo: background stripped, currently displayed inverted (black shield → white); acceptable on dark bg
 - Aprilia/Yamaha logos: tinted from black-fill SVGs — not true brand colour

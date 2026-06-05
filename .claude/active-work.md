@@ -4,11 +4,21 @@
 **"Renew race weekend results"** → Claude uses WebSearch/WebFetch to find latest results for the manually-maintained series and edits `src/data/results-2026.ts` + `src/data/standings-2026.ts` directly. No scripts, no terminal. F1 **and MotoGP** are excluded (automated via API routes).
 Series: WEC, ELMS, IMSA, WRC, DTM.
 
-## Last Commits (2026-06-05)
+## Last Commits (2026-06-06)
+
+`5dd4d25` — fix: headshot maxHeight instead of fixed height — no upscaling blur
+- `maxHeight: 140` so image never renders larger than its natural size (prevents upscale blur)
+
+`7cd54eb` — fix: revert to OpenF1 headshots — guessed F1 CDN paths were wrong, photos gone
+- F1 CDN `content/dam/fom-website/drivers/2026Drivers/` path does NOT exist — don't try it again
+- Back to OpenF1 `headshot_url` with `q_100` quality boost on Cloudinary URL
+
+`e3f79af` — fix: driver name hover — vertical team-color bar slides in left, text → white
+- `DriverRow` in `StandingsPanel` uses `useState(nameHover)` + onMouseEnter/Leave
+- 2px vertical accent bar in `d.teamColor` animates width 0→2px from left of name
+- Text transitions to white; no underline, no glow, no letter-spacing
 
 `cec472e` — fix: split object selector in DriverProfileOverlay — fixes React #185 infinite re-render
-- `useStore((s) => ({ a, b }))` creates new object every call → Zustand always re-renders → React #185
-- Fixed: two separate `useStore(s => s.x)` calls instead
 
 `4c8154f` — feat: phase 4 redo — driver profiles, trajectory chart, teammate H2H (features 8, 9, 10)
 - `src/types/index.ts` — added `DriverProfile` + `SelectedDriver` interfaces (shared between route + client)
@@ -16,7 +26,7 @@ Series: WEC, ELMS, IMSA, WRC, DTM.
 - `src/app/api/f1/driver/[driverRef]/route.ts` + `src/app/api/f1/h2h/route.ts` — NEW routes
 - `src/components/standings/ChampionshipChart.tsx` — SVG points trajectory, top-6 drivers
 - `src/components/DriverProfileOverlay.tsx` — right-panel slide-in, fetches /api/f1/driver at runtime
-- `src/lib/f1DriverRefs.ts` — single source of truth for name→driverRef mappings
+- `src/lib/f1DriverRefs.ts` — single source of truth for name→driverRef mappings + `F1_CDN_SLUGS` map (unused currently)
 - `StandingsPanel`, `RecentResults`, `Dashboard` — wired up click handlers + lazy overlay
 
 ## 16-Feature Build Status
