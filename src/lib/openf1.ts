@@ -57,7 +57,7 @@ export interface RaceControlMsg {
 }
 
 export interface SessionTiming {
-  status: 'ok' | 'no_data' | 'error';
+  status: 'ok' | 'no_data' | 'error' | 'live_blocked';
   sessionName?: string;
   isLive?: boolean;
   /** seconds — used by the route for Cache-Control + the client poll cadence */
@@ -68,6 +68,8 @@ export interface SessionTiming {
 }
 
 // ─── Fetch helper ────────────────────────────────────────────────────────────────
+
+class LiveBlockError extends Error {}
 
 function authHeaders(): Record<string, string> {
   const key = process.env.OPENF1_API_KEY;
@@ -80,10 +82,15 @@ async function openf1<T>(path: string, revalidate = 300): Promise<T | null> {
       next: { revalidate },
       headers: authHeaders(),
     });
-    if (!res.ok) return null;
+    if (!res.ok) {
+      const body = await res.json().catch(() => null);
+      if (typeof body?.detail === 'string' && body.detail.includes('restricted to authenticated users')) throw new LiveBlockError();
+      return null;
+    }
     const data = await res.json();
     return Array.isArray(data) ? (data as T) : null;
-  } catch {
+  } catch (e) {
+    if (e instanceof LiveBlockError) throw e;
     return null;
   }
 }
@@ -134,7 +141,11 @@ export async function getSessionTiming(eventId: string | null): Promise<SessionT
   const event = CALENDAR_2026.find((e) => e.id === eventId && e.series === 'f1');
   if (!event) return { status: 'no_data' };
 
-  const resolved = await resolveSession(event);
+  const resolved = await resolveSession(event).catch((e: unknown) => {
+    if (e instanceof LiveBlockError) return 'live_blocked' as const;
+    return null;
+  });
+  if (resolved === 'live_blocked') return { status: 'live_blocked' };
   if (!resolved) return { status: 'no_data' };
 
   const { target, isLive } = resolved;

@@ -43,7 +43,7 @@ interface RaceControlMsg {
 }
 
 interface TimingData {
-  status: 'ok' | 'no_data' | 'error';
+  status: 'ok' | 'no_data' | 'error' | 'live_blocked';
   sessionName?: string;
   isLive?: boolean;
   results?: TimingResult[];
@@ -241,6 +241,33 @@ export default function F1TimingPanel({ eventId, accentColor, eventState }: Prop
           {[...Array(5)].map((_, i) => (
             <div key={i} className="h-9 rounded animate-pulse" style={{ background: 'var(--pw-glass-bg)' }} />
           ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (data?.status === 'live_blocked') {
+    return (
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-3">
+          <h4 className="text-[10px] uppercase tracking-widest" style={{ color: 'var(--pw-text-tertiary)' }}>Timing</h4>
+          <a href="https://openf1.org" target="_blank" rel="noopener noreferrer" className="text-[9px] hover:opacity-80 transition-opacity" style={{ color: 'var(--pw-text-tertiary)' }}>
+            via OpenF1
+          </a>
+        </div>
+        <div className="pw-glass px-4 py-3 flex items-start gap-3" style={{ borderColor: `${accentColor}25` }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={accentColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 mt-0.5 opacity-60">
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+          <div>
+            <p className="text-[11px] font-semibold mb-0.5" style={{ color: 'var(--pw-text-secondary)' }}>
+              Timing paused during live session
+            </p>
+            <p className="text-[10px] leading-snug" style={{ color: 'var(--pw-text-tertiary)' }}>
+              Full data — tyres, radio, flags — unlocks when the session ends.
+            </p>
+          </div>
         </div>
       </div>
     );
