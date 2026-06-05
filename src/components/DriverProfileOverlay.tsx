@@ -19,25 +19,15 @@ function nationalityFlag(nat: string): string {
 }
 
 function HeadshotImage({ src, alt }: { src: string; alt: string }) {
-  const [imgSrc, setImgSrc] = useState(src);
-  const [hidden, setHidden] = useState(false);
-
-  useEffect(() => { setImgSrc(src); setHidden(false); }, [src]);
-
-  if (hidden) return null;
-
+  const [visible, setVisible] = useState(true);
+  useEffect(() => setVisible(true), [src]);
+  if (!visible) return null;
   return (
     <div className="flex justify-center">
       <img
-        src={imgSrc}
+        src={src}
         alt={alt}
-        onError={() => {
-          if (imgSrc.includes('2026Drivers')) {
-            setImgSrc(imgSrc.replace('2026Drivers', '2025Drivers'));
-          } else {
-            setHidden(true);
-          }
-        }}
+        onError={() => setVisible(false)}
         style={{
           height: 160,
           width: 'auto',
