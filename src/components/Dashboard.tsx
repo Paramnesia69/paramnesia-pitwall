@@ -35,7 +35,6 @@ const DiaryView = lazy(() => import('@/components/DiaryView'));
 const UpcomingTimeline = lazy(() => import('@/components/UpcomingTimeline'));
 const EventDetailOverlay = lazy(() => import('@/components/EventDetailOverlay'));
 const RaceWeekendOverlay = lazy(() => import('@/components/RaceWeekendOverlay'));
-const DriverProfileOverlay = lazy(() => import('@/components/DriverProfileOverlay'));
 const Footer = lazy(() => import('@/components/Footer'));
 
 const ALL_SERIES: SeriesId[] = [
@@ -346,9 +345,6 @@ export default function Dashboard({ featured, upcoming, newsFeedSlot }: Dashboar
       </Suspense>
       <Suspense>
         <RaceWeekendOverlay />
-      </Suspense>
-      <Suspense>
-        <DriverProfileOverlay />
       </Suspense>
 
       <Suspense>

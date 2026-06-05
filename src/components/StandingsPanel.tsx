@@ -1,12 +1,10 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getTeamLogo } from '@/lib/teamLogos';
 import { SERIES_META } from '@/types';
-import { useStore } from '@/store';
-import ChampionshipChart from '@/components/standings/ChampionshipChart';
 import {
   F1_DRIVERS_2026,
   F1_CONSTRUCTORS_2026,
@@ -39,138 +37,6 @@ type SeriesTab = 'f1' | 'motogp' | 'wec' | 'wrc' | 'imsa' | 'dtm' | 'elms';
 
 const SERIES_TABS: SeriesTab[] = ['f1', 'wec', 'elms', 'imsa', 'motogp', 'dtm', 'wrc'];
 const LOGO_FILTER = 'grayscale(1) contrast(2) brightness(3)';
-
-/** Maps abbreviated standing name → Jolpica driverRef for the 2026 F1 grid */
-const F1_DRIVER_REFS: Record<string, string> = {
-  'G. Russell':    'russell',
-  'K. Antonelli':  'antonelli',
-  'C. Leclerc':    'leclerc',
-  'L. Hamilton':   'hamilton',
-  'L. Norris':     'norris',
-  'O. Piastri':    'piastri',
-  'M. Verstappen': 'max_verstappen',
-  'L. Lawson':     'lawson',
-  'F. Alonso':     'alonso',
-  'L. Stroll':     'stroll',
-  'P. Gasly':      'gasly',
-  'E. Ocon':       'ocon',
-  'O. Bearman':    'bearman',
-  'N. Hulkenberg': 'hulkenberg',
-  'C. Sainz':      'carlos_sainz',
-  'O. Colapinto':  'colapinto',
-  'Y. Tsunoda':    'tsunoda',
-  'C. Hadjar':     'hadjar',
-  'G. Bortoleto':  'bortoleto',
-  'J. Doohan':     'doohan',
-};
-
-/* ── H2H types ── */
-interface H2HEntry {
-  team: string;
-  color: string;
-  d1: { ref: string; name: string; wins: number };
-  d2: { ref: string; name: string; wins: number };
-  rounds: number;
-}
-
-/* ── Teammate H2H section ── */
-function H2HSection() {
-  const [open, setOpen] = useState(false);
-  const [data, setData] = useState<H2HEntry[]>([]);
-  const [loading, setLoading] = useState(false);
-  const fetched = useRef(false);
-
-  useEffect(() => {
-    if (!open || fetched.current) return;
-    fetched.current = true;
-    setLoading(true);
-    fetch('/api/f1/h2h')
-      .then((r) => (r.ok ? r.json() : []))
-      .then((d: H2HEntry[]) => setData(d ?? []))
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, [open]);
-
-  return (
-    <div className="mt-4 pt-3" style={{ borderTop: '1px solid var(--pw-glass-border)' }}>
-      <button
-        className="flex items-center gap-2 w-full hover:opacity-70 transition-opacity"
-        onClick={() => setOpen((v) => !v)}
-      >
-        <div className="w-0.5 h-3 rounded-full shrink-0" style={{ background: 'rgba(255,255,255,0.3)' }} />
-        <span className="text-[10px] font-semibold uppercase tracking-[0.18em]" style={{ color: 'rgba(255,255,255,0.6)' }}>
-          Teammate Qualifying H2H
-        </span>
-        <div className="flex-1 h-px" style={{ background: 'var(--pw-glass-border)' }} />
-        <svg
-          width="12" height="12" viewBox="0 0 24 24" fill="none"
-          stroke="rgba(255,255,255,0.4)" strokeWidth="2.5" strokeLinecap="round"
-          style={{ transition: 'transform 0.25s', transform: open ? 'none' : 'rotate(180deg)' }}
-        >
-          <polyline points="18 15 12 9 6 15" />
-        </svg>
-      </button>
-
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ type: 'spring', stiffness: 280, damping: 28 }}
-            className="overflow-hidden"
-          >
-            {loading ? (
-              <div className="mt-3 space-y-2">
-                {[...Array(5)].map((_, i) => (
-                  <div key={i} className="h-7 rounded animate-pulse" style={{ background: 'var(--pw-glass-bg)' }} />
-                ))}
-              </div>
-            ) : data.length === 0 ? (
-              <p className="mt-3 text-[11px]" style={{ color: 'var(--pw-text-tertiary)' }}>
-                H2H data not yet available.
-              </p>
-            ) : (
-              <div className="mt-3 space-y-1">
-                {data.map((entry) => {
-                  const total = entry.d1.wins + entry.d2.wins;
-                  if (total === 0) return null;
-                  const p1 = entry.d1.wins / total;
-                  const p2 = entry.d2.wins / total;
-                  return (
-                    <div key={entry.team} className="flex items-center gap-2 py-1">
-                      <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: entry.color }} />
-                      <span className="text-[10px] truncate text-right" style={{ minWidth: 72, maxWidth: 80, color: 'var(--pw-text-secondary)' }}>
-                        {entry.d1.name}
-                      </span>
-                      <div className="flex items-center gap-1 shrink-0">
-                        <div style={{ width: 48, height: 3, background: 'var(--pw-glass-border)', borderRadius: 2, overflow: 'hidden' }}>
-                          <div style={{ width: `${p1 * 100}%`, height: '100%', background: entry.color, borderRadius: 2 }} />
-                        </div>
-                        <span className="text-[10px] font-bold tabular-nums w-9 text-center" style={{ color: 'var(--pw-text-primary)' }}>
-                          {entry.d1.wins}–{entry.d2.wins}
-                        </span>
-                        <div style={{ width: 48, height: 3, background: 'var(--pw-glass-border)', borderRadius: 2, overflow: 'hidden' }}>
-                          <div style={{ width: `${p2 * 100}%`, height: '100%', background: entry.color, borderRadius: 2, marginLeft: 'auto' }} />
-                        </div>
-                      </div>
-                      <span className="text-[10px] truncate" style={{ minWidth: 72, maxWidth: 80, color: 'var(--pw-text-secondary)' }}>
-                        {entry.d2.name}
-                      </span>
-                    </div>
-                  );
-                })}
-                <p className="text-[9px] mt-2 text-right" style={{ color: 'var(--pw-text-tertiary)' }}>
-                  Qualifying only · {data[0]?.rounds ?? 0} rounds
-                </p>
-              </div>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
 
 /* ── Series logo tab button ── */
 function SeriesTabButton({ series, isActive, onClick }: { series: SeriesTab; isActive: boolean; onClick: () => void }) {
@@ -273,10 +139,7 @@ function DeltaBadge({ current, prev }: { current: number; prev: number }) {
 }
 
 /* ── Driver row ── */
-function DriverRow({ d, maxPts, f1 = false, onDriverClick }: {
-  d: DriverStanding; maxPts: number; f1?: boolean;
-  onDriverClick?: (d: DriverStanding) => void;
-}) {
+function DriverRow({ d, maxPts, f1 = false }: { d: DriverStanding; maxPts: number; f1?: boolean }) {
   const gap = maxPts - d.points;
   return (
     <motion.div className="flex items-center gap-2 py-1.5"
@@ -291,17 +154,7 @@ function DriverRow({ d, maxPts, f1 = false, onDriverClick }: {
       <TeamLogo teamName={d.team} teamColor={d.teamColor} f1={f1} />
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between mb-0.5">
-          {onDriverClick ? (
-            <button
-              className="text-xs font-medium truncate hover:underline hover:opacity-80 transition-opacity text-left"
-              onClick={(e) => { e.stopPropagation(); onDriverClick(d); }}
-              title={`View ${d.name} profile`}
-            >
-              {d.name}
-            </button>
-          ) : (
-            <span className="text-xs font-medium truncate">{d.name}</span>
-          )}
+          <span className="text-xs font-medium truncate">{d.name}</span>
           <div className="flex items-center gap-1.5 shrink-0 ml-2">
             {gap > 0 && (
               <span className="text-[9px] tabular-nums" style={{ color: 'var(--pw-text-tertiary)' }}>–{gap}</span>
@@ -354,7 +207,7 @@ function ConstructorRow({ c, maxPts, f1 = false }: { c: ConstructorStanding; max
 /* ── Side-by-side two-column grid with optional expand ── */
 function ExpandableGrid({
   leftLabel, leftData, rightLabel, rightData,
-  maxLeftPts, maxRightPts, defaultLimit = Infinity, note, f1 = false, onDriverClick,
+  maxLeftPts, maxRightPts, defaultLimit = Infinity, note, f1 = false,
 }: {
   leftLabel: string;
   leftData: DriverStanding[];
@@ -365,7 +218,6 @@ function ExpandableGrid({
   defaultLimit?: number;
   note?: string;
   f1?: boolean;
-  onDriverClick?: (d: DriverStanding) => void;
 }) {
   const [expanded, setExpanded] = useState(false);
   const needsExpand = leftData.length > defaultLimit || rightData.length > defaultLimit;
@@ -384,7 +236,7 @@ function ExpandableGrid({
           </div>
           <div className="space-y-0">
             {visLeft.map((d, i) =>
-              <DriverRow key={i} d={{ ...d, pos: i + 1 }} maxPts={maxLeftPts} f1={f1} onDriverClick={onDriverClick} />
+              <DriverRow key={i} d={{ ...d, pos: i + 1 }} maxPts={maxLeftPts} f1={f1} />
             )}
           </div>
         </div>
@@ -419,7 +271,7 @@ function ExpandableGrid({
 /* ── Multi-class section (badge header + side-by-side grid) ── */
 function ClassSection({
   title, driverData, driverLabel = 'Drivers', teamData, teamLabel = 'Teams',
-  note, accent, badgeSrc, f1 = false, defaultLimit = Infinity, onDriverClick,
+  note, accent, badgeSrc, f1 = false, defaultLimit = Infinity,
 }: {
   title: string;
   driverData: DriverStanding[];
@@ -431,7 +283,6 @@ function ClassSection({
   badgeSrc?: string;
   f1?: boolean;
   defaultLimit?: number;
-  onDriverClick?: (d: DriverStanding) => void;
 }) {
   return (
     <div className="mb-4 last:mb-0">
@@ -449,7 +300,7 @@ function ClassSection({
       <ExpandableGrid
         leftLabel={driverLabel} leftData={driverData} maxLeftPts={driverData[0]?.points ?? 1}
         rightLabel={teamLabel} rightData={teamData} maxRightPts={teamData[0]?.points ?? 1}
-        note={note} defaultLimit={defaultLimit} f1={f1} onDriverClick={onDriverClick}
+        note={note} defaultLimit={defaultLimit} f1={f1}
       />
     </div>
   );
@@ -459,19 +310,6 @@ function ClassSection({
 export default function StandingsPanel({ defaultTab }: { defaultTab?: SeriesTab } = {}) {
   const [activeTab, setActiveTab] = useState<SeriesTab>(defaultTab ?? 'f1');
   const [expanded, setExpanded] = useState(true);
-  const openDriver = useStore((s) => s.openDriver);
-
-  const handleF1DriverClick = useCallback((d: DriverStanding) => {
-    openDriver({
-      ref: F1_DRIVER_REFS[d.name] ?? '',
-      name: d.name,
-      team: d.team,
-      teamColor: d.teamColor,
-      series: 'f1',
-      points: d.points,
-      pos: d.pos,
-    });
-  }, [openDriver]);
   const [f1Drivers, setF1Drivers] = useState<DriverStanding[]>(F1_DRIVERS_2026);
   const [f1Constructors, setF1Constructors] = useState<ConstructorStanding[]>(F1_CONSTRUCTORS_2026);
   const [f1Round, setF1Round] = useState<number | null>(null);
@@ -550,17 +388,12 @@ export default function StandingsPanel({ defaultTab }: { defaultTab?: SeriesTab 
 
                 {/* ── F1 ── */}
                 {activeTab === 'f1' && (
-                  <>
-                    <ExpandableGrid
-                      leftLabel="Drivers" leftData={f1Drivers} maxLeftPts={f1Drivers[0]?.points ?? 1}
-                      rightLabel="Constructors" rightData={f1Constructors} maxRightPts={f1Constructors[0]?.points ?? 1}
-                      defaultLimit={10} f1
-                      note={f1Round ? `After Round ${f1Round}` : 'After Round 5 · Canadian GP'}
-                      onDriverClick={handleF1DriverClick}
-                    />
-                    <ChampionshipChart drivers={f1Drivers} round={f1Round} />
-                    <H2HSection />
-                  </>
+                  <ExpandableGrid
+                    leftLabel="Drivers" leftData={f1Drivers} maxLeftPts={f1Drivers[0]?.points ?? 1}
+                    rightLabel="Constructors" rightData={f1Constructors} maxRightPts={f1Constructors[0]?.points ?? 1}
+                    defaultLimit={10} f1
+                    note={f1Round ? `After Round ${f1Round}` : 'After Round 5 · Canadian GP'}
+                  />
                 )}
 
                 {/* ── MotoGP ── */}
