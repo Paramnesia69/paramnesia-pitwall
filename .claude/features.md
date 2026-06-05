@@ -57,6 +57,10 @@
 - **Points Trajectory chart** (Phase 4) — Expandable SVG multi-line chart below F1 standings in `StandingsPanel`; top-6 drivers; rounds as X-axis labels; built from `roundPoints` static data via `ChampionshipChart.tsx`
 - **Teammate H2H** (Phase 4) — Expandable qualifying battle bars per team pair below the points chart; lazy-loads `/api/f1/h2h` on first open; 10 hardcoded 2026 team pairings; Jolpica qualifying data
 
+### Media Layer (Phase 5, shipped 2026-06-06)
+- **Race Highlights** — Thumbnail grid below Recent Results; sourced from 9 official series YouTube channel RSS feeds (Atom) via `src/lib/highlights.ts`; titles prioritise highlight/recap reels, fall back to latest uploads per channel; click a card → **inline lightbox** with embedded YouTube player (`HighlightsFeed` local state; Escape + backdrop close); series-filterable via `?series=`; `Show more` pagination resets on filter change
+- **Podcasts** — Episode grid below News; 4 real show RSS feeds with `.mp3` enclosures via `src/lib/podcasts.ts` (The Race F1, The Race MotoGP, Midweek Motorsport → wec/imsa/elms, SPIN The Rally Pod → wrc); inline `<audio>` player + show artwork + duration badge per episode; series-filterable; both streamed via Suspense as Dashboard slots (no API routes; shared parsers in `src/lib/rss.ts`)
+
 ## Known Issues / Workarounds
 - **Driver headshots** — Source is OpenF1 `headshot_url` (small F1 CDN thumbnails, ~100–130px native). Displayed at `maxHeight: 140` to avoid upscale blur. Quality ceiling is set by the source. F1 official CDN high-res path (`content/dam/fom-website/drivers/2026Drivers/`) was tried and does NOT exist — do not attempt again without a verified URL from the F1 website source.
 - `gtwce.png`, `wec.png`, `elms.png`, `nurburgring.jpg` have non-transparent backgrounds → use `mixBlendMode: screen` + `maskImage: radial-gradient(ellipse at center, black 30%, transparent 70%)` + `grayscale(1) contrast(2) brightness(3)` for series watermarks; never use these raw

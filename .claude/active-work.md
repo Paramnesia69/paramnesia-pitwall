@@ -36,7 +36,7 @@ Series: WEC, ELMS, IMSA, WRC, DTM.
 | 2 | Team Radio (1), Tyre Tracker (2), Flag Feed (3) | ✅ shipped |
 | 3 | Mini-Leaderboard (4), What's Live Badge (11) | ✅ shipped |
 | 4 | Driver Profile (8), Trajectory Chart (9), H2H (10) | ✅ shipped |
-| 5 | Highlights (12), Podcasts (13) | ⏳ not started |
+| 5 | Highlights (12), Podcasts (13) | ✅ shipped 2026-06-06 |
 | 6 | Next Alarm (14), Offline Badge (15), Season Ring (16) | ⏳ not started |
 
 ## Critical Rules (learned from Phase 4)
@@ -53,6 +53,18 @@ Series: WEC, ELMS, IMSA, WRC, DTM.
 - `/api/motogp/results` — PulseLive, revalidates 5min
 - `/api/motogp/standings` — riders + teams, revalidates 1hr
 - `/api/motogp/weekend/[round]` — full classifications for RaceWeekendOverlay; revalidates 5min
+
+## Phase 5 Media Layer (Highlights + Podcasts)
+- **No API routes** — async server components (`AsyncHighlightsFeed`/`AsyncPodcastsFeed`) call `src/lib/{highlights,podcasts}.ts`, streamed via Suspense into Dashboard as slots (mirrors News). Client feeds (`HighlightsFeed`/`PodcastsFeed`) read `?series=`.
+- Shared RSS/Atom parsers live in `src/lib/rss.ts` (news.ts now imports from it too).
+- `cached()` memoizes the parsed result (`highlights:all` 600s, `podcasts:all` 1800s). The Acast F1 feed is ~4MB so Next's fetch cache skips it (benign warning) — the parsed-result cache covers it.
+- Highlights playback = inline lightbox YouTube iframe (`HighlightsFeed` local `useState`, Escape/backdrop close). Podcasts = inline `<audio>`.
+- **Highlights — verified YouTube channel_ids** (in `src/lib/highlights.ts`):
+  f1 `UCB_qr75-ydFVKSF9Dmo6izg` · motogp `UC8pYaQzbBBXg9GIOHRvTmDQ` · wec `UCwU7U7PiarcJKLjDJTnANjw` · imsa `UC9D9hRoUT2OatfVtmnOBXzg` · wrc `UC5G6kTnHXDz0WIBC2VGBOqg` · dtm `UCwKq447rYMVI5dAQWMmFnfg` · gtwce `UC-yHapH6mW1ceZ_5PDUf1_g` · elms `UCU8C8RqGhqH4nhk4mlN1Vwg` · nurburgring `UCKgMzHVA7nsDsDEKKMc9bKA`
+- **Podcasts — verified feeds** (in `src/lib/podcasts.ts`):
+  f1 = The Race F1 (acast) · motogp = The Race MotoGP (acast) · wec/imsa/elms = Midweek Motorsport (radiolemans/blubrry) · wrc = SPIN The Rally Pod (`rss.art19.com/spinning-the-line`)
+- Static fallbacks (`src/data/{highlights,podcasts}-2026.ts`) hold REAL seed items — only used if every feed fails.
+- Backlog: DTM/GTWCE/Nürburgring lack a dedicated podcast feed; add if a real one surfaces.
 
 ## Current Data Coverage
 
