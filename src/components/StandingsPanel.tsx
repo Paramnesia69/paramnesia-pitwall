@@ -162,7 +162,20 @@ function DriverRow({ d, maxPts, f1 = false, onDriverClick }: {
         <div className="flex items-center justify-between mb-0.5">
           {onDriverClick ? (
             <button
-              className="text-xs font-medium truncate hover:underline hover:opacity-80 transition-opacity text-left"
+              className="text-xs font-medium truncate text-left border-b border-transparent pb-px"
+              style={{ transition: 'color 120ms ease, border-color 120ms ease, letter-spacing 120ms ease' }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget;
+                el.style.color = 'rgba(255,255,255,1)';
+                el.style.borderBottomColor = d.teamColor;
+                el.style.letterSpacing = '0.03em';
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget;
+                el.style.color = '';
+                el.style.borderBottomColor = 'transparent';
+                el.style.letterSpacing = '';
+              }}
               onClick={(e) => { e.stopPropagation(); onDriverClick(d); }}
               title={`View ${d.name} profile`}
             >

@@ -196,7 +196,14 @@ export default function DriverProfileOverlay() {
                   <img
                     src={profile.headshotUrl}
                     alt={d.name}
-                    style={{ height: 160, width: 'auto', objectFit: 'contain', borderRadius: 12, opacity: 0.9 }}
+                    style={{
+                      height: 200,
+                      width: 'auto',
+                      objectFit: 'contain',
+                      borderRadius: 12,
+                      opacity: 1,
+                      filter: 'contrast(1.1) brightness(1.04) drop-shadow(0 8px 20px rgba(0,0,0,0.6))',
+                    }}
                   />
                 </div>
               )}
