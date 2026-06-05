@@ -165,6 +165,31 @@ export interface NormalizedNewsItem {
   series?: SeriesId[];
 }
 
+// ─── Highlights (YouTube) ─────────────────────────────────────────────────────
+
+export interface HighlightItem {
+  id: string;            // `yt-<series>-<videoId>`
+  videoId: string;       // YouTube id → embed + thumbnail
+  title: string;
+  thumbnailUrl: string;  // https://i.ytimg.com/vi/<id>/hqdefault.jpg
+  publishedAt: string;   // ISO 8601
+  source: string;        // channel name, e.g. "FORMULA 1"
+  series?: SeriesId[];
+}
+
+// ─── Podcasts ─────────────────────────────────────────────────────────────────
+
+export interface PodcastEpisode {
+  id: string;            // `pod-<series>-<guid|audioUrl>`
+  title: string;
+  audioUrl: string;      // direct .mp3 enclosure
+  durationLabel?: string;// from itunes:duration (e.g. "56:15")
+  imageUrl?: string;     // episode or show artwork
+  publishedAt: string;   // ISO 8601
+  source: string;        // show name, e.g. "The Race F1 Podcast"
+  series?: SeriesId[];
+}
+
 // ─── F1 Driver Profile ────────────────────────────────────────────────────────
 
 export interface DriverProfile {

@@ -1,5 +1,6 @@
 import type { NormalizedNewsItem, SeriesId } from '@/types';
 import { NEWS_ITEMS } from '@/data/news-2026';
+import { parseRssItems } from '@/lib/rss';
 
 interface FeedConfig {
   url: string;
@@ -16,76 +17,6 @@ const FEEDS: FeedConfig[] = [
   { url: 'https://www.the-race.com/feed/', source: 'The Race', series: ['f1'] },
 ];
 
-/** Strip HTML tags and decode basic HTML entities */
-function stripHtml(html: string): string {
-  return html
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#039;/g, "'")
-    .replace(/&apos;/g, "'")
-    .replace(/&nbsp;/g, ' ')
-    .replace(/\s{2,}/g, ' ')
-    .trim();
-}
-
-/** Extract text content of an XML tag, handling CDATA */
-function extractTag(xml: string, tag: string): string {
-  const re = new RegExp(
-    `<${tag}(?:\\s[^>]*)?>(?:<!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?<\\/${tag}>`,
-    'i'
-  );
-  const m = xml.match(re);
-  return m ? m[1].trim() : '';
-}
-
-/** Extract an attribute value from a self-closing or open tag */
-function extractAttr(xml: string, tag: string, attr: string): string {
-  const re = new RegExp(`<${tag}[^>]*\\s${attr}="([^"]*)"`, 'i');
-  const m = xml.match(re);
-  return m ? m[1] : '';
-}
-
-interface RawItem {
-  title: string;
-  link: string;
-  description: string;
-  pubDate: string;
-  guid: string;
-  imageUrl: string;
-}
-
-function parseItems(xml: string): RawItem[] {
-  const items: RawItem[] = [];
-  const itemRe = /<item>([\s\S]*?)<\/item>/g;
-  let match: RegExpExecArray | null;
-
-  while ((match = itemRe.exec(xml)) !== null) {
-    const block = match[1];
-
-    // <link> in RSS is often bare text between tags (not an attribute)
-    const linkMatch = block.match(/<link>([^<]+)<\/link>/) ||
-      block.match(/<link\s+href="([^"]+)"/);
-    const link = linkMatch ? linkMatch[1].trim() : '';
-
-    items.push({
-      title: stripHtml(extractTag(block, 'title')),
-      link,
-      description: stripHtml(extractTag(block, 'description')),
-      pubDate: extractTag(block, 'pubDate'),
-      guid: extractTag(block, 'guid'),
-      imageUrl:
-        extractAttr(block, 'enclosure', 'url') ||
-        extractAttr(block, 'media:content', 'url') ||
-        '',
-    });
-  }
-
-  return items;
-}
-
 async function fetchFeed(feed: FeedConfig): Promise<NormalizedNewsItem[]> {
   const res = await fetch(feed.url, {
     next: { revalidate: 120 },
@@ -95,7 +26,7 @@ async function fetchFeed(feed: FeedConfig): Promise<NormalizedNewsItem[]> {
   if (!res.ok) throw new Error(`${feed.url} → ${res.status}`);
 
   const xml = await res.text();
-  const raw = parseItems(xml);
+  const raw = parseRssItems(xml);
 
   return raw
     .filter((item) => item.link && item.title)
@@ -105,7 +36,7 @@ async function fetchFeed(feed: FeedConfig): Promise<NormalizedNewsItem[]> {
       title: item.title,
       summary: item.description.slice(0, 220),
       url: item.link,
-      imageUrl: item.imageUrl || undefined,
+      imageUrl: item.enclosureUrl || item.mediaContentUrl || undefined,
       source: feed.source,
       publishedAt: item.pubDate ? new Date(item.pubDate).toISOString() : new Date().toISOString(),
       series: feed.series,

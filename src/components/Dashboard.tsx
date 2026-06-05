@@ -46,9 +46,11 @@ interface DashboardProps {
   featured: NormalizedRaceEvent | null;
   upcoming: NormalizedRaceEvent[];
   newsFeedSlot?: React.ReactNode;
+  highlightsSlot?: React.ReactNode;
+  podcastsSlot?: React.ReactNode;
 }
 
-export default function Dashboard({ featured, upcoming, newsFeedSlot }: DashboardProps) {
+export default function Dashboard({ featured, upcoming, newsFeedSlot, highlightsSlot, podcastsSlot }: DashboardProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -286,6 +288,9 @@ export default function Dashboard({ featured, upcoming, newsFeedSlot }: Dashboar
         <RecentResults activeFilter={activeFilter} />
       </Suspense>
 
+      {/* ── Race Highlights — streamed from server ── */}
+      {highlightsSlot}
+
       {/* ── Race Diary — your watched/rated races ── */}
       <Suspense>
         <DiaryView activeFilter={activeFilter} />
@@ -293,6 +298,9 @@ export default function Dashboard({ featured, upcoming, newsFeedSlot }: Dashboar
 
       {/* ── Latest News — streamed from server ── */}
       {newsFeedSlot}
+
+      {/* ── Podcasts — streamed from server ── */}
+      {podcastsSlot}
 
       {/* ── Event Cards Grid ─────────────────── */}
       <FadeIn delay={0.1}>

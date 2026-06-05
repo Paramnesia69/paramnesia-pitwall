@@ -5,6 +5,8 @@ import { CALENDAR_2026 } from '@/data/calendar-2026';
 import { SERIES_META } from '@/types';
 import Dashboard from '@/components/Dashboard';
 import AsyncNewsFeed from '@/components/AsyncNewsFeed';
+import AsyncHighlightsFeed from '@/components/AsyncHighlightsFeed';
+import AsyncPodcastsFeed from '@/components/AsyncPodcastsFeed';
 
 // ISR: regenerate the page every 2 minutes so event states stay fresh
 export const revalidate = 120;
@@ -48,7 +50,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   return {};
 }
 
-function NewsFeedSkeleton() {
+function FeedSkeleton() {
   return (
     <div className="mt-10 mb-8 animate-pulse">
       <div className="flex items-center gap-3 mb-6">
@@ -71,14 +73,32 @@ export default async function Home() {
   const upcoming = deriveUpcomingEvents(events);
 
   const newsFeedSlot = (
-    <Suspense fallback={<NewsFeedSkeleton />}>
+    <Suspense fallback={<FeedSkeleton />}>
       <AsyncNewsFeed />
+    </Suspense>
+  );
+
+  const highlightsSlot = (
+    <Suspense fallback={<FeedSkeleton />}>
+      <AsyncHighlightsFeed />
+    </Suspense>
+  );
+
+  const podcastsSlot = (
+    <Suspense fallback={<FeedSkeleton />}>
+      <AsyncPodcastsFeed />
     </Suspense>
   );
 
   return (
     <Suspense>
-      <Dashboard featured={featured ?? null} upcoming={upcoming} newsFeedSlot={newsFeedSlot} />
+      <Dashboard
+        featured={featured ?? null}
+        upcoming={upcoming}
+        newsFeedSlot={newsFeedSlot}
+        highlightsSlot={highlightsSlot}
+        podcastsSlot={podcastsSlot}
+      />
     </Suspense>
   );
 }
