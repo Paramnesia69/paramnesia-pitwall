@@ -89,7 +89,6 @@ Series: WEC, ELMS, IMSA, WRC, DTM.
 - DTM: after R2 Zandvoort
 
 ## Backlog (next up)
-- **Phase 5**: Highlights (12) + Podcasts (13)
 - **Phase 6**: Next Alarm (14), Offline Badge (15), Season Ring (16)
 - **WEC results**: R3 Le Mans 24H (June 14–15)
 - **ELMS/DTM results**: R3+

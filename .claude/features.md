@@ -63,7 +63,8 @@
 
 ## Known Issues / Workarounds
 - **Driver headshots** — Source is OpenF1 `headshot_url` (small F1 CDN thumbnails, ~100–130px native). Displayed at `maxHeight: 140` to avoid upscale blur. Quality ceiling is set by the source. F1 official CDN high-res path (`content/dam/fom-website/drivers/2026Drivers/`) was tried and does NOT exist — do not attempt again without a verified URL from the F1 website source.
-- `gtwce.png`, `wec.png`, `elms.png`, `nurburgring.jpg` have non-transparent backgrounds → use `mixBlendMode: screen` + `maskImage: radial-gradient(ellipse at center, black 30%, transparent 70%)` + `grayscale(1) contrast(2) brightness(3)` for series watermarks; never use these raw
+- `gtwce.png`, `wec.png`, `elms.png`, `nurburgring.jpg` have non-transparent backgrounds → use `maskImage: radial-gradient(ellipse at center, black 30%, transparent 70%)` + `grayscale(1) contrast(2) brightness(3)` for series watermarks; never use these raw. **Do NOT add `mixBlendMode: screen`** — iOS Safari drops blend modes on stacking contexts created by `backdrop-filter`+`overflow:hidden`+`border-radius`, producing a solid black mark; desktop browsers lighten it to grey. Omitting the blend yields a consistent faded-black watermark on all platforms.
+- **Series watermarks** (HeroCard / EventCard / EventDetailOverlay) — `filter: grayscale(1) contrast(2) brightness(3)` + `opacity: 0.08–0.14` + radial-gradient `maskImage`. No `mixBlendMode`. Porsche SVG (dark fill) gets `brightness(0) invert(1)` instead.
 - Peugeot logo: background stripped, currently displayed inverted (black shield → white); acceptable on dark bg
 - Aprilia/Yamaha logos: tinted from black-fill SVGs — not true brand colour
 - Porsche brand PNG: gold badge with gentle filter `brightness(1.1) saturate(1.8) contrast(1.05)` — not true Porsche gold but readable
