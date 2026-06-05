@@ -65,6 +65,7 @@
 - No websockets — polling is sufficient and simpler
 - Business logic stays in `src/lib/`, never in components
 - Components are pure presentation + local interaction only
+- **CRITICAL — client→route import ban**: Client components (`'use client'`) must NEVER import anything (even `import type`) from `src/app/api/**`. Turbopack resolves the full module graph and pulls server-only modules (`next/server`) into the client bundle → runtime crash ("This page couldn't load"). **Fix pattern**: shared interfaces live in `src/types/index.ts`; route files import FROM `@/types`; components import FROM `@/types`. Direction is always one-way: types → routes & types → components. Learned from Phase 4 incident (2026-06-05).
 
 ## CSS & Component Patterns
 - TiltCard has `overflow-hidden` — all absolute-positioned watermarks must fit inside card

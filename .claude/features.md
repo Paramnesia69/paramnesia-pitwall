@@ -43,6 +43,17 @@
 - **OpenGraph cards** — `/api/og?event=<id>` → 1200×630 PNG with series accent; wired via `generateMetadata`
 - **Manual overrides** — `src/data/overrides.json` → note banners, state overrides, stream links, forced hero
 
+### Live Intelligence & Personal Layer (Phases 1–3, shipped 2026-06-05)
+- **Race Diary** — "Watched" toggle on result cards + event detail overlay; star rating (1–5) + free-text note; `DiaryView` component shows chronological watched/rated races; persisted in Zustand `diary` map
+- **Conflict Detector** — `getWeekendConflicts()` in `src/lib/conflicts.ts` detects overlapping sessions among favorited series; warning badge in `ThisWeekend.tsx` header
+- **Watched State** — `WatchedButton` on podium cards dims watched results (opacity 0.5); checkmark overlay; `StarRating` sub-component for diary ratings
+- **F1 live timing: Tyre Tracker** — Compound dot per driver row (S=red, M=yellow, H=white, I=green, W=blue) + mini stint bar; from OpenF1 `/stints`; works on historical sessions too
+- **F1 live timing: Team Radio** — Scrolling feed below timing table; inline `<audio>` play button per clip; from OpenF1 `/team_radio`; only populated during/just-after live sessions
+- **F1 live timing: Flag Feed** — Status bar showing latest flag (e.g. 🟡 YELLOW Sector 2) + scrollable incident log with timestamps; from OpenF1 `/race_control`
+- **F1 timing: live_blocked state** — OpenF1 blocks anonymous access during live sessions; shows friendly "Timing paused" message with premium glass card instead of crashing
+- **Mini-Leaderboard** — Fixed bottom strip (`z-[190]`); Framer spring slide-up; collapsed = thin 44px bar with live session pills; expanded = glass cards per live session with series logo + event + circuit flag; collapse toggle; auto-hides when nothing live
+- **What's Live Badge** — Floating pill bottom-right (`z-[200]`); pulsing red dot + series logo + Live/Starting Soon + session name; arrow nav for multiple live sessions; click → `openEvent`; auto-hides when nothing live
+
 ## Known Issues / Workarounds
 - `gtwce.png`, `wec.png`, `elms.png`, `nurburgring.jpg` have non-transparent backgrounds → use `mixBlendMode: screen` + `maskImage: radial-gradient(ellipse at center, black 30%, transparent 70%)` + `grayscale(1) contrast(2) brightness(3)` for series watermarks; never use these raw
 - Peugeot logo: background stripped, currently displayed inverted (black shield → white); acceptable on dark bg
