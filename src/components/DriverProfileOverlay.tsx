@@ -29,7 +29,7 @@ function HeadshotImage({ src, alt }: { src: string; alt: string }) {
         alt={alt}
         onError={() => setVisible(false)}
         style={{
-          height: 160,
+          maxHeight: 140,
           width: 'auto',
           objectFit: 'contain',
           borderRadius: 10,
