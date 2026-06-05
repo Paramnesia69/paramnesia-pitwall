@@ -193,16 +193,29 @@ export default function DriverProfileOverlay() {
 
               {profile?.headshotUrl && (
                 <div className="flex justify-center">
+                  {/* SVG unsharp-mask filter — genuinely sharpens soft/low-res source images */}
+                  <svg width="0" height="0" style={{ position: 'absolute' }}>
+                    <defs>
+                      <filter id="driver-sharpen" x="0" y="0" width="100%" height="100%" colorInterpolationFilters="sRGB">
+                        <feConvolveMatrix order="3" kernelMatrix="0 -0.5 0 -0.5 3 -0.5 0 -0.5 0" preserveAlpha="true" />
+                        <feComponentTransfer>
+                          <feFuncR type="linear" slope="1.08" />
+                          <feFuncG type="linear" slope="1.08" />
+                          <feFuncB type="linear" slope="1.08" />
+                        </feComponentTransfer>
+                      </filter>
+                    </defs>
+                  </svg>
                   <img
                     src={profile.headshotUrl}
                     alt={d.name}
                     style={{
-                      height: 200,
+                      height: 220,
                       width: 'auto',
                       objectFit: 'contain',
                       borderRadius: 12,
                       opacity: 1,
-                      filter: 'contrast(1.1) brightness(1.04) drop-shadow(0 8px 20px rgba(0,0,0,0.6))',
+                      filter: 'url(#driver-sharpen) drop-shadow(0 8px 24px rgba(0,0,0,0.65))',
                     }}
                   />
                 </div>
