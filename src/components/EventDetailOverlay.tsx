@@ -101,7 +101,7 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
                       alt=""
                       fill
                       className="object-contain"
-                      style={{ filter: 'brightness(3) contrast(1.2) saturate(0.5)', mixBlendMode: 'screen' }}
+                      style={{ filter: 'brightness(3) contrast(1.2) saturate(0.5)' }}
                     />
                   </div>
                 );
@@ -114,7 +114,7 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
                     alt=""
                     fill
                     className="object-contain"
-                    style={{ filter: 'grayscale(1) contrast(2) brightness(3)', mixBlendMode: 'screen' }}
+                    style={{ filter: 'grayscale(1) contrast(2) brightness(3)' }}
                   />
                 </div>
               )}

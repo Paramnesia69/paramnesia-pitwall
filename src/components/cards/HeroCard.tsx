@@ -52,7 +52,6 @@ export default function HeroCard({ event }: HeroCardProps) {
               className="object-contain"
               style={{
                 filter: 'brightness(3) contrast(1.2) saturate(0.5)',
-                mixBlendMode: 'screen',
               }}
             />
           </div>
@@ -72,7 +71,7 @@ export default function HeroCard({ event }: HeroCardProps) {
               alt=""
               fill
               className="object-contain"
-              style={{ filter: meta.logo === '/logos/porsche.svg' ? 'brightness(0) invert(1)' : 'grayscale(1) contrast(2) brightness(3)', mixBlendMode: 'screen' }}
+              style={{ filter: meta.logo === '/logos/porsche.svg' ? 'brightness(0) invert(1)' : 'grayscale(1) contrast(2) brightness(3)' }}
               priority
             />
           </div>
