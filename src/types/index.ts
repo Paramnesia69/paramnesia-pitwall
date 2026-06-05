@@ -165,6 +165,32 @@ export interface NormalizedNewsItem {
   series?: SeriesId[];
 }
 
+// ─── F1 Driver Profile ────────────────────────────────────────────────────────
+
+export interface DriverProfile {
+  ref: string;
+  givenName: string;
+  familyName: string;
+  code: string | null;
+  permanentNumber: string | null;
+  nationality: string;
+  dateOfBirth: string | null;
+  wins: number;
+  seasons: number;
+  season2026: { points: number; pos: number; team: string } | null;
+  headshotUrl: string | null;
+}
+
+export interface SelectedDriver {
+  ref: string;
+  name: string;
+  team: string;
+  teamColor: string;
+  series: SeriesId;
+  points: number;
+  pos: number;
+}
+
 export const SERIES_META: Record<
   SeriesId,
   { name: string; accent: string; logo?: string }
