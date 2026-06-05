@@ -28,10 +28,8 @@ function StatBox({ label, value }: { label: string; value: string | number }) {
 }
 
 export default function DriverProfileOverlay() {
-  const { selectedDriver, closeDriver } = useStore((s) => ({
-    selectedDriver: s.selectedDriver,
-    closeDriver: s.closeDriver,
-  }));
+  const selectedDriver = useStore((s) => s.selectedDriver);
+  const closeDriver = useStore((s) => s.closeDriver);
 
   const [profile, setProfile] = useState<DriverProfile | null>(null);
   const [loading, setLoading] = useState(false);
