@@ -48,7 +48,8 @@
       "Bash(qlmanage -t -s 1500 -o lm viewlm.svg)",
       "Bash(cp /tmp/le-mans.svg public/circuits/le-mans.svg)",
       "Bash(python3 -c \"import xml.etree.ElementTree as ET; ET.parse\\('public/circuits/le-mans.svg'\\); print\\('valid svg'\\)\")",
-      "Bash(sed -n '95,110p' src/components/EventDetailOverlay.tsx)"
+      "Bash(sed -n '95,110p' src/components/EventDetailOverlay.tsx)",
+      "Bash(npx next *)"
     ],
     "additionalDirectories": [
       "/private/tmp/src/data"
