@@ -55,7 +55,7 @@ export default memo(function EventCard({ event }: EventCardProps) {
           <div
             className="absolute right-3 top-1/2 -translate-y-1/2 w-44 h-44 pointer-events-none select-none"
             style={{
-              opacity: 0.28,
+              opacity: 0.18,
               zIndex: 0,
               maskImage: 'radial-gradient(ellipse at center, black 55%, transparent 90%)',
               WebkitMaskImage: 'radial-gradient(ellipse at center, black 55%, transparent 90%)',
@@ -66,7 +66,7 @@ export default memo(function EventCard({ event }: EventCardProps) {
               alt=""
               fill
               className="object-contain"
-              style={{ filter: meta.logo === '/logos/porsche.svg' ? 'brightness(0) invert(1)' : 'grayscale(1) contrast(2) brightness(3)' }}
+              style={meta.logo === '/logos/porsche.svg' ? { filter: 'brightness(0) invert(1)' } : undefined}
             />
           </div>
         )}

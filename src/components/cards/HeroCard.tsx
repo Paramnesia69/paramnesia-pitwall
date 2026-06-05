@@ -62,7 +62,7 @@ export default function HeroCard({ event }: HeroCardProps) {
       {meta.logo && (
         <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none select-none" style={{ width: '45%', maxWidth: 420, aspectRatio: '1' }}>
           <div className="relative w-full h-full" style={{
-            opacity: 0.14,
+            opacity: 0.18,
             maskImage: 'radial-gradient(ellipse at center, black 50%, transparent 85%)',
             WebkitMaskImage: 'radial-gradient(ellipse at center, black 50%, transparent 85%)',
           }}>
@@ -71,7 +71,7 @@ export default function HeroCard({ event }: HeroCardProps) {
               alt=""
               fill
               className="object-contain"
-              style={{ filter: meta.logo === '/logos/porsche.svg' ? 'brightness(0) invert(1)' : 'grayscale(1) contrast(2) brightness(3)' }}
+              style={meta.logo === '/logos/porsche.svg' ? { filter: 'brightness(0) invert(1)' } : undefined}
               priority
             />
           </div>

@@ -108,13 +108,13 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
               })()}
               {/* Large faded series logo */}
               {SERIES_META[event.series].logo && (
-                <div className="absolute -right-6 top-1/2 -translate-y-1/2 w-52 h-52 pointer-events-none select-none" style={{ opacity: 0.07 }}>
+                <div className="absolute -right-6 top-1/2 -translate-y-1/2 w-52 h-52 pointer-events-none select-none" style={{ opacity: 0.12 }}>
                   <Image
                     src={SERIES_META[event.series].logo!}
                     alt=""
                     fill
                     className="object-contain"
-                    style={{ filter: 'grayscale(1) contrast(2) brightness(3)' }}
+                    style={SERIES_META[event.series].logo === '/logos/porsche.svg' ? { filter: 'brightness(0) invert(1)' } : undefined}
                   />
                 </div>
               )}
