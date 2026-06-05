@@ -1,4 +1,4 @@
-const CACHE_VERSION = 4;
+const CACHE_VERSION = 5;
 const STATIC_CACHE = `pitwall-static-v${CACHE_VERSION}`;
 const RUNTIME_CACHE = `pitwall-runtime-v${CACHE_VERSION}`;
 const API_CACHE = `pitwall-api-v${CACHE_VERSION}`;
