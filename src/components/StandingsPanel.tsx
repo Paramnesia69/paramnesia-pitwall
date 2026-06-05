@@ -147,6 +147,7 @@ function DriverRow({ d, maxPts, f1 = false, onDriverClick }: {
   onDriverClick?: (d: DriverStanding) => void;
 }) {
   const gap = maxPts - d.points;
+  const [nameHover, setNameHover] = useState(false);
   return (
     <motion.div className="flex items-center gap-2 py-1.5"
       initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: d.pos * 0.03 }}>
@@ -162,24 +163,29 @@ function DriverRow({ d, maxPts, f1 = false, onDriverClick }: {
         <div className="flex items-center justify-between mb-0.5">
           {onDriverClick ? (
             <button
-              className="text-xs font-medium truncate text-left"
-              style={{ transition: 'color 120ms ease, letter-spacing 120ms ease, text-shadow 120ms ease' }}
-              onMouseEnter={(e) => {
-                const el = e.currentTarget;
-                el.style.color = 'rgba(255,255,255,1)';
-                el.style.letterSpacing = '0.04em';
-                el.style.textShadow = `0 0 12px ${d.teamColor}99`;
-              }}
-              onMouseLeave={(e) => {
-                const el = e.currentTarget;
-                el.style.color = '';
-                el.style.letterSpacing = '';
-                el.style.textShadow = '';
-              }}
+              className="flex items-center min-w-0 overflow-hidden text-left"
+              onMouseEnter={() => setNameHover(true)}
+              onMouseLeave={() => setNameHover(false)}
               onClick={(e) => { e.stopPropagation(); onDriverClick(d); }}
               title={`View ${d.name} profile`}
             >
-              {d.name}
+              <span style={{
+                display: 'inline-block',
+                width: nameHover ? 2 : 0,
+                height: 11,
+                borderRadius: 1,
+                background: d.teamColor,
+                flexShrink: 0,
+                alignSelf: 'center',
+                marginRight: nameHover ? 5 : 0,
+                transition: 'width 140ms ease, margin-right 140ms ease',
+              }} />
+              <span
+                className="text-xs font-medium truncate"
+                style={{ color: nameHover ? 'rgba(255,255,255,1)' : undefined, transition: 'color 140ms ease' }}
+              >
+                {d.name}
+              </span>
             </button>
           ) : (
             <span className="text-xs font-medium truncate">{d.name}</span>
