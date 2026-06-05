@@ -24,6 +24,9 @@ import UpdateBanner from '@/components/ui/UpdateBanner';
 import LiveIndicator from '@/components/ui/LiveIndicator';
 import type { RaceResult } from '@/types';
 import { ALL_RESULTS_2026 } from '@/data/results-2026';
+import { getLiveSessions } from '@/lib/useLiveSessions';
+import WhatsLiveBadge from '@/components/ui/WhatsLiveBadge';
+import MiniLeaderboard from '@/components/MiniLeaderboard';
 
 /* ── Lazy-loaded below-fold components ──────────── */
 const StandingsPanel = lazy(() => import('@/components/StandingsPanel'));
@@ -121,6 +124,9 @@ export default function Dashboard({ featured, upcoming, newsFeedSlot }: Dashboar
 
   const cardEvents = filtered.slice(0, 9);
   const timelineEvents = filtered.slice(9, 20);
+
+  // Live sessions across all series — consumed by WhatsLiveBadge + MiniLeaderboard
+  const liveSessions = useMemo(() => getLiveSessions(liveUpcoming), [liveUpcoming]);
 
   // Sync active series accent to CSS var so AmbientBackground reacts
   useEffect(() => {
@@ -345,6 +351,14 @@ export default function Dashboard({ featured, upcoming, newsFeedSlot }: Dashboar
         <Footer />
       </Suspense>
     </main>
+
+    {/* ── Ambient live features ─── outside <main> so they sit above all content */}
+    <AnimatePresence>
+      {liveSessions.length > 0 && <WhatsLiveBadge key="wlb" sessions={liveSessions} />}
+    </AnimatePresence>
+    <AnimatePresence>
+      {liveSessions.length > 0 && <MiniLeaderboard key="mlb" sessions={liveSessions} />}
+    </AnimatePresence>
     </>
   );
 }
