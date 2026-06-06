@@ -33,7 +33,7 @@ const DARK_SVGS = new Set([
 // Per-circuit filter overrides — takes precedence over dark/vivid/base
 const FILTER_OVERRIDES: Record<string, string> = {
   // Nordschleife: gray strokes + red sector marks; needs strong brightness + shape-glow
-  '/circuits/nurburgring-nordschleife.svg': 'brightness(4.2) contrast(1.6) saturate(2.2) drop-shadow(0 0 2px rgba(255,255,255,0.85)) drop-shadow(0 0 8px rgba(160,230,160,0.45))',
+  '/circuits/nurburgring-nordschleife.svg': 'brightness(4.2) contrast(1.6) saturate(2.2) drop-shadow(0 0 2px rgba(255,255,255,0.72)) drop-shadow(0 0 7px rgba(160,230,160,0.32))',
 };
 
 // Per-circuit tuning: [sharpOpacity, glowOpacity, cardTop?, cardRight?]
@@ -41,7 +41,7 @@ const FILTER_OVERRIDES: Record<string, string> = {
 // cardTop default '48%', cardRight default '48%'
 const TUNING: Record<string, [number, number, string?, string?]> = {
   '/circuits/algarve.svg':                [0.45, 0.18],
-  '/circuits/nurburgring-nordschleife.svg':[0.68, 0.42],
+  '/circuits/nurburgring-nordschleife.svg':[0.68, 0.35],
   '/circuits/misano-v2.svg':              [0.28, 0.10],
   '/circuits/watkins-glen.svg':           [0.30, 0.13],
   '/circuits/mugello.svg':                [0.30, 0.13],
