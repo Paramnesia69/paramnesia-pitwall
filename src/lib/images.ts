@@ -10,7 +10,6 @@ export interface CircuitImageInfo {
 }
 
 const VIVID_SVGS = new Set([
-  '/circuits/algarve.svg',
   '/circuits/le-mans-sarthe-v2.svg',
   '/circuits/sebring.svg',
 ]);
@@ -33,18 +32,22 @@ const DARK_SVGS = new Set([
 const FILTER_OVERRIDES: Record<string, string> = {
   // Nordschleife: gray strokes + red sector marks; needs strong brightness + shape-glow
   '/circuits/nurburgring-nordschleife.svg': 'brightness(4.2) contrast(1.6) saturate(2.2) drop-shadow(0 0 2px rgba(255,255,255,0.72)) drop-shadow(0 0 7px rgba(160,230,160,0.32))',
-  // Watkins Glen: black track inverted to white + warm gold glow (IMSA accent)
-  '/circuits/watkins-glen-long.svg': 'brightness(0) invert(1) contrast(1.5) drop-shadow(0 0 3px rgba(255,255,255,0.82)) drop-shadow(0 0 10px rgba(240,190,80,0.45))',
+  // Watkins Glen: inverted to white, reduced glow/glare
+  '/circuits/watkins-glen-long.svg': 'brightness(0) invert(1) contrast(1.1) drop-shadow(0 0 2px rgba(255,255,255,0.38)) drop-shadow(0 0 5px rgba(240,190,80,0.18))',
+  // Misano: simple white inversion, no blue tint, low contrast
+  '/circuits/misano-v2.svg': 'brightness(0) invert(1) contrast(1.1)',
+  // Portimão (Algarve): natural color, slightly boosted clarity
+  '/circuits/algarve.svg': 'brightness(1.12) contrast(1.35) saturate(0.8)',
 };
 
 // Per-circuit tuning: [sharpOpacity, glowOpacity, cardTop?, cardRight?]
 // dark default: 0.42/0.20 | vivid default: 0.42/0.30 | base default: 0.28/0.14
 // cardTop default '48%', cardRight default '48%'
 const TUNING: Record<string, [number, number, string?, string?]> = {
-  '/circuits/algarve.svg':                [0.45, 0.18],
+  '/circuits/algarve.svg':                [0.52, 0.22],          // Portimão: more visible, natural
   '/circuits/nurburgring-nordschleife.svg':[0.68, 0.35],
-  '/circuits/misano-v2.svg':              [0.28, 0.10],
-  '/circuits/watkins-glen-long.svg':      [0.65, 0.40],
+  '/circuits/misano-v2.svg':              [0.20, 0.07, '56%'],   // Misano: shrunk + dimmed
+  '/circuits/watkins-glen-long.svg':      [0.42, 0.20],          // Watkins Glen: less glare
   '/circuits/mugello.svg':                [0.30, 0.13],
   '/circuits/road-america.svg':           [0.30, 0.13],
   '/circuits/brands-hatch.svg':           [0.18, 0.08],
