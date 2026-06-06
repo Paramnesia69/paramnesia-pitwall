@@ -727,34 +727,7 @@
        d="M 1787.9383,800.85556 C 1815.3699,769.76278 1827.7533,758.95644 1892.5252,777.19898"
        id="path5221"
        sodipodi:nodetypes="cc" />
-    <g
-       style="display:inline"
-       id="g3804"
-       transform="matrix(1.9555278,0,0,1.9555278,-2195.3174,-611.3616)"
-       clip-path="none">
-      <text
-         id="text3180"
-         y="964.98792"
-         x="2073.4658"
-         style="font-size:64px;font-style:normal;font-weight:normal;fill:black;fill-opacity:1;stroke:white;stroke-width:0.51137096px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Times New Roman"
-         xml:space="preserve"
-         inkscape:export-xdpi="90.015755"
-         inkscape:export-ydpi="90.015755"><tspan
-           y="964.98792"
-           x="2073.4658"
-           id="tspan3182"
-           sodipodi:role="line"
-           style="stroke-width:0.51137096">N</tspan></text>
-      <path
-         id="path2745"
-         d="M 2146.9581,917.25439 L 2157.3017,971.03394 L 2156.2706,971.02504 L 2146.5892,959.53371 L 2136.7087,970.85443 L 2135.6777,970.84528 L 2146.9581,917.25439 z"
-         style="fill:red;fill-opacity:1;fill-rule:nonzero;stroke:white;stroke-width:0.51137096;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-         inkscape:transform-center-x="6.995674"
-         inkscape:transform-center-y="-11.604558"
-         inkscape:export-filename="D:\Images\Race Tracks\text3180.png"
-         inkscape:export-xdpi="90.015755"
-         inkscape:export-ydpi="90.015755" />
-    </g>
+    
     <g
        style="display:inline"
        transform="matrix(-1.2259208,0.3970303,0.3970303,1.2259208,3104.6243,-482.57345)"

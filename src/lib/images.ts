@@ -36,7 +36,7 @@ const DARK_SVGS = new Set([
 const TUNING: Record<string, [number, number, string?, string?]> = {
   '/circuits/algarve.svg':                [0.60, 0.42],
   '/circuits/nurburgring-nordschleife.svg':[0.45, 0.42],
-  '/circuits/misano.svg':                 [0.20, 0.08, '62%', '58%'], // shrink: top+right push in
+  '/circuits/misano.svg':                 [0.16, 0.06, '68%', '64%'], // shrink hard
   '/circuits/watkins-glen.svg':           [0.30, 0.13],
   '/circuits/mugello.svg':                [0.30, 0.13],
   '/circuits/road-america.svg':           [0.30, 0.13],

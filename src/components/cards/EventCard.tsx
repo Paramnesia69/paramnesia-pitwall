@@ -79,7 +79,7 @@ export default memo(function EventCard({ event }: EventCardProps) {
           return (
             <div
               className="absolute pointer-events-none select-none"
-              style={{ bottom: '14%', left: 0, top: circuitImg.cardTop ?? '48%', right: circuitImg.cardRight ?? '48%', zIndex: 0 }}
+              style={{ bottom: '18%', left: 0, top: circuitImg.cardTop ?? '48%', right: circuitImg.cardRight ?? '48%', zIndex: 0 }}
             >
               <Image src={circuitImg.src} alt="" fill className="object-contain"
                 style={{ filter: `${f} blur(5px)`, opacity: circuitImg.glowOpacity }} />
