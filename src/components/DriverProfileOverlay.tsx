@@ -324,7 +324,6 @@ export default function DriverProfileOverlay() {
                           {profile.nationality && (
                             <InfoRow label="Nationality" accent={accent} last={!profile.dateOfBirth}>
                               <span className="text-base leading-none select-none">{nationalityFlag(profile.nationality)}</span>
-                              <span className="text-[12px] font-semibold truncate">{profile.nationality}</span>
                             </InfoRow>
                           )}
                           {profile.dateOfBirth && (

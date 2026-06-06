@@ -224,7 +224,6 @@ export default function TeamProfileOverlay() {
                   transition={{ delay: 0.2 }}
                 >
                   <span className="text-base leading-none">{nationalityFlag(profile.nationality)}</span>
-                  <span className="text-sm" style={{ color: 'var(--pw-text-secondary)' }}>{profile.nationality}</span>
                 </motion.div>
               )}
               {!profile?.nationality && (
@@ -285,7 +284,6 @@ export default function TeamProfileOverlay() {
                         {profile.nationality && (
                           <InfoRow label="Nationality" accent={accent} last={profile.drivers2026.length === 0}>
                             <span className="text-base leading-none select-none">{nationalityFlag(profile.nationality)}</span>
-                            <span className="text-[12px] font-semibold truncate">{profile.nationality}</span>
                           </InfoRow>
                         )}
                         {profile.drivers2026.length > 0 && (
