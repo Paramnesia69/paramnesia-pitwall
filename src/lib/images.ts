@@ -53,6 +53,7 @@ const CIRCUIT_MAP: Record<string, string> = {
   'Losail International Circuit':   '/circuits/f1-qatar.svg',
   'Yas Marina Circuit':             '/circuits/f1-abu-dhabi.svg',
   'Madring Street Circuit':         '/circuits/f1-madrid.svg',
+  'Circuit de Barcelona-Catalunya': '/circuits/f1-barcelona.svg',
 
   // ── WEC / ELMS / Multi-series ────────────────────────────────────────────
   'Circuit de la Sarthe':           '/circuits/le-mans-sarthe-v2.svg',
