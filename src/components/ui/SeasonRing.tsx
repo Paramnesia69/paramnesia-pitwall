@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
+import { motion } from 'framer-motion';
 import type { SeriesId } from '@/types';
 import { SERIES_META } from '@/types';
 
@@ -42,7 +43,7 @@ const TYRE_MAP: Partial<Record<string, string>> = {
   'porsche-supercup':'/tyres/tyre-wec-yellow.png',
 };
 
-const RING_R = 19;
+const RING_R = 20;
 const CIRCUMFERENCE = 2 * Math.PI * RING_R;
 
 function Ring({ series, finished, total, isActive }: {
@@ -56,63 +57,93 @@ function Ring({ series, finished, total, isActive }: {
   const dashOffset = CIRCUMFERENCE * (1 - progress);
   const label = SHORT[series] ?? series.toUpperCase().slice(0, 4);
   const tyreSrc = TYRE_MAP[series] ?? '/tyres/tyre-imsa-white.png';
+  const filterId = `arc-glow-${series}`;
+  const txtId = `txt-shadow-${series}`;
 
   return (
     <div
       className="flex flex-col items-center gap-1 flex-shrink-0 cursor-default"
-      style={{ transform: isActive ? 'scale(1.12)' : 'scale(1)', transition: 'transform 0.25s ease' }}
       title={`${SERIES_META[series]?.name ?? series}: ${finished} / ${total} rounds`}
     >
-      <div className="relative" style={{ width: 44, height: 44 }}>
-        {/* Tyre image — circular clip, sits inside the progress ring */}
-        <div
-          className="absolute overflow-hidden"
-          style={{ inset: 3, borderRadius: '50%' }}
+      {/* Perspective wrapper for 3-D tilt */}
+      <div style={{ perspective: 400 }}>
+        <motion.div
+          className="relative"
+          style={{ width: 44, height: 44, transformStyle: 'preserve-3d' }}
+          animate={{ scale: isActive ? 1.1 : 1 }}
+          whileHover={{ rotateY: 14, rotateX: -9, scale: isActive ? 1.18 : 1.12 }}
+          transition={{ type: 'spring', stiffness: 280, damping: 22 }}
         >
-          <img
-            src={tyreSrc}
-            alt=""
-            className="w-full h-full object-cover"
-            style={{ opacity: isActive ? 0.92 : 0.52 }}
-          />
-        </div>
+          {/* Tyre photo — fills full circle, no inset */}
+          <div className="absolute inset-0 overflow-hidden" style={{ borderRadius: '50%' }}>
+            <img
+              src={tyreSrc}
+              alt=""
+              className="w-full h-full object-cover"
+              style={{ opacity: isActive ? 0.95 : 0.5 }}
+            />
+          </div>
 
-        {/* Progress arc + center label overlay */}
-        <svg width="44" height="44" viewBox="0 0 44 44" className="absolute inset-0" aria-hidden>
-          {/* Track (subtle dark ring behind the progress arc) */}
-          <circle
-            cx="22" cy="22" r={RING_R}
-            fill="none"
-            stroke="rgba(0,0,0,0.4)"
-            strokeWidth="2.5"
-          />
-          {/* Progress arc */}
-          <circle
-            cx="22" cy="22" r={RING_R}
-            fill="none"
-            stroke={accent}
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeDasharray={CIRCUMFERENCE}
-            strokeDashoffset={dashOffset}
-            transform="rotate(-90 22 22)"
-            style={{ transition: 'stroke-dashoffset 0.8s ease', opacity: isActive ? 1 : 0.65 }}
-          />
-          {/* Dark pill behind text for readability over the tyre rim */}
-          <circle cx="22" cy="22" r="7.5" fill="rgba(0,0,0,0.48)" />
-          {/* Round label */}
-          <text
-            x="22" y="25"
-            textAnchor="middle"
-            fontSize="7.5"
-            fontFamily="ui-monospace, monospace"
-            fontWeight="bold"
-            fill={finished > 0 ? '#fff' : 'rgba(255,255,255,0.45)'}
-            style={{ opacity: isActive ? 1 : 0.7 }}
+          {/* SVG: slim glowing edge arc + readable center label */}
+          <svg
+            width="44" height="44" viewBox="0 0 44 44"
+            className="absolute inset-0"
+            aria-hidden
           >
-            {finished > 0 ? `R${finished}` : '—'}
-          </text>
-        </svg>
+            <defs>
+              {/* Glow for the progress arc */}
+              <filter id={filterId} x="-40%" y="-40%" width="180%" height="180%">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+              {/* Drop-shadow for center text */}
+              <filter id={txtId} x="-50%" y="-50%" width="200%" height="200%">
+                <feDropShadow dx="0" dy="0" stdDeviation="1.8" floodColor="rgba(0,0,0,0.95)" floodOpacity="1" />
+              </filter>
+            </defs>
+
+            {/* Dark track ring — shows the full 360° behind the arc */}
+            <circle
+              cx="22" cy="22" r={RING_R}
+              fill="none"
+              stroke="rgba(0,0,0,0.55)"
+              strokeWidth="2"
+            />
+
+            {/* Progress arc — slim, glowing */}
+            {progress > 0 && (
+              <circle
+                cx="22" cy="22" r={RING_R}
+                fill="none"
+                stroke={accent}
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeDasharray={CIRCUMFERENCE}
+                strokeDashoffset={dashOffset}
+                transform="rotate(-90 22 22)"
+                filter={`url(#${filterId})`}
+                style={{ transition: 'stroke-dashoffset 0.8s ease', opacity: isActive ? 1 : 0.6 }}
+              />
+            )}
+
+            {/* Center label — accent color + drop-shadow so it reads on any tyre */}
+            <text
+              x="22" y="26"
+              textAnchor="middle"
+              fontSize="8"
+              fontFamily="ui-monospace, monospace"
+              fontWeight="bold"
+              fill={finished > 0 ? accent : 'rgba(255,255,255,0.3)'}
+              filter={`url(#${txtId})`}
+              style={{ opacity: isActive ? 1 : 0.65 }}
+            >
+              {finished > 0 ? `R${finished}` : '—'}
+            </text>
+          </svg>
+        </motion.div>
       </div>
 
       <span
@@ -144,7 +175,7 @@ export default function SeasonRing({ stats, activeFilter }: SeasonRingProps) {
       </div>
 
       <div
-        className="flex gap-5 overflow-x-auto py-1"
+        className="flex gap-5 overflow-x-auto py-2"
         style={{ scrollbarWidth: 'none' }}
       >
         {series.map((s) => (
