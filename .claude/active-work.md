@@ -1,23 +1,22 @@
 # Active Work — PARAMNESIA PITWALL
 
-## Trigger Phrase
-**"Renew race weekend results"** → Claude uses WebSearch/WebFetch to find latest results for the manually-maintained series and edits `src/data/results-2026.ts` + `src/data/standings-2026.ts` directly. No scripts, no terminal. F1 **and MotoGP** are excluded (automated via API routes).
-Series: WEC, ELMS, IMSA, WRC, DTM.
+## Slash Commands (use these instead of trigger phrases)
+- `/renew-results` — update all manual series results + standings + deploy (or `/renew-results wec` for one series)
+- `/data-check` — scan for stale data vs. calendar
+- `/deploy` — push uncommitted changes live
+- `/pitwall-agent <task>` — spawn dedicated data agent (use when main conversation is long/bloated)
 
-## Last Commits (2026-06-06)
+## Last Commits (2026-05-27)
 
-`12ccd11` — fix: show series logo watermarks in natural brand colors
-- Removed `grayscale(1) contrast(2) brightness(3)` filter from HeroCard, EventCard, EventDetailOverlay series logo watermarks
-- Logos now show in their natural brand colors: F1=red, WRC=red, DTM=gold, MotoGP=white
-- Opacity tuned: HeroCard 0.18, EventCard 0.18, EventDetailOverlay 0.12
-- Porsche SVG (dark fill) still inverted to white via `brightness(0) invert(1)`
-- Circuit map watermarks (`brightness(3) contrast(1.2) saturate(0.5)`) unchanged
+`6e131fb` — docs: trim features.md 81→30 lines; backup to features-backup.txt
 
-`878a72e` — docs: update .claude — Phase 5 shipped, watermark cross-platform rule documented
+`5d7c18a` — refactor: simplify skills to direct instructions (no @include or sub-agent spawning)
 
-`b33f097` — fix: remove mixBlendMode screen from watermarks — consistent dark look on all platforms
-- iOS Safari drops blend modes inside stacking contexts (backdrop-filter + overflow:hidden + border-radius)
-- Removed `mixBlendMode: 'screen'` from HeroCard (logo + circuit map), EventCard (logo + circuit map), EventDetailOverlay (logo + circuit map)
+`9611bc2` — refactor: rename pitwall-data → pitwall-agent
+
+`bceedff` — feat: add pitwall-agent + renew-results, deploy, data-check skills
+- `.claude/agents/pitwall-agent.md` — dedicated data agent briefing
+- `.claude/commands/renew-results.md`, `deploy.md`, `data-check.md`, `pitwall-agent.md`
 
 ## 16-Feature Build Status
 | Phase | Features | Status |
