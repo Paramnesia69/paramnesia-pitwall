@@ -19,13 +19,14 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ dri
   const { driverRef } = await params;
   if (!driverRef) return NextResponse.json({ error: 'missing driverRef' }, { status: 400 });
 
-  const [infoData, winsData, seasonsData, standingsData] = await Promise.all([
+  const [infoData, winsData, careerStandingsData, standingsData] = await Promise.all([
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     jGet<any>(`/drivers/${driverRef}.json`),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     jGet<any>(`/drivers/${driverRef}/results/1.json?limit=1`),
+    // Career standings — one entry per season with actual race starts (excludes FP-only appearances)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    jGet<any>(`/drivers/${driverRef}/seasons.json?limit=1`),
+    jGet<any>(`/drivers/${driverRef}/driverStandings.json?limit=100`),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     jGet<any>(`/2026/drivers/${driverRef}/driverStandings.json`),
   ]);
@@ -36,7 +37,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ dri
   }
 
   const wins    = parseInt(winsData?.MRData?.total ?? '0');
-  const seasons = parseInt(seasonsData?.MRData?.total ?? '0');
+  const seasons = (careerStandingsData?.MRData?.StandingsTable?.StandingsLists?.length as number) ?? 0;
 
   const standingEntry = standingsData?.MRData?.StandingsTable?.StandingsLists?.[0]?.DriverStandings?.[0];
   const season2026 = standingEntry

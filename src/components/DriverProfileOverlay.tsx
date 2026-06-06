@@ -44,11 +44,18 @@ function StatCard({ label, value, accent, delay = 0 }: { label: string; value: s
   );
 }
 
-function MetaRow({ label, value }: { label: string; value: React.ReactNode }) {
+function InfoRow({ label, children, accent, last }: { label: string; children: React.ReactNode; accent: string; last?: boolean }) {
   return (
-    <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid var(--pw-glass-border)' }}>
-      <span className="text-[11px]" style={{ color: 'var(--pw-text-tertiary)' }}>{label}</span>
-      <span className="text-[11px] font-semibold">{value}</span>
+    <div
+      className="flex items-center justify-between gap-4 px-4 py-3"
+      style={last ? undefined : { borderBottom: `1px solid ${accent}14` }}
+    >
+      <span className="text-[9px] font-bold uppercase tracking-[0.18em] shrink-0" style={{ color: accent, opacity: 0.6 }}>
+        {label}
+      </span>
+      <div className="min-w-0 flex items-center justify-end gap-1.5 overflow-hidden">
+        {children}
+      </div>
     </div>
   );
 }
@@ -311,21 +318,27 @@ export default function DriverProfileOverlay() {
                           <StatCard label="Number" value={profile.permanentNumber ? `#${profile.permanentNumber}` : '—'} accent={accent} delay={0.48} />
                         </div>
                         <motion.div
-                          className="rounded-xl overflow-hidden"
-                          style={{ border: `1px solid ${accent}18`, background: `${accent}06` }}
+                          className="rounded-xl overflow-hidden relative"
+                          style={{ border: `1px solid ${accent}20`, background: `${accent}08` }}
                           initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.52 }}
                         >
+                          {/* Top accent ribbon */}
+                          <div className="absolute top-0 left-4 right-4 h-[2px] rounded-full" style={{ background: `linear-gradient(90deg, ${accent}70, ${accent}15)` }} />
                           {profile.nationality && (
-                            <MetaRow
-                              label="Nationality"
-                              value={<span>{nationalityFlag(profile.nationality)} {profile.nationality}</span>}
-                            />
+                            <InfoRow label="Nationality" accent={accent} last={!profile.dateOfBirth}>
+                              <span className="text-base leading-none select-none">{nationalityFlag(profile.nationality)}</span>
+                              <span className="text-[12px] font-semibold truncate">{profile.nationality}</span>
+                            </InfoRow>
                           )}
                           {profile.dateOfBirth && (
-                            <MetaRow
-                              label="Born"
-                              value={new Date(profile.dateOfBirth).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
-                            />
+                            <InfoRow label="Born" accent={accent} last>
+                              <span className="text-[12px] font-semibold truncate">
+                                {(() => {
+                                  const [y, m, day] = profile.dateOfBirth!.split('-').map(Number);
+                                  return new Date(y, m - 1, day).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+                                })()}
+                              </span>
+                            </InfoRow>
                           )}
                         </motion.div>
                       </>
