@@ -14,10 +14,12 @@ Event grid, Hero card (series-aware featured/live/next), EventDetailOverlay (sli
 ### UX & PWA
 Reminders, Weather badges, Circuit stats panel, Manufacturer logos (3-tier system), Class plate badges, Series logo watermarks, Dark/light theme, PWA, Share, Favorites, Live indicator, Google Calendar links, ICS calendar feed, OpenGraph cards, Manual overrides (overrides.json)
 
-### Live Intelligence & Personal Layer (Phases 1–4)
-Race Diary (watched toggle + star rating + notes), Conflict Detector, Watched State (dim + checkmark), Mini-Leaderboard (fixed bottom strip, z-190), What's Live Badge (floating pill, z-200), Driver Profiles (DriverProfileOverlay, Jolpica + OpenF1 headshot), Points Trajectory chart (ChampionshipChart.tsx, top-6), Teammate H2H (/api/f1/h2h, Jolpica qualifying)
+### Live Intelligence & Personal Layer (Phases 1–4+)
+Race Diary (watched toggle + star rating + notes), Conflict Detector, Watched State (dim + checkmark), Mini-Leaderboard (fixed bottom strip, z-190), What's Live Badge (floating pill, z-200), Driver Profiles (DriverProfileOverlay, Jolpica + OpenF1 headshot), Points Trajectory chart (ChampionshipChart.tsx, top-6), Teammate H2H (/api/f1/h2h, Jolpica qualifying), Team/Constructor Profiles (TeamProfileOverlay, Jolpica)
 
-**Driver Profile details:** Hero gradient + team logo watermark + race number watermark + scan line + headshot pinned bottom-right. StatCards (Position, Points, Wins, Seasons, Number) with whileHover scale+glow (transition 0.12s). InfoRow card (Nationality + flag emoji, Born) with accent-colored labels, min-w-0 truncate on values. Seasons = `seasons.json?limit=100` actual array length (not MRData.total — that overcounts FP appearances). Driver API: `Cache-Control: no-store`.
+**Driver Profile details:** Hero gradient + team logo watermark + race number watermark + scan line + headshot pinned bottom-right. StatCards (Position, Points, Wins, Seasons, Number) — centered (`items-center text-center`), values in Orbitron font, whileHover scale+glow (transition 0.12s). InfoRow card (Nationality flag only — no text, Born date in Orbitron) with accent-colored labels. Seasons = `seasons.json?limit=100` actual array length (not MRData.total — overcounts FP appearances). Driver API: `Cache-Control: no-store`.
+
+**Team Profile details:** Identical layout to Driver Profile. Hero: team logo watermark (left) + `#pos` watermark (right, Orbitron 120px) + scan line. No headshot — hero is pure gradient. StatCards (Position, Points — 2-col; Wins, Seasons, Since — 3-col) centered, Orbitron values. InfoRow card: Nationality (flag only) + 2026 Drivers (full names in Orbitron, joined with ` · `). Opened by clicking constructor name in F1 Standings (animated ribbon hover, same as DriverRow). `CONSTRUCTOR_REFS` map in StandingsPanel → Jolpica constructorId. API: `/api/f1/constructor/[constructorRef]/route.ts`, `Cache-Control: no-store`, 5 parallel Jolpica fetches.
 
 ### Media Layer (Phase 5)
 Race Highlights (9 YouTube RSS feeds, inline lightbox player), Podcasts (4 RSS feeds with .mp3 enclosures, inline audio)

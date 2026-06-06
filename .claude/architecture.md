@@ -24,18 +24,24 @@ src/
 │       ├── weather/route.ts  # /api/weather — OpenWeatherMap proxy
 │       ├── calendar/route.ts # /api/calendar — ICS feed (254 sessions, ?series= filter)
 │       ├── og/route.ts       # /api/og?event=<id> — 1200×630 PNG OpenGraph card
-│       └── openf1/
-│           └── timing/route.ts # /api/openf1/timing?eventId= — F1 live timing proxy
+│       ├── openf1/
+│       │   └── timing/route.ts # /api/openf1/timing?eventId= — F1 live timing proxy
+│       └── f1/
+│           ├── driver/[driverRef]/route.ts      # /api/f1/driver/:ref — Jolpica driver profile, no-store cache
+│           └── constructor/[constructorRef]/route.ts # /api/f1/constructor/:ref — Jolpica constructor profile, no-store cache
 ├── components/
 │   ├── Dashboard.tsx         # Client shell: series filter, event grid, lazy-loaded panels; accepts newsFeedSlot ReactNode
 │   │                         # Series order: F1→WEC→ELMS→IMSA→Nürburgring→MotoGP→GTWCE→DTM→WRC→Porsche
 │   ├── AsyncNewsFeed.tsx     # Async server component — fetches news + renders NewsFeed; used behind Suspense in page.tsx
 │   ├── EventDetailOverlay.tsx # Right-panel slide-out (framer spring), Escape key, backdrop click
+│   ├── DriverProfileOverlay.tsx # F1 driver profile sidebar; opened from StandingsPanel DriverRow click
+│   ├── TeamProfileOverlay.tsx   # F1 constructor profile sidebar; opened from StandingsPanel ConstructorRow click
 │   ├── StandingsPanel.tsx    # Championship standings; series logo tab bar (F1/WEC/ELMS/IMSA/MotoGP/DTM/WRC)
 │   │                         # All series side-by-side via ExpandableGrid (3-col CSS grid: 1fr 1px 1fr, glass divider)
 │   │                         # ExpandableGrid: premium headers (10px semibold + bottom border), defaultLimit=10 + expand button
 │   │                         # ClassSection: badge header + ExpandableGrid; takes driverData+teamData (no sub-toggle)
 │   │                         # F1: roundPoints merged from static into live API response by name → SVG sparkline per row
+│   │                         # CONSTRUCTOR_REFS map: constructor display name → Jolpica constructorId
 │   ├── RecentResults.tsx     # Podium cards grid; filterable by series; manufacturer logos
 │   ├── NewsFeed.tsx          # RSS news feed; reads activeFilter from useSearchParams(?series=); no longer needs prop
 │   ├── HeroCard.tsx          # Featured event hero (motion.section, series watermark, countdown)
@@ -144,6 +150,11 @@ RaceResult { id, series: SeriesId, round, name, circuit, country, countryCode, d
 
 DriverStanding   { pos, name, team, points, teamColor }
 ConstructorStanding { pos, name, points, color }
+
+SelectedTeam { ref: string, name: string, teamColor: string, pos: number, points: number, series: SeriesId }
+TeamProfile  { ref, name, nationality, wins, seasons, firstSeason,
+               season2026: { points, pos } | null,
+               drivers2026: { ref, givenName, familyName, number }[] }
 ```
 
 ## SERIES_META (src/types/index.ts)
@@ -158,14 +169,19 @@ Series logos in `/public/logos/` — SVGs are transparent; `gtwce.png`, `wec.png
 ```ts
 { favorites: SeriesId[], toggleFavorite, isFavorite,
   selectedEventId: string|null, openEvent(id), closeEvent(),
-  selectedDriver: DriverSelectedInfo|null, openDriver(info), closeDriver(),
+  selectedDriver: SelectedDriver|null, openDriver(info), closeDriver(),
+  selectedTeam: SelectedTeam|null, openTeam(team), closeTeam(),
   theme: 'dark'|'light', toggleTheme,
-  reminders: Reminder[], addReminder, removeReminder, markFired, getReminder, clearExpiredReminders }
+  reminders: Reminder[], addReminder, removeReminder, markFired, getReminder, clearExpiredReminders,
+  diary: Record<string, DiaryEntry>, setDiaryEntry, toggleWatched, getDiaryEntry, removeDiaryEntry }
 
-DriverSelectedInfo { ref: string, name: string, team: string, teamColor: string,
-                     pos: number, points: number, series: SeriesId }
+SelectedDriver { ref: string, name: string, team: string, teamColor: string,
+                 pos: number, points: number, series: SeriesId }
+SelectedTeam   { ref: string, name: string, teamColor: string,
+                 pos: number, points: number, series: SeriesId }
 ```
-Persisted: `favorites`, `theme`, `reminders`
+Persisted: `favorites`, `theme`, `reminders`, `diary`
+Transient (not persisted): `selectedEventId`, `selectedDriver`, `selectedTeam`, `selectedResult`
 
 ## Data Flow
 ```
@@ -228,12 +244,13 @@ spring: stiffness 300, damping 32 — slides in from x:'100%'
 
 ### StatCard component
 ```tsx
-// Accent-tinted glass card with instant hover animation
+// Centered, accent-tinted glass card with instant hover animation
+className: "relative flex flex-col items-center text-center gap-1.5 px-4 pt-4 pb-3 rounded-xl overflow-hidden cursor-default"
 background: ${accent}0c  border: 1px solid ${accent}28
 whileHover: scale 1.03, boxShadow: `0 0 0 1px ${accent}45, 0 8px 28px ${accent}18`
   transition: { duration: 0.12, ease: 'easeOut' }   ← MUST be inside whileHover to override spring
 label: 9px bold uppercase tracking-[0.18em], accent color at opacity 0.7
-value: text-2xl font-bold tabular-nums
+value: text-2xl font-bold tabular-nums, fontFamily: var(--font-orbitron)
 entrance: initial y:10→0 opacity:0→1, spring stiffness:240 damping:24, staggered delay
 ```
 Cards: **2026 Season** (Position, Points — 2-col grid) · **Career** (Wins, Seasons, Number — 3-col grid)
@@ -243,7 +260,8 @@ Cards: **2026 Season** (Position, Points — 2-col grid) · **Career** (Wins, Se
 // flex justify-between, gap-4, px-4 py-3
 label: 9px bold uppercase tracking-[0.18em], accent color at opacity 0.6, shrink-0
 value wrapper: min-w-0 flex items-center justify-end gap-1.5 overflow-hidden
-  → flag emoji at text-base (16px), nationality/date text at 12px font-semibold truncate
+  → Nationality: flag emoji only (no text label)
+  → Born/Drivers: 12px font-semibold truncate, fontFamily: var(--font-orbitron)
 border between rows: 1px solid ${accent}14
 card: border 1px solid ${accent}20, bg ${accent}08, overflow-hidden, motion.div entrance delay 0.52s
 ```
@@ -270,6 +288,46 @@ seasons count: use SeasonTable.Seasons.length (actual array) NOT MRData.total
 headshot: OpenF1 /drivers?driver_number=N&session_key=latest → headshot_url, replace q_auto→q_100
   revalidate: 86400 (headshots change rarely)
   failure is silent — headshot is optional
+```
+
+## Team Profile Overlay (TeamProfileOverlay.tsx)
+
+Identical structure to DriverProfileOverlay. Key differences:
+
+### Trigger & State
+- Opened from `StandingsPanel` ConstructorRow — same animated ribbon hover as DriverRow (width 0→2, marginRight 0→5, name brightens to white, 140ms ease)
+- `CONSTRUCTOR_REFS` map in StandingsPanel: display name → Jolpica constructorId (e.g. `'McLaren' → 'mclaren'`)
+- Zustand: `selectedTeam: SelectedTeam | null`, `openTeam(team)`, `closeTeam()` — transient, not persisted
+
+### Hero (h-56)
+- Same gradient, scan line, bottom fade, close button as DriverProfileOverlay
+- **Left watermark**: team logo, opacity 0.10, radial-gradient mask — identical to driver
+- **Right watermark**: `#${team.pos}` at fontSize 120, opacity 0.07, Orbitron — replaces race number
+- No headshot equivalent — hero is pure gradient
+
+### StatCards
+- **2026 Season** (2-col): Position (`P${pos}`), Points
+- **Career** (3-col): Wins, Seasons, Since (first season year)
+- All centered + Orbitron values (same as driver)
+
+### InfoRow card
+- **Nationality**: flag emoji only (no text)
+- **2026 Drivers**: full names joined with ` · `, Orbitron font
+
+### API Route: /api/f1/constructor/[constructorRef]/route.ts
+```
+runtime: nodejs
+Cache-Control: no-store
+
+Parallel fetches (Promise.all):
+  /constructors/${ref}.json                            → name, nationality
+  /constructors/${ref}/results/1.json?limit=1          → MRData.total = career wins
+  /constructors/${ref}/seasons.json?limit=100          → SeasonTable.Seasons.length = seasons count
+  /2026/constructors/${ref}/constructorStandings.json  → current pos + points
+  /2026/constructors/${ref}/drivers.json               → 2026 driver list
+
+seasons: use SeasonTable.Seasons.length (same reason as driver — MRData.total overcounts)
+firstSeason: SeasonTable.Seasons[0].season
 ```
 
 ## Important: Next.js Version Warning

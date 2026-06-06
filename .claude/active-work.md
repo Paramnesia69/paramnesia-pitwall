@@ -8,9 +8,9 @@
 
 ## Last Commits (2026-06-06)
 
-`e82849f` — fix: seasons — use actual seasons list length not MRData.total
+`44d15f0` — feat: center stat cards + Orbitron font on values in driver/team overlays
 
-`4497150` — fix: remove stat card ribbons + bust driver API cache
+`8b56f99` — fix: remove nationality text labels — keep flags only in driver + team overlays
 
 ## 16-Feature Build Status
 | Phase | Features | Status |
@@ -19,6 +19,7 @@
 | 2 | Team Radio (1), Tyre Tracker (2), Flag Feed (3) | ✅ shipped |
 | 3 | Mini-Leaderboard (4), What's Live Badge (11) | ✅ shipped |
 | 4 | Driver Profile (8), Trajectory Chart (9), H2H (10) | ✅ shipped |
+| 4+ | Team Profile (constructor overlay) | ✅ shipped 2026-06-06 |
 | 5 | Highlights (12), Podcasts (13) | ✅ shipped 2026-06-06 |
 | 6 | Next Alarm (14), Offline Badge (15), Season Ring (16) | ⏳ not started |
 
