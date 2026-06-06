@@ -4,17 +4,27 @@ import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '@/store';
 import { getTeamLogo } from '@/lib/teamLogos';
-import type { TeamProfile } from '@/types';
+import type { TeamProfile, SelectedTeam } from '@/types';
 
 const NATIONALITY_FLAGS: Record<string, string> = {
   British: '🇬🇧', Dutch: '🇳🇱', Monegasque: '🇲🇨', Australian: '🇦🇺', Spanish: '🇪🇸',
   Italian: '🇮🇹', French: '🇫🇷', German: '🇩🇪', Finnish: '🇫🇮', Mexican: '🇲🇽',
   Canadian: '🇨🇦', American: '🇺🇸', Japanese: '🇯🇵', Chinese: '🇨🇳', Thai: '🇹🇭',
   Brazilian: '🇧🇷', Argentine: '🇦🇷', Austrian: '🇦🇹', Swiss: '🇨🇭', Belgian: '🇧🇪',
+  South_African: '🇿🇦', Turkish: '🇹🇷',
 };
 
 function nationalityFlag(nat: string): string {
   return NATIONALITY_FLAGS[nat] ?? NATIONALITY_FLAGS[nat.replace(/ /g, '_')] ?? '';
+}
+
+function getTeamBadge(t: SelectedTeam): string {
+  if (t.series === 'f1') return 'F1 · CONSTRUCTOR';
+  if (t.series === 'motogp') return 'MOTOGP · TEAM';
+  if (t.series === 'wec') return t.driverNames ? 'WEC · ENTRY' : 'WEC · MANUFACTURER';
+  if (t.series === 'imsa') return t.driverNames ? 'IMSA · ENTRY' : 'IMSA · MANUFACTURER';
+  if (t.series === 'elms') return t.driverNames ? 'ELMS · ENTRY' : 'ELMS · MANUFACTURER';
+  return `${t.series.toUpperCase()} · TEAM`;
 }
 
 function StatCard({ label, value, accent, delay = 0 }: { label: string; value: string | number; accent: string; delay?: number }) {
@@ -65,6 +75,11 @@ export default function TeamProfileOverlay() {
   useEffect(() => {
     if (!selectedTeam) { setProfile(null); return; }
     if (!selectedTeam.ref) { setProfile(null); return; }
+    if (selectedTeam.series !== 'f1') {
+      setProfile(null);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     setProfile(null);
     fetch(`/api/f1/constructor/${encodeURIComponent(selectedTeam.ref)}`)
@@ -72,7 +87,7 @@ export default function TeamProfileOverlay() {
       .then((data) => setProfile(data ?? null))
       .catch(() => setProfile(null))
       .finally(() => setLoading(false));
-  }, [selectedTeam?.ref]);
+  }, [selectedTeam?.ref, selectedTeam?.series]);
 
   const handleKey = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Escape') closeTeam();
@@ -87,6 +102,7 @@ export default function TeamProfileOverlay() {
   const t = selectedTeam;
   const logo = t ? getTeamLogo(t.name, t.series === 'f1') : null;
   const accent = t?.teamColor ?? '#888';
+  const isF1 = t?.series === 'f1';
 
   return (
     <AnimatePresence>
@@ -198,7 +214,7 @@ export default function TeamProfileOverlay() {
                   className="text-[10px] font-bold uppercase tracking-[0.18em] px-2.5 py-1 rounded"
                   style={{ color: accent, background: `${accent}18`, border: `1px solid ${accent}30` }}
                 >
-                  {t.series.toUpperCase()} · Constructor
+                  {getTeamBadge(t)}
                 </span>
               </motion.div>
 
@@ -239,7 +255,7 @@ export default function TeamProfileOverlay() {
               />
 
               <div className="px-6 pt-4 space-y-6 relative">
-                {/* 2026 Season */}
+                {/* 2026 Season — always shown */}
                 <div>
                   <motion.p
                     className="text-[10px] font-bold uppercase tracking-[0.18em] mb-3"
@@ -254,51 +270,84 @@ export default function TeamProfileOverlay() {
                   </div>
                 </div>
 
-                {/* Career */}
-                <div>
-                  <motion.p
-                    className="text-[10px] font-bold uppercase tracking-[0.18em] mb-3"
-                    style={{ color: 'var(--pw-text-tertiary)' }}
-                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 }}
-                  >
-                    Career
-                  </motion.p>
-                  {loading ? (
-                    <div className="grid grid-cols-3 gap-2">
-                      {[...Array(3)].map((_, i) => (
-                        <div key={i} className="rounded-xl h-16 animate-pulse" style={{ background: `${accent}10` }} />
-                      ))}
-                    </div>
-                  ) : profile ? (
-                    <>
-                      <div className="grid grid-cols-3 gap-2 mb-4">
-                        <StatCard label="Wins" value={profile.wins} accent={accent} delay={0.38} />
-                        <StatCard label="Seasons" value={profile.seasons} accent={accent} delay={0.43} />
-                        <StatCard label="Since" value={profile.firstSeason || '—'} accent={accent} delay={0.48} />
+                {/* Career — F1 only */}
+                {isF1 && (
+                  <div>
+                    <motion.p
+                      className="text-[10px] font-bold uppercase tracking-[0.18em] mb-3"
+                      style={{ color: 'var(--pw-text-tertiary)' }}
+                      initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 }}
+                    >
+                      Career
+                    </motion.p>
+                    {loading ? (
+                      <div className="grid grid-cols-3 gap-2">
+                        {[...Array(3)].map((_, i) => (
+                          <div key={i} className="rounded-xl h-16 animate-pulse" style={{ background: `${accent}10` }} />
+                        ))}
                       </div>
-                      <motion.div
-                        className="rounded-xl overflow-hidden"
-                        style={{ border: `1px solid ${accent}20`, background: `${accent}08` }}
-                        initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.52 }}
-                      >
-                        {profile.nationality && (
-                          <InfoRow label="Nationality" accent={accent} last={profile.drivers2026.length === 0}>
-                            <span className="text-base leading-none select-none">{nationalityFlag(profile.nationality)}</span>
-                          </InfoRow>
-                        )}
-                        {profile.drivers2026.length > 0 && (
-                          <InfoRow label="2026 Drivers" accent={accent} last>
-                            <span className="text-[12px] font-semibold truncate text-right" style={{ fontFamily: 'var(--font-orbitron, var(--pw-font-display))' }}>
-                              {profile.drivers2026.map(d => `${d.givenName} ${d.familyName}`).join(' · ')}
-                            </span>
-                          </InfoRow>
-                        )}
-                      </motion.div>
-                    </>
-                  ) : (
-                    <p className="text-[11px]" style={{ color: 'var(--pw-text-tertiary)' }}>Career data unavailable</p>
-                  )}
-                </div>
+                    ) : profile ? (
+                      <>
+                        <div className="grid grid-cols-3 gap-2 mb-4">
+                          <StatCard label="Wins" value={profile.wins} accent={accent} delay={0.38} />
+                          <StatCard label="Seasons" value={profile.seasons} accent={accent} delay={0.43} />
+                          <StatCard label="Since" value={profile.firstSeason || '—'} accent={accent} delay={0.48} />
+                        </div>
+                        <motion.div
+                          className="rounded-xl overflow-hidden"
+                          style={{ border: `1px solid ${accent}20`, background: `${accent}08` }}
+                          initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.52 }}
+                        >
+                          {profile.nationality && (
+                            <InfoRow label="Nationality" accent={accent} last={profile.drivers2026.length === 0}>
+                              <span className="text-base leading-none select-none">{nationalityFlag(profile.nationality)}</span>
+                            </InfoRow>
+                          )}
+                          {profile.drivers2026.length > 0 && (
+                            <InfoRow label="2026 Drivers" accent={accent} last>
+                              <span className="text-[12px] font-semibold truncate text-right" style={{ fontFamily: 'var(--font-orbitron, var(--pw-font-display))' }}>
+                                {profile.drivers2026.map(d => `${d.givenName} ${d.familyName}`).join(' · ')}
+                              </span>
+                            </InfoRow>
+                          )}
+                        </motion.div>
+                      </>
+                    ) : (
+                      <p className="text-[11px]" style={{ color: 'var(--pw-text-tertiary)' }}>Career data unavailable</p>
+                    )}
+                  </div>
+                )}
+
+                {/* Entry / Team info — non-F1 */}
+                {!isF1 && (t.driverNames || t.carNumber || t.seriesClass) && (
+                  <motion.div
+                    className="rounded-xl overflow-hidden"
+                    style={{ border: `1px solid ${accent}20`, background: `${accent}08` }}
+                    initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.38 }}
+                  >
+                    {t.driverNames && (
+                      <InfoRow label="Drivers" accent={accent} last={!t.carNumber && !t.seriesClass}>
+                        <span className="text-[12px] font-semibold truncate text-right" style={{ fontFamily: 'var(--font-orbitron, var(--pw-font-display))' }}>
+                          {t.driverNames}
+                        </span>
+                      </InfoRow>
+                    )}
+                    {t.carNumber && (
+                      <InfoRow label="Car #" accent={accent} last={!t.seriesClass}>
+                        <span className="text-[12px] font-semibold" style={{ fontFamily: 'var(--font-orbitron, var(--pw-font-display))' }}>
+                          #{t.carNumber}
+                        </span>
+                      </InfoRow>
+                    )}
+                    {t.seriesClass && (
+                      <InfoRow label="Class" accent={accent} last>
+                        <span className="text-[12px] font-semibold" style={{ fontFamily: 'var(--font-orbitron, var(--pw-font-display))' }}>
+                          {t.seriesClass}
+                        </span>
+                      </InfoRow>
+                    )}
+                  </motion.div>
+                )}
               </div>
             </div>
           </motion.aside>

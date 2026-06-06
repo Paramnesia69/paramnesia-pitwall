@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '@/store';
 import { getTeamLogo } from '@/lib/teamLogos';
-import type { DriverProfile } from '@/types';
+import type { DriverProfile, MotoGPRiderProfile } from '@/types';
 
 const NATIONALITY_FLAGS: Record<string, string> = {
   British: '🇬🇧', Dutch: '🇳🇱', Monegasque: '🇲🇨', Australian: '🇦🇺', Spanish: '🇪🇸',
@@ -12,6 +12,7 @@ const NATIONALITY_FLAGS: Record<string, string> = {
   Canadian: '🇨🇦', American: '🇺🇸', Japanese: '🇯🇵', Chinese: '🇨🇳', Thai: '🇹🇭',
   Brazilian: '🇧🇷', Argentine: '🇦🇷', New_Zealander: '🇳🇿', Danish: '🇩🇰', Swiss: '🇨🇭',
   Belgian: '🇧🇪', Austrian: '🇦🇹', Swedish: '🇸🇪', Norwegian: '🇳🇴', Polish: '🇵🇱',
+  South_African: '🇿🇦', Turkish: '🇹🇷', Portuguese: '🇵🇹',
 };
 
 function nationalityFlag(nat: string): string {
@@ -59,24 +60,33 @@ function InfoRow({ label, children, accent, last }: { label: string; children: R
   );
 }
 
+function formatDOB(dob: string): string {
+  const [y, m, day] = dob.split('-').map(Number);
+  return new Date(y, m - 1, day).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
 export default function DriverProfileOverlay() {
   const selectedDriver = useStore((s) => s.selectedDriver);
   const closeDriver = useStore((s) => s.closeDriver);
 
-  const [profile, setProfile] = useState<DriverProfile | null>(null);
+  const [profile, setProfile] = useState<DriverProfile | MotoGPRiderProfile | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!selectedDriver) { setProfile(null); return; }
-    if (selectedDriver.series !== 'f1' || !selectedDriver.ref) { setProfile(null); return; }
+    if (!selectedDriver?.ref) { setProfile(null); return; }
+    const series = selectedDriver.series;
+    if (series !== 'f1' && series !== 'motogp') { setProfile(null); return; }
     setLoading(true);
     setProfile(null);
-    fetch(`/api/f1/driver/${encodeURIComponent(selectedDriver.ref)}`)
+    const url = series === 'motogp'
+      ? `/api/motogp/rider/${encodeURIComponent(selectedDriver.ref)}`
+      : `/api/f1/driver/${encodeURIComponent(selectedDriver.ref)}`;
+    fetch(url)
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => setProfile(data ?? null))
       .catch(() => setProfile(null))
       .finally(() => setLoading(false));
-  }, [selectedDriver?.ref]);
+  }, [selectedDriver?.ref, selectedDriver?.series]);
 
   const handleKey = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Escape') closeDriver();
@@ -91,6 +101,8 @@ export default function DriverProfileOverlay() {
   const d = selectedDriver;
   const logo = d ? getTeamLogo(d.team, d.series === 'f1') : null;
   const accent = d?.teamColor ?? '#888';
+
+  const seriesBadge = d?.series === 'motogp' ? 'MOTOGP · RIDER' : 'F1 · DRIVER';
 
   return (
     <AnimatePresence>
@@ -227,7 +239,7 @@ export default function DriverProfileOverlay() {
                   className="text-[10px] font-bold uppercase tracking-[0.18em] px-2.5 py-1 rounded"
                   style={{ color: accent, background: `${accent}18`, border: `1px solid ${accent}30` }}
                 >
-                  {d.series.toUpperCase()} · Driver
+                  {seriesBadge}
                 </span>
               </motion.div>
 
@@ -293,7 +305,7 @@ export default function DriverProfileOverlay() {
                   </div>
                 </div>
 
-                {/* Career */}
+                {/* Career — F1 */}
                 {d.series === 'f1' && (
                   <div>
                     <motion.p
@@ -312,27 +324,72 @@ export default function DriverProfileOverlay() {
                     ) : profile ? (
                       <>
                         <div className="grid grid-cols-3 gap-2 mb-4">
-                          <StatCard label="Wins" value={profile.wins} accent={accent} delay={0.38} />
-                          <StatCard label="Seasons" value={profile.seasons} accent={accent} delay={0.43} />
-                          <StatCard label="Number" value={profile.permanentNumber ? `#${profile.permanentNumber}` : '—'} accent={accent} delay={0.48} />
+                          <StatCard label="Wins" value={(profile as DriverProfile).wins} accent={accent} delay={0.38} />
+                          <StatCard label="Seasons" value={(profile as DriverProfile).seasons} accent={accent} delay={0.43} />
+                          <StatCard label="Number" value={(profile as DriverProfile).permanentNumber ? `#${(profile as DriverProfile).permanentNumber}` : '—'} accent={accent} delay={0.48} />
                         </div>
                         <motion.div
                           className="rounded-xl overflow-hidden"
                           style={{ border: `1px solid ${accent}20`, background: `${accent}08` }}
                           initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.52 }}
                         >
-                          {profile.nationality && (
-                            <InfoRow label="Nationality" accent={accent} last={!profile.dateOfBirth}>
-                              <span className="text-base leading-none select-none">{nationalityFlag(profile.nationality)}</span>
+                          {(profile as DriverProfile).nationality && (
+                            <InfoRow label="Nationality" accent={accent} last={!(profile as DriverProfile).dateOfBirth}>
+                              <span className="text-base leading-none select-none">{nationalityFlag((profile as DriverProfile).nationality)}</span>
                             </InfoRow>
                           )}
-                          {profile.dateOfBirth && (
+                          {(profile as DriverProfile).dateOfBirth && (
                             <InfoRow label="Born" accent={accent} last>
                               <span className="text-[12px] font-semibold truncate" style={{ fontFamily: 'var(--font-orbitron, var(--pw-font-display))' }}>
-                                {(() => {
-                                  const [y, m, day] = profile.dateOfBirth!.split('-').map(Number);
-                                  return new Date(y, m - 1, day).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
-                                })()}
+                                {formatDOB((profile as DriverProfile).dateOfBirth!)}
+                              </span>
+                            </InfoRow>
+                          )}
+                        </motion.div>
+                      </>
+                    ) : (
+                      <p className="text-[11px]" style={{ color: 'var(--pw-text-tertiary)' }}>Career data unavailable</p>
+                    )}
+                  </div>
+                )}
+
+                {/* Career — MotoGP */}
+                {d.series === 'motogp' && (
+                  <div>
+                    <motion.p
+                      className="text-[10px] font-bold uppercase tracking-[0.18em] mb-3"
+                      style={{ color: 'var(--pw-text-tertiary)' }}
+                      initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 }}
+                    >
+                      Career
+                    </motion.p>
+                    {loading ? (
+                      <div className="grid grid-cols-3 gap-2">
+                        {[...Array(3)].map((_, i) => (
+                          <div key={i} className="rounded-xl h-16 animate-pulse" style={{ background: `${accent}10` }} />
+                        ))}
+                      </div>
+                    ) : profile ? (
+                      <>
+                        <div className="grid grid-cols-3 gap-2 mb-4">
+                          <StatCard label="Wins" value={(profile as MotoGPRiderProfile).raceWins} accent={accent} delay={0.38} />
+                          <StatCard label="Titles" value={(profile as MotoGPRiderProfile).championships} accent={accent} delay={0.43} />
+                          <StatCard label="Number" value={`#${(profile as MotoGPRiderProfile).permanentNumber}`} accent={accent} delay={0.48} />
+                        </div>
+                        <motion.div
+                          className="rounded-xl overflow-hidden"
+                          style={{ border: `1px solid ${accent}20`, background: `${accent}08` }}
+                          initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.52 }}
+                        >
+                          {(profile as MotoGPRiderProfile).nationality && (
+                            <InfoRow label="Nationality" accent={accent} last={!(profile as MotoGPRiderProfile).dateOfBirth}>
+                              <span className="text-base leading-none select-none">{nationalityFlag((profile as MotoGPRiderProfile).nationality)}</span>
+                            </InfoRow>
+                          )}
+                          {(profile as MotoGPRiderProfile).dateOfBirth && (
+                            <InfoRow label="Born" accent={accent} last>
+                              <span className="text-[12px] font-semibold truncate" style={{ fontFamily: 'var(--font-orbitron, var(--pw-font-display))' }}>
+                                {formatDOB((profile as MotoGPRiderProfile).dateOfBirth)}
                               </span>
                             </InfoRow>
                           )}

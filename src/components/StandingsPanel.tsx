@@ -8,6 +8,7 @@ import { SERIES_META } from '@/types';
 import { useStore } from '@/store';
 import ChampionshipChart from '@/components/standings/ChampionshipChart';
 import { F1_DRIVER_REFS } from '@/lib/f1DriverRefs';
+import { MOTOGP_RIDER_REFS } from '@/lib/motogpRiders';
 import {
   F1_DRIVERS_2026,
   F1_CONSTRUCTORS_2026,
@@ -353,7 +354,7 @@ function ExpandableGrid({
 /* ── Multi-class section (badge header + side-by-side grid) ── */
 function ClassSection({
   title, driverData, driverLabel = 'Drivers', teamData, teamLabel = 'Teams',
-  note, accent, badgeSrc, f1 = false, defaultLimit = Infinity, onDriverClick,
+  note, accent, badgeSrc, f1 = false, defaultLimit = Infinity, onDriverClick, onConstructorClick,
 }: {
   title: string;
   driverData: DriverStanding[];
@@ -366,6 +367,7 @@ function ClassSection({
   f1?: boolean;
   defaultLimit?: number;
   onDriverClick?: (d: DriverStanding) => void;
+  onConstructorClick?: (c: ConstructorStanding) => void;
 }) {
   return (
     <div className="mb-4 last:mb-0">
@@ -383,7 +385,7 @@ function ClassSection({
       <ExpandableGrid
         leftLabel={driverLabel} leftData={driverData} maxLeftPts={driverData[0]?.points ?? 1}
         rightLabel={teamLabel} rightData={teamData} maxRightPts={teamData[0]?.points ?? 1}
-        note={note} defaultLimit={defaultLimit} f1={f1} onDriverClick={onDriverClick}
+        note={note} defaultLimit={defaultLimit} f1={f1} onDriverClick={onDriverClick} onConstructorClick={onConstructorClick}
       />
     </div>
   );
@@ -533,6 +535,60 @@ export default function StandingsPanel({ defaultTab }: { defaultTab?: SeriesTab 
     });
   }, [openTeam]);
 
+  const handleMotoGPRiderClick = useCallback((d: DriverStanding) => {
+    openDriver({
+      ref: MOTOGP_RIDER_REFS[d.name] ?? '',
+      name: d.name,
+      team: d.team,
+      teamColor: d.teamColor,
+      series: 'motogp',
+      points: d.points,
+      pos: d.pos,
+    });
+  }, [openDriver]);
+
+  const handleMotoGPTeamClick = useCallback((c: ConstructorStanding) => {
+    openTeam({
+      ref: c.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      name: c.name,
+      series: 'motogp',
+      points: c.points,
+      pos: c.pos,
+      teamColor: c.color,
+    });
+  }, [openTeam]);
+
+  // Endurance helpers — car entry overlay (driver row click)
+  const makeEnduranceDriverClick = (series: 'wec' | 'elms' | 'imsa', seriesClass: string) =>
+    (d: DriverStanding) => {
+      const carNum = d.team.match(/#(\d+)/)?.[1] ?? '';
+      openTeam({
+        ref: d.name,
+        name: d.team,
+        series,
+        points: d.points,
+        pos: d.pos,
+        teamColor: d.teamColor,
+        driverNames: d.name,
+        carNumber: carNum,
+        seriesClass,
+      });
+    };
+
+  // Endurance helpers — manufacturer overlay (constructor row click)
+  const makeEnduranceConstructorClick = (series: 'wec' | 'elms' | 'imsa', seriesClass: string) =>
+    (c: ConstructorStanding) => {
+      openTeam({
+        ref: c.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+        name: c.name,
+        series,
+        points: c.points,
+        pos: c.pos,
+        teamColor: c.color,
+        seriesClass,
+      });
+    };
+
   useEffect(() => {
     fetch('/api/f1/standings')
       .then(r => r.ok ? r.json() : null)
@@ -625,6 +681,8 @@ export default function StandingsPanel({ defaultTab }: { defaultTab?: SeriesTab 
                     rightLabel="Teams" rightData={motoTeams} maxRightPts={motoTeams[0]?.points ?? 1}
                     defaultLimit={10}
                     note={motoRound ? `After Round ${motoRound}` : 'After Round 7 · Italian GP'}
+                    onDriverClick={handleMotoGPRiderClick}
+                    onConstructorClick={handleMotoGPTeamClick}
                   />
                 )}
 
@@ -636,12 +694,16 @@ export default function StandingsPanel({ defaultTab }: { defaultTab?: SeriesTab 
                       driverData={WEC_DRIVERS_2026} teamData={WEC_MANUFACTURERS_2026}
                       note="After R2 · 6H Spa-Francorchamps" accent="#8C1A1A"
                       badgeSrc="/logos/class-hypercar.svg" defaultLimit={10}
+                      onDriverClick={makeEnduranceDriverClick('wec', 'Hypercar')}
+                      onConstructorClick={makeEnduranceConstructorClick('wec', 'Hypercar')}
                     />
                     <ClassSection
                       title="LMGT3" driverLabel="Drivers" teamLabel="Manufacturers"
                       driverData={WEC_LMGT3_DRIVERS_2026} teamData={WEC_LMGT3_MANUFACTURERS_2026}
                       note="After R2 · 6H Spa-Francorchamps" accent="#1A6B38"
                       badgeSrc="/logos/class-lmgt3.svg"
+                      onDriverClick={makeEnduranceDriverClick('wec', 'LMGT3')}
+                      onConstructorClick={makeEnduranceConstructorClick('wec', 'LMGT3')}
                     />
                   </div>
                 )}
@@ -662,16 +724,22 @@ export default function StandingsPanel({ defaultTab }: { defaultTab?: SeriesTab 
                       title="GTP"
                       driverData={IMSA_GTP_DRIVERS_2026} teamData={IMSA_GTP_TEAMS_2026}
                       note="After R4 · Laguna Seca" accent="#C0A062"
+                      onDriverClick={makeEnduranceDriverClick('imsa', 'GTP')}
+                      onConstructorClick={makeEnduranceConstructorClick('imsa', 'GTP')}
                     />
                     <ClassSection
                       title="GTD Pro"
                       driverData={IMSA_GTD_PRO_DRIVERS_2026} teamData={IMSA_GTDPRO_TEAMS_2026}
                       note="After R4 · Laguna Seca" accent="#FF6B35"
+                      onDriverClick={makeEnduranceDriverClick('imsa', 'GTD Pro')}
+                      onConstructorClick={makeEnduranceConstructorClick('imsa', 'GTD Pro')}
                     />
                     <ClassSection
                       title="GTD"
                       driverData={IMSA_GTD_DRIVERS_2026} teamData={IMSA_GTD_TEAMS_2026}
                       note="After R4 · Laguna Seca" accent="#B8A0D0"
+                      onDriverClick={makeEnduranceDriverClick('imsa', 'GTD')}
+                      onConstructorClick={makeEnduranceConstructorClick('imsa', 'GTD')}
                     />
                   </div>
                 )}
@@ -693,18 +761,24 @@ export default function StandingsPanel({ defaultTab }: { defaultTab?: SeriesTab 
                       driverData={ELMS_LMP2_DRIVERS_2026} teamData={ELMS_LMP2_TEAMS_2026}
                       note="After R2 · 4H Le Castellet" accent="#1E4B8C"
                       badgeSrc="/logos/class-lmp2.svg" defaultLimit={10}
+                      onDriverClick={makeEnduranceDriverClick('elms', 'LMP2')}
+                      onConstructorClick={makeEnduranceConstructorClick('elms', 'LMP2')}
                     />
                     <ClassSection
                       title="LMP3"
                       driverData={ELMS_LMP3_DRIVERS_2026} teamData={ELMS_LMP3_TEAMS_2026}
                       note="After R2 · 4H Le Castellet" accent="#4A2090"
                       badgeSrc="/logos/class-lmp3.svg"
+                      onDriverClick={makeEnduranceDriverClick('elms', 'LMP3')}
+                      onConstructorClick={makeEnduranceConstructorClick('elms', 'LMP3')}
                     />
                     <ClassSection
                       title="LMGT3"
                       driverData={ELMS_LMGT3_DRIVERS_2026} teamData={ELMS_LMGT3_TEAMS_2026}
                       note="After R2 · 4H Le Castellet" accent="#1A6B38"
                       badgeSrc="/logos/class-lmgt3.svg"
+                      onDriverClick={makeEnduranceDriverClick('elms', 'LMGT3')}
+                      onConstructorClick={makeEnduranceConstructorClick('elms', 'LMGT3')}
                     />
                   </div>
                 )}

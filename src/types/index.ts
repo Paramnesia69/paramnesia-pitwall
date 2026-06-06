@@ -190,6 +190,22 @@ export interface PodcastEpisode {
   series?: SeriesId[];
 }
 
+// ─── MotoGP Rider Profile ─────────────────────────────────────────────────────
+
+export interface MotoGPRiderProfile {
+  ref: string;
+  givenName: string;
+  familyName: string;
+  nationality: string;   // e.g. "Spanish", "Italian", "French"
+  dateOfBirth: string;   // ISO 8601 e.g. "1993-02-17"
+  permanentNumber: string;
+  raceWins: number;      // MotoGP premier-class feature race wins only
+  championships: number; // FIM World Championship titles across all classes
+  seasons: number;       // MotoGP seasons competed (including current)
+  headshotUrl: string | null;
+  season2026: { pos: number; points: number; team: string } | null;
+}
+
 // ─── F1 Driver Profile ────────────────────────────────────────────────────────
 
 export interface DriverProfile {
@@ -223,6 +239,11 @@ export interface SelectedTeam {
   points: number;
   pos: number;
   teamColor: string;
+  // Non-F1 static data (WEC/ELMS/IMSA car entries, MotoGP teams)
+  driverNames?: string;   // e.g. "Frijns / Rast" for endurance car entries
+  carNumber?: string;     // e.g. "20" parsed from team name "#20"
+  seriesClass?: string;   // e.g. "Hypercar", "LMP2", "GTP"
+  manufacturer?: string;  // e.g. "BMW", "Ferrari"
 }
 
 export interface TeamProfile {
