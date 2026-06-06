@@ -38,7 +38,7 @@ const CIRCUIT_MAP: Record<string, string> = {
   'Lusail International Circuit':   '/circuits/f1-qatar.svg',
   'Losail International Circuit':   '/circuits/f1-qatar.svg',
   'Yas Marina Circuit':             '/circuits/f1-abu-dhabi.svg',
-  // Madrid/Madring — no SVG available yet
+  'Madring Street Circuit':           '/circuits/f1-madrid.svg',
 
   // ── WEC / ELMS / Multi-series ────────────────────────────────────────────
   'Circuit de la Sarthe':           '/circuits/le-mans-sarthe-v2.svg',
