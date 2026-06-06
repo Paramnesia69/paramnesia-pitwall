@@ -2,6 +2,7 @@ export interface CircuitImageInfo {
   src: string;
   dark?: boolean;
   vivid?: boolean;
+  filterOverride?: string;  // per-circuit CSS filter; bypasses dark/vivid/base selection
   sharpOpacity: number;
   glowOpacity: number;
   cardTop?: string;   // override top% of card circuit zone (default '48%')
@@ -12,7 +13,6 @@ const VIVID_SVGS = new Set([
   '/circuits/algarve.svg',
   '/circuits/le-mans-sarthe-v2.svg',
   '/circuits/sebring.svg',
-  '/circuits/nurburgring-nordschleife.svg',
 ]);
 
 const DARK_SVGS = new Set([
@@ -30,12 +30,18 @@ const DARK_SVGS = new Set([
   '/circuits/shanghai.svg',
 ]);
 
+// Per-circuit filter overrides — takes precedence over dark/vivid/base
+const FILTER_OVERRIDES: Record<string, string> = {
+  // Nordschleife: gray strokes + red sector marks; needs strong brightness to glow on dark bg
+  '/circuits/nurburgring-nordschleife.svg': 'brightness(2.8) contrast(1.4) saturate(2.2)',
+};
+
 // Per-circuit tuning: [sharpOpacity, glowOpacity, cardTop?, cardRight?]
 // dark default: 0.42/0.20 | vivid default: 0.42/0.30 | base default: 0.28/0.14
 // cardTop default '48%', cardRight default '48%'
 const TUNING: Record<string, [number, number, string?, string?]> = {
   '/circuits/algarve.svg':                [0.45, 0.18],
-  '/circuits/nurburgring-nordschleife.svg':[0.45, 0.25],
+  '/circuits/nurburgring-nordschleife.svg':[0.55, 0.45],
   '/circuits/misano-v2.svg':              [0.28, 0.10],
   '/circuits/watkins-glen.svg':           [0.30, 0.13],
   '/circuits/mugello.svg':                [0.30, 0.13],
@@ -121,7 +127,8 @@ export function getCircuitImage(circuitName: string): CircuitImageInfo | undefin
   if (!src) return undefined;
   const dark = DARK_SVGS.has(src);
   const vivid = VIVID_SVGS.has(src);
+  const filterOverride = FILTER_OVERRIDES[src];
   const defaults: [number, number, string?, string?] = dark ? [0.42, 0.20] : vivid ? [0.42, 0.30] : [0.28, 0.14];
   const [sharpOpacity, glowOpacity, cardTop, cardRight] = TUNING[src] ?? defaults;
-  return { src, dark, vivid, sharpOpacity, glowOpacity, cardTop, cardRight };
+  return { src, dark, vivid, filterOverride, sharpOpacity, glowOpacity, cardTop, cardRight };
 }

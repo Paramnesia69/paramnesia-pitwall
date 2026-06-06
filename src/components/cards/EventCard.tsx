@@ -75,7 +75,7 @@ export default memo(function EventCard({ event }: EventCardProps) {
           const darkF = 'brightness(0) invert(1) sepia(1) hue-rotate(175deg) saturate(6) brightness(1.1)';
           const vividF = 'brightness(1.05) contrast(1.12) saturate(1.3)';
           const baseF = 'brightness(1.05) contrast(1.1) saturate(1.2)';
-          const f = circuitImg.dark ? darkF : circuitImg.vivid ? vividF : baseF;
+          const f = circuitImg.filterOverride ?? (circuitImg.dark ? darkF : circuitImg.vivid ? vividF : baseF);
           return (
             <div
               className="absolute pointer-events-none select-none"
