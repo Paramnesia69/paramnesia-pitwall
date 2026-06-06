@@ -2,7 +2,7 @@
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { SeriesId, RaceResult, SelectedDriver } from '@/types';
+import type { SeriesId, RaceResult, SelectedDriver, SelectedTeam } from '@/types';
 
 export type Theme = 'dark' | 'light';
 
@@ -67,6 +67,11 @@ interface PitwallStore {
   selectedDriver: SelectedDriver | null;
   openDriver: (driver: SelectedDriver) => void;
   closeDriver: () => void;
+
+  /** Transient — F1 team/constructor profile overlay (not persisted) */
+  selectedTeam: SelectedTeam | null;
+  openTeam: (team: SelectedTeam) => void;
+  closeTeam: () => void;
 
   /** Race diary — keyed by eventId; unifies watched-state (7) + rating/note (5) */
   diary: Record<string, DiaryEntry>;
@@ -171,6 +176,10 @@ export const useStore = create<PitwallStore>()(
       selectedDriver: null,
       openDriver: (driver) => set({ selectedDriver: driver }),
       closeDriver: () => set({ selectedDriver: null }),
+
+      selectedTeam: null,
+      openTeam: (team) => set({ selectedTeam: team }),
+      closeTeam: () => set({ selectedTeam: null }),
 
       diary: {},
       setDiaryEntry: (eventId, partial) =>

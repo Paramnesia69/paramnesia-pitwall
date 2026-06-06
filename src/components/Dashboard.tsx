@@ -38,6 +38,7 @@ const UpcomingTimeline = lazy(() => import('@/components/UpcomingTimeline'));
 const EventDetailOverlay = lazy(() => import('@/components/EventDetailOverlay'));
 const RaceWeekendOverlay = lazy(() => import('@/components/RaceWeekendOverlay'));
 const DriverProfileOverlay = lazy(() => import('@/components/DriverProfileOverlay'));
+const TeamProfileOverlay   = lazy(() => import('@/components/TeamProfileOverlay'));
 const Footer = lazy(() => import('@/components/Footer'));
 const SeasonRing = lazy(() => import('@/components/ui/SeasonRing'));
 
@@ -368,6 +369,9 @@ export default function Dashboard({ featured, upcoming, seasonStats, newsFeedSlo
       </Suspense>
       <Suspense>
         <DriverProfileOverlay />
+      </Suspense>
+      <Suspense>
+        <TeamProfileOverlay />
       </Suspense>
 
       <Suspense>

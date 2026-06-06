@@ -38,6 +38,19 @@ import type { DriverStanding, ConstructorStanding } from '@/data/standings-2026'
 
 type SeriesTab = 'f1' | 'motogp' | 'wec' | 'wrc' | 'imsa' | 'dtm' | 'elms';
 
+const CONSTRUCTOR_REFS: Record<string, string> = {
+  'Mercedes': 'mercedes',
+  'Red Bull Racing': 'red_bull',
+  'Ferrari': 'ferrari',
+  'McLaren': 'mclaren',
+  'Aston Martin': 'aston_martin',
+  'Alpine': 'alpine',
+  'Racing Bulls': 'rb',
+  'Haas': 'haas',
+  'Williams': 'williams',
+  'Kick Sauber': 'sauber',
+};
+
 const SERIES_TABS: SeriesTab[] = ['f1', 'wec', 'elms', 'imsa', 'motogp', 'dtm', 'wrc'];
 const LOGO_FILTER = 'grayscale(1) contrast(2) brightness(3)';
 
@@ -207,7 +220,10 @@ function DriverRow({ d, maxPts, f1 = false, onDriverClick }: {
 }
 
 /* ── Constructor / team row ── */
-function ConstructorRow({ c, maxPts, f1 = false }: { c: ConstructorStanding; maxPts: number; f1?: boolean }) {
+function ConstructorRow({ c, maxPts, f1 = false, onConstructorClick }: {
+  c: ConstructorStanding; maxPts: number; f1?: boolean;
+  onConstructorClick?: (c: ConstructorStanding) => void;
+}) {
   const gap = maxPts - c.points;
   return (
     <motion.div className="flex items-center gap-2 py-1.5"
@@ -222,7 +238,17 @@ function ConstructorRow({ c, maxPts, f1 = false }: { c: ConstructorStanding; max
       <TeamLogo teamName={c.name} teamColor={c.color} f1={f1} />
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between mb-0.5">
-          <span className="text-xs font-medium truncate">{c.name}</span>
+          {onConstructorClick ? (
+            <button
+              className="text-xs font-medium truncate text-left hover:underline"
+              style={{ color: c.color }}
+              onClick={(e) => { e.stopPropagation(); onConstructorClick(c); }}
+            >
+              {c.name}
+            </button>
+          ) : (
+            <span className="text-xs font-medium truncate">{c.name}</span>
+          )}
           <div className="flex items-center gap-1.5 shrink-0 ml-2">
             {gap > 0 && (
               <span className="text-[9px] tabular-nums" style={{ color: 'var(--pw-text-tertiary)' }}>–{gap}</span>
@@ -242,7 +268,7 @@ function ConstructorRow({ c, maxPts, f1 = false }: { c: ConstructorStanding; max
 /* ── Side-by-side two-column grid with optional expand ── */
 function ExpandableGrid({
   leftLabel, leftData, rightLabel, rightData,
-  maxLeftPts, maxRightPts, defaultLimit = Infinity, note, f1 = false, onDriverClick,
+  maxLeftPts, maxRightPts, defaultLimit = Infinity, note, f1 = false, onDriverClick, onConstructorClick,
 }: {
   leftLabel: string;
   leftData: DriverStanding[];
@@ -254,6 +280,7 @@ function ExpandableGrid({
   note?: string;
   f1?: boolean;
   onDriverClick?: (d: DriverStanding) => void;
+  onConstructorClick?: (c: ConstructorStanding) => void;
 }) {
   const [expanded, setExpanded] = useState(false);
   const needsExpand = leftData.length > defaultLimit || rightData.length > defaultLimit;
@@ -285,7 +312,7 @@ function ExpandableGrid({
           </div>
           <div className="space-y-0">
             {visRight.map((c, i) =>
-              <ConstructorRow key={i} c={{ ...c, pos: i + 1 }} maxPts={maxRightPts} f1={f1} />
+              <ConstructorRow key={i} c={{ ...c, pos: i + 1 }} maxPts={maxRightPts} f1={f1} onConstructorClick={onConstructorClick} />
             )}
           </div>
         </div>
@@ -462,6 +489,8 @@ export default function StandingsPanel({ defaultTab }: { defaultTab?: SeriesTab 
   const [motoRound, setMotoRound] = useState<number | null>(null);
 
   const openDriver = useStore((s) => s.openDriver);
+  const openTeam   = useStore((s) => s.openTeam);
+
   const handleF1DriverClick = useCallback((d: DriverStanding) => {
     openDriver({
       ref: F1_DRIVER_REFS[d.name] ?? '',
@@ -473,6 +502,17 @@ export default function StandingsPanel({ defaultTab }: { defaultTab?: SeriesTab 
       pos: d.pos,
     });
   }, [openDriver]);
+
+  const handleF1ConstructorClick = useCallback((c: ConstructorStanding) => {
+    openTeam({
+      ref: CONSTRUCTOR_REFS[c.name] ?? c.name.toLowerCase().replace(/ /g, '_'),
+      name: c.name,
+      series: 'f1',
+      points: c.points,
+      pos: c.pos,
+      teamColor: c.color,
+    });
+  }, [openTeam]);
 
   useEffect(() => {
     fetch('/api/f1/standings')
@@ -552,6 +592,7 @@ export default function StandingsPanel({ defaultTab }: { defaultTab?: SeriesTab 
                       defaultLimit={10} f1
                       note={f1Round ? `After Round ${f1Round}` : 'After Round 5 · Canadian GP'}
                       onDriverClick={handleF1DriverClick}
+                      onConstructorClick={handleF1ConstructorClick}
                     />
                     <ChampionshipChart drivers={f1Drivers} round={f1Round} />
                     <H2HSection />

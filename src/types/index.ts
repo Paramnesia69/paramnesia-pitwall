@@ -216,6 +216,26 @@ export interface SelectedDriver {
   pos: number;
 }
 
+export interface SelectedTeam {
+  ref: string;        // Jolpica constructorId e.g. "mercedes", "red_bull"
+  name: string;       // Display name e.g. "Mercedes"
+  series: SeriesId;
+  points: number;
+  pos: number;
+  teamColor: string;
+}
+
+export interface TeamProfile {
+  ref: string;
+  name: string;
+  nationality: string;
+  wins: number;
+  seasons: number;
+  firstSeason: number;
+  season2026: { points: number; pos: number } | null;
+  drivers2026: { ref: string; givenName: string; familyName: string; number: string | null }[];
+}
+
 export const SERIES_META: Record<
   SeriesId,
   { name: string; accent: string; logo?: string }
