@@ -1,77 +1,76 @@
 /**
- * Maps circuit names to official F1 circuit map images from the F1 media CDN.
- * These detailed diagrams show turn numbers, DRS zones, and sector colors.
- * Used in EventDetailOverlay hero and CircuitStatsPanel.
+ * Maps circuit names to self-hosted Wikimedia Commons SVG circuit maps.
+ * All files live in /public/circuits/ — no external CDN dependency.
+ *
+ * Files not yet downloaded return a 404 (graceful — same as undefined).
+ * Background download script populates them without requiring code changes.
  */
+const CIRCUIT_MAP: Record<string, string> = {
+  // ── F1 ───────────────────────────────────────────────────────────────────
+  'Albert Park Circuit':            '/circuits/f1-australia.svg',
+  'Bahrain International Circuit':  '/circuits/f1-bahrain.svg',
+  'Jeddah':                         '/circuits/f1-saudi-arabia.svg',
+  'Jeddah Corniche Circuit':        '/circuits/f1-saudi-arabia.svg',
+  'Shanghai International Circuit': '/circuits/shanghai.svg',
+  'Miami International Autodrome':  '/circuits/miami.svg',
+  'Imola Circuit':                  '/circuits/f1-imola.svg',
+  'Imola':                          '/circuits/f1-imola.svg',
+  'Circuit de Monaco':              '/circuits/f1-monaco.svg',
+  'Monte Carlo':                    '/circuits/f1-monaco.svg',
+  'Circuit Gilles Villeneuve':      '/circuits/f1-canada.svg',
+  'Red Bull Ring':                  '/circuits/f1-austria.svg',
+  'Silverstone Circuit':            '/circuits/f1-britain.svg',
+  'Circuit de Spa-Francorchamps':   '/circuits/f1-belgium.svg',
+  'Hungaroring':                    '/circuits/f1-hungary.svg',
+  'Circuit Zandvoort':              '/circuits/f1-netherlands.svg',
+  'Autodromo Nazionale Monza':      '/circuits/f1-italia.svg',
+  'Monza Circuit':                  '/circuits/f1-italia.svg',
+  'Baku City Circuit':              '/circuits/f1-azerbaijan.svg',
+  'Marina Bay Street Circuit':      '/circuits/f1-singapore.svg',
+  'Suzuka International Racing Course': '/circuits/f1-japan.svg',
+  'Suzuka Circuit':                 '/circuits/f1-japan.svg',
+  'Circuit of the Americas':        '/circuits/f1-cota.svg',
+  'Autodromo Hermanos Rodriguez':   '/circuits/f1-mexico.svg',
+  'Autódromo Hermanos Rodríguez':   '/circuits/f1-mexico.svg',
+  'Interlagos':                     '/circuits/f1-sao-paulo.svg',
+  'Interlagos Circuit':             '/circuits/f1-sao-paulo.svg',
+  'Las Vegas Strip Circuit':        '/circuits/las-vegas.svg',
+  'Lusail International Circuit':   '/circuits/f1-qatar.svg',
+  'Losail International Circuit':   '/circuits/f1-qatar.svg',
+  'Yas Marina Circuit':             '/circuits/f1-abu-dhabi.svg',
+  // Madrid/Madring — no SVG available yet
 
-const F1_CDN_BASE =
-  'https://media.formula1.com/image/upload/f_auto/q_auto/v1677245035/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/';
+  // ── WEC / ELMS / Multi-series ────────────────────────────────────────────
+  'Circuit de la Sarthe':           '/circuits/le-mans-sarthe-v2.svg',
+  'Circuit Paul Ricard':            '/circuits/paul-ricard.svg',
+  'Fuji Speedway':                  '/circuits/fuji.svg',
+  'Mugello':                        '/circuits/mugello.svg',
+  'Mugello Circuit':                '/circuits/mugello.svg',
+  'Brands Hatch':                   '/circuits/brands-hatch.svg',
+  'Misano World Circuit':           '/circuits/misano.svg',
+  'Algarve International Circuit':  '/circuits/algarve.svg',
 
-/**
- * Local circuit-map assets for non-F1 circuits the F1 CDN doesn't cover.
- * White line-art on transparent bg — matches the F1 CDN style so the same
- * screen-blend watermark treatment works (HeroCard, EventCard, overlay).
- */
-const LOCAL_CIRCUIT_MAPS: Record<string, string> = {
-  // Versioned filename: service worker caches /circuits/* cache-first, so a new
-  // URL is required to bust a stale copy when the asset changes.
-  'Circuit de la Sarthe': '/circuits/le-mans-sarthe-v2.svg',
+  // ── IMSA ─────────────────────────────────────────────────────────────────
+  'Daytona International Speedway': '/circuits/daytona.svg',
+  'Sebring International Raceway':  '/circuits/sebring.svg',
+  'Watkins Glen International':     '/circuits/watkins-glen.svg',
+  'WeatherTech Raceway Laguna Seca':'/circuits/laguna-seca.svg',
+  'Road America':                   '/circuits/road-america.svg',
+
+  // ── Nürburgring ──────────────────────────────────────────────────────────
+  'Nürburgring Nordschleife':       '/circuits/nurburgring-nordschleife.svg',
+  'Nürburgring':                    '/circuits/nurburgring-gp.svg',
 };
 
-/** Maps circuit names → F1 CDN image filename (without _Circuit.png suffix) */
-const CIRCUIT_CDN_NAMES: Record<string, string> = {
-  // ── F1 circuits ──────────────────────────────────────────
-  'Albert Park Circuit':            'Australia',
-  'Shanghai International Circuit': 'China',
-  'Suzuka International Racing Course': 'Japan',
-  'Suzuka Circuit':                 'Japan',
-  'Bahrain International Circuit':  'Bahrain',
-  'Jeddah Corniche Circuit':        'Saudi_Arabia',
-  'Miami International Autodrome':  'Miami',
-  'Imola':                          'Emilia_Romagna',
-  'Imola Circuit':                  'Emilia_Romagna',
-  'Circuit de Monaco':              'Monaco',
-  'Circuit de Barcelona-Catalunya': 'Spain',
-  'Circuit Gilles Villeneuve':      'Canada',
-  'Red Bull Ring':                  'Austria',
-  'Silverstone Circuit':            'Great_Britain',
-  'Circuit de Spa-Francorchamps':   'Belgium',
-  'Hungaroring':                    'Hungary',
-  'Circuit Zandvoort':              'Netherlands',
-  'Autodromo Nazionale Monza':      'Italy',
-  'Monza Circuit':                  'Italy',
-  'Baku City Circuit':              'Baku',
-  'Marina Bay Street Circuit':      'Singapore',
-  'Circuit of the Americas':        'USA',
-  'Autodromo Hermanos Rodriguez':   'Mexico',
-  'Autódromo Hermanos Rodríguez':   'Mexico',
-  'Interlagos':                     'Brazil',
-  'Interlagos Circuit':             'Brazil',
-  'Las Vegas Strip Circuit':        'Las_Vegas',
-  'Losail International Circuit':   'Qatar',
-  'Lusail International Circuit':   'Qatar',
-  'Yas Marina Circuit':             'Abu_Dhabi',
-  'Circuito de Madrid':             'Spain',
-  'Madring Street Circuit':         'Spain',
-};
-
-/**
- * Returns the official F1 circuit map image URL for a given circuit name.
- * Falls back to fuzzy matching if no direct match is found.
- */
 export function getCircuitImage(circuitName: string): string | undefined {
-  // Local assets first (non-F1 circuits)
-  const local = LOCAL_CIRCUIT_MAPS[circuitName];
-  if (local) return local;
-
   // Direct match
-  const cdnName = CIRCUIT_CDN_NAMES[circuitName];
-  if (cdnName) return `${F1_CDN_BASE}${cdnName}_Circuit.png`;
+  const direct = CIRCUIT_MAP[circuitName];
+  if (direct) return direct;
 
-  // Fuzzy match — partial name containment
-  for (const [key, value] of Object.entries(CIRCUIT_CDN_NAMES)) {
+  // Fuzzy match — partial containment for minor name variations
+  for (const [key, value] of Object.entries(CIRCUIT_MAP)) {
     if (circuitName.includes(key) || key.includes(circuitName)) {
-      return `${F1_CDN_BASE}${value}_Circuit.png`;
+      return value;
     }
   }
 
