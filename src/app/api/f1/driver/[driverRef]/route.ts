@@ -19,14 +19,14 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ dri
   const { driverRef } = await params;
   if (!driverRef) return NextResponse.json({ error: 'missing driverRef' }, { status: 400 });
 
-  const [infoData, winsData, firstRaceData, standingsData] = await Promise.all([
+  const [infoData, winsData, seasonsData, standingsData] = await Promise.all([
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     jGet<any>(`/drivers/${driverRef}.json`),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     jGet<any>(`/drivers/${driverRef}/results/1.json?limit=1`),
-    // First race result gives debut year — seasons = currentYear - debutYear + 1
+    // Fetch full seasons list — count array length, not MRData.total (total overcounts)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    jGet<any>(`/drivers/${driverRef}/results.json?limit=1`),
+    jGet<any>(`/drivers/${driverRef}/seasons.json?limit=100`),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     jGet<any>(`/2026/drivers/${driverRef}/driverStandings.json`),
   ]);
@@ -36,9 +36,8 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ dri
     return NextResponse.json({ error: 'driver not found' }, { status: 404 });
   }
 
-  const wins     = parseInt(winsData?.MRData?.total ?? '0');
-  const debutYear = parseInt(firstRaceData?.MRData?.RaceTable?.Races?.[0]?.season ?? '0');
-  const seasons  = debutYear > 0 ? (2026 - debutYear + 1) : 0;
+  const wins    = parseInt(winsData?.MRData?.total ?? '0');
+  const seasons = (seasonsData?.MRData?.SeasonTable?.Seasons?.length as number) ?? 0;
 
   const standingEntry = standingsData?.MRData?.StandingsTable?.StandingsLists?.[0]?.DriverStandings?.[0];
   const season2026 = standingEntry
