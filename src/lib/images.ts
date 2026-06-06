@@ -33,7 +33,7 @@ const DARK_SVGS = new Set([
 const TUNING: Record<string, [number, number]> = {
   '/circuits/algarve.svg':                [0.60, 0.42], // rich colors, needs extra boost
   '/circuits/nurburgring-nordschleife.svg':[0.45, 0.42], // needs stronger glow layer
-  '/circuits/misano.svg':                 [0.25, 0.10], // large 1450px SVG, blueprint too intense
+  '/circuits/misano.svg':                 [0.14, 0.05], // large 1450px SVG, very subtle
   '/circuits/watkins-glen.svg':           [0.30, 0.13], // 3000px wide, pull back
   '/circuits/mugello.svg':                [0.30, 0.13], // 1391px, pull back
   '/circuits/road-america.svg':           [0.30, 0.13], // 1391px, pull back
