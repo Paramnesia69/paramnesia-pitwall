@@ -27,6 +27,8 @@ import { ALL_RESULTS_2026 } from '@/data/results-2026';
 import { getLiveSessions } from '@/lib/useLiveSessions';
 import WhatsLiveBadge from '@/components/ui/WhatsLiveBadge';
 import MiniLeaderboard from '@/components/MiniLeaderboard';
+import NextAlarmBadge from '@/components/ui/NextAlarmBadge';
+import OfflineBadge from '@/components/ui/OfflineBadge';
 
 /* ── Lazy-loaded below-fold components ──────────── */
 const StandingsPanel = lazy(() => import('@/components/StandingsPanel'));
@@ -37,6 +39,7 @@ const EventDetailOverlay = lazy(() => import('@/components/EventDetailOverlay'))
 const RaceWeekendOverlay = lazy(() => import('@/components/RaceWeekendOverlay'));
 const DriverProfileOverlay = lazy(() => import('@/components/DriverProfileOverlay'));
 const Footer = lazy(() => import('@/components/Footer'));
+const SeasonRing = lazy(() => import('@/components/ui/SeasonRing'));
 
 const ALL_SERIES: SeriesId[] = [
   'f1', 'wec', 'elms', 'imsa', 'nurburgring', 'motogp', 'gtwce', 'dtm', 'wrc', 'porsche-supercup',
@@ -45,12 +48,13 @@ const ALL_SERIES: SeriesId[] = [
 interface DashboardProps {
   featured: NormalizedRaceEvent | null;
   upcoming: NormalizedRaceEvent[];
+  seasonStats: Record<string, { total: number; finished: number }>;
   newsFeedSlot?: React.ReactNode;
   highlightsSlot?: React.ReactNode;
   podcastsSlot?: React.ReactNode;
 }
 
-export default function Dashboard({ featured, upcoming, newsFeedSlot, highlightsSlot, podcastsSlot }: DashboardProps) {
+export default function Dashboard({ featured, upcoming, seasonStats, newsFeedSlot, highlightsSlot, podcastsSlot }: DashboardProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -142,6 +146,7 @@ export default function Dashboard({ featured, upcoming, newsFeedSlot, highlights
     {/* PWA banners */}
     {hasUpdate && <UpdateBanner onUpdate={applyUpdate} />}
     <InstallPrompt />
+    <OfflineBadge />
 
     <main className="min-h-screen px-4 py-6 sm:px-6 lg:px-8 max-w-[1600px] mx-auto">
       {/* ── Top Bar ──────────────────────────── */}
@@ -160,6 +165,7 @@ export default function Dashboard({ featured, upcoming, newsFeedSlot, highlights
           </div>
           <div className="flex items-center gap-3 text-sm" style={{ color: 'var(--pw-text-secondary)' }}>
             <LiveIndicator lastUpdated={live.lastUpdated} isRefreshing={live.isRefreshing} onRefresh={live.refresh} />
+            <NextAlarmBadge />
             <span className="hidden sm:inline tracking-widest text-xs uppercase">Motorsport Command Center</span>
             <ThemeToggle />
             <ShareButton />
@@ -272,6 +278,11 @@ export default function Dashboard({ featured, upcoming, newsFeedSlot, highlights
       {weekendEvents.length > 0 && (
         <ThisWeekend events={weekendEvents} conflicts={conflicts} />
       )}
+
+      {/* ── Season Progress ──────────────────── */}
+      <Suspense>
+        <SeasonRing stats={seasonStats} activeFilter={activeFilter} />
+      </Suspense>
 
       {/* ── Championship Standings ─────────────── */}
       {(activeFilter === 'all' || ['f1','wec','elms','imsa','motogp','dtm','wrc'].includes(activeFilter)) && (

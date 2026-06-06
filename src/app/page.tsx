@@ -72,6 +72,13 @@ export default async function Home() {
   const featured = deriveFeaturedEvent(events);
   const upcoming = deriveUpcomingEvents(events);
 
+  const seasonStats = events.reduce<Record<string, { total: number; finished: number }>>((acc, e) => {
+    if (!acc[e.series]) acc[e.series] = { total: 0, finished: 0 };
+    acc[e.series].total++;
+    if (e.state === 'finished') acc[e.series].finished++;
+    return acc;
+  }, {});
+
   const newsFeedSlot = (
     <Suspense fallback={<FeedSkeleton />}>
       <AsyncNewsFeed />
@@ -95,6 +102,7 @@ export default async function Home() {
       <Dashboard
         featured={featured ?? null}
         upcoming={upcoming}
+        seasonStats={seasonStats}
         newsFeedSlot={newsFeedSlot}
         highlightsSlot={highlightsSlot}
         podcastsSlot={podcastsSlot}
