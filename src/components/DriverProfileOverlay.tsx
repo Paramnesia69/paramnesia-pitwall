@@ -34,8 +34,6 @@ function StatCard({ label, value, accent, delay = 0 }: { label: string; value: s
         boxShadow: `0 0 0 1px ${accent}45, 0 8px 28px ${accent}18`,
       }}
     >
-      {/* Top accent ribbon */}
-      <div className="absolute top-0 left-4 right-4 h-[2px] rounded-full" style={{ background: `linear-gradient(90deg, ${accent}80, ${accent}20)` }} />
       <span className="text-[9px] font-bold uppercase tracking-[0.18em]" style={{ color: accent, opacity: 0.7 }}>
         {label}
       </span>
@@ -318,12 +316,10 @@ export default function DriverProfileOverlay() {
                           <StatCard label="Number" value={profile.permanentNumber ? `#${profile.permanentNumber}` : '—'} accent={accent} delay={0.48} />
                         </div>
                         <motion.div
-                          className="rounded-xl overflow-hidden relative"
+                          className="rounded-xl overflow-hidden"
                           style={{ border: `1px solid ${accent}20`, background: `${accent}08` }}
                           initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.52 }}
                         >
-                          {/* Top accent ribbon */}
-                          <div className="absolute top-0 left-4 right-4 h-[2px] rounded-full" style={{ background: `linear-gradient(90deg, ${accent}70, ${accent}15)` }} />
                           {profile.nationality && (
                             <InfoRow label="Nationality" accent={accent} last={!profile.dateOfBirth}>
                               <span className="text-base leading-none select-none">{nationalityFlag(profile.nationality)}</span>

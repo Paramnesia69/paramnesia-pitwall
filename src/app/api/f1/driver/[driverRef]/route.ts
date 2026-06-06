@@ -78,6 +78,6 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ dri
   };
 
   return NextResponse.json(profile, {
-    headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=1800' },
+    headers: { 'Cache-Control': 'no-store' },
   });
 }
