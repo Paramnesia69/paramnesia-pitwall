@@ -1,9 +1,11 @@
 export interface CircuitImageInfo {
   src: string;
-  dark?: boolean;       // black-stroke SVG — apply blueprint tint filter
-  vivid?: boolean;      // colored SVG — apply brightness/contrast/saturation boost
-  sharpOpacity: number; // opacity of the sharp top layer
-  glowOpacity: number;  // opacity of the blurred glow layer beneath
+  dark?: boolean;
+  vivid?: boolean;
+  sharpOpacity: number;
+  glowOpacity: number;
+  cardTop?: string;   // override top% of card circuit zone (default '48%')
+  cardRight?: string; // override right% of card circuit zone (default '48%')
 }
 
 const VIVID_SVGS = new Set([
@@ -28,17 +30,18 @@ const DARK_SVGS = new Set([
   '/circuits/shanghai.svg',
 ]);
 
-// Per-circuit opacity tuning: [sharpOpacity, glowOpacity]
-// dark default: 0.42 / 0.20 | vivid default: 0.42 / 0.30 | base default: 0.28 / 0.14
-const TUNING: Record<string, [number, number]> = {
-  '/circuits/algarve.svg':                [0.60, 0.42], // rich colors, needs extra boost
-  '/circuits/nurburgring-nordschleife.svg':[0.45, 0.42], // needs stronger glow layer
-  '/circuits/misano.svg':                 [0.14, 0.05], // large 1450px SVG, very subtle
-  '/circuits/watkins-glen.svg':           [0.30, 0.13], // 3000px wide, pull back
-  '/circuits/mugello.svg':                [0.30, 0.13], // 1391px, pull back
-  '/circuits/road-america.svg':           [0.30, 0.13], // 1391px, pull back
-  '/circuits/brands-hatch.svg':           [0.18, 0.08], // 1119KB portrait SVG, keep subtle
-  '/circuits/sebring.svg':                [0.38, 0.22], // white strokes, moderate
+// Per-circuit tuning: [sharpOpacity, glowOpacity, cardTop?, cardRight?]
+// dark default: 0.42/0.20 | vivid default: 0.42/0.30 | base default: 0.28/0.14
+// cardTop default '48%', cardRight default '48%'
+const TUNING: Record<string, [number, number, string?, string?]> = {
+  '/circuits/algarve.svg':                [0.60, 0.42],
+  '/circuits/nurburgring-nordschleife.svg':[0.45, 0.42],
+  '/circuits/misano.svg':                 [0.20, 0.08, '62%', '58%'], // shrink: top+right push in
+  '/circuits/watkins-glen.svg':           [0.30, 0.13],
+  '/circuits/mugello.svg':                [0.30, 0.13],
+  '/circuits/road-america.svg':           [0.30, 0.13],
+  '/circuits/brands-hatch.svg':           [0.18, 0.08],
+  '/circuits/sebring.svg':                [0.38, 0.22],
 };
 
 const CIRCUIT_MAP: Record<string, string> = {
@@ -118,7 +121,7 @@ export function getCircuitImage(circuitName: string): CircuitImageInfo | undefin
   if (!src) return undefined;
   const dark = DARK_SVGS.has(src);
   const vivid = VIVID_SVGS.has(src);
-  const defaults: [number, number] = dark ? [0.42, 0.20] : vivid ? [0.42, 0.30] : [0.28, 0.14];
-  const [sharpOpacity, glowOpacity] = TUNING[src] ?? defaults;
-  return { src, dark, vivid, sharpOpacity, glowOpacity };
+  const defaults: [number, number, string?, string?] = dark ? [0.42, 0.20] : vivid ? [0.42, 0.30] : [0.28, 0.14];
+  const [sharpOpacity, glowOpacity, cardTop, cardRight] = TUNING[src] ?? defaults;
+  return { src, dark, vivid, sharpOpacity, glowOpacity, cardTop, cardRight };
 }
