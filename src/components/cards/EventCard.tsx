@@ -81,12 +81,10 @@ export default memo(function EventCard({ event }: EventCardProps) {
               className="absolute pointer-events-none select-none"
               style={{ bottom: 0, left: 0, top: '52%', right: '48%', zIndex: 0 }}
             >
-              {/* Halo layer — blurred glow beneath */}
               <Image src={circuitImg.src} alt="" fill className="object-contain"
-                style={{ filter: `${f} blur(5px)`, opacity: circuitImg.vivid ? 0.30 : 0.22 }} />
-              {/* Sharp layer on top */}
+                style={{ filter: `${f} blur(5px)`, opacity: circuitImg.glowOpacity }} />
               <Image src={circuitImg.src} alt="" fill className="object-contain"
-                style={{ filter: f, opacity: circuitImg.dark ? 0.45 : circuitImg.vivid ? 0.42 : 0.28 }} />
+                style={{ filter: f, opacity: circuitImg.sharpOpacity }} />
             </div>
           );
         })()}

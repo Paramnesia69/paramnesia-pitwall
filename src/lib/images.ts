@@ -1,10 +1,11 @@
 export interface CircuitImageInfo {
   src: string;
-  dark?: boolean;  // black-stroke SVG — apply blueprint tint filter
-  vivid?: boolean; // colored SVG that needs brightness/contrast/glow boost
+  dark?: boolean;       // black-stroke SVG — apply blueprint tint filter
+  vivid?: boolean;      // colored SVG — apply brightness/contrast/saturation boost
+  sharpOpacity: number; // opacity of the sharp top layer
+  glowOpacity: number;  // opacity of the blurred glow layer beneath
 }
 
-// vivid=true SVGs: rich colored SVGs that benefit from brightness/contrast/saturation boost
 const VIVID_SVGS = new Set([
   '/circuits/algarve.svg',
   '/circuits/le-mans-sarthe-v2.svg',
@@ -12,7 +13,6 @@ const VIVID_SVGS = new Set([
   '/circuits/nurburgring-nordschleife.svg',
 ]);
 
-// dark=true SVGs: black strokes on transparent bg, need CSS filter to show on dark cards
 const DARK_SVGS = new Set([
   '/circuits/f1-madrid.svg',
   '/circuits/fuji.svg',
@@ -27,6 +27,19 @@ const DARK_SVGS = new Set([
   '/circuits/road-america.svg',
   '/circuits/shanghai.svg',
 ]);
+
+// Per-circuit opacity tuning: [sharpOpacity, glowOpacity]
+// dark default: 0.42 / 0.20 | vivid default: 0.42 / 0.30 | base default: 0.28 / 0.14
+const TUNING: Record<string, [number, number]> = {
+  '/circuits/algarve.svg':                [0.60, 0.42], // rich colors, needs extra boost
+  '/circuits/nurburgring-nordschleife.svg':[0.45, 0.42], // needs stronger glow layer
+  '/circuits/misano.svg':                 [0.25, 0.10], // large 1450px SVG, blueprint too intense
+  '/circuits/watkins-glen.svg':           [0.30, 0.13], // 3000px wide, pull back
+  '/circuits/mugello.svg':                [0.30, 0.13], // 1391px, pull back
+  '/circuits/road-america.svg':           [0.30, 0.13], // 1391px, pull back
+  '/circuits/brands-hatch.svg':           [0.18, 0.08], // 1119KB portrait SVG, keep subtle
+  '/circuits/sebring.svg':                [0.38, 0.22], // white strokes, moderate
+};
 
 const CIRCUIT_MAP: Record<string, string> = {
   // ── F1 ───────────────────────────────────────────────────────────────────
@@ -103,5 +116,9 @@ export function getCircuitImage(circuitName: string): CircuitImageInfo | undefin
   }
 
   if (!src) return undefined;
-  return { src, dark: DARK_SVGS.has(src), vivid: VIVID_SVGS.has(src) };
+  const dark = DARK_SVGS.has(src);
+  const vivid = VIVID_SVGS.has(src);
+  const defaults: [number, number] = dark ? [0.42, 0.20] : vivid ? [0.42, 0.30] : [0.28, 0.14];
+  const [sharpOpacity, glowOpacity] = TUNING[src] ?? defaults;
+  return { src, dark, vivid, sharpOpacity, glowOpacity };
 }
