@@ -71,8 +71,6 @@ export default memo(function EventCard({ event }: EventCardProps) {
           </div>
         )}
 
-        {/* Circuit map watermark — lower-left zone, clear of series logo.
-            Local white outlines read fainter than the F1 CDN maps → small opacity bump. */}
         {circuitImg && (
           <div
             className="absolute pointer-events-none select-none"
@@ -81,15 +79,18 @@ export default memo(function EventCard({ event }: EventCardProps) {
               left: 0,
               top: '52%',
               right: '48%',
-              opacity: 0.28,
+              opacity: circuitImg.dark ? 0.45 : 0.28,
               zIndex: 0,
             }}
           >
             <Image
-              src={circuitImg}
+              src={circuitImg.src}
               alt=""
               fill
               className="object-contain"
+              style={circuitImg.dark ? {
+                filter: 'brightness(0) invert(1) sepia(1) hue-rotate(175deg) saturate(6) brightness(1.1)',
+              } : undefined}
             />
           </div>
         )}

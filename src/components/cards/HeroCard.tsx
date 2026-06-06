@@ -36,15 +36,18 @@ export default function HeroCard({ event }: HeroCardProps) {
             left: '36%',
             right: '39%',
             bottom: '32%',
-            opacity: 0.22,
+            opacity: circuitImg.dark ? 0.40 : 0.22,
             zIndex: 0,
           }}
         >
           <Image
-            src={circuitImg}
+            src={circuitImg.src}
             alt=""
             fill
             className="object-contain"
+            style={circuitImg.dark ? {
+              filter: 'brightness(0) invert(1) sepia(1) hue-rotate(175deg) saturate(6) brightness(1.1)',
+            } : undefined}
           />
         </div>
       )}

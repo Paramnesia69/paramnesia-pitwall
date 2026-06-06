@@ -93,14 +93,17 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
                       left: 0,
                       right: '45%',
                       bottom: 0,
-                      opacity: 0.22,
+                      opacity: circuitImg.dark ? 0.40 : 0.22,
                     }}
                   >
                     <Image
-                      src={circuitImg}
+                      src={circuitImg.src}
                       alt=""
                       fill
                       className="object-contain"
+                      style={circuitImg.dark ? {
+                        filter: 'brightness(0) invert(1) sepia(1) hue-rotate(175deg) saturate(6) brightness(1.1)',
+                      } : undefined}
                     />
                   </div>
                 );

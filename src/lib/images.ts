@@ -1,10 +1,24 @@
-/**
- * Maps circuit names to self-hosted Wikimedia Commons SVG circuit maps.
- * All files live in /public/circuits/ — no external CDN dependency.
- *
- * Files not yet downloaded return a 404 (graceful — same as undefined).
- * Background download script populates them without requiring code changes.
- */
+export interface CircuitImageInfo {
+  src: string;
+  dark?: boolean; // black-stroke SVG — apply blueprint tint filter in components
+}
+
+// dark=true SVGs: black strokes on transparent bg, need CSS filter to show on dark cards
+const DARK_SVGS = new Set([
+  '/circuits/f1-madrid.svg',
+  '/circuits/fuji.svg',
+  '/circuits/miami.svg',
+  '/circuits/watkins-glen.svg',
+  '/circuits/mugello.svg',
+  '/circuits/daytona.svg',
+  '/circuits/nurburgring-gp.svg',
+  '/circuits/las-vegas.svg',
+  '/circuits/misano.svg',
+  '/circuits/laguna-seca.svg',
+  '/circuits/road-america.svg',
+  '/circuits/shanghai.svg',
+]);
+
 const CIRCUIT_MAP: Record<string, string> = {
   // ── F1 ───────────────────────────────────────────────────────────────────
   'Albert Park Circuit':            '/circuits/f1-australia.svg',
@@ -38,7 +52,7 @@ const CIRCUIT_MAP: Record<string, string> = {
   'Lusail International Circuit':   '/circuits/f1-qatar.svg',
   'Losail International Circuit':   '/circuits/f1-qatar.svg',
   'Yas Marina Circuit':             '/circuits/f1-abu-dhabi.svg',
-  'Madring Street Circuit':           '/circuits/f1-madrid.svg',
+  'Madring Street Circuit':         '/circuits/f1-madrid.svg',
 
   // ── WEC / ELMS / Multi-series ────────────────────────────────────────────
   'Circuit de la Sarthe':           '/circuits/le-mans-sarthe-v2.svg',
@@ -62,17 +76,22 @@ const CIRCUIT_MAP: Record<string, string> = {
   'Nürburgring':                    '/circuits/nurburgring-gp.svg',
 };
 
-export function getCircuitImage(circuitName: string): string | undefined {
+export function getCircuitImage(circuitName: string): CircuitImageInfo | undefined {
+  let src: string | undefined;
+
   // Direct match
-  const direct = CIRCUIT_MAP[circuitName];
-  if (direct) return direct;
+  src = CIRCUIT_MAP[circuitName];
 
   // Fuzzy match — partial containment for minor name variations
-  for (const [key, value] of Object.entries(CIRCUIT_MAP)) {
-    if (circuitName.includes(key) || key.includes(circuitName)) {
-      return value;
+  if (!src) {
+    for (const [key, value] of Object.entries(CIRCUIT_MAP)) {
+      if (circuitName.includes(key) || key.includes(circuitName)) {
+        src = value;
+        break;
+      }
     }
   }
 
-  return undefined;
+  if (!src) return undefined;
+  return { src, dark: DARK_SVGS.has(src) };
 }

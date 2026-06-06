@@ -105,7 +105,9 @@ function StatTile({
 
 /* ── Main panel ────────────────────────────── */
 export default function CircuitStatsPanel({ stats, circuitName, accentColor }: CircuitStatsPanelProps) {
-  const circuitMapUrl = getCircuitImage(circuitName) ?? stats.image3d;
+  const circuitImgInfo = getCircuitImage(circuitName);
+  const circuitMapUrl = circuitImgInfo?.src ?? stats.image3d;
+  const circuitMapDark = circuitImgInfo?.dark ?? false;
 
   return (
     <div className="relative overflow-hidden rounded-xl" style={{ border: '1px solid var(--pw-glass-border)' }}>
@@ -118,6 +120,9 @@ export default function CircuitStatsPanel({ stats, circuitName, accentColor }: C
             fill
             className="object-contain"
             sizes="(max-width: 520px) 100vw, 480px"
+            style={circuitMapDark ? {
+              filter: 'brightness(0) invert(1) sepia(1) hue-rotate(175deg) saturate(6) brightness(1.1)',
+            } : undefined}
           />
           <div
             className="absolute inset-0"
