@@ -1,7 +1,16 @@
 export interface CircuitImageInfo {
   src: string;
-  dark?: boolean; // black-stroke SVG — apply blueprint tint filter in components
+  dark?: boolean;  // black-stroke SVG — apply blueprint tint filter
+  vivid?: boolean; // colored SVG that needs brightness/contrast/glow boost
 }
+
+// vivid=true SVGs: rich colored SVGs that benefit from brightness/contrast/saturation boost
+const VIVID_SVGS = new Set([
+  '/circuits/algarve.svg',
+  '/circuits/le-mans-sarthe-v2.svg',
+  '/circuits/sebring.svg',
+  '/circuits/nurburgring-nordschleife.svg',
+]);
 
 // dark=true SVGs: black strokes on transparent bg, need CSS filter to show on dark cards
 const DARK_SVGS = new Set([
@@ -94,5 +103,5 @@ export function getCircuitImage(circuitName: string): CircuitImageInfo | undefin
   }
 
   if (!src) return undefined;
-  return { src, dark: DARK_SVGS.has(src) };
+  return { src, dark: DARK_SVGS.has(src), vivid: VIVID_SVGS.has(src) };
 }

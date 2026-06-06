@@ -36,7 +36,7 @@ export default function HeroCard({ event }: HeroCardProps) {
             left: '36%',
             right: '39%',
             bottom: '32%',
-            opacity: circuitImg.dark ? 0.40 : 0.22,
+            opacity: circuitImg.dark ? 0.40 : circuitImg.vivid ? 0.38 : 0.22,
             zIndex: 0,
           }}
         >
@@ -47,6 +47,8 @@ export default function HeroCard({ event }: HeroCardProps) {
             className="object-contain"
             style={circuitImg.dark ? {
               filter: 'brightness(0) invert(1) sepia(1) hue-rotate(175deg) saturate(6) brightness(1.1)',
+            } : circuitImg.vivid ? {
+              filter: 'brightness(1.15) contrast(1.2) saturate(1.5) drop-shadow(0 0 8px rgba(255,255,255,0.15))',
             } : undefined}
           />
         </div>

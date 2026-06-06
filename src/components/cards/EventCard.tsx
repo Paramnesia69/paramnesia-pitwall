@@ -79,7 +79,7 @@ export default memo(function EventCard({ event }: EventCardProps) {
               left: 0,
               top: '52%',
               right: '48%',
-              opacity: circuitImg.dark ? 0.45 : 0.28,
+              opacity: circuitImg.dark ? 0.45 : circuitImg.vivid ? 0.42 : 0.28,
               zIndex: 0,
             }}
           >
@@ -90,6 +90,8 @@ export default memo(function EventCard({ event }: EventCardProps) {
               className="object-contain"
               style={circuitImg.dark ? {
                 filter: 'brightness(0) invert(1) sepia(1) hue-rotate(175deg) saturate(6) brightness(1.1)',
+              } : circuitImg.vivid ? {
+                filter: 'brightness(1.15) contrast(1.2) saturate(1.5) drop-shadow(0 0 8px rgba(255,255,255,0.15))',
               } : undefined}
             />
           </div>

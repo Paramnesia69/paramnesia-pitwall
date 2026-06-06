@@ -108,6 +108,7 @@ export default function CircuitStatsPanel({ stats, circuitName, accentColor }: C
   const circuitImgInfo = getCircuitImage(circuitName);
   const circuitMapUrl = circuitImgInfo?.src ?? stats.image3d;
   const circuitMapDark = circuitImgInfo?.dark ?? false;
+  const circuitMapVivid = circuitImgInfo?.vivid ?? false;
 
   return (
     <div className="relative overflow-hidden rounded-xl" style={{ border: '1px solid var(--pw-glass-border)' }}>
@@ -122,6 +123,8 @@ export default function CircuitStatsPanel({ stats, circuitName, accentColor }: C
             sizes="(max-width: 520px) 100vw, 480px"
             style={circuitMapDark ? {
               filter: 'brightness(0) invert(1) sepia(1) hue-rotate(175deg) saturate(6) brightness(1.1)',
+            } : circuitMapVivid ? {
+              filter: 'brightness(1.15) contrast(1.2) saturate(1.5)',
             } : undefined}
           />
           <div
