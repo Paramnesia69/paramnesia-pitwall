@@ -77,7 +77,7 @@
 - Never add `mixBlendMode: screen` to watermarks — iOS Safari drops it inside stacking contexts (backdrop-filter + overflow:hidden + border-radius), causing cross-platform inconsistency.
 - ClassSection `badgeSrc` prop: use `<img>` at `height: 20px` — the SVG viewBox handles proportions
 
-## External CDN
-- F1 circuit maps: `https://media.formula1.com/image/upload/f_auto/q_auto/v1677245035/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/{Name}_Circuit.png`
-- Remote pattern whitelisted in `next.config.mjs`
-- Helper: `getCircuitImage(name)` in `src/lib/images.ts`
+## Circuit Maps
+- All circuit maps are self-hosted Wikimedia Commons SVGs under `/public/circuits/`
+- `getCircuitImage(name)` in `src/lib/images.ts` is a flat lookup table → local paths only
+- No external CDN remote patterns needed in `next.config.mjs`
