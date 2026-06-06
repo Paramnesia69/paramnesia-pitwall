@@ -45,7 +45,6 @@ export default function HeroCard({ event }: HeroCardProps) {
           </div>
         );
       })()}
-      )}
 
       {/* Large faded series logo — right side */}
       {meta.logo && (
