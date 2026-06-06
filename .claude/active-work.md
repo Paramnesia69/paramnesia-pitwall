@@ -8,15 +8,9 @@
 
 ## Last Commits (2026-05-27)
 
+`9c38173` — docs: update active-work — slash commands, latest commits
+
 `6e131fb` — docs: trim features.md 81→30 lines; backup to features-backup.txt
-
-`5d7c18a` — refactor: simplify skills to direct instructions (no @include or sub-agent spawning)
-
-`9611bc2` — refactor: rename pitwall-data → pitwall-agent
-
-`bceedff` — feat: add pitwall-agent + renew-results, deploy, data-check skills
-- `.claude/agents/pitwall-agent.md` — dedicated data agent briefing
-- `.claude/commands/renew-results.md`, `deploy.md`, `data-check.md`, `pitwall-agent.md`
 
 ## 16-Feature Build Status
 | Phase | Features | Status |
