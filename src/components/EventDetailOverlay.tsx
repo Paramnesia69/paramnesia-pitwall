@@ -93,7 +93,7 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
                       left: 0,
                       right: '45%',
                       bottom: 0,
-                      opacity: circuitImg.startsWith('/circuits/') ? 0.18 : 0.16,
+                      opacity: 0.22,
                     }}
                   >
                     <Image
@@ -101,7 +101,6 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
                       alt=""
                       fill
                       className="object-contain"
-                      style={{ filter: 'brightness(3) contrast(1.2) saturate(0.5)' }}
                     />
                   </div>
                 );

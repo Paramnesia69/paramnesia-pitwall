@@ -81,7 +81,7 @@ export default memo(function EventCard({ event }: EventCardProps) {
               left: 0,
               top: '52%',
               right: '48%',
-              opacity: circuitImg.startsWith('/circuits/') ? 0.16 : 0.14,
+              opacity: 0.28,
               zIndex: 0,
             }}
           >
@@ -90,7 +90,6 @@ export default memo(function EventCard({ event }: EventCardProps) {
               alt=""
               fill
               className="object-contain"
-              style={{ filter: 'brightness(3) contrast(1.2) saturate(0.5)' }}
             />
           </div>
         )}

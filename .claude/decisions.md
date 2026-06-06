@@ -73,7 +73,7 @@
 - Card uniform height: `h-full` must chain through StaggerItem → EventCard div → TiltCard
 - Logo watermarks: absolute positioned, z-index 0, pointer-events-none, opacity 0.12–0.18
 - **Series logo watermarks** show in natural brand colors — NO filter, NO `mixBlendMode`. Just the raw logo at low opacity + `maskImage: radial-gradient(ellipse at center, black 50%, transparent 85%)`. Porsche SVG only exception: `brightness(0) invert(1)` to make dark fill white.
-- **Circuit map watermarks** use `filter: brightness(3) contrast(1.2) saturate(0.5)` to extract line-art — NO `mixBlendMode`.
+- **Circuit map watermarks** — NO filter, opacity 0.22–0.28, NO `mixBlendMode`. Wikimedia SVGs use gray (#646464) main track + coloured sectors; `brightness(3)` destroys those colours. White-stroke SVGs like Le Mans also look correct at this opacity without a filter.
 - Never add `mixBlendMode: screen` to watermarks — iOS Safari drops it inside stacking contexts (backdrop-filter + overflow:hidden + border-radius), causing cross-platform inconsistency.
 - ClassSection `badgeSrc` prop: use `<img>` at `height: 20px` — the SVG viewBox handles proportions
 

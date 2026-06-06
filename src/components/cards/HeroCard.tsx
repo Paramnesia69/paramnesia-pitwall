@@ -28,35 +28,26 @@ export default function HeroCard({ event }: HeroCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 150, damping: 20 }}
     >
-      {/* Circuit map — background diagram. Local /circuits/* maps are shifted right
-          to clear long titles like "24 Hours of Le Mans"; opacity matched to the
-          F1 CDN maps (compared side-by-side against Monaco at 0.15). */}
-      {circuitImg && (() => {
-        const isLocal = circuitImg.startsWith('/circuits/');
-        return (
-          <div
-            className="absolute pointer-events-none select-none"
-            style={{
-              top: 0,
-              left: isLocal ? '36%' : '30%',
-              right: isLocal ? '39%' : '44%',
-              bottom: '32%',
-              opacity: isLocal ? 0.18 : 0.15,
-              zIndex: 0,
-            }}
-          >
-            <Image
-              src={circuitImg}
-              alt=""
-              fill
-              className="object-contain"
-              style={{
-                filter: 'brightness(3) contrast(1.2) saturate(0.5)',
-              }}
-            />
-          </div>
-        );
-      })()}
+      {circuitImg && (
+        <div
+          className="absolute pointer-events-none select-none"
+          style={{
+            top: 0,
+            left: '36%',
+            right: '39%',
+            bottom: '32%',
+            opacity: 0.22,
+            zIndex: 0,
+          }}
+        >
+          <Image
+            src={circuitImg}
+            alt=""
+            fill
+            className="object-contain"
+          />
+        </div>
+      )}
 
       {/* Large faded series logo — right side */}
       {meta.logo && (
