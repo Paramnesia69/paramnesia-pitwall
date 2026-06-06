@@ -45,10 +45,9 @@ function Ring({ series, finished, total, isActive }: {
       title={`${SERIES_META[series]?.name ?? series}: ${finished} / ${total} rounds`}
     >
       <div
-        className="overflow-hidden"
-        style={{ width: 52, height: 52, borderRadius: '50%', opacity: isActive ? 1 : 0.45 }}
+        style={{ width: 64, height: 64, opacity: isActive ? 1 : 0.45, transition: 'opacity 0.25s ease' }}
       >
-        <img src={tyreSrc} alt="" className="w-full h-full object-cover" />
+        <img src={tyreSrc} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
       </div>
       <span
         className="text-[9px] font-semibold tracking-wider uppercase"
