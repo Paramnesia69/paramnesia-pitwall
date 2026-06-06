@@ -18,37 +18,46 @@ const SHORT: Record<string, string> = {
   motogp: 'MOTO', gtwce: 'GT', dtm: 'DTM', wrc: 'WRC', 'porsche-supercup': 'PSC',
 };
 
-const TYRE_MAP: Partial<Record<string, string>> = {
-  f1:                '/tyres/tyre-f1-red.png',
-  wec:               '/tyres/tyre-wec-yellow.png',
-  elms:              '/tyres/tyre-wec-yellow.png',
-  imsa:              '/tyres/tyre-imsa-white.png',
-  motogp:            '/tyres/tyre-wec-yellow.png',
-  wrc:               '/tyres/tyre-f1-red.png',
-  gtwce:             '/tyres/tyre-f1-red.png',
-  dtm:               '/tyres/tyre-imsa-white.png',
-  nurburgring:       '/tyres/tyre-imsa-white.png',
-  'porsche-supercup':'/tyres/tyre-wec-yellow.png',
-};
+const CIRCUMFERENCE = 2 * Math.PI * 16;
 
 function Ring({ series, finished, total, isActive }: {
   series: SeriesId; finished: number; total: number; isActive: boolean;
 }) {
   const accent = SERIES_META[series]?.accent ?? '#888';
-  const tyreSrc = TYRE_MAP[series] ?? '/tyres/tyre-imsa-white.png';
+  const progress = total > 0 ? finished / total : 0;
+  const dashOffset = CIRCUMFERENCE * (1 - progress);
   const label = SHORT[series] ?? series.toUpperCase().slice(0, 4);
 
   return (
     <div
-      className="flex flex-col items-center gap-1.5 flex-shrink-0 cursor-default"
-      style={{ transform: isActive ? 'scale(1.1)' : 'scale(1)', transition: 'transform 0.25s ease' }}
+      className="flex flex-col items-center gap-1 flex-shrink-0 cursor-default"
+      style={{ transform: isActive ? 'scale(1.12)' : 'scale(1)', transition: 'transform 0.25s ease' }}
       title={`${SERIES_META[series]?.name ?? series}: ${finished} / ${total} rounds`}
     >
-      <div
-        style={{ width: 64, height: 64, opacity: isActive ? 1 : 0.45, transition: 'opacity 0.25s ease' }}
-      >
-        <img src={tyreSrc} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
-      </div>
+      <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden>
+        <circle cx="22" cy="22" r="16" fill="none" stroke="var(--pw-glass-border)" strokeWidth="3" />
+        <circle
+          cx="22" cy="22" r="16"
+          fill="none"
+          stroke={accent}
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeDasharray={CIRCUMFERENCE}
+          strokeDashoffset={dashOffset}
+          transform="rotate(-90 22 22)"
+          style={{ transition: 'stroke-dashoffset 0.8s ease', opacity: isActive ? 1 : 0.65 }}
+        />
+        <text
+          x="22" y="25"
+          textAnchor="middle"
+          fontSize="8"
+          fontFamily="ui-monospace, monospace"
+          fill={finished > 0 ? accent : 'var(--pw-text-tertiary)'}
+          style={{ opacity: isActive ? 1 : 0.7 }}
+        >
+          {finished > 0 ? `R${finished}` : '—'}
+        </text>
+      </svg>
       <span
         className="text-[9px] font-semibold tracking-wider uppercase"
         style={{ color: isActive ? accent : 'var(--pw-text-tertiary)' }}
@@ -79,8 +88,7 @@ export default function SeasonRing({ stats, activeFilter }: SeasonRingProps) {
       <div className="flex gap-5 overflow-x-auto py-1" style={{ scrollbarWidth: 'none' }}>
         {series.map((s) => (
           <Ring
-            key={s}
-            series={s}
+            key={s} series={s}
             finished={stats[s]?.finished ?? 0}
             total={stats[s]?.total ?? 0}
             isActive={activeFilter === s || activeFilter === 'all'}
