@@ -30,7 +30,7 @@ export default function HeroCard({ event }: HeroCardProps) {
     >
       {circuitImg && (() => {
         const darkF = 'brightness(0) invert(1) sepia(1) hue-rotate(175deg) saturate(6) brightness(1.1)';
-        const vividF = 'brightness(1.2) contrast(1.25) saturate(1.6)';
+        const vividF = 'brightness(1.05) contrast(1.12) saturate(1.3)';
         const baseF = 'brightness(1.05) contrast(1.1) saturate(1.2)';
         const f = circuitImg.dark ? darkF : circuitImg.vivid ? vividF : baseF;
         return (

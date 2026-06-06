@@ -124,7 +124,7 @@ export default function CircuitStatsPanel({ stats, circuitName, accentColor }: C
             style={circuitMapDark ? {
               filter: 'brightness(0) invert(1) sepia(1) hue-rotate(175deg) saturate(6) brightness(1.1)',
             } : circuitMapVivid ? {
-              filter: 'brightness(1.15) contrast(1.2) saturate(1.5)',
+              filter: 'brightness(1.05) contrast(1.12) saturate(1.3)',
             } : undefined}
           />
           <div
