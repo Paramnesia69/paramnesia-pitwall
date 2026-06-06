@@ -24,7 +24,7 @@ function normalizeConstructor(name: string): string {
 const TEAM_COLORS: Record<string, string> = {
   Mercedes: '#27F4D2',
   Ferrari: '#E8002D',
-  McLaren: '#FF8000',
+  McLaren: '#FF6700',
   'Red Bull Racing': '#3671C6',
   Alpine: '#0093CC',
   Haas: '#B6BABD',

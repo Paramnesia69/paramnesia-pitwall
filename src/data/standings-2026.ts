@@ -44,9 +44,9 @@ export const F1_DRIVERS_2026: DriverStanding[] = [
   { pos: 1, name: 'K. Antonelli', team: 'Mercedes', points: 100, teamColor: '#27F4D2', roundPoints: [18, 47, 72, 100] },
   { pos: 2, name: 'G. Russell', team: 'Mercedes', points: 80, teamColor: '#27F4D2', roundPoints: [25, 51, 63, 80] },
   { pos: 3, name: 'C. Leclerc', team: 'Ferrari', points: 59, teamColor: '#E8002D', roundPoints: [15, 34, 49, 59] },
-  { pos: 4, name: 'L. Norris', team: 'McLaren', points: 51, teamColor: '#FF8000', roundPoints: [10, 15, 25, 51] },
+  { pos: 4, name: 'L. Norris', team: 'McLaren', points: 51, teamColor: '#FF6700', roundPoints: [10, 15, 25, 51] },
   { pos: 5, name: 'L. Hamilton', team: 'Ferrari', points: 51, teamColor: '#E8002D', roundPoints: [12, 33, 41, 51] },
-  { pos: 6, name: 'O. Piastri', team: 'McLaren', points: 43, teamColor: '#FF8000', roundPoints: [0, 3, 21, 43] },
+  { pos: 6, name: 'O. Piastri', team: 'McLaren', points: 43, teamColor: '#FF6700', roundPoints: [0, 3, 21, 43] },
   { pos: 7, name: 'M. Verstappen', team: 'Red Bull Racing', points: 26, teamColor: '#3671C6', roundPoints: [8, 8, 12, 26] },
   { pos: 8, name: 'O. Bearman', team: 'Haas', points: 17, teamColor: '#B6BABD', roundPoints: [6, 17, 17, 17] },
   { pos: 9, name: 'P. Gasly', team: 'Alpine', points: 16, teamColor: '#0093CC', roundPoints: [1, 9, 15, 16] },
@@ -58,7 +58,7 @@ export const F1_DRIVERS_2026: DriverStanding[] = [
 export const F1_CONSTRUCTORS_2026: ConstructorStanding[] = [
   { pos: 1, name: 'Mercedes', points: 180, color: '#27F4D2', roundPoints: [43, 98, 135, 180] },
   { pos: 2, name: 'Ferrari', points: 110, color: '#E8002D', roundPoints: [27, 67, 90, 110] },
-  { pos: 3, name: 'McLaren', points: 94, color: '#FF8000', roundPoints: [10, 18, 46, 94] },
+  { pos: 3, name: 'McLaren', points: 94, color: '#FF6700', roundPoints: [10, 18, 46, 94] },
   { pos: 4, name: 'Red Bull Racing', points: 30, color: '#3671C6', roundPoints: [8, 12, 16, 30] },
   { pos: 5, name: 'Alpine', points: 23, color: '#0093CC', roundPoints: [1, 10, 16, 23] },
   { pos: 6, name: 'Haas', points: 18, color: '#B6BABD', roundPoints: [6, 17, 18, 18] },
@@ -96,13 +96,13 @@ export const WEC_DRIVERS_2026: DriverStanding[] = [
 // Source: pitdebrief.com post-Spa standings
 export const WEC_LMGT3_DRIVERS_2026: DriverStanding[] = [
   { pos: 1, name: 'Pera / Lietz / Shahin',              team: 'Manthey Porsche',          points: 30, teamColor: '#C0A062' },
-  { pos: 2, name: 'Au / Kirchhöfer / Fleming',          team: 'Garage 59 McLaren',        points: 26, teamColor: '#FF8000' },
+  { pos: 2, name: 'Au / Kirchhöfer / Fleming',          team: 'Garage 59 McLaren',        points: 26, teamColor: '#FF6700' },
   { pos: 3, name: 'McIntosh / Harper / Thompson',       team: 'Team WRT BMW',             points: 25, teamColor: '#1E88E5' },
   { pos: 4, name: 'McDonald / Edgar / Catsburg',        team: 'TF Sport Corvette',        points: 22, teamColor: '#FFC906' },
   { pos: 5, name: 'Rovera / Hériau / Mann',             team: 'Ferrari AF Corse VISTA',   points: 20, teamColor: '#E8002D' },
   { pos: 6, name: 'James / Drudi / Robichon',           team: 'Heart of Racing Aston Martin', points: 18, teamColor: '#006241' },
   { pos: 7, name: 'Güven / Cottingham / Boguslavskiy', team: 'Manthey DK Porsche',       points: 18, teamColor: '#C0A062' },
-  { pos: 8, name: 'West / Goethe / Gehrsitz',          team: 'Garage 59 McLaren',        points: 16, teamColor: '#FF8000' },
+  { pos: 8, name: 'West / Goethe / Gehrsitz',          team: 'Garage 59 McLaren',        points: 16, teamColor: '#FF6700' },
 ];
 
 // ─── MotoGP 2026 Riders Championship (after R7 · Italian GP) ─
@@ -183,7 +183,7 @@ export const DTM_DRIVERS_2026: DriverStanding[] = [
   { pos: 3,  name: 'M. Wittmann',      team: 'BMW',           points: 52, teamColor: '#1E88E5', prevPos: 3,  roundPoints: [31, 52] },
   { pos: 4,  name: 'T. Preining',      team: 'Porsche',       points: 46, teamColor: '#C0A062', prevPos: 4,  roundPoints: [29, 46] },
   { pos: 5,  name: 'M. Cairoli',       team: 'Ferrari',       points: 43, teamColor: '#E8002D', prevPos: 14, roundPoints: [10, 43] },
-  { pos: 6,  name: 'B. Dörr',          team: 'McLaren',       points: 42, teamColor: '#FF8000', prevPos: 12, roundPoints: [11, 42] },
+  { pos: 6,  name: 'B. Dörr',          team: 'McLaren',       points: 42, teamColor: '#FF6700', prevPos: 12, roundPoints: [11, 42] },
   { pos: 7,  name: 'K. van der Linde', team: 'BMW',           points: 41, teamColor: '#1E88E5', prevPos: 10, roundPoints: [13, 41] },
   { pos: 8,  name: 'T. Vermeulen',     team: 'Ferrari',       points: 41, teamColor: '#E8002D', prevPos: 15, roundPoints: [10, 41] },
   { pos: 9,  name: 'J. Gounon',        team: 'Mercedes-AMG',  points: 30, teamColor: '#00D2BE', prevPos: 8,  roundPoints: [13, 30] },
@@ -223,7 +223,7 @@ export const WEC_MANUFACTURERS_2026: ConstructorStanding[] = [
 // Manufacturer pts = sum of entered cars' pts for each brand
 export const WEC_LMGT3_MANUFACTURERS_2026: ConstructorStanding[] = [
   { pos: 1, name: 'Porsche',     points: 48, color: '#C0A062' }, // Manthey #92 30 + Manthey DK 18
-  { pos: 2, name: 'McLaren',     points: 42, color: '#FF8000' }, // G59 #59 26 + G59 #188 16
+  { pos: 2, name: 'McLaren',     points: 42, color: '#FF6700' }, // G59 #59 26 + G59 #188 16
   { pos: 3, name: 'BMW',         points: 25, color: '#1E88E5' }, // WRT 25
   { pos: 4, name: 'Corvette',    points: 22, color: '#FFC906' }, // TF Sport 22
   { pos: 5, name: 'Ferrari',     points: 20, color: '#E8002D' }, // AF Corse VISTA 20
@@ -272,7 +272,7 @@ export const DTM_MANUFACTURERS_2026: ConstructorStanding[] = [
   { pos: 2, name: 'BMW',          points: 93,  color: '#1E88E5', prevPos: 2, roundPoints: [44, 93]  }, // Wittmann 52 + vdLinde 41
   { pos: 3, name: 'Ferrari',      points: 84,  color: '#E8002D', prevPos: 5, roundPoints: [20, 84]  }, // Cairoli 43 + Vermeulen 41
   { pos: 4, name: 'Porsche',      points: 46,  color: '#C0A062', prevPos: 3, roundPoints: [29, 46]  }, // Preining 46
-  { pos: 5, name: 'McLaren',      points: 42,  color: '#FF8000', prevPos: 4, roundPoints: [22, 42]  }, // Dörr 42
+  { pos: 5, name: 'McLaren',      points: 42,  color: '#FF6700', prevPos: 4, roundPoints: [22, 42]  }, // Dörr 42
   { pos: 6, name: 'Aston Martin', points: 24,  color: '#006241', prevPos: 6, roundPoints: [17, 24]  }, // Thiim 24
 ];
 
