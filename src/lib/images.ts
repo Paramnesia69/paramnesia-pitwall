@@ -19,7 +19,6 @@ const DARK_SVGS = new Set([
   '/circuits/f1-madrid.svg',
   '/circuits/fuji.svg',
   '/circuits/miami.svg',
-  '/circuits/watkins-glen.svg',
   '/circuits/mugello.svg',
   '/circuits/daytona.svg',
   '/circuits/nurburgring-gp.svg',
@@ -34,8 +33,6 @@ const DARK_SVGS = new Set([
 const FILTER_OVERRIDES: Record<string, string> = {
   // Nordschleife: gray strokes + red sector marks; needs strong brightness + shape-glow
   '/circuits/nurburgring-nordschleife.svg': 'brightness(4.2) contrast(1.6) saturate(2.2) drop-shadow(0 0 2px rgba(255,255,255,0.72)) drop-shadow(0 0 7px rgba(160,230,160,0.32))',
-  // Watkins Glen: blueprint tint + blue shape-glow for 3D depth
-  '/circuits/watkins-glen.svg': 'brightness(0) invert(1) sepia(1) hue-rotate(175deg) saturate(6) brightness(1.3) drop-shadow(0 0 3px rgba(100,180,255,0.85)) drop-shadow(0 0 10px rgba(60,140,255,0.45))',
 };
 
 // Per-circuit tuning: [sharpOpacity, glowOpacity, cardTop?, cardRight?]
@@ -45,7 +42,7 @@ const TUNING: Record<string, [number, number, string?, string?]> = {
   '/circuits/algarve.svg':                [0.45, 0.18],
   '/circuits/nurburgring-nordschleife.svg':[0.68, 0.35],
   '/circuits/misano-v2.svg':              [0.28, 0.10],
-  '/circuits/watkins-glen.svg':           [0.50, 0.28],
+  '/circuits/watkins-glen-long.svg':      [0.32, 0.14],
   '/circuits/mugello.svg':                [0.30, 0.13],
   '/circuits/road-america.svg':           [0.30, 0.13],
   '/circuits/brands-hatch.svg':           [0.18, 0.08],
@@ -101,7 +98,7 @@ const CIRCUIT_MAP: Record<string, string> = {
   // ── IMSA ─────────────────────────────────────────────────────────────────
   'Daytona International Speedway': '/circuits/daytona.svg',
   'Sebring International Raceway':  '/circuits/sebring.svg',
-  'Watkins Glen International':     '/circuits/watkins-glen.svg',
+  'Watkins Glen International':     '/circuits/watkins-glen-long.svg',
   'WeatherTech Raceway Laguna Seca':'/circuits/laguna-seca.svg',
   'Road America':                   '/circuits/road-america.svg',
 
