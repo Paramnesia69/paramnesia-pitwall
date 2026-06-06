@@ -18,25 +18,37 @@ function nationalityFlag(nat: string): string {
   return NATIONALITY_FLAGS[nat] ?? NATIONALITY_FLAGS[nat.replace(/ /g, '_')] ?? '';
 }
 
-function StatCard({ label, value, accent }: { label: string; value: string | number; accent: string }) {
+function StatCard({ label, value, accent, delay = 0 }: { label: string; value: string | number; accent: string; delay?: number }) {
   return (
-    <div
-      className="pw-glass flex flex-col gap-1 px-4 py-3 rounded-xl"
-      style={{ borderColor: `${accent}18` }}
+    <motion.div
+      className="relative flex flex-col gap-1.5 px-4 pt-4 pb-3 rounded-xl overflow-hidden cursor-default"
+      style={{
+        background: `${accent}0c`,
+        border: `1px solid ${accent}28`,
+      }}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay, type: 'spring', stiffness: 240, damping: 24 }}
+      whileHover={{
+        scale: 1.03,
+        boxShadow: `0 0 0 1px ${accent}45, 0 8px 28px ${accent}18`,
+      }}
     >
-      <span className="text-[9px] font-bold uppercase tracking-[0.16em]" style={{ color: 'var(--pw-text-tertiary)' }}>
+      {/* Top accent ribbon */}
+      <div className="absolute top-0 left-4 right-4 h-[2px] rounded-full" style={{ background: `linear-gradient(90deg, ${accent}80, ${accent}20)` }} />
+      <span className="text-[9px] font-bold uppercase tracking-[0.18em]" style={{ color: accent, opacity: 0.7 }}>
         {label}
       </span>
       <span className="text-2xl font-bold tabular-nums tracking-tight">{value}</span>
-    </div>
+    </motion.div>
   );
 }
 
 function MetaRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="flex items-center justify-between py-2.5" style={{ borderBottom: '1px solid var(--pw-glass-border)' }}>
+    <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid var(--pw-glass-border)' }}>
       <span className="text-[11px]" style={{ color: 'var(--pw-text-tertiary)' }}>{label}</span>
-      <span className="text-[11px] font-medium">{value}</span>
+      <span className="text-[11px] font-semibold">{value}</span>
     </div>
   );
 }
@@ -252,59 +264,77 @@ export default function DriverProfileOverlay() {
             </div>
 
             {/* ── SCROLLABLE BODY ── */}
-            <div className="flex-1 overflow-y-auto px-6 pb-8 space-y-6" style={{ scrollbarWidth: 'none' }}>
+            <div className="flex-1 overflow-y-auto pb-8 space-y-6 relative" style={{ scrollbarWidth: 'none' }}>
+              {/* Accent continuation from hero */}
+              <div
+                className="absolute inset-x-0 top-0 h-24 pointer-events-none"
+                style={{ background: `linear-gradient(to bottom, ${accent}10, transparent)` }}
+              />
 
-              {/* 2026 Season */}
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.24 }}>
-                <p className="text-[10px] font-bold uppercase tracking-[0.18em] mb-3" style={{ color: 'var(--pw-text-tertiary)' }}>
-                  2026 Season
-                </p>
-                <div className="grid grid-cols-2 gap-2">
-                  <StatCard label="Position" value={`P${d.pos}`} accent={accent} />
-                  <StatCard label="Points" value={d.points} accent={accent} />
+              <div className="px-6 pt-4 space-y-6 relative">
+                {/* 2026 Season */}
+                <div>
+                  <motion.p
+                    className="text-[10px] font-bold uppercase tracking-[0.18em] mb-3"
+                    style={{ color: 'var(--pw-text-tertiary)' }}
+                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.22 }}
+                  >
+                    2026 Season
+                  </motion.p>
+                  <div className="grid grid-cols-2 gap-2.5">
+                    <StatCard label="Position" value={`P${d.pos}`} accent={accent} delay={0.26} />
+                    <StatCard label="Points" value={d.points} accent={accent} delay={0.31} />
+                  </div>
                 </div>
-              </motion.div>
 
-              {/* Career */}
-              {d.series === 'f1' && (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.30 }}>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] mb-3" style={{ color: 'var(--pw-text-tertiary)' }}>
-                    Career
-                  </p>
-                  {loading ? (
-                    <div className="grid grid-cols-3 gap-2">
-                      {[...Array(3)].map((_, i) => (
-                        <div key={i} className="pw-glass rounded-xl h-16 animate-pulse" />
-                      ))}
-                    </div>
-                  ) : profile ? (
-                    <>
-                      <div className="grid grid-cols-3 gap-2 mb-4">
-                        <StatCard label="Wins" value={profile.wins} accent={accent} />
-                        <StatCard label="Seasons" value={profile.seasons} accent={accent} />
-                        <StatCard label="Number" value={profile.permanentNumber ? `#${profile.permanentNumber}` : '—'} accent={accent} />
+                {/* Career */}
+                {d.series === 'f1' && (
+                  <div>
+                    <motion.p
+                      className="text-[10px] font-bold uppercase tracking-[0.18em] mb-3"
+                      style={{ color: 'var(--pw-text-tertiary)' }}
+                      initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 }}
+                    >
+                      Career
+                    </motion.p>
+                    {loading ? (
+                      <div className="grid grid-cols-3 gap-2">
+                        {[...Array(3)].map((_, i) => (
+                          <div key={i} className="rounded-xl h-16 animate-pulse" style={{ background: `${accent}10` }} />
+                        ))}
                       </div>
-                      <div className="pw-glass rounded-xl overflow-hidden">
-                        {profile.nationality && (
-                          <MetaRow
-                            label="Nationality"
-                            value={<span>{nationalityFlag(profile.nationality)} {profile.nationality}</span>}
-                          />
-                        )}
-                        {profile.dateOfBirth && (
-                          <MetaRow
-                            label="Born"
-                            value={new Date(profile.dateOfBirth).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
-                          />
-                        )}
-                      </div>
-                    </>
-                  ) : (
-                    <p className="text-[11px]" style={{ color: 'var(--pw-text-tertiary)' }}>Career data unavailable</p>
-                  )}
-                </motion.div>
-              )}
-
+                    ) : profile ? (
+                      <>
+                        <div className="grid grid-cols-3 gap-2 mb-4">
+                          <StatCard label="Wins" value={profile.wins} accent={accent} delay={0.38} />
+                          <StatCard label="Seasons" value={profile.seasons} accent={accent} delay={0.43} />
+                          <StatCard label="Number" value={profile.permanentNumber ? `#${profile.permanentNumber}` : '—'} accent={accent} delay={0.48} />
+                        </div>
+                        <motion.div
+                          className="rounded-xl overflow-hidden"
+                          style={{ border: `1px solid ${accent}18`, background: `${accent}06` }}
+                          initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.52 }}
+                        >
+                          {profile.nationality && (
+                            <MetaRow
+                              label="Nationality"
+                              value={<span>{nationalityFlag(profile.nationality)} {profile.nationality}</span>}
+                            />
+                          )}
+                          {profile.dateOfBirth && (
+                            <MetaRow
+                              label="Born"
+                              value={new Date(profile.dateOfBirth).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+                            />
+                          )}
+                        </motion.div>
+                      </>
+                    ) : (
+                      <p className="text-[11px]" style={{ color: 'var(--pw-text-tertiary)' }}>Career data unavailable</p>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           </motion.aside>
         </>
