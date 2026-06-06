@@ -6,11 +6,11 @@
 - `/deploy` — push uncommitted changes live
 - `/pitwall-agent <task>` — spawn dedicated data agent (use when main conversation is long/bloated)
 
-## Last Commits (2026-05-27)
+## Last Commits (2026-06-06)
 
-`9c38173` — docs: update active-work — slash commands, latest commits
+`e82849f` — fix: seasons — use actual seasons list length not MRData.total
 
-`6e131fb` — docs: trim features.md 81→30 lines; backup to features-backup.txt
+`4497150` — fix: remove stat card ribbons + bust driver API cache
 
 ## 16-Feature Build Status
 | Phase | Features | Status |
