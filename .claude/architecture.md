@@ -63,7 +63,7 @@ src/
 │   ├── weather.ts            # fetchWeather (OpenWeatherMap), getSimulatedWeather fallback
 │   ├── overrides.ts          # applyOverrides, getForcedFeaturedId
 │   ├── circuitStats.ts       # getCircuitStats(name) → CircuitStats | null
-│   ├── images.ts             # getCircuitImage(name) → F1 CDN URL
+│   ├── images.ts             # getCircuitImage(name) → local /circuits/ SVG path (flat lookup table)
 │   ├── streamLinks.ts        # getStreamLinks(series) → StreamLink[]
 │   ├── useLiveData.ts        # Polls /api/events every 2min, tab-visibility aware
 │   ├── useReminders.ts       # Browser notification scheduler
@@ -185,7 +185,7 @@ Caching:
 ## CSS Patterns
 - **Design tokens**: `var(--pw-bg-primary)`, `var(--pw-glass-bg)`, `var(--pw-accent)` — all in globals.css
 - **Glass cards**: `.pw-glass` utility class
-- **Series watermarks** (non-transparent logos): `filter: grayscale(1) contrast(2) brightness(3)` + `mixBlendMode: screen` + `maskImage: radial-gradient(ellipse at center, black 30%, transparent 70%)`
+- **Series watermarks** (non-transparent logos): opacity 0.12–0.18 + `maskImage: radial-gradient(ellipse at center, black 50%, transparent 85%)` — NO filter, NO mixBlendMode
 - **TiltCard**: has `overflow-hidden` on inner div — clips absolute-positioned children at card boundary
 - **Uniform card height**: requires `h-full` chain → `StaggerItem` → `EventCard` outer div → `TiltCard`
 

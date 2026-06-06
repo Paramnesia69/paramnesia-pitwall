@@ -23,8 +23,9 @@ Race Highlights (9 YouTube RSS feeds, inline lightbox player), Podcasts (4 RSS f
 ## Known Issues / Workarounds
 - **Driver headshots** — Source is OpenF1 `headshot_url` (~100–130px native). Displayed at `maxHeight: 140`. F1 official CDN high-res path (`content/dam/fom-website/drivers/2026Drivers/`) does NOT exist — do not attempt again without a verified URL.
 - `gtwce.png`, `wec.png`, `elms.png` have non-transparent backgrounds — opacity 0.18 + `maskImage: radial-gradient(ellipse at center, black 50%, transparent 85%)` keeps it acceptable. Never use `mixBlendMode: screen` — iOS Safari drops it inside stacking contexts.
-- **Series watermarks** — no filter, natural brand colors, opacity 0.12–0.18, radial-gradient maskImage. Porsche SVG only: `brightness(0) invert(1)`. Circuit maps: `brightness(3) contrast(1.2) saturate(0.5)`.
+- **Series watermarks** — no filter, natural brand colors, opacity 0.12–0.18, radial-gradient maskImage. Porsche SVG only: `brightness(0) invert(1)`.
+- **Circuit map watermarks** — self-hosted Wikimedia SVGs, NO filter, opacity 0.22–0.28. 2022 F1 CourseLayout SVGs cleaned: DRS boxes, Speed Trap, and legend (アイコン group) all stripped. Only track + sector colours + corner numbers remain.
 - Peugeot logo inverted (black shield → white); Aprilia/Yamaha tinted from black SVGs — not true brand colour; Porsche brand PNG gentle boost — not true gold. All acceptable.
-- `images: { unoptimized: true }` required — remote patterns whitelisted for F1 CDN.
+- `images: { unoptimized: true }` required — no remote patterns needed (all circuit maps are self-hosted).
 - Weather API calls capped at 15 concurrent (rate limit avoidance).
 - TiltCard `overflow-hidden` clips absolute children — watermarks must fit within card bounds.
