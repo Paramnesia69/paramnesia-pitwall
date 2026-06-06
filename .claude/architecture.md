@@ -158,8 +158,12 @@ Series logos in `/public/logos/` — SVGs are transparent; `gtwce.png`, `wec.png
 ```ts
 { favorites: SeriesId[], toggleFavorite, isFavorite,
   selectedEventId: string|null, openEvent(id), closeEvent(),
+  selectedDriver: DriverSelectedInfo|null, openDriver(info), closeDriver(),
   theme: 'dark'|'light', toggleTheme,
   reminders: Reminder[], addReminder, removeReminder, markFired, getReminder, clearExpiredReminders }
+
+DriverSelectedInfo { ref: string, name: string, team: string, teamColor: string,
+                     pos: number, points: number, series: SeriesId }
 ```
 Persisted: `favorites`, `theme`, `reminders`
 
@@ -188,6 +192,85 @@ Caching:
 - **Series watermarks** (non-transparent logos): opacity 0.12–0.18 + `maskImage: radial-gradient(ellipse at center, black 50%, transparent 85%)` — NO filter, NO mixBlendMode
 - **TiltCard**: has `overflow-hidden` on inner div — clips absolute-positioned children at card boundary
 - **Uniform card height**: requires `h-full` chain → `StaggerItem` → `EventCard` outer div → `TiltCard`
+
+## Driver Profile Overlay (DriverProfileOverlay.tsx)
+
+### Trigger & State
+- Opened from `StandingsPanel` rows — clicking an F1 driver calls `useStore(s => s.openDriver({ ref, name, team, teamColor, pos, points, series }))`
+- Zustand store: `selectedDriver: DriverSelectedInfo | null`, `openDriver(info)`, `closeDriver()`
+- Only renders for `series === 'f1'` and when `selectedDriver.ref` is set; fetches on `selectedDriver.ref` change
+- Escape key + backdrop click both call `closeDriver()`
+
+### Layout: fixed right panel
+```
+width: min(420px, 92vw)
+z-index: 320 (backdrop: 310)
+background: var(--pw-bg-elevated)
+borderLeft: 1px solid ${accent}25
+boxShadow: -24px 0 80px rgba(0,0,0,0.75), inset 1px 0 0 ${accent}15
+spring: stiffness 300, damping 32 — slides in from x:'100%'
+```
+
+### Hero section (h-56, overflow-hidden, shrink-0)
+- Background: `linear-gradient(135deg, ${accent}35 0%, ${accent}08 55%, var(--pw-bg-elevated) 100%)`
+- **Team logo watermark** — left side, 160×100, opacity 0.10, radial-gradient mask (40%→80%), same logo filter logic as other components
+- **Race number watermark** — right side, fontSize 120, opacity 0.07, Orbitron font, accent color
+- **Driver headshot** — `profile.headshotUrl` from OpenF1 (q_auto→q_100), pinned bottom-right, maxHeight 220, drop-shadow glow
+- **Scan line** — `motion.div` animating `top: 0%→100%` over 7s, repeat Infinity, accent gradient
+- **Bottom fade** — `h-20 bg-gradient-to-t from-[var(--pw-bg-elevated)]`
+- **Skeleton** — pulse div while loading (no headshot yet)
+- **Close button** — top-right, `bg-black/50 backdrop-blur-[10px]`, SVG X icon
+
+### Identity section (px-6 -mt-4)
+- Series badge pill: `${accent}18` bg, `${accent}30` border — `F1 · DRIVER`
+- Driver name: `text-3xl font-extrabold tracking-tight` Orbitron
+- Team logo (small) + team name row, staggered fade-in (delays 0.12→0.20s)
+
+### StatCard component
+```tsx
+// Accent-tinted glass card with instant hover animation
+background: ${accent}0c  border: 1px solid ${accent}28
+whileHover: scale 1.03, boxShadow: `0 0 0 1px ${accent}45, 0 8px 28px ${accent}18`
+  transition: { duration: 0.12, ease: 'easeOut' }   ← MUST be inside whileHover to override spring
+label: 9px bold uppercase tracking-[0.18em], accent color at opacity 0.7
+value: text-2xl font-bold tabular-nums
+entrance: initial y:10→0 opacity:0→1, spring stiffness:240 damping:24, staggered delay
+```
+Cards: **2026 Season** (Position, Points — 2-col grid) · **Career** (Wins, Seasons, Number — 3-col grid)
+
+### InfoRow component (Nationality + Born card)
+```tsx
+// flex justify-between, gap-4, px-4 py-3
+label: 9px bold uppercase tracking-[0.18em], accent color at opacity 0.6, shrink-0
+value wrapper: min-w-0 flex items-center justify-end gap-1.5 overflow-hidden
+  → flag emoji at text-base (16px), nationality/date text at 12px font-semibold truncate
+border between rows: 1px solid ${accent}14
+card: border 1px solid ${accent}20, bg ${accent}08, overflow-hidden, motion.div entrance delay 0.52s
+```
+Date parsing: `profile.dateOfBirth.split('-').map(Number)` → `new Date(y, m-1, day)` (local time, avoids UTC off-by-one)
+
+### DO NOT add static ribbons inside stat cards
+Static accent ribbon divs (absolute top-0 h-[2px] gradient) look like UI artifacts — rejected. The whileHover glow is the only accent on hover.
+
+### API Route: /api/f1/driver/[driverRef]/route.ts
+```
+runtime: nodejs
+Cache-Control: no-store  ← intentional, driver data must be fresh (no CDN caching)
+
+Parallel fetches (Promise.all):
+  /drivers/${ref}.json                         → name, nationality, dob, code, number
+  /drivers/${ref}/results/1.json?limit=1       → MRData.total = career wins
+  /drivers/${ref}/seasons.json?limit=100       → SeasonTable.Seasons.length = seasons count
+  /2026/drivers/${ref}/driverStandings.json    → current season pos + points + team
+
+seasons count: use SeasonTable.Seasons.length (actual array) NOT MRData.total
+  MRData.total overcounts — includes seasons with FP-only appearances (e.g. Antonelli 2024)
+  Array length correctly counts only seasons with race entries
+
+headshot: OpenF1 /drivers?driver_number=N&session_key=latest → headshot_url, replace q_auto→q_100
+  revalidate: 86400 (headshots change rarely)
+  failure is silent — headshot is optional
+```
 
 ## Important: Next.js Version Warning
 This is Next.js 16.2.6 — APIs, conventions, and file structure may differ from training data. Read `node_modules/next/dist/docs/` before writing code. Heed deprecation notices.
