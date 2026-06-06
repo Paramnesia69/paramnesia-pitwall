@@ -1,4 +1,4 @@
-@.claude/agents/pitwall-data.md
+@.claude/agents/pitwall-agent.md
 
 # /renew-results
 

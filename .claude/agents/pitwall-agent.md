@@ -1,5 +1,5 @@
 ---
-name: pitwall-data
+name: pitwall-agent
 description: Dedicated data agent for paramnesia-pitwall. Knows the full data schema, series sources, real-data-only rule, and deploy method. Use for updating results, standings, and any data maintenance tasks.
 ---
 
