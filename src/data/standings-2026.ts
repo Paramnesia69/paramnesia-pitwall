@@ -5,9 +5,9 @@
  * MotoGP Teams: computed from rider points (team pts = sum of both riders)
  * WEC: After Round 2 (6H Spa, May 10 2026) — source: fiawec.com / Wikipedia
  * WEC Manufacturers: official FIA WEC data (fiawec.com/en/page/manufacturers-classification)
- * WRC: After Round 6 (Rally Portugal, May 22 2026) — source: wrc.com
+ * WRC: After Round 7 (Rally Japan, May 31 2026) — source: wrc.com / autohebdof1.com
  * WRC Manufacturers: Toyota/Hyundai/Lancia/Ford — derived from driver pts top-3 per mfr
- * IMSA: After Round 4 (Laguna Seca, May 11 2026) — source: imsa.com / speedsport.com
+ * IMSA: After Round 5 (Detroit, May 30 2026) — source: imsa.com / autohebdof1.com / racer.com
  * IMSA Teams: each car entry IS the team entry — same pts as driver entry
  * DTM: After Round 2 (Zandvoort, May 24 2026) — source: pitdebrief.com / motorsport.com
  * DTM Manufacturers: top 2 drivers per brand per race — derived from driver standings
@@ -141,30 +141,31 @@ export const WRC_DRIVERS_2026: DriverStanding[] = [
   { pos: 3,  name: 'O. Solberg', team: 'Toyota',  points: 102, teamColor: '#EB0A1E', prevPos: 3  },
   { pos: 4,  name: 'S. Pajari',  team: 'Toyota',  points: 96,  teamColor: '#EB0A1E', prevPos: 5  },
   { pos: 5,  name: 'S. Ogier',   team: 'Toyota',  points: 90,  teamColor: '#EB0A1E', prevPos: 6  },
-  { pos: 6,  name: 'A. Fourmaux', team: 'Hyundai', points: 83, teamColor: '#003082', prevPos: 4  },
-  { pos: 7,  name: 'T. Neuville', team: 'Hyundai', points: 69, teamColor: '#003082', prevPos: 7  },
-  { pos: 8,  name: 'E. Lappi',   team: 'Hyundai', points: 21,  teamColor: '#003082', prevPos: 8  },
-  { pos: 9,  name: 'Y. Rossel',  team: 'Lancia',  points: 20,  teamColor: '#0C2340', prevPos: 9  },
-  { pos: 10, name: 'L. Rossel',  team: 'Citroën', points: 18,  teamColor: '#CC0000', prevPos: 10 },
+  { pos: 6,  name: 'A. Fourmaux', team: 'Hyundai', points: 89, teamColor: '#003082', prevPos: 4  },
+  { pos: 7,  name: 'T. Neuville', team: 'Hyundai', points: 73, teamColor: '#003082', prevPos: 7  },
+  { pos: 8,  name: 'H. Paddon',  team: 'Hyundai', points: 21,  teamColor: '#003082', prevPos: 8  },
+  { pos: 9,  name: 'E. Lappi',   team: 'Hyundai', points: 21,  teamColor: '#003082', prevPos: 9  },
+  { pos: 10, name: 'Y. Rossel',  team: 'Lancia',  points: 20,  teamColor: '#0C2340', prevPos: 10 },
 ];
 
-// ─── IMSA GTP 2026 Driver Championship (after R4 · Laguna Seca) ─
-// Source: imsa.com / speedsport.com — gaps confirmed, exact totals from NBC Sports PDF
+// ─── IMSA GTP 2026 Driver Championship (after R5 · Detroit) ─
+// Source: autohebdof1.com / racer.com — official post-Detroit points
 export const IMSA_GTP_DRIVERS_2026: DriverStanding[] = [
-  { pos: 1, name: 'L. Heinrich',               team: 'JDC-Miller Porsche',    points: 1396, teamColor: '#C0A062' },
-  { pos: 2, name: 'J. Aitken',                 team: 'Whelen Cadillac',       points: 1375, teamColor: '#D4AF37' },
-  { pos: 3, name: 'F. Nasr / J. Andlauer',    team: 'Porsche Penske #7',     points: 1323, teamColor: '#C0A062' },
-  { pos: 4, name: 'K. Estre / L. Vanthoor',   team: 'Porsche Penske #6',     points: 1250, teamColor: '#C0A062' },
-  { pos: 5, name: 'R. van der Zande / N. Yelloly', team: 'Meyer Shank Acura', points: 1242, teamColor: '#C8102E' },
+  { pos: 1, name: 'J. Aitken',                 team: 'Action Express Cadillac', points: 1760, teamColor: '#D4AF37' },
+  { pos: 2, name: 'L. Heinrich',               team: 'Porsche Penske #7',       points: 1616, teamColor: '#C0A062' },
+  { pos: 3, name: 'F. Nasr / J. Andlauer',    team: 'Porsche Penske #7',       points: 1606, teamColor: '#C0A062' },
+  { pos: 4, name: 'N. Yelloly / R. van der Zande', team: 'Meyer Shank Acura',  points: 1552, teamColor: '#C8102E' },
+  { pos: 5, name: 'K. Estre / L. Vanthoor',   team: 'Porsche Penske #6',       points: 1501, teamColor: '#C0A062' },
 ];
 
-// ─── IMSA GTD Pro 2026 Driver Championship (after R4 · Laguna Seca) ─
-// Source: imsa.com / speedsport.com — positions + gaps confirmed; point totals approx (gaps exact)
+// ─── IMSA GTD Pro 2026 Driver Championship (after R5 · Detroit) ─
+// Source: autohebdof1.com — official post-Detroit points
 export const IMSA_GTD_PRO_DRIVERS_2026: DriverStanding[] = [
-  { pos: 1, name: 'T. Milner / N. Catsburg',        team: 'Corvette Racing',    points: 1300, teamColor: '#FFC906' },
-  { pos: 2, name: 'C. De Phillippi / N. Verhagen',  team: 'Paul Miller BMW',    points: 1249, teamColor: '#1E88E5' },
-  { pos: 3, name: 'H. King / N. Tandy',             team: 'AO Racing Porsche',  points: 1237, teamColor: '#C0A062' },
-  { pos: 4, name: 'F. Vervisch / C. Mies',          team: 'Ford Racing',        points: 1226, teamColor: '#0032A0' },
+  { pos: 1, name: 'N. Catsburg / T. Milner',        team: 'Corvette Racing',    points: 1243, teamColor: '#FFC906' },
+  { pos: 2, name: 'C. De Phillippi / N. Verhagen',  team: 'Paul Miller BMW',    points: 1225, teamColor: '#1E88E5' },
+  { pos: 3, name: 'C. Mies / F. Vervisch',          team: 'Multimatic Ford',    points: 1223, teamColor: '#0032A0' },
+  { pos: 4, name: 'A. Sims / A. Garcia',            team: 'Corvette Racing',    points: 1212, teamColor: '#FFC906' },
+  { pos: 5, name: 'H. King / N. Tandy',             team: 'AO Racing Porsche',  points: 1150, teamColor: '#C0A062' },
 ];
 
 // ─── IMSA GTD 2026 Driver Championship (after R4 · Laguna Seca) ─
@@ -230,31 +231,32 @@ export const WEC_LMGT3_MANUFACTURERS_2026: ConstructorStanding[] = [
   { pos: 6, name: 'Aston Martin',points: 18, color: '#006241' }, // Heart of Racing 18
 ];
 
-// ─── WRC 2026 Manufacturers Championship (after R6 · Rally of Portugal) ─
-// Source: wrc.com — manufacturer pts sum top-3 drivers per rally per manufacturer
+// ─── WRC 2026 Manufacturers Championship (after R7 · FORUM8 Rally Japan) ─
+// Source: autohebdof1.com — official FIA manufacturer points
 export const WRC_MANUFACTURERS_2026: ConstructorStanding[] = [
-  { pos: 1, name: 'Toyota Gazoo Racing',  points: 326, color: '#EB0A1E' }, // Evans+Katsuta+Solberg top-3
-  { pos: 2, name: 'Hyundai Shell WRT',    points: 165, color: '#003082' }, // Fourmaux+Neuville+Lappi
-  { pos: 3, name: 'Lancia Corse WRT',     points: 20,  color: '#0C2340' }, // Y.Rossel
-  { pos: 4, name: 'M-Sport Ford',         points: 18,  color: '#003CB4' }, // L.Rossel / Citroën entry
+  { pos: 1, name: 'Toyota Gazoo Racing',  points: 370, color: '#EB0A1E' },
+  { pos: 2, name: 'Hyundai Shell WRT',    points: 243, color: '#003082' },
+  { pos: 3, name: 'Toyota WRT2',          points: 106, color: '#EB0A1E' },
+  { pos: 4, name: 'M-Sport Ford',         points: 85,  color: '#003CB4' },
 ];
 
-// ─── IMSA 2026 GTP Teams Championship (after R4 · Laguna Seca) ─
-// IMSA team championship = car entry championship; pts identical to driver entry
+// ─── IMSA 2026 GTP Teams Championship (after R5 · Detroit) ─
+// IMSA team championship = car entry championship; pts mirror leading driver per car
 export const IMSA_GTP_TEAMS_2026: ConstructorStanding[] = [
-  { pos: 1, name: 'JDC-Miller Motorsports',    points: 1396, color: '#C0A062' },
-  { pos: 2, name: 'Cadillac Racing (Whelen)',  points: 1375, color: '#D4AF37' },
-  { pos: 3, name: 'Porsche Penske #7',         points: 1323, color: '#C0A062' },
-  { pos: 4, name: 'Porsche Penske #6',         points: 1250, color: '#C0A062' },
-  { pos: 5, name: 'Meyer Shank Racing',        points: 1242, color: '#C8102E' },
+  { pos: 1, name: 'Action Express Racing',     points: 1760, color: '#D4AF37' },
+  { pos: 2, name: 'Porsche Penske #7',         points: 1616, color: '#C0A062' },
+  { pos: 3, name: 'Meyer Shank Racing',        points: 1552, color: '#C8102E' },
+  { pos: 4, name: 'Porsche Penske #6',         points: 1501, color: '#C0A062' },
+  { pos: 5, name: 'JDC-Miller Motorsports',    points: 1379, color: '#C0A062' },
 ];
 
-// ─── IMSA 2026 GTD Pro Teams Championship (after R4 · Laguna Seca) ─
+// ─── IMSA 2026 GTD Pro Teams Championship (after R5 · Detroit) ─
 export const IMSA_GTDPRO_TEAMS_2026: ConstructorStanding[] = [
-  { pos: 1, name: 'Corvette Racing',        points: 1300, color: '#FFC906' },
-  { pos: 2, name: 'Paul Miller Racing',     points: 1249, color: '#1E88E5' },
-  { pos: 3, name: 'AO Racing',             points: 1237, color: '#C0A062' },
-  { pos: 4, name: 'Multimatic Motorsports', points: 1226, color: '#0032A0' },
+  { pos: 1, name: 'Corvette Racing #4',     points: 1243, color: '#FFC906' },
+  { pos: 2, name: 'Paul Miller Racing',     points: 1225, color: '#1E88E5' },
+  { pos: 3, name: 'Multimatic Ford',        points: 1223, color: '#0032A0' },
+  { pos: 4, name: 'Corvette Racing #3',     points: 1212, color: '#FFC906' },
+  { pos: 5, name: 'AO Racing',             points: 1150, color: '#C0A062' },
 ];
 
 // ─── IMSA 2026 GTD Teams Championship (after R4 · Laguna Seca) ─
