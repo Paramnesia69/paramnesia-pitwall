@@ -85,27 +85,23 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
               {(() => {
                 const circuitImg = getCircuitImage(event.circuit.name);
                 if (!circuitImg) return null;
+                const darkF = 'brightness(0) invert(1) sepia(1) hue-rotate(175deg) saturate(6) brightness(1.1)';
+                const vividF = 'brightness(1.2) contrast(1.25) saturate(1.6)';
+                const baseF = 'brightness(1.05) contrast(1.1) saturate(1.2)';
+                const f = circuitImg.dark ? darkF : circuitImg.vivid ? vividF : baseF;
                 return (
                   <div
                     className="absolute pointer-events-none select-none"
-                    style={{
-                      top: 0,
-                      left: 0,
-                      right: '45%',
-                      bottom: 0,
-                      opacity: circuitImg.dark ? 0.40 : circuitImg.vivid ? 0.38 : 0.22,
-                    }}
+                    style={{ top: 0, left: 0, right: '45%', bottom: 0 }}
                   >
+                    <Image src={circuitImg.src} alt="" fill className="object-contain"
+                      style={{ filter: `${f} blur(6px)`, opacity: circuitImg.vivid ? 0.28 : 0.18 }} />
                     <Image
                       src={circuitImg.src}
                       alt=""
                       fill
                       className="object-contain"
-                      style={circuitImg.dark ? {
-                        filter: 'brightness(0) invert(1) sepia(1) hue-rotate(175deg) saturate(6) brightness(1.1)',
-                      } : circuitImg.vivid ? {
-                        filter: 'brightness(1.15) contrast(1.2) saturate(1.5) drop-shadow(0 0 8px rgba(255,255,255,0.15))',
-                      } : undefined}
+                      style={{ filter: f, opacity: circuitImg.dark ? 0.40 : circuitImg.vivid ? 0.38 : 0.22 }}
                     />
                   </div>
                 );
