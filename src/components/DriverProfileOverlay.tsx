@@ -21,7 +21,7 @@ function nationalityFlag(nat: string): string {
 function StatCard({ label, value, accent, delay = 0 }: { label: string; value: string | number; accent: string; delay?: number }) {
   return (
     <motion.div
-      className="relative flex flex-col gap-1.5 px-4 pt-4 pb-3 rounded-xl overflow-hidden cursor-default"
+      className="relative flex flex-col items-center text-center gap-1.5 px-4 pt-4 pb-3 rounded-xl overflow-hidden cursor-default"
       style={{
         background: `${accent}0c`,
         border: `1px solid ${accent}28`,
@@ -38,7 +38,7 @@ function StatCard({ label, value, accent, delay = 0 }: { label: string; value: s
       <span className="text-[9px] font-bold uppercase tracking-[0.18em]" style={{ color: accent, opacity: 0.7 }}>
         {label}
       </span>
-      <span className="text-2xl font-bold tabular-nums tracking-tight">{value}</span>
+      <span className="text-2xl font-bold tabular-nums tracking-tight" style={{ fontFamily: 'var(--font-orbitron, var(--pw-font-display))' }}>{value}</span>
     </motion.div>
   );
 }
@@ -328,7 +328,7 @@ export default function DriverProfileOverlay() {
                           )}
                           {profile.dateOfBirth && (
                             <InfoRow label="Born" accent={accent} last>
-                              <span className="text-[12px] font-semibold truncate">
+                              <span className="text-[12px] font-semibold truncate" style={{ fontFamily: 'var(--font-orbitron, var(--pw-font-display))' }}>
                                 {(() => {
                                   const [y, m, day] = profile.dateOfBirth!.split('-').map(Number);
                                   return new Date(y, m - 1, day).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
