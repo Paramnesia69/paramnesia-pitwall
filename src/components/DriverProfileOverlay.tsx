@@ -32,6 +32,7 @@ function StatCard({ label, value, accent, delay = 0 }: { label: string; value: s
       whileHover={{
         scale: 1.03,
         boxShadow: `0 0 0 1px ${accent}45, 0 8px 28px ${accent}18`,
+        transition: { duration: 0.12, ease: 'easeOut' },
       }}
     >
       <span className="text-[9px] font-bold uppercase tracking-[0.18em]" style={{ color: accent, opacity: 0.7 }}>
