@@ -82,6 +82,8 @@ export default memo(function EventCard({ event }: EventCardProps) {
               style={{ bottom: '18%', left: 0, top: circuitImg.cardTop ?? '48%', right: circuitImg.cardRight ?? '48%', zIndex: 0 }}
             >
               <Image src={circuitImg.src} alt="" fill className="object-contain"
+                style={{ filter: `${f} blur(18px)`, opacity: circuitImg.glowOpacity * 0.5 }} />
+              <Image src={circuitImg.src} alt="" fill className="object-contain"
                 style={{ filter: `${f} blur(5px)`, opacity: circuitImg.glowOpacity }} />
               <Image src={circuitImg.src} alt="" fill className="object-contain"
                 style={{ filter: f, opacity: circuitImg.sharpOpacity }} />

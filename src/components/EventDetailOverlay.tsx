@@ -95,6 +95,8 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
                     style={{ top: 0, left: 0, right: '45%', bottom: 0 }}
                   >
                     <Image src={circuitImg.src} alt="" fill className="object-contain"
+                      style={{ filter: `${f} blur(20px)`, opacity: circuitImg.glowOpacity * 0.5 }} />
+                    <Image src={circuitImg.src} alt="" fill className="object-contain"
                       style={{ filter: `${f} blur(6px)`, opacity: circuitImg.glowOpacity }} />
                     <Image src={circuitImg.src} alt="" fill className="object-contain"
                       style={{ filter: f, opacity: circuitImg.sharpOpacity }}

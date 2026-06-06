@@ -39,6 +39,8 @@ export default function HeroCard({ event }: HeroCardProps) {
             style={{ top: 0, left: '36%', right: '39%', bottom: '32%', zIndex: 0 }}
           >
             <Image src={circuitImg.src} alt="" fill className="object-contain"
+              style={{ filter: `${f} blur(20px)`, opacity: circuitImg.glowOpacity * 0.5 }} />
+            <Image src={circuitImg.src} alt="" fill className="object-contain"
               style={{ filter: `${f} blur(6px)`, opacity: circuitImg.glowOpacity }} />
             <Image src={circuitImg.src} alt="" fill className="object-contain"
               style={{ filter: f, opacity: circuitImg.sharpOpacity }} />
