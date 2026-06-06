@@ -6,28 +6,18 @@ Series: WEC, ELMS, IMSA, WRC, DTM.
 
 ## Last Commits (2026-06-06)
 
-`5dd4d25` — fix: headshot maxHeight instead of fixed height — no upscaling blur
-- `maxHeight: 140` so image never renders larger than its natural size (prevents upscale blur)
+`12ccd11` — fix: show series logo watermarks in natural brand colors
+- Removed `grayscale(1) contrast(2) brightness(3)` filter from HeroCard, EventCard, EventDetailOverlay series logo watermarks
+- Logos now show in their natural brand colors: F1=red, WRC=red, DTM=gold, MotoGP=white
+- Opacity tuned: HeroCard 0.18, EventCard 0.18, EventDetailOverlay 0.12
+- Porsche SVG (dark fill) still inverted to white via `brightness(0) invert(1)`
+- Circuit map watermarks (`brightness(3) contrast(1.2) saturate(0.5)`) unchanged
 
-`7cd54eb` — fix: revert to OpenF1 headshots — guessed F1 CDN paths were wrong, photos gone
-- F1 CDN `content/dam/fom-website/drivers/2026Drivers/` path does NOT exist — don't try it again
-- Back to OpenF1 `headshot_url` with `q_100` quality boost on Cloudinary URL
+`878a72e` — docs: update .claude — Phase 5 shipped, watermark cross-platform rule documented
 
-`e3f79af` — fix: driver name hover — vertical team-color bar slides in left, text → white
-- `DriverRow` in `StandingsPanel` uses `useState(nameHover)` + onMouseEnter/Leave
-- 2px vertical accent bar in `d.teamColor` animates width 0→2px from left of name
-- Text transitions to white; no underline, no glow, no letter-spacing
-
-`cec472e` — fix: split object selector in DriverProfileOverlay — fixes React #185 infinite re-render
-
-`4c8154f` — feat: phase 4 redo — driver profiles, trajectory chart, teammate H2H (features 8, 9, 10)
-- `src/types/index.ts` — added `DriverProfile` + `SelectedDriver` interfaces (shared between route + client)
-- `src/store/index.ts` — added `selectedDriver/openDriver/closeDriver` (transient, not persisted)
-- `src/app/api/f1/driver/[driverRef]/route.ts` + `src/app/api/f1/h2h/route.ts` — NEW routes
-- `src/components/standings/ChampionshipChart.tsx` — SVG points trajectory, top-6 drivers
-- `src/components/DriverProfileOverlay.tsx` — right-panel slide-in, fetches /api/f1/driver at runtime
-- `src/lib/f1DriverRefs.ts` — single source of truth for name→driverRef mappings + `F1_CDN_SLUGS` map (unused currently)
-- `StandingsPanel`, `RecentResults`, `Dashboard` — wired up click handlers + lazy overlay
+`b33f097` — fix: remove mixBlendMode screen from watermarks — consistent dark look on all platforms
+- iOS Safari drops blend modes inside stacking contexts (backdrop-filter + overflow:hidden + border-radius)
+- Removed `mixBlendMode: 'screen'` from HeroCard (logo + circuit map), EventCard (logo + circuit map), EventDetailOverlay (logo + circuit map)
 
 ## 16-Feature Build Status
 | Phase | Features | Status |

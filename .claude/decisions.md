@@ -71,8 +71,10 @@
 ## CSS & Component Patterns
 - TiltCard has `overflow-hidden` — all absolute-positioned watermarks must fit inside card
 - Card uniform height: `h-full` must chain through StaggerItem → EventCard div → TiltCard
-- Logo watermarks: absolute positioned, z-index 0, pointer-events-none, opacity 0.06–0.10
-- Non-transparent series logos: always apply `filter: grayscale(1) contrast(2) brightness(3)`, `mixBlendMode: screen`, and `maskImage: radial-gradient(ellipse at center, black 30%, transparent 70%)`
+- Logo watermarks: absolute positioned, z-index 0, pointer-events-none, opacity 0.12–0.18
+- **Series logo watermarks** show in natural brand colors — NO filter, NO `mixBlendMode`. Just the raw logo at low opacity + `maskImage: radial-gradient(ellipse at center, black 50%, transparent 85%)`. Porsche SVG only exception: `brightness(0) invert(1)` to make dark fill white.
+- **Circuit map watermarks** use `filter: brightness(3) contrast(1.2) saturate(0.5)` to extract line-art — NO `mixBlendMode`.
+- Never add `mixBlendMode: screen` to watermarks — iOS Safari drops it inside stacking contexts (backdrop-filter + overflow:hidden + border-radius), causing cross-platform inconsistency.
 - ClassSection `badgeSrc` prop: use `<img>` at `height: 20px` — the SVG viewBox handles proportions
 
 ## External CDN
