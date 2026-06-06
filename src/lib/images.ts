@@ -24,7 +24,7 @@ const DARK_SVGS = new Set([
   '/circuits/daytona.svg',
   '/circuits/nurburgring-gp.svg',
   '/circuits/las-vegas.svg',
-  '/circuits/misano.svg',
+  '/circuits/misano-v2.svg',
   '/circuits/laguna-seca.svg',
   '/circuits/road-america.svg',
   '/circuits/shanghai.svg',
@@ -36,7 +36,7 @@ const DARK_SVGS = new Set([
 const TUNING: Record<string, [number, number, string?, string?]> = {
   '/circuits/algarve.svg':                [0.60, 0.42],
   '/circuits/nurburgring-nordschleife.svg':[0.45, 0.42],
-  '/circuits/misano.svg':                 [0.16, 0.06, '68%', '64%'], // shrink hard
+  '/circuits/misano-v2.svg':                 [0.16, 0.06, '68%', '64%'], // shrink hard
   '/circuits/watkins-glen.svg':           [0.30, 0.13],
   '/circuits/mugello.svg':                [0.30, 0.13],
   '/circuits/road-america.svg':           [0.30, 0.13],
@@ -87,7 +87,7 @@ const CIRCUIT_MAP: Record<string, string> = {
   'Mugello':                        '/circuits/mugello.svg',
   'Mugello Circuit':                '/circuits/mugello.svg',
   'Brands Hatch':                   '/circuits/brands-hatch.svg',
-  'Misano World Circuit':           '/circuits/misano.svg',
+  'Misano World Circuit':           '/circuits/misano-v2.svg',
   'Algarve International Circuit':  '/circuits/algarve.svg',
 
   // ── IMSA ─────────────────────────────────────────────────────────────────
