@@ -225,6 +225,7 @@ function ConstructorRow({ c, maxPts, f1 = false, onConstructorClick }: {
   onConstructorClick?: (c: ConstructorStanding) => void;
 }) {
   const gap = maxPts - c.points;
+  const [nameHover, setNameHover] = useState(false);
   return (
     <motion.div className="flex items-center gap-2 py-1.5"
       initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: c.pos * 0.03 }}>
@@ -240,11 +241,29 @@ function ConstructorRow({ c, maxPts, f1 = false, onConstructorClick }: {
         <div className="flex items-center justify-between mb-0.5">
           {onConstructorClick ? (
             <button
-              className="text-xs font-medium truncate text-left hover:underline"
-              style={{ color: c.color }}
+              className="flex items-center min-w-0 overflow-hidden text-left"
+              onMouseEnter={() => setNameHover(true)}
+              onMouseLeave={() => setNameHover(false)}
               onClick={(e) => { e.stopPropagation(); onConstructorClick(c); }}
+              title={`View ${c.name} profile`}
             >
-              {c.name}
+              <span style={{
+                display: 'inline-block',
+                width: nameHover ? 2 : 0,
+                height: 11,
+                borderRadius: 1,
+                background: c.color,
+                flexShrink: 0,
+                alignSelf: 'center',
+                marginRight: nameHover ? 5 : 0,
+                transition: 'width 140ms ease, margin-right 140ms ease',
+              }} />
+              <span
+                className="text-xs font-medium truncate"
+                style={{ color: nameHover ? 'rgba(255,255,255,1)' : undefined, transition: 'color 140ms ease' }}
+              >
+                {c.name}
+              </span>
             </button>
           ) : (
             <span className="text-xs font-medium truncate">{c.name}</span>

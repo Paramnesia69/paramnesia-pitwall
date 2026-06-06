@@ -162,36 +162,6 @@ export default function TeamProfileOverlay() {
                 #{t.pos}
               </div>
 
-              {/* Center: prominent team logo (the "headshot" equivalent) */}
-              {logo && (
-                <div
-                  className="absolute bottom-6 left-1/2 -translate-x-1/2 pointer-events-none select-none flex items-end justify-center"
-                  style={{ height: '70%' }}
-                >
-                  <img
-                    src={logo.src}
-                    alt={t.name}
-                    style={{
-                      maxHeight: 110, maxWidth: 200, width: 'auto', objectFit: 'contain',
-                      opacity: 0.72,
-                      filter: logo.white
-                        ? `drop-shadow(0 0 24px ${accent}60) drop-shadow(0 4px 16px rgba(0,0,0,0.6))`
-                        : logo.cssFilter !== undefined
-                        ? `${logo.cssFilter} drop-shadow(0 0 20px ${accent}40)`
-                        : `brightness(1.6) saturate(2.5) contrast(1.2) drop-shadow(0 0 20px ${accent}40)`,
-                    }}
-                  />
-                </div>
-              )}
-
-              {/* Skeleton while loading */}
-              {loading && !logo && (
-                <div
-                  className="absolute bottom-6 left-1/2 -translate-x-1/2 rounded-2xl animate-pulse"
-                  style={{ width: 160, height: 80, background: `${accent}15` }}
-                />
-              )}
-
               {/* Bottom fade */}
               <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[var(--pw-bg-elevated)] to-transparent" />
 
