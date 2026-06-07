@@ -20,6 +20,7 @@
 | Images | `unoptimized: true` | Vercel image optimization has quota limits; logos/circuits are already small |
 | CSS | Tailwind v4 (`@import "tailwindcss"` + `@theme inline`) | No tailwind.config.js — breaking change from v3 |
 | Weather | OpenWeatherMap with simulated fallback | Real data preferred; simulated (lat/lng based) when no key or rate limited |
+| F1 event state | OpenF1 `date_end` overrides time-based guess | `computeState()` uses startTime+3h fallback; OpenF1 posts real end time — checked in `getEventsWithState()` for any live F1 event, revalidate 60s, silent fail |
 
 ## Logo System Decisions
 | Decision | Choice | Reason |

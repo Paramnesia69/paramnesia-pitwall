@@ -8,11 +8,11 @@
 
 ## Last Commits (2026-06-07)
 
+`4946bf1` — fix: auto-flip F1 event state to finished via OpenF1 session date_end
+
 `fc67422` — fix: replace transitionEnd overflow with imperative DOM ref on all collapse wrappers
 
 `06cb3da` — fix: remove body overflow-x:hidden to stop clipping card hover shadows
-
-`f7bc49e` — feat: use series logo in driver/team overlay badges instead of text prefix
 
 ## 16-Feature Build Status
 | Phase | Features | Status |
