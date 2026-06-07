@@ -124,7 +124,6 @@ body {
   background: var(--pw-bg-primary);
   color: var(--pw-text-primary);
   font-family: var(--pw-font-display);
-  overflow-x: hidden;
 }
 
 ::selection {
