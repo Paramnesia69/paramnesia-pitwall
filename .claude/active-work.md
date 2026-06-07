@@ -8,11 +8,11 @@
 
 ## Last Commits (2026-06-07)
 
+`fc67422` — fix: replace transitionEnd overflow with imperative DOM ref on all collapse wrappers
+
+`06cb3da` — fix: remove body overflow-x:hidden to stop clipping card hover shadows
+
 `f7bc49e` — feat: use series logo in driver/team overlay badges instead of text prefix
-
-`f942387` — fix: move nationality flag next to name, remove Nationality InfoRow from both overlays
-
-`2e2f69b` — feat: MotoGP rider profiles + WEC/ELMS/IMSA car-entry/manufacturer overlays
 
 ## 16-Feature Build Status
 | Phase | Features | Status |

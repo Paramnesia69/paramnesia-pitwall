@@ -81,3 +81,8 @@
 - All circuit maps are self-hosted Wikimedia Commons SVGs under `/public/circuits/`
 - `getCircuitImage(name)` in `src/lib/images.ts` is a flat lookup table → local paths only
 - No external CDN remote patterns needed in `next.config.mjs`
+
+## Framer Motion v12 Collapse Wrappers
+- **NEVER use `transitionEnd: { overflow: 'visible' }`** for `height: 'auto'` collapse animations — it does not reliably fire in FM v12, leaving the wrapper permanently `overflow: hidden` and clipping box-shadows of edge-column cards.
+- **Correct pattern**: `useRef<HTMLDivElement>` + `onAnimationStart → hidden` + `onAnimationComplete → visible` + pre-set `hidden` synchronously in the toggle handler before collapse begins. This bypasses FM's value system entirely.
+- Also keep `body { overflow-x: hidden }` **removed** — it clipped card shadows at the viewport edge, causing an unnatural hard cut instead of a smooth fade.
