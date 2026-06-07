@@ -88,13 +88,9 @@ function PodiumCard({ result }: { result: RaceResult }) {
           const baseF = 'brightness(1.05) contrast(1.1) saturate(1.2)';
           const f = circuitImg.filterOverride ?? (circuitImg.dark ? darkF : circuitImg.vivid ? vividF : baseF);
           return (
-            <div className="absolute pointer-events-none select-none" style={{ width: 96, height: 96, top: '50%', left: '62%', transform: 'translate(-50%, -50%)' }}>
-              <img src={circuitImg.src} alt="" className="absolute inset-0 w-full h-full object-contain"
-                style={{ filter: `${f} blur(10px)`, opacity: circuitImg.glowOpacity * 0.5 }} />
-              <img src={circuitImg.src} alt="" className="absolute inset-0 w-full h-full object-contain"
-                style={{ filter: `${f} blur(2px)`, opacity: circuitImg.glowOpacity * 0.9 }} />
-              <img src={circuitImg.src} alt="" className="absolute inset-0 w-full h-full object-contain"
-                style={{ filter: f, opacity: circuitImg.sharpOpacity * 0.85 }} />
+            <div className="absolute pointer-events-none select-none" style={{ width: 72, height: 72, top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
+              <img src={circuitImg.src} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', filter: `${f} blur(8px)`, opacity: circuitImg.glowOpacity * 0.4 }} />
+              <img src={circuitImg.src} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', filter: f, opacity: circuitImg.sharpOpacity * 0.7 }} />
             </div>
           );
         })()}
