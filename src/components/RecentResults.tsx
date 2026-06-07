@@ -12,6 +12,7 @@ import SeriesBadge from '@/components/ui/SeriesBadge';
 import WatchedButton from '@/components/ui/WatchedButton';
 import StarRating from '@/components/ui/StarRating';
 import { useStore } from '@/store';
+import { getCircuitImage } from '@/lib/images';
 
 interface RecentResultsProps {
   activeFilter?: SeriesId | 'all';
@@ -60,10 +61,11 @@ function PodiumCard({ result }: { result: RaceResult }) {
   const watched = entry?.watched ?? false;
   const rating = entry?.rating ?? 0;
   const handleClick = useCallback(() => openResult(result), [openResult, result]);
+  const circuitImg = getCircuitImage(result.circuit);
 
   return (
     <motion.div
-      className="pw-glass p-4 relative overflow-hidden cursor-pointer"
+      className="pw-glass p-4 relative cursor-pointer"
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: watched ? 0.5 : 1, y: 0 }}
       transition={{ duration: 0.3 }}
@@ -74,11 +76,32 @@ function PodiumCard({ result }: { result: RaceResult }) {
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleClick(); }}
       aria-label={`View full results for ${result.name}`}
     >
-      {/* Accent glow */}
-      <div
-        className="absolute top-0 left-0 right-0 h-px"
-        style={{ background: `linear-gradient(90deg, transparent, ${meta.accent}, transparent)` }}
-      />
+      {/* Clipped layer: accent line + circuit watermark */}
+      <div className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none" style={{ zIndex: 0 }}>
+        <div
+          className="absolute top-0 left-0 right-0 h-px"
+          style={{ background: `linear-gradient(90deg, transparent, ${meta.accent}, transparent)` }}
+        />
+        {circuitImg && (() => {
+          const darkF = 'brightness(0) invert(1) sepia(1) hue-rotate(175deg) saturate(6) brightness(1.1)';
+          const vividF = 'brightness(1.05) contrast(1.12) saturate(1.3)';
+          const baseF = 'brightness(1.05) contrast(1.1) saturate(1.2)';
+          const f = circuitImg.filterOverride ?? (circuitImg.dark ? darkF : circuitImg.vivid ? vividF : baseF);
+          return (
+            <div className="absolute pointer-events-none select-none" style={{ top: '45%', right: '-5%', bottom: '-5%', left: '35%' }}>
+              <img src={circuitImg.src} alt="" className="absolute inset-0 w-full h-full object-contain"
+                style={{ filter: `${f} blur(18px)`, opacity: circuitImg.glowOpacity * 0.45 }} />
+              <img src={circuitImg.src} alt="" className="absolute inset-0 w-full h-full object-contain"
+                style={{ filter: `${f} blur(5px)`, opacity: circuitImg.glowOpacity * 0.85 }} />
+              <img src={circuitImg.src} alt="" className="absolute inset-0 w-full h-full object-contain"
+                style={{ filter: f, opacity: circuitImg.sharpOpacity * 0.9 }} />
+            </div>
+          );
+        })()}
+      </div>
+
+      {/* Card content — above watermark */}
+      <div className="relative" style={{ zIndex: 1 }}>
 
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
@@ -203,6 +226,7 @@ function PodiumCard({ result }: { result: RaceResult }) {
           </svg>
         </span>
       </div>
+      </div>{/* end content wrapper */}
     </motion.div>
   );
 }
@@ -275,13 +299,13 @@ export default function RecentResults({ activeFilter = 'all' }: RecentResultsPro
       <AnimatePresence>
         {expanded && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
+            initial={{ height: 0, opacity: 0, overflow: 'hidden' }}
+            animate={{ height: 'auto', opacity: 1, transitionEnd: { overflow: 'visible' } }}
+            exit={{ overflow: 'hidden', height: 0, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 200, damping: 25 }}
-            className="overflow-hidden"
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 px-1 py-1 -mx-1"
+              style={{ paddingBottom: '8px' }}>
               {filtered.map((result) => (
                 <PodiumCard key={result.id} result={result} />
               ))}

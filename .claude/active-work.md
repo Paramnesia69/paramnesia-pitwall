@@ -23,7 +23,7 @@
 | 4 | Driver Profile (8), Trajectory Chart (9), H2H (10) | ✅ shipped |
 | 4+ | Team Profile (constructor overlay) | ✅ shipped 2026-06-06 |
 | 5 | Highlights (12), Podcasts (13) | ✅ shipped 2026-06-06 |
-| 6 | Next Alarm (14), Offline Badge (15), Season Ring (16) | ⏳ not started |
+| 6 | Next Alarm (14), Offline Badge (15), Season Ring (16) | ✅ shipped |
 
 ## Critical Rules (learned from Phase 4)
 - **NEVER** import anything (even `type`) from `src/app/api/**` into a client component — Turbopack pulls server-only modules into client bundle → crash
@@ -75,7 +75,6 @@
 - DTM: after R2 Zandvoort
 
 ## Backlog (next up)
-- **Phase 6**: Next Alarm (14), Offline Badge (15), Season Ring (16)
 - **WEC results**: R3 Le Mans 24H (June 14–15)
 - **ELMS/DTM results**: R3+
 - **Nürburgring**: NLS6+ (Eifel Trophy, Jun 20)
