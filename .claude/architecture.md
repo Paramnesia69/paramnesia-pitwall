@@ -26,16 +26,18 @@ src/
 │       ├── og/route.ts       # /api/og?event=<id> — 1200×630 PNG OpenGraph card
 │       ├── openf1/
 │       │   └── timing/route.ts # /api/openf1/timing?eventId= — F1 live timing proxy
-│       └── f1/
-│           ├── driver/[driverRef]/route.ts      # /api/f1/driver/:ref — Jolpica driver profile, no-store cache
-│           └── constructor/[constructorRef]/route.ts # /api/f1/constructor/:ref — Jolpica constructor profile, no-store cache
+│       ├── f1/
+│       │   ├── driver/[driverRef]/route.ts      # /api/f1/driver/:ref — Jolpica driver profile, no-store cache
+│       │   └── constructor/[constructorRef]/route.ts # /api/f1/constructor/:ref — Jolpica constructor profile, no-store cache
+│       └── motogp/
+│           └── rider/[riderRef]/route.ts        # /api/motogp/rider/:ref — MotoGP rider profile from static lib, no-store cache
 ├── components/
 │   ├── Dashboard.tsx         # Client shell: series filter, event grid, lazy-loaded panels; accepts newsFeedSlot ReactNode
 │   │                         # Series order: F1→WEC→ELMS→IMSA→Nürburgring→MotoGP→GTWCE→DTM→WRC→Porsche
 │   ├── AsyncNewsFeed.tsx     # Async server component — fetches news + renders NewsFeed; used behind Suspense in page.tsx
 │   ├── EventDetailOverlay.tsx # Right-panel slide-out (framer spring), Escape key, backdrop click
-│   ├── DriverProfileOverlay.tsx # F1 driver profile sidebar; opened from StandingsPanel DriverRow click
-│   ├── TeamProfileOverlay.tsx   # F1 constructor profile sidebar; opened from StandingsPanel ConstructorRow click
+│   ├── DriverProfileOverlay.tsx # Driver profile sidebar — F1 (Jolpica) + MotoGP (static lib); series logo badge; flag next to name
+│   ├── TeamProfileOverlay.tsx   # Team/entry sidebar — F1 (Jolpica) + MotoGP/WEC/ELMS/IMSA (store data only); series logo badge
 │   ├── StandingsPanel.tsx    # Championship standings; series logo tab bar (F1/WEC/ELMS/IMSA/MotoGP/DTM/WRC)
 │   │                         # All series side-by-side via ExpandableGrid (3-col CSS grid: 1fr 1px 1fr, glass divider)
 │   │                         # ExpandableGrid: premium headers (10px semibold + bottom border), defaultLimit=10 + expand button
@@ -71,6 +73,7 @@ src/
 │   ├── circuitStats.ts       # getCircuitStats(name) → CircuitStats | null
 │   ├── images.ts             # getCircuitImage(name) → local /circuits/ SVG path (flat lookup table)
 │   ├── streamLinks.ts        # getStreamLinks(series) → StreamLink[]
+│   ├── motogpRiders.ts       # Static 2026 MotoGP grid: MOTOGP_RIDER_DATA (23 riders, Wikipedia-sourced) + MOTOGP_RIDER_REFS map
 │   ├── useLiveData.ts        # Polls /api/events every 2min, tab-visibility aware
 │   ├── useReminders.ts       # Browser notification scheduler
 │   └── useSW.ts              # Service worker registration + update detection
@@ -151,10 +154,14 @@ RaceResult { id, series: SeriesId, round, name, circuit, country, countryCode, d
 DriverStanding   { pos, name, team, points, teamColor }
 ConstructorStanding { pos, name, points, color }
 
-SelectedTeam { ref: string, name: string, teamColor: string, pos: number, points: number, series: SeriesId }
+SelectedTeam { ref: string, name: string, teamColor: string, pos: number, points: number, series: SeriesId,
+               driverNames?: string, carNumber?: string, seriesClass?: string, manufacturer?: string }
 TeamProfile  { ref, name, nationality, wins, seasons, firstSeason,
                season2026: { points, pos } | null,
                drivers2026: { ref, givenName, familyName, number }[] }
+MotoGPRiderProfile { ref, givenName, familyName, nationality, dateOfBirth, permanentNumber,
+                     raceWins, championships, seasons, headshotUrl: string|null,
+                     season2026: { pos, points, team } | null }
 ```
 
 ## SERIES_META (src/types/index.ts)
@@ -212,10 +219,14 @@ Caching:
 ## Driver Profile Overlay (DriverProfileOverlay.tsx)
 
 ### Trigger & State
-- Opened from `StandingsPanel` rows — clicking an F1 driver calls `useStore(s => s.openDriver({ ref, name, team, teamColor, pos, points, series }))`
+- Opened from `StandingsPanel` — F1 and MotoGP driver rows call `openDriver({ ref, name, team, teamColor, pos, points, series })`
 - Zustand store: `selectedDriver: DriverSelectedInfo | null`, `openDriver(info)`, `closeDriver()`
-- Only renders for `series === 'f1'` and when `selectedDriver.ref` is set; fetches on `selectedDriver.ref` change
+- Fetches on `selectedDriver.ref` + `selectedDriver.series` change; series determines API route
 - Escape key + backdrop click both call `closeDriver()`
+
+### Series branches
+- `series === 'f1'` → fetch `/api/f1/driver/${ref}` → `DriverProfile`
+- `series === 'motogp'` → fetch `/api/motogp/rider/${ref}` → `MotoGPRiderProfile` (data from static `src/lib/motogpRiders.ts`)
 
 ### Layout: fixed right panel
 ```
@@ -229,17 +240,19 @@ spring: stiffness 300, damping 32 — slides in from x:'100%'
 
 ### Hero section (h-56, overflow-hidden, shrink-0)
 - Background: `linear-gradient(135deg, ${accent}35 0%, ${accent}08 55%, var(--pw-bg-elevated) 100%)`
-- **Team logo watermark** — left side, 160×100, opacity 0.10, radial-gradient mask (40%→80%), same logo filter logic as other components
+- **Team logo watermark** — left side, 160×100, opacity 0.10, radial-gradient mask (40%→80%)
 - **Race number watermark** — right side, fontSize 120, opacity 0.07, Orbitron font, accent color
-- **Driver headshot** — `profile.headshotUrl` from OpenF1 (q_auto→q_100), pinned bottom-right, maxHeight 220, drop-shadow glow
+- **Driver headshot** — F1: OpenF1 `headshot_url` (q_auto→q_100), maxHeight 220. MotoGP: `null` (motogp.com JS-rendered, no extractable URL)
 - **Scan line** — `motion.div` animating `top: 0%→100%` over 7s, repeat Infinity, accent gradient
 - **Bottom fade** — `h-20 bg-gradient-to-t from-[var(--pw-bg-elevated)]`
-- **Skeleton** — pulse div while loading (no headshot yet)
 - **Close button** — top-right, `bg-black/50 backdrop-blur-[10px]`, SVG X icon
 
 ### Identity section (px-6 -mt-4)
-- Series badge pill: `${accent}18` bg, `${accent}30` border — `F1 · DRIVER`
-- Driver name: `text-3xl font-extrabold tracking-tight` Orbitron
+- **Series badge pill**: series logo icon (13px, from `SERIES_META[series].logo`) + `· DRIVER` / `· RIDER`
+  - Opaque logos (wec/elms/gtwce): `filter: 'grayscale(1) contrast(3) brightness(6)', mixBlendMode: 'screen'`
+  - Transparent logos: `opacity: 0.9`
+  - Pill: `${accent}18` bg, `${accent}30` border, inline-flex items-center gap-1.5
+- **Driver name**: `text-3xl font-extrabold tracking-tight` Orbitron, **nationality flag emoji inline** (gap-3, pb-0.5)
 - Team logo (small) + team name row, staggered fade-in (delays 0.12→0.20s)
 
 ### StatCard component
@@ -253,18 +266,18 @@ label: 9px bold uppercase tracking-[0.18em], accent color at opacity 0.7
 value: text-2xl font-bold tabular-nums, fontFamily: var(--font-orbitron)
 entrance: initial y:10→0 opacity:0→1, spring stiffness:240 damping:24, staggered delay
 ```
-Cards: **2026 Season** (Position, Points — 2-col grid) · **Career** (Wins, Seasons, Number — 3-col grid)
+Cards:
+- **F1**: 2026 Season (Position, Points — 2-col) · Career (Wins, Seasons, Number — 3-col)
+- **MotoGP**: 2026 Season (Position, Points — 2-col) · Career (Wins, Titles, Number — 3-col; Wins = feature race wins only, Titles = championships across all classes)
 
-### InfoRow component (Nationality + Born card)
+### InfoRow component (Born card)
 ```tsx
 // flex justify-between, gap-4, px-4 py-3
 label: 9px bold uppercase tracking-[0.18em], accent color at opacity 0.6, shrink-0
-value wrapper: min-w-0 flex items-center justify-end gap-1.5 overflow-hidden
-  → Nationality: flag emoji only (no text label)
-  → Born/Drivers: 12px font-semibold truncate, fontFamily: var(--font-orbitron)
-border between rows: 1px solid ${accent}14
+value: 12px font-semibold truncate, fontFamily: var(--font-orbitron)
 card: border 1px solid ${accent}20, bg ${accent}08, overflow-hidden, motion.div entrance delay 0.52s
 ```
+- **Born** only — nationality flag is next to the name, NOT in InfoRow
 Date parsing: `profile.dateOfBirth.split('-').map(Number)` → `new Date(y, m-1, day)` (local time, avoids UTC off-by-one)
 
 ### DO NOT add static ribbons inside stat cards
@@ -273,7 +286,7 @@ Static accent ribbon divs (absolute top-0 h-[2px] gradient) look like UI artifac
 ### API Route: /api/f1/driver/[driverRef]/route.ts
 ```
 runtime: nodejs
-Cache-Control: no-store  ← intentional, driver data must be fresh (no CDN caching)
+Cache-Control: no-store
 
 Parallel fetches (Promise.all):
   /drivers/${ref}.json                         → name, nationality, dob, code, number
@@ -282,37 +295,51 @@ Parallel fetches (Promise.all):
   /2026/drivers/${ref}/driverStandings.json    → current season pos + points + team
 
 seasons count: use SeasonTable.Seasons.length (actual array) NOT MRData.total
-  MRData.total overcounts — includes seasons with FP-only appearances (e.g. Antonelli 2024)
-  Array length correctly counts only seasons with race entries
+headshot: OpenF1 /drivers?driver_number=N&session_key=latest → headshot_url (silent fail)
+```
 
-headshot: OpenF1 /drivers?driver_number=N&session_key=latest → headshot_url, replace q_auto→q_100
-  revalidate: 86400 (headshots change rarely)
-  failure is silent — headshot is optional
+### API Route: /api/motogp/rider/[riderRef]/route.ts
+```
+runtime: nodejs
+Cache-Control: no-store
+
+Data: MOTOGP_RIDER_DATA[ref] from src/lib/motogpRiders.ts (23 riders, Wikipedia-sourced)
+headshotUrl: null — motogp.com is JS-rendered, no URL extractable
 ```
 
 ## Team Profile Overlay (TeamProfileOverlay.tsx)
 
-Identical structure to DriverProfileOverlay. Key differences:
-
 ### Trigger & State
-- Opened from `StandingsPanel` ConstructorRow — same animated ribbon hover as DriverRow (width 0→2, marginRight 0→5, name brightens to white, 140ms ease)
-- `CONSTRUCTOR_REFS` map in StandingsPanel: display name → Jolpica constructorId (e.g. `'McLaren' → 'mclaren'`)
+- F1: `StandingsPanel` ConstructorRow click → `openTeam({ ref, name, teamColor, pos, points, series: 'f1' })`
+- MotoGP: team row click → `openTeam({ series: 'motogp', ... })`
+- WEC/ELMS/IMSA driver row: `openTeam({ driverNames, carNumber, seriesClass, ... })` — car entry overlay
+- WEC/ELMS/IMSA constructor row: `openTeam({ seriesClass, ... })` — manufacturer overlay
+- `CONSTRUCTOR_REFS` map in StandingsPanel: display name → Jolpica constructorId (F1 only)
 - Zustand: `selectedTeam: SelectedTeam | null`, `openTeam(team)`, `closeTeam()` — transient, not persisted
+- carNumber parsed in StandingsPanel via regex `/#(\d+)/` on team name string
+
+### Series branches
+- `series === 'f1'` → fetch `/api/f1/constructor/${ref}` → `TeamProfile`
+- All other series → skip fetch (`setProfile(null); setLoading(false)`); render from store data only
 
 ### Hero (h-56)
 - Same gradient, scan line, bottom fade, close button as DriverProfileOverlay
-- **Left watermark**: team logo, opacity 0.10, radial-gradient mask — identical to driver
-- **Right watermark**: `#${team.pos}` at fontSize 120, opacity 0.07, Orbitron — replaces race number
-- No headshot equivalent — hero is pure gradient
+- **Left watermark**: team logo, opacity 0.10, radial-gradient mask
+- **Right watermark**: `#${team.pos}` at fontSize 120, opacity 0.07, Orbitron
+- No headshot — hero is pure gradient
+
+### Series badge
+- Series logo icon (13px) + `· CONSTRUCTOR` / `· TEAM` / `· ENTRY` / `· MANUFACTURER`
+- Same opaque-logo filter logic as DriverProfileOverlay badge
 
 ### StatCards
-- **2026 Season** (2-col): Position (`P${pos}`), Points
-- **Career** (3-col): Wins, Seasons, Since (first season year)
-- All centered + Orbitron values (same as driver)
+- **2026 Season** (2-col): Position, Points — always shown for all series
+- **Career** (3-col): Wins, Seasons, Since — F1 only (from API)
 
 ### InfoRow card
-- **Nationality**: flag emoji only (no text)
-- **2026 Drivers**: full names joined with ` · `, Orbitron font
+- **F1**: 2026 Drivers (full names joined with ` · `, Orbitron font). Nationality flag shown under team name (from API), NOT in InfoRow.
+- **Non-F1 entry** (`t.driverNames` set): Drivers + Car # + Class
+- **Non-F1 manufacturer** (no `driverNames`): no InfoRow card
 
 ### API Route: /api/f1/constructor/[constructorRef]/route.ts
 ```

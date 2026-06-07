@@ -6,11 +6,13 @@
 - `/deploy` — push uncommitted changes live
 - `/pitwall-agent <task>` — spawn dedicated data agent (use when main conversation is long/bloated)
 
-## Last Commits (2026-06-06)
+## Last Commits (2026-06-07)
 
-`44d15f0` — feat: center stat cards + Orbitron font on values in driver/team overlays
+`f7bc49e` — feat: use series logo in driver/team overlay badges instead of text prefix
 
-`8b56f99` — fix: remove nationality text labels — keep flags only in driver + team overlays
+`f942387` — fix: move nationality flag next to name, remove Nationality InfoRow from both overlays
+
+`2e2f69b` — feat: MotoGP rider profiles + WEC/ELMS/IMSA car-entry/manufacturer overlays
 
 ## 16-Feature Build Status
 | Phase | Features | Status |
@@ -57,7 +59,7 @@
 - MotoGP: R1–6 static fallback; all rounds live via /api/motogp/results
 - WEC: R1 Imola, R2 Spa (Hypercar + LMGT3)
 - WRC: R1–7 (Monte Carlo → Rally Japan)
-- IMSA GTP: R1–4 (Daytona → Laguna Seca)
+- IMSA GTP: R1–5 (Daytona → Detroit)
 - ELMS: R1 Barcelona, R2 Le Castellet (LMP2/LMP3/LMGT3)
 - DTM: R1 Red Bull Ring, R2 Zandvoort (Race 1+2 each)
 - GTWCE: R1 Paul Ricard, R2 Brands Hatch, R3 Monza
@@ -69,7 +71,7 @@
 - WEC Hypercar + LMGT3: after R2 Spa
 - ELMS LMP2/LMP3/LMGT3: after R2 Le Castellet
 - WRC: after R7 Rally Japan · Evans 151 leads
-- IMSA GTP/GTD Pro/GTD: after R4 Laguna Seca
+- IMSA GTP/GTD Pro/GTD: after R5 Detroit
 - DTM: after R2 Zandvoort
 
 ## Backlog (next up)
@@ -77,6 +79,5 @@
 - **WEC results**: R3 Le Mans 24H (June 14–15)
 - **ELMS/DTM results**: R3+
 - **Nürburgring**: NLS6+ (Eifel Trophy, Jun 20)
-- **IMSA standings**: update after Detroit R5
 - **Porsche Supercup**: R1 Monaco (June 7)
 - **Logo quality**: Aprilia/Yamaha not true-colour
