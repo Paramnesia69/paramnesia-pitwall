@@ -57,6 +57,7 @@ const TUNING: Record<string, [number, number, string?, string?]> = {
 const CIRCUIT_MAP: Record<string, string> = {
   // ── F1 ───────────────────────────────────────────────────────────────────
   'Albert Park Circuit':            '/circuits/f1-australia.svg',
+  'Albert Park Grand Prix Circuit': '/circuits/f1-australia.svg',
   'Bahrain International Circuit':  '/circuits/f1-bahrain.svg',
   'Jeddah':                         '/circuits/f1-saudi-arabia.svg',
   'Jeddah Corniche Circuit':        '/circuits/f1-saudi-arabia.svg',
