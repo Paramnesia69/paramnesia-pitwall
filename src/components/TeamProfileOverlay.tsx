@@ -5,6 +5,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '@/store';
 import { getTeamLogo } from '@/lib/teamLogos';
 import type { TeamProfile, SelectedTeam } from '@/types';
+import { SERIES_META } from '@/types';
+
+const OPAQUE_LOGO_SERIES = new Set(['wec', 'elms', 'gtwce']);
 
 const NATIONALITY_FLAGS: Record<string, string> = {
   British: '🇬🇧', Dutch: '🇳🇱', Monegasque: '🇲🇨', Australian: '🇦🇺', Spanish: '🇪🇸',
@@ -18,13 +21,13 @@ function nationalityFlag(nat: string): string {
   return NATIONALITY_FLAGS[nat] ?? NATIONALITY_FLAGS[nat.replace(/ /g, '_')] ?? '';
 }
 
-function getTeamBadge(t: SelectedTeam): string {
-  if (t.series === 'f1') return 'F1 · CONSTRUCTOR';
-  if (t.series === 'motogp') return 'MOTOGP · TEAM';
-  if (t.series === 'wec') return t.driverNames ? 'WEC · ENTRY' : 'WEC · MANUFACTURER';
-  if (t.series === 'imsa') return t.driverNames ? 'IMSA · ENTRY' : 'IMSA · MANUFACTURER';
-  if (t.series === 'elms') return t.driverNames ? 'ELMS · ENTRY' : 'ELMS · MANUFACTURER';
-  return `${t.series.toUpperCase()} · TEAM`;
+function getTeamRole(t: SelectedTeam): string {
+  if (t.series === 'f1') return 'CONSTRUCTOR';
+  if (t.series === 'motogp') return 'TEAM';
+  if (t.series === 'wec') return t.driverNames ? 'ENTRY' : 'MANUFACTURER';
+  if (t.series === 'imsa') return t.driverNames ? 'ENTRY' : 'MANUFACTURER';
+  if (t.series === 'elms') return t.driverNames ? 'ENTRY' : 'MANUFACTURER';
+  return 'TEAM';
 }
 
 function StatCard({ label, value, accent, delay = 0 }: { label: string; value: string | number; accent: string; delay?: number }) {
@@ -211,10 +214,24 @@ export default function TeamProfileOverlay() {
                 transition={{ delay: 0.12 }}
               >
                 <span
-                  className="text-[10px] font-bold uppercase tracking-[0.18em] px-2.5 py-1 rounded"
+                  className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em] px-2.5 py-1 rounded"
                   style={{ color: accent, background: `${accent}18`, border: `1px solid ${accent}30` }}
                 >
-                  {getTeamBadge(t)}
+                  {SERIES_META[t.series]?.logo && (
+                    <img
+                      src={SERIES_META[t.series].logo}
+                      alt=""
+                      width={13}
+                      height={13}
+                      className="inline-block flex-shrink-0 object-contain"
+                      style={
+                        OPAQUE_LOGO_SERIES.has(t.series)
+                          ? { filter: 'grayscale(1) contrast(3) brightness(6)', mixBlendMode: 'screen' }
+                          : { opacity: 0.9 }
+                      }
+                    />
+                  )}
+                  · {getTeamRole(t)}
                 </span>
               </motion.div>
 

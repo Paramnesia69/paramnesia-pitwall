@@ -5,6 +5,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '@/store';
 import { getTeamLogo } from '@/lib/teamLogos';
 import type { DriverProfile, MotoGPRiderProfile } from '@/types';
+import { SERIES_META } from '@/types';
+
+const OPAQUE_LOGO_SERIES = new Set(['wec', 'elms', 'gtwce']);
 
 const NATIONALITY_FLAGS: Record<string, string> = {
   British: '🇬🇧', Dutch: '🇳🇱', Monegasque: '🇲🇨', Australian: '🇦🇺', Spanish: '🇪🇸',
@@ -102,7 +105,7 @@ export default function DriverProfileOverlay() {
   const logo = d ? getTeamLogo(d.team, d.series === 'f1') : null;
   const accent = d?.teamColor ?? '#888';
 
-  const seriesBadge = d?.series === 'motogp' ? 'MOTOGP · RIDER' : 'F1 · DRIVER';
+  const seriesRole = d?.series === 'motogp' ? 'RIDER' : 'DRIVER';
 
   return (
     <AnimatePresence>
@@ -236,10 +239,24 @@ export default function DriverProfileOverlay() {
                 transition={{ delay: 0.12 }}
               >
                 <span
-                  className="text-[10px] font-bold uppercase tracking-[0.18em] px-2.5 py-1 rounded"
+                  className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em] px-2.5 py-1 rounded"
                   style={{ color: accent, background: `${accent}18`, border: `1px solid ${accent}30` }}
                 >
-                  {seriesBadge}
+                  {d && SERIES_META[d.series]?.logo && (
+                    <img
+                      src={SERIES_META[d.series].logo}
+                      alt=""
+                      width={13}
+                      height={13}
+                      className="inline-block flex-shrink-0 object-contain"
+                      style={
+                        OPAQUE_LOGO_SERIES.has(d.series)
+                          ? { filter: 'grayscale(1) contrast(3) brightness(6)', mixBlendMode: 'screen' }
+                          : { opacity: 0.9 }
+                      }
+                    />
+                  )}
+                  · {seriesRole}
                 </span>
               </motion.div>
 
