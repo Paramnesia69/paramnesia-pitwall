@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { HighlightItem, SeriesId } from '@/types';
@@ -227,6 +227,7 @@ export default function HighlightsFeed({ items }: HighlightsFeedProps) {
   const [expanded, setExpanded] = useState(true);
   const [showCount, setShowCount] = useState(6);
   const [active, setActive] = useState<HighlightItem | null>(null);
+  const collapseRef = useRef<HTMLDivElement>(null);
 
   // Reset pagination when filter changes
   useEffect(() => {
@@ -262,7 +263,10 @@ export default function HighlightsFeed({ items }: HighlightsFeedProps) {
         </h3>
         <div className="flex-1 h-px" style={{ background: 'var(--pw-glass-border)' }} />
         <button
-          onClick={() => setExpanded(!expanded)}
+          onClick={() => {
+            if (expanded && collapseRef.current) collapseRef.current.style.overflow = 'hidden';
+            setExpanded(!expanded);
+          }}
           className="text-[10px] uppercase tracking-wider px-2 py-1 rounded transition-colors hover:bg-white/5"
           style={{ color: 'var(--pw-text-tertiary)' }}
         >
@@ -273,10 +277,13 @@ export default function HighlightsFeed({ items }: HighlightsFeedProps) {
       <AnimatePresence>
         {expanded && (
           <motion.div
-            initial={{ height: 0, opacity: 0, overflow: 'hidden' }}
-            animate={{ height: 'auto', opacity: 1, transitionEnd: { overflow: 'visible' } }}
-            exit={{ overflow: 'hidden', height: 0, opacity: 0 }}
+            ref={collapseRef}
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 200, damping: 25 }}
+            onAnimationStart={() => { if (collapseRef.current) collapseRef.current.style.overflow = 'hidden'; }}
+            onAnimationComplete={() => { if (collapseRef.current) collapseRef.current.style.overflow = 'visible'; }}
           >
             {filtered.length === 0 ? (
               <motion.div className="text-center py-12" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>

@@ -405,6 +405,7 @@ function H2HSection() {
   const [data, setData] = useState<H2HEntry[]>([]);
   const [loading, setLoading] = useState(false);
   const fetched = useRef(false);
+  const collapseRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!open || fetched.current) return;
@@ -421,7 +422,10 @@ function H2HSection() {
     <div className="mt-4 pt-3" style={{ borderTop: '1px solid var(--pw-glass-border)' }}>
       <button
         className="flex items-center gap-2 w-full hover:opacity-70 transition-opacity"
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => {
+          if (open && collapseRef.current) collapseRef.current.style.overflow = 'hidden';
+          setOpen((v) => !v);
+        }}
       >
         <div className="w-0.5 h-3 rounded-full shrink-0" style={{ background: 'rgba(255,255,255,0.3)' }} />
         <span className="text-[10px] font-semibold uppercase tracking-[0.18em]" style={{ color: 'rgba(255,255,255,0.6)' }}>
@@ -440,10 +444,13 @@ function H2HSection() {
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, height: 0, overflow: 'hidden' }}
-            animate={{ opacity: 1, height: 'auto', transitionEnd: { overflow: 'visible' } }}
-            exit={{ overflow: 'hidden', opacity: 0, height: 0 }}
+            ref={collapseRef}
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
             transition={{ type: 'spring', stiffness: 280, damping: 28 }}
+            onAnimationStart={() => { if (collapseRef.current) collapseRef.current.style.overflow = 'hidden'; }}
+            onAnimationComplete={() => { if (collapseRef.current) collapseRef.current.style.overflow = 'visible'; }}
           >
             {loading ? (
               <div className="mt-3 space-y-2">
