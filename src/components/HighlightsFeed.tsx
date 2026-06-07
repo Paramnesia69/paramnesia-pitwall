@@ -273,11 +273,10 @@ export default function HighlightsFeed({ items }: HighlightsFeedProps) {
       <AnimatePresence>
         {expanded && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
+            initial={{ height: 0, opacity: 0, overflow: 'hidden' }}
+            animate={{ height: 'auto', opacity: 1, transitionEnd: { overflow: 'visible' } }}
+            exit={{ overflow: 'hidden', height: 0, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 200, damping: 25 }}
-            className="overflow-hidden"
           >
             {filtered.length === 0 ? (
               <motion.div className="text-center py-12" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>

@@ -440,11 +440,10 @@ function H2HSection() {
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
+            initial={{ opacity: 0, height: 0, overflow: 'hidden' }}
+            animate={{ opacity: 1, height: 'auto', transitionEnd: { overflow: 'visible' } }}
+            exit={{ overflow: 'hidden', opacity: 0, height: 0 }}
             transition={{ type: 'spring', stiffness: 280, damping: 28 }}
-            className="overflow-hidden"
           >
             {loading ? (
               <div className="mt-3 space-y-2">
