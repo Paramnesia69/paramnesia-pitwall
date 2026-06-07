@@ -75,7 +75,7 @@ const f1: CalendarEntry[] = [
     { type: 'qualifying', name: 'Qualifying', startTime: '2026-06-06T14:00:00Z' },
     { type: 'race', name: 'Race', startTime: '2026-06-07T13:00:00Z' },
   ]),
-  evt('f1', 'Spanish Grand Prix', { name: 'Circuit de Barcelona-Catalunya', country: 'Spain', countryCode: 'ES', lat: 41.57, lng: 2.2611 }, '2026-06-12', '2026-06-14', [
+  evt('f1', 'Barcelona Grand Prix', { name: 'Circuit de Barcelona-Catalunya', country: 'Spain', countryCode: 'ES', lat: 41.57, lng: 2.2611 }, '2026-06-12', '2026-06-14', [
     { type: 'practice', name: 'FP1', startTime: '2026-06-12T11:30:00Z' },
     { type: 'practice', name: 'FP2', startTime: '2026-06-12T15:00:00Z' },
     { type: 'practice', name: 'FP3', startTime: '2026-06-13T10:30:00Z' },
