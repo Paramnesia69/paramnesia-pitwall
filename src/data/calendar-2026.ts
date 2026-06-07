@@ -75,7 +75,7 @@ const f1: CalendarEntry[] = [
     { type: 'qualifying', name: 'Qualifying', startTime: '2026-06-06T14:00:00Z' },
     { type: 'race', name: 'Race', startTime: '2026-06-07T13:00:00Z' },
   ]),
-  evt('f1', 'Barcelona-Catalunya Grand Prix', { name: 'Circuit de Barcelona-Catalunya', country: 'Spain', countryCode: 'ES', lat: 41.57, lng: 2.2611 }, '2026-06-12', '2026-06-14', [
+  evt('f1', 'Spanish Grand Prix', { name: 'Circuit de Barcelona-Catalunya', country: 'Spain', countryCode: 'ES', lat: 41.57, lng: 2.2611 }, '2026-06-12', '2026-06-14', [
     { type: 'practice', name: 'FP1', startTime: '2026-06-12T11:30:00Z' },
     { type: 'practice', name: 'FP2', startTime: '2026-06-12T15:00:00Z' },
     { type: 'practice', name: 'FP3', startTime: '2026-06-13T10:30:00Z' },
@@ -538,7 +538,7 @@ const porscheSupercup: CalendarEntry[] = [
   evt('porsche-supercup', 'Supercup Monaco', { name: 'Circuit de Monaco', country: 'Monaco', countryCode: 'MC', lat: 43.7347, lng: 7.4206 }, '2026-06-04', '2026-06-06', [
     { type: 'race', name: 'Race', startTime: '2026-06-06T09:00:00Z' },
   ]),
-  evt('porsche-supercup', 'Supercup Barcelona-Catalunya', { name: 'Circuit de Barcelona-Catalunya', country: 'Spain', countryCode: 'ES', lat: 41.57, lng: 2.2611 }, '2026-06-12', '2026-06-14', [
+  evt('porsche-supercup', 'Supercup Barcelona', { name: 'Circuit de Barcelona-Catalunya', country: 'Spain', countryCode: 'ES', lat: 41.57, lng: 2.2611 }, '2026-06-12', '2026-06-14', [
     { type: 'race', name: 'Race', startTime: '2026-06-14T09:00:00Z' },
   ]),
   evt('porsche-supercup', 'Supercup Austria', { name: 'Red Bull Ring', country: 'Austria', countryCode: 'AT', lat: 47.2197, lng: 14.7647 }, '2026-06-26', '2026-06-28', [
