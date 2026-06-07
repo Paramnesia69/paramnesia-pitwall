@@ -46,6 +46,29 @@ export async function getEventsWithState(): Promise<NormalizedRaceEvent[]> {
     return { evt, state, sessions };
   });
 
+  // For F1 events still showing 'live', verify against OpenF1 actual session end times.
+  // The time-based fallback assumes startTime+3h; OpenF1 posts the real date_end once
+  // the session closes, so we can flip to 'finished' without manual intervention.
+  const liveF1 = mapped.filter((m) => m.state === 'live' && m.evt.series === 'f1');
+  if (liveF1.length > 0) {
+    try {
+      const res = await fetch('https://api.openf1.org/v1/sessions?year=2026&session_name=Race', {
+        next: { revalidate: 60 },
+      });
+      if (res.ok) {
+        const raceSessions = (await res.json()) as Array<{ date_start: string; date_end: string }>;
+        const now = new Date();
+        for (const m of liveF1) {
+          const raceSession = m.sessions.find((s) => s.type === 'race');
+          if (!raceSession) continue;
+          const raceDate = raceSession.startTime.slice(0, 10);
+          const match = raceSessions.find((s) => s.date_start?.slice(0, 10) === raceDate);
+          if (match && new Date(match.date_end) < now) m.state = 'finished';
+        }
+      }
+    } catch { /* silent fail — keep time-based state */ }
+  }
+
   // Fetch real weather in parallel for non-finished events (max 15 to stay within rate limits)
   const nonFinished = mapped.filter((m) => m.state !== 'finished').slice(0, 15);
   const weatherResults = await Promise.all(
