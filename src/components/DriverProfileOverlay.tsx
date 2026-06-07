@@ -255,6 +255,11 @@ export default function DriverProfileOverlay() {
                 >
                   {d.name}
                 </h2>
+                {profile?.nationality && (
+                  <span className="text-2xl leading-none pb-0.5 select-none">
+                    {nationalityFlag(profile.nationality)}
+                  </span>
+                )}
               </motion.div>
 
               <motion.div
@@ -328,24 +333,19 @@ export default function DriverProfileOverlay() {
                           <StatCard label="Seasons" value={(profile as DriverProfile).seasons} accent={accent} delay={0.43} />
                           <StatCard label="Number" value={(profile as DriverProfile).permanentNumber ? `#${(profile as DriverProfile).permanentNumber}` : '—'} accent={accent} delay={0.48} />
                         </div>
-                        <motion.div
-                          className="rounded-xl overflow-hidden"
-                          style={{ border: `1px solid ${accent}20`, background: `${accent}08` }}
-                          initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.52 }}
-                        >
-                          {(profile as DriverProfile).nationality && (
-                            <InfoRow label="Nationality" accent={accent} last={!(profile as DriverProfile).dateOfBirth}>
-                              <span className="text-base leading-none select-none">{nationalityFlag((profile as DriverProfile).nationality)}</span>
-                            </InfoRow>
-                          )}
-                          {(profile as DriverProfile).dateOfBirth && (
+                        {(profile as DriverProfile).dateOfBirth && (
+                          <motion.div
+                            className="rounded-xl overflow-hidden"
+                            style={{ border: `1px solid ${accent}20`, background: `${accent}08` }}
+                            initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.52 }}
+                          >
                             <InfoRow label="Born" accent={accent} last>
                               <span className="text-[12px] font-semibold truncate" style={{ fontFamily: 'var(--font-orbitron, var(--pw-font-display))' }}>
                                 {formatDOB((profile as DriverProfile).dateOfBirth!)}
                               </span>
                             </InfoRow>
-                          )}
-                        </motion.div>
+                          </motion.div>
+                        )}
                       </>
                     ) : (
                       <p className="text-[11px]" style={{ color: 'var(--pw-text-tertiary)' }}>Career data unavailable</p>
@@ -376,24 +376,19 @@ export default function DriverProfileOverlay() {
                           <StatCard label="Titles" value={(profile as MotoGPRiderProfile).championships} accent={accent} delay={0.43} />
                           <StatCard label="Number" value={`#${(profile as MotoGPRiderProfile).permanentNumber}`} accent={accent} delay={0.48} />
                         </div>
-                        <motion.div
-                          className="rounded-xl overflow-hidden"
-                          style={{ border: `1px solid ${accent}20`, background: `${accent}08` }}
-                          initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.52 }}
-                        >
-                          {(profile as MotoGPRiderProfile).nationality && (
-                            <InfoRow label="Nationality" accent={accent} last={!(profile as MotoGPRiderProfile).dateOfBirth}>
-                              <span className="text-base leading-none select-none">{nationalityFlag((profile as MotoGPRiderProfile).nationality)}</span>
-                            </InfoRow>
-                          )}
-                          {(profile as MotoGPRiderProfile).dateOfBirth && (
+                        {(profile as MotoGPRiderProfile).dateOfBirth && (
+                          <motion.div
+                            className="rounded-xl overflow-hidden"
+                            style={{ border: `1px solid ${accent}20`, background: `${accent}08` }}
+                            initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.52 }}
+                          >
                             <InfoRow label="Born" accent={accent} last>
                               <span className="text-[12px] font-semibold truncate" style={{ fontFamily: 'var(--font-orbitron, var(--pw-font-display))' }}>
                                 {formatDOB((profile as MotoGPRiderProfile).dateOfBirth)}
                               </span>
                             </InfoRow>
-                          )}
-                        </motion.div>
+                          </motion.div>
+                        )}
                       </>
                     ) : (
                       <p className="text-[11px]" style={{ color: 'var(--pw-text-tertiary)' }}>Career data unavailable</p>

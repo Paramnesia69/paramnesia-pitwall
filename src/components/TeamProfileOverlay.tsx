@@ -293,24 +293,19 @@ export default function TeamProfileOverlay() {
                           <StatCard label="Seasons" value={profile.seasons} accent={accent} delay={0.43} />
                           <StatCard label="Since" value={profile.firstSeason || '—'} accent={accent} delay={0.48} />
                         </div>
-                        <motion.div
-                          className="rounded-xl overflow-hidden"
-                          style={{ border: `1px solid ${accent}20`, background: `${accent}08` }}
-                          initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.52 }}
-                        >
-                          {profile.nationality && (
-                            <InfoRow label="Nationality" accent={accent} last={profile.drivers2026.length === 0}>
-                              <span className="text-base leading-none select-none">{nationalityFlag(profile.nationality)}</span>
-                            </InfoRow>
-                          )}
-                          {profile.drivers2026.length > 0 && (
+                        {profile.drivers2026.length > 0 && (
+                          <motion.div
+                            className="rounded-xl overflow-hidden"
+                            style={{ border: `1px solid ${accent}20`, background: `${accent}08` }}
+                            initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.52 }}
+                          >
                             <InfoRow label="2026 Drivers" accent={accent} last>
                               <span className="text-[12px] font-semibold truncate text-right" style={{ fontFamily: 'var(--font-orbitron, var(--pw-font-display))' }}>
                                 {profile.drivers2026.map(d => `${d.givenName} ${d.familyName}`).join(' · ')}
                               </span>
                             </InfoRow>
-                          )}
-                        </motion.div>
+                          </motion.div>
+                        )}
                       </>
                     ) : (
                       <p className="text-[11px]" style={{ color: 'var(--pw-text-tertiary)' }}>Career data unavailable</p>
