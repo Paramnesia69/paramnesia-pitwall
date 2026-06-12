@@ -899,6 +899,27 @@ export const NURBURGRING_RESULTS_2026: RaceResult[] = [
   },
 ];
 
+// ─── Porsche Mobil 1 Supercup ────────────────────────────
+// Source: newsroom.porsche.com
+// R1 Monaco (Jun 7): Oeverhaus lights-to-flag from pole; Bristot top rookie
+export const PORSCHE_SUPERCUP_RESULTS_2026: RaceResult[] = [
+  {
+    id: 'porsche-supercup-r1-2026',
+    series: 'porsche-supercup',
+    round: 1,
+    name: 'Supercup Monaco',
+    circuit: 'Circuit de Monaco',
+    country: 'Monaco',
+    countryCode: 'MC',
+    date: '2026-06-07',
+    podium: [
+      { pos: 1, driver: 'Theo Oeverhaus', team: 'Martinet by Alméras' },
+      { pos: 2, driver: 'Andrea Bristot', team: 'Dinamic Motorsport' },
+      { pos: 3, driver: 'Gustav Burton', team: 'Team GP Elite' },
+    ],
+  },
+];
+
 // ─── Combined recent results (latest first) ─────────────
 export const ALL_RESULTS_2026: RaceResult[] = [
   ...F1_RESULTS_2026,
@@ -910,4 +931,5 @@ export const ALL_RESULTS_2026: RaceResult[] = [
   ...DTM_RESULTS_2026,
   ...GTWCE_RESULTS_2026,
   ...NURBURGRING_RESULTS_2026,
+  ...PORSCHE_SUPERCUP_RESULTS_2026,
 ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
