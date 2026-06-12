@@ -7,29 +7,31 @@ const JOLPICA = 'https://api.jolpi.ca/ergast/f1';
 
 /** Known 2026 teammate pairings: [constructorId, driverRef1, driverRef2] */
 const TEAM_PAIRS: [string, string, string][] = [
-  ['mercedes',      'russell',         'antonelli'],
-  ['ferrari',       'leclerc',         'hamilton'],
-  ['mclaren',       'norris',          'piastri'],
-  ['red_bull',      'max_verstappen',  'lawson'],
-  ['aston_martin',  'alonso',          'stroll'],
-  ['racing_bulls',  'tsunoda',         'hadjar'],
-  ['alpine',        'gasly',           'ocon'],
-  ['haas',          'bearman',         'hulkenberg'],
-  ['williams',      'carlos_sainz',    'colapinto'],
-  ['sauber',        'bortoleto',       'magnussen'],
+  ['mercedes',     'russell',        'antonelli'],
+  ['ferrari',      'leclerc',        'hamilton'],
+  ['mclaren',      'norris',         'piastri'],
+  ['red_bull',     'max_verstappen', 'hadjar'],
+  ['aston_martin', 'alonso',         'stroll'],
+  ['rb',           'lawson',         'arvid_lindblad'],
+  ['alpine',       'gasly',          'colapinto'],
+  ['haas',         'bearman',        'ocon'],
+  ['williams',     'albon',          'sainz'],
+  ['audi',         'bortoleto',      'hulkenberg'],
+  ['cadillac',     'perez',          'bottas'],
 ];
 
 const CONSTRUCTOR_COLORS: Record<string, string> = {
   mercedes:     '#27F4D2',
   ferrari:      '#E8002D',
-  mclaren:      '#FF8000',
+  mclaren:      '#FF6700',
   red_bull:     '#3671C6',
   aston_martin: '#358C75',
-  racing_bulls: '#6692FF',
+  rb:           '#6692FF',
   alpine:       '#0093CC',
   haas:         '#B6BABD',
   williams:     '#1868DB',
-  sauber:       '#52E252',
+  audi:         '#990000',
+  cadillac:     '#CC1E4A',
 };
 
 interface H2HEntry {
