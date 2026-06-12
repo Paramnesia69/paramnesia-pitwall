@@ -30,6 +30,7 @@ import MiniLeaderboard from '@/components/MiniLeaderboard';
 import NextAlarmBadge from '@/components/ui/NextAlarmBadge';
 import OfflineBadge from '@/components/ui/OfflineBadge';
 import Toaster from '@/components/ui/Toaster';
+import SpoilerShieldToggle from '@/components/ui/SpoilerShieldToggle';
 
 /* ── Lazy-loaded below-fold components ──────────── */
 const StandingsPanel = lazy(() => import('@/components/StandingsPanel'));
@@ -42,6 +43,7 @@ const DriverProfileOverlay = lazy(() => import('@/components/DriverProfileOverla
 const TeamProfileOverlay   = lazy(() => import('@/components/TeamProfileOverlay'));
 const Footer = lazy(() => import('@/components/Footer'));
 const SeasonRing = lazy(() => import('@/components/ui/SeasonRing'));
+const CommandPalette = lazy(() => import('@/components/CommandPalette'));
 
 const ALL_SERIES: SeriesId[] = [
   'f1', 'wec', 'elms', 'imsa', 'nurburgring', 'motogp', 'gtwce', 'dtm', 'wrc', 'porsche-supercup',
@@ -68,6 +70,7 @@ export default function Dashboard({ featured, upcoming, seasonStats, newsFeedSlo
   })();
 
   const [activeFilter, setActiveFilter] = useState<SeriesId | 'all'>(initialFilter);
+  const [paletteOpen, setPaletteOpen] = useState(false);
   const { hasUpdate, applyUpdate } = useServiceWorker();
 
   // Live polling — replaces SSR props with fresh API data every 2 min
@@ -169,6 +172,18 @@ export default function Dashboard({ featured, upcoming, seasonStats, newsFeedSlo
             <LiveIndicator lastUpdated={live.lastUpdated} isRefreshing={live.isRefreshing} onRefresh={live.refresh} />
             <NextAlarmBadge />
             <span className="hidden sm:inline tracking-widest text-xs uppercase">Motorsport Command Center</span>
+            <button
+              onClick={() => setPaletteOpen(true)}
+              className="w-8 h-8 rounded-full flex items-center justify-center transition-colors hover:bg-white/5"
+              style={{ background: 'var(--pw-glass-bg)', border: '1px solid var(--pw-glass-border)', color: 'var(--pw-text-tertiary)' }}
+              title="Search (⌘K)"
+              aria-label="Search events, drivers, teams"
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+            </button>
+            <SpoilerShieldToggle />
             <ThemeToggle />
             <ShareButton />
           </div>
@@ -373,6 +388,14 @@ export default function Dashboard({ featured, upcoming, seasonStats, newsFeedSlo
       </Suspense>
       <Suspense>
         <TeamProfileOverlay />
+      </Suspense>
+      <Suspense>
+        <CommandPalette
+          events={liveUpcoming}
+          open={paletteOpen}
+          onOpen={() => setPaletteOpen(true)}
+          onClose={() => setPaletteOpen(false)}
+        />
       </Suspense>
 
       <Suspense>

@@ -7,8 +7,9 @@ import { getTeamLogo } from '@/lib/teamLogos';
 import { SERIES_META } from '@/types';
 import { useStore } from '@/store';
 import ChampionshipChart from '@/components/standings/ChampionshipChart';
-import { F1_DRIVER_REFS } from '@/lib/f1DriverRefs';
+import { F1_DRIVER_REFS, F1_CONSTRUCTOR_REFS } from '@/lib/f1DriverRefs';
 import { MOTOGP_RIDER_REFS } from '@/lib/motogpRiders';
+import { getClinchInfo } from '@/lib/clinch';
 import {
   F1_DRIVERS_2026,
   F1_CONSTRUCTORS_2026,
@@ -39,18 +40,7 @@ import type { DriverStanding, ConstructorStanding } from '@/data/standings-2026'
 
 type SeriesTab = 'f1' | 'motogp' | 'wec' | 'wrc' | 'imsa' | 'dtm' | 'elms';
 
-const CONSTRUCTOR_REFS: Record<string, string> = {
-  'Mercedes': 'mercedes',
-  'Red Bull Racing': 'red_bull',
-  'Ferrari': 'ferrari',
-  'McLaren': 'mclaren',
-  'Aston Martin': 'aston_martin',
-  'Alpine': 'alpine',
-  'Racing Bulls': 'rb',
-  'Haas': 'haas',
-  'Williams': 'williams',
-  'Kick Sauber': 'sauber',
-};
+const CONSTRUCTOR_REFS = F1_CONSTRUCTOR_REFS;
 
 const SERIES_TABS: SeriesTab[] = ['f1', 'wec', 'elms', 'imsa', 'motogp', 'dtm', 'wrc'];
 const LOGO_FILTER = 'grayscale(1) contrast(2) brightness(3)';
@@ -143,8 +133,10 @@ function TeamLogo({ teamName, teamColor, f1 = false }: { teamName: string; teamC
   return <div className="w-1 h-4 rounded-full shrink-0" style={{ background: teamColor }} />;
 }
 
-/* ── Delta badge (▲2 / ▼1) ── */
+/* ── Delta badge (▲2 / ▼1) — hidden by Spoiler Shield (reveals latest race outcome) ── */
 function DeltaBadge({ current, prev }: { current: number; prev: number }) {
+  const spoilerShield = useStore((s) => s.spoilerShield);
+  if (spoilerShield) return null;
   if (prev === current) return null;
   const gained = prev > current;
   const n = Math.abs(prev - current);
@@ -505,6 +497,34 @@ function H2HSection() {
   );
 }
 
+/* ── Title clinch banner (F1 + MotoGP — unambiguous per-round maximums) ── */
+function ClinchBanner({ series, standings }: { series: 'f1' | 'motogp'; standings: DriverStanding[] }) {
+  const info = getClinchInfo(series, standings);
+  if (!info) return null;
+  const gold = '#FFD700';
+  return (
+    <div
+      className="flex items-center gap-2 px-3 py-2 rounded-lg mb-3 text-[11px]"
+      style={{ background: `${gold}10`, border: `1px solid ${gold}30`, color: gold }}
+    >
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" /><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+        <path d="M4 22h16" /><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+        <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" /><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+      </svg>
+      {info.status === 'champion' ? (
+        <span className="font-semibold">
+          {info.leader} is the 2026 champion — {info.lead} pts clear with {info.maxRemaining} left on the table
+        </span>
+      ) : (
+        <span className="font-semibold">
+          Title math: {info.leader} can clinch at {info.nextEventName} — leads {info.rival} by {info.lead} pts, {info.roundsLeft} rounds left
+        </span>
+      )}
+    </div>
+  );
+}
+
 /* ── Main panel ── */
 export default function StandingsPanel({ defaultTab }: { defaultTab?: SeriesTab } = {}) {
   const [activeTab, setActiveTab] = useState<SeriesTab>(defaultTab ?? 'f1');
@@ -668,6 +688,7 @@ export default function StandingsPanel({ defaultTab }: { defaultTab?: SeriesTab 
                 {/* ── F1 ── */}
                 {activeTab === 'f1' && (
                   <>
+                    <ClinchBanner series="f1" standings={f1Drivers} />
                     <ExpandableGrid
                       leftLabel="Drivers" leftData={f1Drivers} maxLeftPts={f1Drivers[0]?.points ?? 1}
                       rightLabel="Constructors" rightData={f1Constructors} maxRightPts={f1Constructors[0]?.points ?? 1}
@@ -683,6 +704,8 @@ export default function StandingsPanel({ defaultTab }: { defaultTab?: SeriesTab 
 
                 {/* ── MotoGP ── */}
                 {activeTab === 'motogp' && (
+                  <>
+                  <ClinchBanner series="motogp" standings={motoRiders} />
                   <ExpandableGrid
                     leftLabel="Riders" leftData={motoRiders} maxLeftPts={motoRiders[0]?.points ?? 1}
                     rightLabel="Teams" rightData={motoTeams} maxRightPts={motoTeams[0]?.points ?? 1}
@@ -691,6 +714,7 @@ export default function StandingsPanel({ defaultTab }: { defaultTab?: SeriesTab 
                     onDriverClick={handleMotoGPRiderClick}
                     onConstructorClick={handleMotoGPTeamClick}
                   />
+                  </>
                 )}
 
                 {/* ── WEC ── */}

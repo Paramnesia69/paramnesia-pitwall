@@ -10,6 +10,7 @@ import { getTeamLogo } from '@/lib/teamLogos';
 import StarRating from '@/components/ui/StarRating';
 import { useMobileSheet } from '@/lib/useMobileSheet';
 import SheetGrip from '@/components/ui/SheetGrip';
+import SpoilerBlur from '@/components/ui/SpoilerBlur';
 
 // ─── Diary editor (feature 5) ───────────────────────────────────────────────────
 // Watched + rating + note for a finished race. Persists to the diary store with a
@@ -364,6 +365,13 @@ export default function RaceWeekendOverlay() {
   const activeSession = sortedSessions.find((s) => s.type === activeTab);
   const { isMobile, dragControls, sheetMotionProps, sheetStyle } = useMobileSheet(closeResult);
 
+  // Spoiler Shield — blur session results until the race is marked watched
+  const spoilerShield = useStore((s) => s.spoilerShield);
+  const diaryEntry = useStore((s) => (result ? s.diary[result.id] : undefined));
+  const [revealed, setRevealed] = useState(false);
+  useEffect(() => { setRevealed(false); }, [result?.id]);
+  const hideSpoilers = spoilerShield && !(diaryEntry?.watched ?? false) && !revealed;
+
   return (
     <AnimatePresence>
       {result && (
@@ -551,7 +559,9 @@ export default function RaceWeekendOverlay() {
                   <p className="text-xs" style={{ color: 'var(--pw-text-tertiary)' }}>Check back after the race weekend</p>
                 </div>
               ) : activeSession ? (
-                <SessionTab session={activeSession} isF1={isF1} accentColor={accentColor} />
+                <SpoilerBlur hidden={hideSpoilers} onReveal={() => setRevealed(true)}>
+                  <SessionTab session={activeSession} isF1={isF1} accentColor={accentColor} />
+                </SpoilerBlur>
               ) : null}
             </div>
           </motion.div>

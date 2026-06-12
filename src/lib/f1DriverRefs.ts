@@ -73,3 +73,17 @@ export const F1_DRIVER_REFS: Record<string, string> = {
   'G. Bortoleto':  'bortoleto',
   'J. Doohan':     'doohan',
 };
+
+/** Constructor display name → Jolpica constructorId (used by StandingsPanel + CommandPalette) */
+export const F1_CONSTRUCTOR_REFS: Record<string, string> = {
+  'Mercedes': 'mercedes',
+  'Red Bull Racing': 'red_bull',
+  'Ferrari': 'ferrari',
+  'McLaren': 'mclaren',
+  'Aston Martin': 'aston_martin',
+  'Alpine': 'alpine',
+  'Racing Bulls': 'rb',
+  'Haas': 'haas',
+  'Williams': 'williams',
+  'Kick Sauber': 'sauber',
+};

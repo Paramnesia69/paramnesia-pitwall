@@ -11,6 +11,7 @@ import { ALL_RESULTS_2026, F1_RESULTS_2026 } from '@/data/results-2026';
 import SeriesBadge from '@/components/ui/SeriesBadge';
 import WatchedButton from '@/components/ui/WatchedButton';
 import StarRating from '@/components/ui/StarRating';
+import SpoilerBlur from '@/components/ui/SpoilerBlur';
 import { useStore } from '@/store';
 import { getCircuitImage } from '@/lib/images';
 
@@ -58,8 +59,11 @@ function PodiumCard({ result }: { result: RaceResult }) {
   const openResult = useStore((s) => s.openResult);
   const openDriver = useStore((s) => s.openDriver);
   const entry = useStore((s) => s.diary[result.id]);
+  const spoilerShield = useStore((s) => s.spoilerShield);
+  const [revealed, setRevealed] = useState(false);
   const watched = entry?.watched ?? false;
   const rating = entry?.rating ?? 0;
+  const hideSpoilers = spoilerShield && !watched && !revealed;
   const handleClick = useCallback(() => openResult(result), [openResult, result]);
   const circuitImg = getCircuitImage(result.circuit);
 
@@ -136,7 +140,8 @@ function PodiumCard({ result }: { result: RaceResult }) {
         {result.circuit} · {result.country}
       </p>
 
-      {/* Podium */}
+      {/* Podium — blurred behind Spoiler Shield until watched/revealed */}
+      <SpoilerBlur hidden={hideSpoilers} onReveal={() => setRevealed(true)}>
       <div className="space-y-1.5">
         {result.podium.map((p, i) => {
           const isF1 = result.series === 'f1';
@@ -222,6 +227,7 @@ function PodiumCard({ result }: { result: RaceResult }) {
           </svg>
         </span>
       </div>
+      </SpoilerBlur>
       </div>{/* end content wrapper */}
     </motion.div>
   );

@@ -56,6 +56,10 @@ interface PitwallStore {
   theme: Theme;
   toggleTheme: () => void;
 
+  /** Spoiler Shield — blur results/podiums until marked watched (persisted) */
+  spoilerShield: boolean;
+  toggleSpoilerShield: () => void;
+
   reminders: Reminder[];
   addReminder: (reminder: Omit<Reminder, 'id' | 'remindAt' | 'fired'>) => void;
   removeReminder: (id: string) => void;
@@ -145,6 +149,9 @@ export const useStore = create<PitwallStore>()(
           return { theme: next };
         }),
 
+      spoilerShield: false,
+      toggleSpoilerShield: () => set((state) => ({ spoilerShield: !state.spoilerShield })),
+
       reminders: [],
       addReminder: (r) =>
         set((state) => {
@@ -227,6 +234,7 @@ export const useStore = create<PitwallStore>()(
       partialize: (state) => ({
         favorites: state.favorites,
         theme: state.theme,
+        spoilerShield: state.spoilerShield,
         reminders: state.reminders,
         diary: state.diary,
       }),
