@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
+import { jolpicaGetAllRaces } from '@/lib/jolpica';
 
 export const revalidate = 3600;
 export const runtime = 'nodejs';
-
-const JOLPICA = 'https://api.jolpi.ca/ergast/f1';
 
 /** Known 2026 teammate pairings: [constructorId, driverRef1, driverRef2] */
 const TEAM_PAIRS: [string, string, string][] = [
@@ -43,24 +42,16 @@ interface H2HEntry {
   rounds: number;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function jolpicaGet<T>(path: string): Promise<T | null> {
-  try {
-    const res = await fetch(`${JOLPICA}${path}`, { next: { revalidate: 3600 } });
-    if (!res.ok) return null;
-    return await res.json() as T;
-  } catch { return null; }
-}
-
 function shortName(given: string, family: string): string {
   const initial = given.split(' ').pop()?.charAt(0) ?? given.charAt(0);
   return `${initial}. ${family}`;
 }
 
 export async function GET() {
+  // Paginated: Jolpica silently clamps limit to 100 ROWS, so the old
+  // limit=500 request truncated qualifying data after ~5 rounds
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const data = await jolpicaGet<any>('/2026/qualifying.json?limit=500');
-  const races = data?.MRData?.RaceTable?.Races;
+  const races = await jolpicaGetAllRaces<any>('/2026/qualifying.json', 'QualifyingResults', 3600);
 
   if (!races?.length) {
     return NextResponse.json([], {

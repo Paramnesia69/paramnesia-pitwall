@@ -66,7 +66,8 @@
       "Bash(git commit -m 'chore: allowlist awk in settings.json \\(pre-phase restore point\\) *)",
       "Bash(git tag *)",
       "Bash(git bundle *)",
-      "Read(//Users/paramnesia/Documents/Claude/**)"
+      "Read(//Users/paramnesia/Documents/Claude/**)",
+      "Bash(node -e ' *)"
     ],
     "additionalDirectories": [
       "/private/tmp/src/data",

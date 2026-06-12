@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import { F1_RESULTS_2026 } from '@/data/results-2026';
 import type { RaceResult } from '@/data/results-2026';
+import { jolpicaGetAllRaces } from '@/lib/jolpica';
 
 export const revalidate = 300;
 export const runtime = 'nodejs';
 
-const JOLPICA = 'https://api.jolpi.ca/ergast/f1';
 const OPENF1 = 'https://api.openf1.org/v1';
 
 const COUNTRY_CODES: Record<string, string> = {
@@ -17,14 +17,6 @@ const COUNTRY_CODES: Record<string, string> = {
   Singapore: 'SG', Mexico: 'MX', Brazil: 'BR', 'Abu Dhabi': 'AE',
   Qatar: 'QA', 'Las Vegas': 'US',
 };
-
-async function jolpicaGet<T>(path: string): Promise<T | null> {
-  try {
-    const res = await fetch(`${JOLPICA}${path}`, { next: { revalidate: 300 } });
-    if (!res.ok) return null;
-    return await res.json() as T;
-  } catch { return null; }
-}
 
 async function openf1Get<T>(path: string, ttl = 300): Promise<T | null> {
   try {
@@ -93,10 +85,11 @@ function mapJolpicaRace(race: JolpicaRace): RaceResult | null {
 export async function GET() {
   try {
   // ── 1. Jolpica: all official 2026 results ──────────────────
-  type JolpicaResp = { MRData: { RaceTable: { Races: JolpicaRace[] } } };
-  const jolData = await jolpicaGet<JolpicaResp>('/2026/results.json?limit=100');
+  // Paginated: Jolpica caps limit at 100 ROWS (~5 races) — a single request
+  // dropped every race after R5 (missing Monaco GP incident, 2026-06-12)
+  const jolRaces = await jolpicaGetAllRaces<JolpicaRace>('/2026/results.json', 'Results');
 
-  const jolResults: RaceResult[] = (jolData?.MRData?.RaceTable?.Races ?? [])
+  const jolResults: RaceResult[] = jolRaces
     .map(mapJolpicaRace)
     .filter((r): r is RaceResult => r !== null);
 
