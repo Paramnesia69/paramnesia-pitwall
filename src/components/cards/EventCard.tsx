@@ -103,7 +103,7 @@ export default memo(function EventCard({ event }: EventCardProps) {
 
         {/* Event name + circuit emblem — parallax layer */}
         <div className="flex items-start gap-3" style={{ transform: 'translateZ(30px)' }}>
-          <CircuitEmblem circuitName={event.circuit.name} accent={meta.accent} size={40} />
+          <CircuitEmblem circuitName={event.circuit.name} size={40} opacity={0.58} />
           <div className="min-w-0">
             <h4 className="text-lg font-semibold tracking-tight leading-tight">{event.name}</h4>
             <p className="text-sm mt-1" style={{ color: 'var(--pw-text-secondary)' }}>

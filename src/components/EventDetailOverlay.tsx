@@ -13,7 +13,7 @@ import CircuitStatsPanel from '@/components/ui/CircuitStatsPanel';
 import WeatherBadge from '@/components/ui/WeatherBadge';
 import EventShareButton from '@/components/ui/EventShareButton';
 import F1TimingPanel from '@/components/ui/F1TimingPanel';
-import { getCircuitImage } from '@/lib/images';
+import { getCircuitImage, getCircuitFilter } from '@/lib/images';
 import { getCountryFlag } from '@/lib/countryFlag';
 import { useMobileSheet } from '@/lib/useMobileSheet';
 import SheetGrip from '@/components/ui/SheetGrip';
@@ -89,25 +89,20 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
                   background: `linear-gradient(135deg, ${SERIES_META[event.series].accent}25 0%, var(--pw-bg-elevated) 70%)`,
                 }}
               />
-              {/* Circuit map bleed */}
+              {/* Circuit map bleed — uniform neutral white silhouette */}
               {(() => {
                 const circuitImg = getCircuitImage(event.circuit.name);
                 if (!circuitImg) return null;
-                const darkF = 'brightness(0) invert(1) sepia(1) hue-rotate(175deg) saturate(6) brightness(1.1)';
-                const vividF = 'brightness(1.05) contrast(1.12) saturate(1.3)';
-                const baseF = 'brightness(1.05) contrast(1.1) saturate(1.2)';
-                const f = circuitImg.filterOverride ?? (circuitImg.dark ? darkF : circuitImg.vivid ? vividF : baseF);
+                const f = getCircuitFilter();
                 return (
                   <div
                     className="absolute pointer-events-none select-none"
                     style={{ top: 0, left: 0, right: '45%', bottom: 0 }}
                   >
                     <Image src={circuitImg.src} alt="" fill className="object-contain"
-                      style={{ filter: `${f} blur(20px)`, opacity: circuitImg.glowOpacity * 0.5 }} />
+                      style={{ filter: `${f} blur(6px)`, opacity: 0.14 }} />
                     <Image src={circuitImg.src} alt="" fill className="object-contain"
-                      style={{ filter: `${f} blur(6px)`, opacity: circuitImg.glowOpacity }} />
-                    <Image src={circuitImg.src} alt="" fill className="object-contain"
-                      style={{ filter: f, opacity: circuitImg.sharpOpacity }}
+                      style={{ filter: f, opacity: 0.28 }}
                     />
                   </div>
                 );

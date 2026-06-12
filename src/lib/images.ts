@@ -113,15 +113,11 @@ const CIRCUIT_MAP: Record<string, string> = {
   'Nürburgring':                    '/circuits/nurburgring-gp.svg',
 };
 
-/** Resolve the CSS filter for a circuit map from its tier flags.
- *  Single source of truth — previously duplicated inline in every surface. */
-export function getCircuitFilter(
-  img: Pick<CircuitImageInfo, 'dark' | 'vivid' | 'filterOverride'>,
-): string {
-  const darkF = 'brightness(0) invert(1) sepia(1) hue-rotate(175deg) saturate(6) brightness(1.1)';
-  const vividF = 'brightness(1.05) contrast(1.12) saturate(1.3)';
-  const baseF = 'brightness(1.05) contrast(1.1) saturate(1.2)';
-  return img.filterOverride ?? (img.dark ? darkF : img.vivid ? vividF : baseF);
+/** Uniform circuit-map treatment: every map (cleaned of corner numbers/markers,
+ *  stroke-normalized) renders as a single neutral white silhouette so all
+ *  circuits read as one visual family, regardless of their source colours. */
+export function getCircuitFilter(): string {
+  return 'brightness(0) invert(1)';
 }
 
 export function getCircuitImage(circuitName: string): CircuitImageInfo | undefined {

@@ -168,7 +168,7 @@ export default function HeroCard({ event }: HeroCardProps) {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          <CircuitEmblem circuitName={event.circuit.name} accent={meta.accent} size={44} />
+          <CircuitEmblem circuitName={event.circuit.name} size={48} opacity={0.62} />
           <div className="min-w-0">
             <p style={{ color: 'var(--pw-text-secondary)' }} className="text-sm sm:text-base mb-1">
               {flag && <span className="mr-1">{flag}</span>}{event.circuit.name} — {event.circuit.country}

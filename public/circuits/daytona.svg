@@ -156,16 +156,7 @@
          id="path3289"
          style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#151515;stroke-width:0.75;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          sodipodi:type="arc" />
-      <text
-         id="text3246"
-         y="1336.853"
-         x="1722.5671"
-         style="font-size:32px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Times New Roman"
-         xml:space="preserve"><tspan
-           y="1336.853"
-           x="1722.5671"
-           id="tspan3248"
-           sodipodi:role="line">1</tspan></text>
+      
     </g>
     <g
        id="g3298"
@@ -180,16 +171,7 @@
          id="path3296"
          style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#151515;stroke-width:0.75;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          sodipodi:type="arc" />
-      <text
-         id="text3250"
-         y="1052.7028"
-         x="1698.8617"
-         style="font-size:32px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Times New Roman"
-         xml:space="preserve"><tspan
-           y="1052.7028"
-           x="1698.8617"
-           id="tspan3252"
-           sodipodi:role="line">2</tspan></text>
+      
     </g>
     <g
        id="g3264"
@@ -204,16 +186,7 @@
          id="path3262"
          style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#151515;stroke-width:0.75;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          sodipodi:type="arc" />
-      <text
-         id="text3254"
-         y="1086.9121"
-         x="682.23145"
-         style="font-size:32px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Times New Roman"
-         xml:space="preserve"><tspan
-           y="1086.9121"
-           x="682.23145"
-           id="tspan3256"
-           sodipodi:role="line">3</tspan></text>
+      
     </g>
     <g
        id="g3284"
@@ -228,28 +201,9 @@
          id="path3282"
          style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#151515;stroke-width:0.75;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          sodipodi:type="arc" />
-      <text
-         id="text3258"
-         y="1321.4727"
-         x="650.3053"
-         style="font-size:32px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Times New Roman"
-         xml:space="preserve"><tspan
-           y="1321.4727"
-           x="650.3053"
-           id="tspan3260"
-           sodipodi:role="line">4</tspan></text>
+      
     </g>
-    <text
-       xml:space="preserve"
-       style="font-size:32px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:0.75;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;font-family:Times New Roman;-inkscape-font-specification:Times New Roman Bold"
-       x="1056.4648"
-       y="1024.736"
-       id="text3303"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         x="1056.4648"
-         y="1024.736"
-         id="tspan3307">&quot;Back stretch&quot;</tspan></text>
+    
     <path
        transform="translate(-14.288266,25.401362)"
        style="font-size:32px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:0.75;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;font-family:Times New Roman;-inkscape-font-specification:Times New Roman Bold"

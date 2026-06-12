@@ -3,27 +3,27 @@
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0.0 0.0 550.0 367.4" style="enable-background:new 0 0 550 443.7;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:none;stroke:#646464;stroke-width:14.1732;stroke-miterlimit:10;}
-	.st1{fill:none;stroke:#FFD449;stroke-width:2.8346;stroke-miterlimit:10;}
-	.st2{fill:none;stroke:#54C6EB;stroke-width:2.8346;stroke-miterlimit:10;}
-	.st3{fill:none;stroke:#F4442E;stroke-width:2.8346;stroke-miterlimit:10;}
-	.st4{fill:none;stroke:#FFFFFF;stroke-width:2.126;}
+	.st0{fill:none;stroke:#646464;stroke-width:5.775;stroke-miterlimit:10;}
+	.st1{fill:none;stroke:#FFD449;stroke-width:1.155;stroke-miterlimit:10;}
+	.st2{fill:none;stroke:#54C6EB;stroke-width:1.155;stroke-miterlimit:10;}
+	.st3{fill:none;stroke:#F4442E;stroke-width:1.155;stroke-miterlimit:10;}
+	.st4{fill:none;stroke:#FFFFFF;stroke-width:0.866;}
 	.st5{fill:#646464;}
 	.st6{fill:#FFFFFF;}
-	.st7{fill:none;stroke:#646464;stroke-width:2.8346;stroke-miterlimit:10;}
+	.st7{fill:none;stroke:#646464;stroke-width:1.155;stroke-miterlimit:10;}
 	.st8{fill:#09BC8A;}
-	.st9{fill:none;stroke:#09BC8A;stroke-width:2.2097;stroke-miterlimit:10;}
-	.st10{fill:none;stroke:#09BC8A;stroke-width:1.9843;stroke-miterlimit:10;}
+	.st9{fill:none;stroke:#09BC8A;stroke-width:0.900;stroke-miterlimit:10;}
+	.st10{fill:none;stroke:#09BC8A;stroke-width:0.809;stroke-miterlimit:10;}
 	.st11{clip-path:url(#SVGID_00000052082226627707448120000003225011589359256480_);}
-	.st12{fill:none;stroke:#646464;stroke-width:4.8189;stroke-miterlimit:10;}
+	.st12{fill:none;stroke:#646464;stroke-width:1.964;stroke-miterlimit:10;}
 	.st13{fill:#FF3380;}
 	.st14{clip-path:url(#SVGID_00000146480650356378285320000014607395338713294209_);}
-	.st15{fill:none;stroke:#FF3380;stroke-width:1.9843;stroke-miterlimit:10;}
-	.st16{fill:none;stroke:#646464;stroke-width:0.7087;stroke-miterlimit:10;}
-	.st17{fill:none;stroke:#F4442E;stroke-width:5.6693;stroke-miterlimit:10;}
-	.st18{fill:none;stroke:#54C6EB;stroke-width:5.6693;stroke-miterlimit:10;}
-	.st19{fill:none;stroke:#FFD449;stroke-width:5.6693;stroke-miterlimit:10;}
-	.st20{fill:none;stroke:#09BC8A;stroke-width:2.8346;stroke-miterlimit:10;}
+	.st15{fill:none;stroke:#FF3380;stroke-width:0.809;stroke-miterlimit:10;}
+	.st16{fill:none;stroke:#646464;stroke-width:0.289;stroke-miterlimit:10;}
+	.st17{fill:none;stroke:#F4442E;stroke-width:2.310;stroke-miterlimit:10;}
+	.st18{fill:none;stroke:#54C6EB;stroke-width:2.310;stroke-miterlimit:10;}
+	.st19{fill:none;stroke:#FFD449;stroke-width:2.310;stroke-miterlimit:10;}
+	.st20{fill:none;stroke:#09BC8A;stroke-width:1.155;stroke-miterlimit:10;}
 	.st21{clip-path:url(#SVGID_00000110462622352096251210000003113858319540910269_);}
 	.st22{fill:#F4442E;}
 	.st23{fill:#54C6EB;}
@@ -57,148 +57,133 @@
 <g id="コーナー番号">
 	<g>
 		<g>
-			<circle class="st4" cx="272.9" cy="14.3" r="8.5"/>
-			<circle class="st5" cx="272.9" cy="14.3" r="8.5"/>
+			
+			
 		</g>
 		<g>
-			<path class="st6" d="M271.2,18.2v-1.6h1v-4.5h-0.9v-1.6h2.6v6.1h0.9v1.6H271.2z"/>
-		</g>
-	</g>
-	<g>
-		<g>
-			<circle class="st4" cx="246.2" cy="141.1" r="8.5"/>
-			<circle class="st5" cx="246.2" cy="141.1" r="8.5"/>
-		</g>
-		<g>
-			<path class="st6" d="M244.1,145v-2.6c0-0.6,0.1-1,0.6-1.2l1.9-0.8v-1.6l-0.1-0.1h-0.5l-0.1,0.1v1.1h-1.7v-1.3
-				c0-0.8,0.4-1.1,0.8-1.3h2.5c0.5,0.2,0.8,0.5,0.8,1.3v1.9c0,0.6-0.1,0.9-0.6,1.2l-1.9,0.8v0.9h2.4v1.6H244.1z"/>
+			
 		</g>
 	</g>
 	<g>
 		<g>
-			<circle class="st4" cx="161.7" cy="188" r="8.5"/>
-			<circle class="st5" cx="161.7" cy="188" r="8.5"/>
+			
+			
 		</g>
 		<g>
-			<path class="st6" d="M160.5,191.9c-0.5-0.2-0.8-0.5-0.8-1.3v-1h1.7v0.8l0.1,0.1h0.5l0.1-0.1v-1.6l-0.1-0.1h-1v-1.3h1l0.1-0.1
-				v-1.5l-0.1-0.1h-0.5l-0.1,0.1v0.8h-1.7v-1c0-0.8,0.4-1.1,0.8-1.3h2.5c0.5,0.2,0.8,0.5,0.8,1.3v1.3c0,0.6-0.2,0.9-0.6,1.2
-				c0.4,0.3,0.6,0.6,0.6,1.2v1.4c0,0.8-0.4,1.1-0.8,1.3H160.5z"/>
+			
 		</g>
 	</g>
 	<g>
 		<g>
-			<circle class="st4" cx="265.9" cy="153.9" r="8.5"/>
-			<circle class="st5" cx="265.9" cy="153.9" r="8.5"/>
+			
+			
 		</g>
 		<g>
-			<path class="st6" d="M267.6,156.3v1.5h-1.7v-1.5h-2.2v-1.5l1.6-4.7h1.7l-1.6,4.6h0.5v-0.4l0.4-1h1.3v1.4h0.5v1.6H267.6z"/>
-		</g>
-	</g>
-	<g>
-		<g>
-			<circle class="st4" cx="327.1" cy="171.9" r="8.5"/>
-			<circle class="st5" cx="327.1" cy="171.9" r="8.5"/>
-		</g>
-		<g>
-			<path class="st6" d="M325.9,175.8c-0.5-0.2-0.8-0.5-0.8-1.3v-1h1.6v0.8l0.1,0.1h0.6l0.1-0.1v-2.1l-0.1-0.1h-0.6l-0.1,0.1v0.4H325
-				v-4.5h4v1.5h-2.4v1.6l0.4-0.4h1.3c0.5,0.2,0.8,0.5,0.8,1.3v2.4c0,0.8-0.4,1.1-0.8,1.3H325.9z"/>
+			
 		</g>
 	</g>
 	<g>
 		<g>
-			<circle class="st4" cx="387.1" cy="151.1" r="8.5"/>
-			<circle class="st5" cx="387.1" cy="151.1" r="8.5"/>
+			
+			
 		</g>
 		<g>
-			<path class="st6" d="M388.4,155h-2.5c-0.5-0.2-0.8-0.5-0.8-1.3v-5.1c0-0.8,0.4-1.1,0.8-1.3h2.5c0.5,0.2,0.8,0.5,0.8,1.3v1h-1.7
-				v-0.8l-0.1-0.1h-0.5l-0.1,0.1v1.8l0.3-0.3h1.3c0.5,0.2,0.8,0.5,0.8,1.3v2.2C389.2,154.5,388.8,154.8,388.4,155z M387.4,153.6
-				l0.1-0.1v-1.8l-0.1-0.1h-0.5l-0.1,0.1v1.8l0.1,0.1H387.4z"/>
+			
 		</g>
 	</g>
 	<g>
 		<g>
-			<circle class="st4" cx="504.8" cy="218" r="8.5"/>
-			<circle class="st5" cx="504.8" cy="218" r="8.5"/>
+			
+			
 		</g>
 		<g>
-			<path class="st6" d="M502.9,221.9l2.1-6.2h-2.4v-1.5h4.1v1.2l-2.1,6.5H502.9z"/>
-		</g>
-	</g>
-	<g>
-		<g>
-			<circle class="st4" cx="422.4" cy="338.8" r="8.5"/>
-			<circle class="st5" cx="422.4" cy="338.8" r="8.5"/>
-		</g>
-		<g>
-			<path class="st6" d="M421.1,342.7c-0.5-0.2-0.8-0.5-0.8-1.3V340c0-0.6,0.2-0.9,0.6-1.2c-0.4-0.3-0.6-0.6-0.6-1.2v-1.3
-				c0-0.8,0.4-1.1,0.8-1.3h2.5c0.5,0.2,0.8,0.5,0.8,1.3v1.3c0,0.6-0.2,0.9-0.6,1.2c0.4,0.3,0.6,0.6,0.6,1.2v1.4
-				c0,0.8-0.4,1.1-0.8,1.3H421.1z M422,338.1l0.1,0.1h0.5l0.1-0.1v-1.5l-0.1-0.1h-0.5l-0.1,0.1V338.1z M422.7,341.2v-1.6l-0.1-0.1
-				h-0.5l-0.1,0.1v1.6l0.1,0.1h0.5L422.7,341.2z"/>
+			
 		</g>
 	</g>
 	<g>
 		<g>
-			<circle class="st4" cx="331.3" cy="258" r="8.5"/>
-			<circle class="st5" cx="331.3" cy="258" r="8.5"/>
+			
+			
 		</g>
 		<g>
-			<path class="st6" d="M330.1,261.9c-0.5-0.2-0.8-0.5-0.8-1.3v-1h1.7v0.8l0.1,0.1h0.5l0.1-0.1v-1.8l-0.3,0.3h-1.3
-				c-0.5-0.2-0.8-0.5-0.8-1.3v-2.2c0-0.8,0.4-1.1,0.8-1.3h2.5c0.5,0.2,0.8,0.5,0.8,1.3v5.1c0,0.8-0.4,1.1-0.8,1.3H330.1z
-				 M331.7,257.5v-1.8l-0.1-0.1h-0.5l-0.1,0.1v1.8l0.1,0.1h0.5L331.7,257.5z"/>
+			
 		</g>
 	</g>
 	<g>
 		<g>
-			<circle class="st4" cx="448.2" cy="228.6" r="8.5"/>
-			<circle class="st5" cx="448.2" cy="228.6" r="8.5"/>
+			
+			
 		</g>
 		<g>
-			<path class="st6" d="M444.1,232.5v-1.6h1v-4.5h-0.9v-1.6h2.6v6.1h0.9v1.6H444.1z"/>
-			<path class="st6" d="M451.7,232.5h-2.5c-0.5-0.2-0.8-0.5-0.8-1.3v-5.1c0-0.8,0.4-1.1,0.8-1.3h2.5c0.5,0.2,0.8,0.5,0.8,1.3v5.1
-				C452.6,232,452.2,232.3,451.7,232.5z M450.9,226.3l-0.1-0.1h-0.5l-0.1,0.1v4.7l0.1,0.1h0.5l0.1-0.1V226.3z"/>
+			
 		</g>
 	</g>
 	<g>
 		<g>
-			<circle class="st4" cx="217.9" cy="248.3" r="8.5"/>
-			<circle class="st5" cx="217.9" cy="248.3" r="8.5"/>
+			
+			
 		</g>
 		<g>
-			<path class="st6" d="M213.9,252.2v-1.6h1v-4.5H214v-1.6h2.6v6.1h0.9v1.6H213.9z"/>
-			<path class="st6" d="M218.6,252.2v-1.6h1v-4.5h-0.9v-1.6h2.6v6.1h0.9v1.6H218.6z"/>
-		</g>
-	</g>
-	<g>
-		<g>
-			<circle class="st4" cx="181.9" cy="196.8" r="8.5"/>
-			<circle class="st5" cx="181.9" cy="196.8" r="8.5"/>
-		</g>
-		<g>
-			<path class="st6" d="M177.9,200.7v-1.6h1v-4.5H178v-1.6h2.6v6.1h0.9v1.6H177.9z"/>
-			<path class="st6" d="M182.2,200.7v-2.6c0-0.6,0.1-1,0.6-1.2l1.9-0.8v-1.6l-0.1-0.1H184l-0.1,0.1v1.1h-1.7v-1.3
-				c0-0.8,0.4-1.1,0.8-1.3h2.5c0.5,0.2,0.8,0.5,0.8,1.3v1.9c0,0.6-0.1,0.9-0.6,1.2l-1.9,0.8v0.9h2.4v1.6H182.2z"/>
+			
 		</g>
 	</g>
 	<g>
 		<g>
-			<circle class="st4" cx="192.3" cy="353.5" r="8.5"/>
-			<circle class="st5" cx="192.3" cy="353.5" r="8.5"/>
+			
+			
 		</g>
 		<g>
-			<path class="st6" d="M188.2,357.4v-1.6h1v-4.5h-0.9v-1.6h2.6v6.1h0.9v1.6H188.2z"/>
-			<path class="st6" d="M193.4,357.4c-0.5-0.2-0.8-0.5-0.8-1.3v-1h1.7v0.8l0.1,0.1h0.5l0.1-0.1v-1.6l-0.1-0.1h-1v-1.3h1l0.1-0.1
-				v-1.5l-0.1-0.1h-0.5l-0.1,0.1v0.8h-1.7v-1c0-0.8,0.4-1.1,0.8-1.3h2.5c0.5,0.2,0.8,0.5,0.8,1.3v1.3c0,0.6-0.2,0.9-0.6,1.2
-				c0.4,0.3,0.6,0.6,0.6,1.2v1.4c0,0.8-0.4,1.1-0.8,1.3H193.4z"/>
+			
 		</g>
 	</g>
 	<g>
 		<g>
-			<circle class="st4" cx="59.1" cy="295.7" r="8.5"/>
-			<circle class="st5" cx="59.1" cy="295.7" r="8.5"/>
+			
+			
 		</g>
 		<g>
-			<path class="st6" d="M55,299.6V298h1v-4.5h-0.9V292h2.6v6.1h0.9v1.6H55z"/>
-			<path class="st6" d="M63.1,298.1v1.5h-1.7v-1.5h-2.2v-1.5l1.6-4.7h1.7l-1.6,4.6h0.5v-0.4l0.4-1h1.3v1.4h0.5v1.6H63.1z"/>
+			
+			
+		</g>
+	</g>
+	<g>
+		<g>
+			
+			
+		</g>
+		<g>
+			
+			
+		</g>
+	</g>
+	<g>
+		<g>
+			
+			
+		</g>
+		<g>
+			
+			
+		</g>
+	</g>
+	<g>
+		<g>
+			
+			
+		</g>
+		<g>
+			
+			
+		</g>
+	</g>
+	<g>
+		<g>
+			
+			
+		</g>
+		<g>
+			
+			
 		</g>
 	</g>
 </g>

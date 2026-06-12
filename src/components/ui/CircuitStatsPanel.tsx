@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import type { CircuitStats } from '@/lib/circuitStats';
-import { getCircuitImage } from '@/lib/images';
+import { getCircuitImage, getCircuitFilter } from '@/lib/images';
 import Circuit3D from './Circuit3D';
 
 interface CircuitStatsPanelProps {
@@ -107,9 +107,8 @@ function StatTile({
 export default function CircuitStatsPanel({ stats, circuitName, accentColor }: CircuitStatsPanelProps) {
   const circuitImgInfo = getCircuitImage(circuitName);
   const circuitMapUrl = circuitImgInfo?.src ?? stats.image3d;
-  const circuitMapDark = circuitImgInfo?.dark ?? false;
-  const circuitMapVivid = circuitImgInfo?.vivid ?? false;
-  const circuitMapFilterOverride = circuitImgInfo?.filterOverride;
+  // Uniform neutral white silhouette when the source is a cleaned circuit SVG
+  const circuitMapFilter = circuitImgInfo ? getCircuitFilter() : undefined;
 
   return (
     <div className="relative overflow-hidden rounded-xl" style={{ border: '1px solid var(--pw-glass-border)' }}>
@@ -122,13 +121,7 @@ export default function CircuitStatsPanel({ stats, circuitName, accentColor }: C
             fill
             className="object-contain"
             sizes="(max-width: 520px) 100vw, 480px"
-            style={circuitMapFilterOverride ? {
-              filter: circuitMapFilterOverride,
-            } : circuitMapDark ? {
-              filter: 'brightness(0) invert(1) sepia(1) hue-rotate(175deg) saturate(6) brightness(1.1)',
-            } : circuitMapVivid ? {
-              filter: 'brightness(1.05) contrast(1.12) saturate(1.3)',
-            } : undefined}
+            style={circuitMapFilter ? { filter: circuitMapFilter } : undefined}
           />
           <div
             className="absolute inset-0"

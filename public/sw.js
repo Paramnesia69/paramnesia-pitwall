@@ -1,4 +1,4 @@
-const CACHE_VERSION = 8;
+const CACHE_VERSION = 9;
 const STATIC_CACHE = `pitwall-static-v${CACHE_VERSION}`;
 const RUNTIME_CACHE = `pitwall-runtime-v${CACHE_VERSION}`;
 const API_CACHE = `pitwall-api-v${CACHE_VERSION}`;
@@ -6,8 +6,8 @@ const API_CACHE = `pitwall-api-v${CACHE_VERSION}`;
 const PRECACHE_URLS = [
   '/',
   '/offline.html',
-  '/icon-192-v2.png',
-  '/icon-512-v2.png',
+  '/icon-192-v3.png',
+  '/icon-512-v3.png',
   '/manifest.json',
 ];
 
@@ -175,8 +175,8 @@ self.addEventListener('push', (event) => {
   const title = data.title || 'PARAMNESIA PITWALL';
   const options = {
     body: data.body || 'Race starting soon!',
-    icon: '/icon-192-v2.png',
-    badge: '/icon-192-v2.png',
+    icon: '/icon-192-v3.png',
+    badge: '/icon-192-v3.png',
     tag: data.tag || 'pitwall-notification',
     data: { url: data.url || '/' },
     vibrate: [200, 100, 200],

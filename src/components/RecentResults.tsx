@@ -123,7 +123,7 @@ function PodiumCard({ result }: { result: RaceResult }) {
 
       {/* Race name + circuit emblem */}
       <div className="flex items-start gap-2.5 mb-3">
-        <CircuitEmblem circuitName={result.circuit} accent={meta.accent} size={38} />
+        <CircuitEmblem circuitName={result.circuit} size={38} opacity={0.55} />
         <div className="min-w-0">
           <h4 className="text-sm font-semibold mb-0.5 truncate">{getDisplayName(result.name)}</h4>
           <p className="text-[11px]" style={{ color: 'var(--pw-text-tertiary)' }}>

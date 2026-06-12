@@ -34,155 +34,52 @@
             <path d="M 279.23 451.82 L 282.76 455.32 L 279.25 458.85 L 275.72 455.35 Z M 279.23 451.82 " fill-rule="non-zero" fill="#FFFFFF"/>
             <path d="M 275.72 455.35 L 279.25 458.85 L 275.74 462.39 L 272.21 458.88 Z M 275.72 455.35 " fill-rule="non-zero" fill="#000000"/>
         </g>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="271.75" y="396.74">T13</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="446.00" y="315.91">Döttinger Höhe</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="496.00" y="277.24">Galgenkopf</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="354.50" y="374.08">Antoniusbuche</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="220.83" y="401.74">Hatzenbach</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="143.16" y="411.41">Hoheneichen</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="178.33" y="360.91">Quiddelbacher-</tspan>
-            <tspan x="178.33" y="370.91">Höhe</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="102.16" y="346.33">Flugplatz</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="145.83" y="263.41">Schwedenkreuz</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="168.33" y="216.41">Fuchsröhre</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="68.08" y="241.00">Aremberg</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="104.33" y="180.74">Adenauer Forst</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="154.00" y="130.74">Metzgesfeld</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="144.50" y="92.49">Kallenhard</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="217.83" y="89.24">Wehrseifen</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="246.25" y="64.49">Exmühle</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="293.25" y="80.67">Ausfahrt</tspan>
-            <tspan x="293.25" y="90.67">Breidscheid</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="354.33" y="40.49">Bergwerk</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="379.08" y="84.49">Kesselchen</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="444.08" y="90.74">Klostertal</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="471.00" y="77.99">Steilstrecke</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="466.33" y="133.66">Caracciola-</tspan>
-            <tspan x="466.33" y="143.66">Karussell</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="508.58" y="61.99">Hohe Acht</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="567.00" y="69.99">Hedwigshöhe</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="591.33" y="91.99">Wippermann</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="539.75" y="117.24">Eschbach</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="606.08" y="136.99">Brünnchen</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="501.08" y="173.41">Pflanzgarten I</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="331.50" y="392.83">Tiergarten</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="312.25" y="418.08">Hohenrain</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="418.58" y="127.24">Mutkurve</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="485.83" y="207.58">Sprunghügel</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="533.75" y="148.08">Eiskurve</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="163.33" y="304.41">Kottenborn</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="89.75" y="225.24">Poststraße</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="396.50" y="225.74">Schwalbenschwanz</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="377.25" y="244.91">kleines Karussell</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="539.41" y="240.24">Pflanzgarten II</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.995892, 0, 0, 0.995892, 0, 0)" opacity="0.50">
-            <tspan x="311.78" y="338.12">neue Einfahrt</tspan>
-            <tspan x="315.78" y="348.12">Nordschleife</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.948843, 0, 0, 0.948843, 0, 0)" opacity="0.50">
-            <tspan x="253.61" y="546.46">Ford-Kurve</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.948843, 0, 0, 0.948843, 0, 0)" opacity="0.50">
-            <tspan x="307.60" y="484.52">Start-und</tspan>
-            <tspan x="307.60" y="494.52">Zielgerade</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.948843, 0, 0, 0.948843, 0, 0)" opacity="0.50">
-            <tspan x="161.56" y="485.89">Warsteiner</tspan>
-            <tspan x="178.56" y="495.89">-Kurve</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.948843, 0, 0, 0.948843, 0, 0)" opacity="0.50">
-            <tspan x="175.35" y="458.94">ADVAN-Bogen</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.948843, 0, 0, 0.948843, 0, 0)" opacity="0.50">
-            <tspan x="250.12" y="510.51">Mercedes-</tspan>
-            <tspan x="250.12" y="520.51">Arena</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.948843, 0, 0, 0.948843, 0, 0)" opacity="0.50">
-            <tspan x="175.70" y="538.94">Michael-</tspan>
-            <tspan x="149.70" y="548.94">Schumacher-S</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.948843, 0, 0, 0.948843, 0, 0)" opacity="0.50">
-            <tspan x="177.82" y="588.06">Dunlop-Kehre</tspan>
-        </text>
-        <text xml:space="preserve" font-family="Liberation Sans" font-size="9.00" transform="matrix(0.948843, 0, 0, 0.948843, 0, 0)" opacity="0.50">
-            <tspan x="196.70" y="507.58">RTL-</tspan>
-            <tspan x="191.70" y="517.58">Kurve</tspan>
-        </text>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     </g>
 </svg>

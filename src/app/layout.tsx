@@ -30,8 +30,11 @@ export const metadata: Metadata = {
   manifest: '/manifest.json',
   metadataBase: new URL(SITE_URL),
   icons: {
-    icon: '/icon-192-v2.png',
-    apple: '/icon-192-v2.png',
+    icon: [
+      { url: '/favicon-32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/icon-192-v3.png', sizes: '192x192', type: 'image/png' },
+    ],
+    apple: '/icon-192-v3.png',
   },
   openGraph: {
     title: 'PARAMNESIA PITWALL',
