@@ -24,6 +24,13 @@ Race Diary (watched toggle + star rating + notes), Conflict Detector, Watched St
 ### Media Layer (Phase 5)
 Race Highlights (9 YouTube RSS feeds, inline lightbox player), Podcasts (4 RSS feeds with .mp3 enclosures, inline audio)
 
+### Mobile Foundation (Phase A, 2026-06-12)
+- **Bottom-sheet overlays** — all four overlays (EventDetail, RaceWeekend, DriverProfile, TeamProfile) become full-width bottom sheets below `sm`: 92dvh, rounded top, SheetGrip drag handle, swipe-down dismiss. Desktop right slide-out unchanged. Shared logic: `useMobileSheet()` (drag via `useDragControls` + `dragListener: false` so inner scroll areas don't fight the gesture).
+- **Safe-area insets** — `viewportFit: 'cover'` + `env(safe-area-inset-*)`: body L/R padding, fixed status-bar scrim in layout.tsx (height = inset-top, z-toast), sticky filter bar `top: env(...)`, MiniLeaderboard/WhatsLiveBadge/InstallPrompt bottom offsets, sheet bottom padding.
+- **Standings mobile stack** — ExpandableGrid collapses `1fr|1px|1fr` to single column below `sm` (drivers above teams, divider hidden).
+- **Touch parity** — TiltCard: no 3D tilt on `pointer: coarse` (iOS synthetic mouse events caused tilt jolts), `whileTap` scale instead; `active:` states on standings rows, reminder options, badge arrows.
+- **Tap targets + legibility** — filter pills 44px tall on mobile; bell/star/arrow hit areas enlarged; overlay 9px labels render 10px below `sm`.
+
 ## Known Issues / Workarounds
 - **Driver headshots** — Source is OpenF1 `headshot_url` (~100–130px native). Displayed at `maxHeight: 140`. F1 official CDN high-res path (`content/dam/fom-website/drivers/2026Drivers/`) does NOT exist — do not attempt again without a verified URL.
 - `gtwce.png`, `wec.png`, `elms.png` have non-transparent backgrounds — opacity 0.18 + `maskImage: radial-gradient(ellipse at center, black 50%, transparent 85%)` keeps it acceptable. Never use `mixBlendMode: screen` — iOS Safari drops it inside stacking contexts.

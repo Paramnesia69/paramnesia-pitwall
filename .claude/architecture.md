@@ -58,6 +58,7 @@ src/
 │   │   └── StaggerGrid.tsx   # Grid with staggered children (StaggerItem = motion.div)
 │   └── ui/                   # Atomic: Countdown, WeatherBadge, ReminderButton, LiveIndicator,
 │       │                     # InstallPrompt, UpdateBanner, ShareButton, ThemeToggle
+│       ├── SheetGrip.tsx     # Drag handle for mobile bottom-sheet overlays (sticky, -mb-7)
 │       └── F1TimingPanel.tsx # Fetches /api/openf1/timing; polls 45s when live
 ├── data/
 │   ├── calendar-2026.ts      # Static race calendar (REAL data, never invented)
@@ -75,6 +76,8 @@ src/
 │   ├── streamLinks.ts        # getStreamLinks(series) → StreamLink[]
 │   ├── motogpRiders.ts       # Static 2026 MotoGP grid: MOTOGP_RIDER_DATA (23 riders, Wikipedia-sourced) + MOTOGP_RIDER_REFS map
 │   ├── useLiveData.ts        # Polls /api/events every 2min, tab-visibility aware
+│   ├── useMediaQuery.ts      # SSR-safe matchMedia hooks: useIsMobile (<640px), useIsCoarsePointer
+│   ├── useMobileSheet.ts     # Bottom-sheet motion props + style for overlays on phones (drag dismiss)
 │   ├── useReminders.ts       # Browser notification scheduler
 │   └── useSW.ts              # Service worker registration + update detection
 ├── store/index.ts            # Zustand store (see Data Models)

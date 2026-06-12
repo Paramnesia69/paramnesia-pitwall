@@ -7,8 +7,15 @@
 - `/pitwall-agent <task>` — spawn dedicated data agent (use when main conversation is long/bloated)
 
 ## Last Commits (2026-06-12)
+`5861fcb` — Phase A mobile foundation: bottom-sheet overlays, safe areas, standings stack, touch parity
 `ae99617` — fix: reminder dropdown clipping + unreadable over countdown
-`a404e54` — data: Porsche Supercup R1 Monaco (Oeverhaus wins)
+
+## Phase Plan (user-approved, executing phase by phase)
+- **Phase A — done (5861fcb)**: mobile foundation (skipped: reduced-motion support)
+- **Phase B**: Endurance mode (elapsed time hero for 24h races), standings position deltas, live-hero ambient state
+- **Phase C**: Spoiler Shield, clinch calculator, command palette, Web Push reminders
+- **Phase D**: error boundaries, LazyMotion bundle cut, zod data validation, first tests
+- Ask user which items from the next phase before starting it
 
 ## Current Data Coverage
 
