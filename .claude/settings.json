@@ -58,7 +58,10 @@
       "Bash(npm run start > /tmp/pitwall-prod.log 2>&1 & *)",
       "Bash(curl -s http://localhost:3000/)",
       "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('scripts',{}\\), indent=2\\)\\)\")",
-      "Bash(mkdir -p /Users/paramnesia/Documents/Claude/paramnesia-pitwall/.claude/commands)"
+      "Bash(mkdir -p /Users/paramnesia/Documents/Claude/paramnesia-pitwall/.claude/commands)",
+      "Bash(curl -s \"https://api.jolpi.ca/ergast/f1/2026/qualifying.json?limit=500\")",
+      "WebFetch(domain:newsroom.porsche.com)",
+      "Bash(cp /Users/paramnesia/Documents/Claude/paramnesia-pitwall/.claude/active-work.md /Users/paramnesia/Documents/Claude/paramnesia-pitwall/.claude/active-work-backup-2026-06-12.txt)"
     ],
     "additionalDirectories": [
       "/private/tmp/src/data",
