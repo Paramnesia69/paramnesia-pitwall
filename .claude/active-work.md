@@ -7,6 +7,7 @@
 - `/pitwall-agent <task>` — spawn dedicated data agent (use when main conversation is long/bloated)
 
 ## Last Commits (2026-06-12)
+`8b8b547` — fix: Jolpica pagination — Monaco GP results were missing (limit clamped to 100 rows; affected /api/f1/results + /api/f1/h2h)
 `f3a522b` — Phase C pt2: Web Push reminders (Redis queue + GH Actions cron dispatch)
 `c08f782` — Phase C pt1: Spoiler Shield, clinch calculator, command palette
 `1c0bc7c` — Phase B: endurance mode + Le Mans state fix, live hero ambience, toasts, skeletons
