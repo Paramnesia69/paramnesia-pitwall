@@ -10,7 +10,7 @@ interface FavoriteButtonProps {
 }
 
 export default function FavoriteButton({ series, accentColor }: FavoriteButtonProps) {
-  const { favorites, toggleFavorite } = useStore();
+  const { favorites, toggleFavorite, showToast } = useStore();
   const isFav = favorites.includes(series);
 
   return (
@@ -18,6 +18,7 @@ export default function FavoriteButton({ series, accentColor }: FavoriteButtonPr
       onClick={(e) => {
         e.stopPropagation();
         toggleFavorite(series);
+        showToast(isFav ? 'Removed from favorites' : 'Added to favorites');
       }}
       className="w-7 h-7 rounded-full flex items-center justify-center transition-colors"
       style={{

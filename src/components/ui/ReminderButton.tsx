@@ -35,6 +35,7 @@ export default function ReminderButton({
   const addReminder = useStore((s) => s.addReminder);
   const removeReminder = useStore((s) => s.removeReminder);
   const getReminder = useStore((s) => s.getReminder);
+  const showToast = useStore((s) => s.showToast);
 
   const existing = getReminder(eventId, sessionName);
   const isSet = !!existing && !existing.fired;
@@ -47,13 +48,14 @@ export default function ReminderButton({
     if (isSet) {
       // Remove existing reminder
       removeReminder(existing!.id);
+      showToast(`Reminder removed — ${sessionName}`);
     } else {
       // Anchor right edge by default; flip when there isn't room to the left
       const rect = e.currentTarget.getBoundingClientRect();
       setAlignLeft(rect.right - 160 < 24);
       setIsOpen((prev) => !prev);
     }
-  }, [isSet, existing, removeReminder]);
+  }, [isSet, existing, removeReminder, showToast, sessionName]);
 
   const handleSelect = useCallback(async (minutes: number, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -62,8 +64,9 @@ export default function ReminderButton({
       // Notification permission denied — still set the reminder, it'll try again
     }
     addReminder({ eventId, eventName, sessionName, sessionStart, leadMinutes: minutes });
+    showToast(`Reminder set — ${minutes >= 60 ? '1 hour' : `${minutes} min`} before ${sessionName}`);
     setIsOpen(false);
-  }, [addReminder, eventId, eventName, sessionName, sessionStart]);
+  }, [addReminder, eventId, eventName, sessionName, sessionStart, showToast]);
 
   // Close dropdown on outside click
   useEffect(() => {

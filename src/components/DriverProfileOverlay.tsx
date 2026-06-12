@@ -215,7 +215,7 @@ export default function DriverProfileOverlay() {
               {/* Skeleton headshot while loading */}
               {loading && (
                 <div
-                  className="absolute bottom-0 right-8 rounded-t-2xl animate-pulse"
+                  className="pw-skeleton absolute bottom-0 right-8 rounded-t-2xl"
                   style={{ width: 90, height: 160, background: `${accent}15` }}
                 />
               )}
@@ -355,7 +355,7 @@ export default function DriverProfileOverlay() {
                     {loading ? (
                       <div className="grid grid-cols-3 gap-2">
                         {[...Array(3)].map((_, i) => (
-                          <div key={i} className="rounded-xl h-16 animate-pulse" style={{ background: `${accent}10` }} />
+                          <div key={i} className="pw-skeleton rounded-xl h-16" style={{ background: `${accent}10` }} />
                         ))}
                       </div>
                     ) : profile ? (
@@ -398,7 +398,7 @@ export default function DriverProfileOverlay() {
                     {loading ? (
                       <div className="grid grid-cols-3 gap-2">
                         {[...Array(3)].map((_, i) => (
-                          <div key={i} className="rounded-xl h-16 animate-pulse" style={{ background: `${accent}10` }} />
+                          <div key={i} className="pw-skeleton rounded-xl h-16" style={{ background: `${accent}10` }} />
                         ))}
                       </div>
                     ) : profile ? (

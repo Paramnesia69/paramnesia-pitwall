@@ -6,10 +6,12 @@ import type { NormalizedRaceEvent } from '@/types';
 import { SERIES_META } from '@/types';
 import { formatDateISR, formatTimeISR } from '@/lib/events';
 import Countdown from '@/components/ui/Countdown';
+import EnduranceTracker from '@/components/ui/EnduranceTracker';
 import { WeatherBadgeCompact } from '@/components/ui/WeatherBadge';
 import ReminderButton from '@/components/ui/ReminderButton';
 import { getCircuitImage } from '@/lib/images';
 import { getCountryFlag } from '@/lib/countryFlag';
+import { getEnduranceDurationHours } from '@/lib/endurance';
 
 interface HeroCardProps {
   event: NormalizedRaceEvent;
@@ -20,6 +22,11 @@ export default function HeroCard({ event }: HeroCardProps) {
   const nextSession = event.sessions.find((s) => s.state !== 'finished');
   const circuitImg = getCircuitImage(event.circuit.name);
   const flag = getCountryFlag(event.circuit.countryCode);
+
+  // Endurance mode: while a long race runs, show elapsed/remaining instead of
+  // a countdown (which targets the past and renders nothing during a race)
+  const raceSession = event.sessions.find((s) => s.type === 'race' && s.state === 'live');
+  const enduranceHours = raceSession ? getEnduranceDurationHours(raceSession.name) : null;
 
   return (
     <motion.section
@@ -68,13 +75,24 @@ export default function HeroCard({ event }: HeroCardProps) {
         </div>
       )}
 
-      {/* Gradient overlay with series accent */}
-      <div
-        className="absolute inset-0 opacity-20"
-        style={{
-          background: `linear-gradient(135deg, ${meta.accent} 0%, transparent 50%)`,
-        }}
-      />
+      {/* Gradient overlay with series accent — breathes slowly while live */}
+      {event.state === 'live' ? (
+        <motion.div
+          className="absolute inset-0"
+          style={{
+            background: `linear-gradient(135deg, ${meta.accent} 0%, transparent 50%)`,
+          }}
+          animate={{ opacity: [0.16, 0.3, 0.16] }}
+          transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      ) : (
+        <div
+          className="absolute inset-0 opacity-20"
+          style={{
+            background: `linear-gradient(135deg, ${meta.accent} 0%, transparent 50%)`,
+          }}
+        />
+      )}
 
       {/* Subtle corner glow */}
       <div
@@ -181,8 +199,21 @@ export default function HeroCard({ event }: HeroCardProps) {
           </div>
         </motion.div>
 
-        {/* Countdown */}
-        {nextSession && event.state !== 'finished' && (
+        {/* Countdown / endurance tracker */}
+        {raceSession && enduranceHours ? (
+          <motion.div
+            className="mb-4"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35 }}
+          >
+            <EnduranceTracker
+              startTime={raceSession.startTime}
+              durationHours={enduranceHours}
+              accent={meta.accent}
+            />
+          </motion.div>
+        ) : nextSession && event.state !== 'finished' && (
           <motion.div
             className="mb-4"
             initial={{ opacity: 0, y: 10 }}

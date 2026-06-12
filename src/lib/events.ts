@@ -2,8 +2,19 @@ import { CALENDAR_2026 } from '@/data/calendar-2026';
 import type { NormalizedRaceEvent, EventState } from '@/types';
 import { fetchWeather, getSimulatedWeather } from '@/lib/weather';
 import { applyOverrides, getForcedFeaturedId } from '@/lib/overrides';
+import { getEnduranceDurationHours } from '@/lib/endurance';
 
-function computeState(event: { startDate: string; endDate: string; sessions: { startTime: string; endTime?: string }[] }): EventState {
+/** Fallback session length when no endTime is recorded. Endurance races
+ *  ("24 Hours of Le Mans") derive their real duration from the name —
+ *  without this the 3h fallback marks Le Mans finished 21 hours early. */
+function sessionFallbackHours(s: { type?: string; name?: string }, defaultHours: number): number {
+  if (s.type === 'race' && s.name) {
+    return getEnduranceDurationHours(s.name) ?? defaultHours;
+  }
+  return defaultHours;
+}
+
+function computeState(event: { startDate: string; endDate: string; sessions: { startTime: string; endTime?: string; type?: string; name?: string }[] }): EventState {
   const now = new Date();
   const start = new Date(event.startDate);
   const end = new Date(event.endDate);
@@ -15,7 +26,7 @@ function computeState(event: { startDate: string; endDate: string; sessions: { s
   if (lastSession) {
     const lastEnd = lastSession.endTime
       ? new Date(lastSession.endTime)
-      : new Date(new Date(lastSession.startTime).getTime() + 3 * 60 * 60 * 1000);
+      : new Date(new Date(lastSession.startTime).getTime() + sessionFallbackHours(lastSession, 3) * 60 * 60 * 1000);
     if (now > lastEnd) return 'finished';
   }
 
@@ -35,7 +46,7 @@ export async function getEventsWithState(): Promise<NormalizedRaceEvent[]> {
     const state = computeState(evt);
     const sessions = evt.sessions.map((s) => {
       const sStart = new Date(s.startTime);
-      const sEnd = s.endTime ? new Date(s.endTime) : new Date(sStart.getTime() + 2 * 60 * 60 * 1000);
+      const sEnd = s.endTime ? new Date(s.endTime) : new Date(sStart.getTime() + sessionFallbackHours(s, 2) * 60 * 60 * 1000);
       const now = new Date();
       let sState: EventState = 'upcoming';
       if (now > sEnd) sState = 'finished';

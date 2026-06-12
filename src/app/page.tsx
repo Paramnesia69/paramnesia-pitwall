@@ -52,15 +52,15 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 
 function FeedSkeleton() {
   return (
-    <div className="mt-10 mb-8 animate-pulse">
+    <div className="mt-10 mb-8">
       <div className="flex items-center gap-3 mb-6">
         <div className="w-1 h-5 rounded-full bg-[var(--pw-glass-border)]" />
-        <div className="h-3 w-32 rounded bg-[var(--pw-glass-border)]" />
+        <div className="pw-skeleton h-3 w-32 rounded" />
         <div className="flex-1 h-px bg-[var(--pw-glass-border)]" />
       </div>
       <div className="grid gap-3">
         {[...Array(3)].map((_, i) => (
-          <div key={i} className="pw-glass h-20 rounded-xl" />
+          <div key={i} className="pw-skeleton h-20 rounded-xl" style={{ border: '1px solid var(--pw-glass-border)' }} />
         ))}
       </div>
     </div>

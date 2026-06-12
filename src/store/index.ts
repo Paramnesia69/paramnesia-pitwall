@@ -73,6 +73,10 @@ interface PitwallStore {
   openTeam: (team: SelectedTeam) => void;
   closeTeam: () => void;
 
+  /** Transient — feedback toast (not persisted); id re-triggers the animation */
+  toast: { id: number; message: string } | null;
+  showToast: (message: string) => void;
+
   /** Race diary — keyed by eventId; unifies watched-state (7) + rating/note (5) */
   diary: Record<string, DiaryEntry>;
   setDiaryEntry: (eventId: string, partial: Partial<Omit<DiaryEntry, 'updatedAt'>>) => void;
@@ -180,6 +184,9 @@ export const useStore = create<PitwallStore>()(
       selectedTeam: null,
       openTeam: (team) => set({ selectedTeam: team }),
       closeTeam: () => set({ selectedTeam: null }),
+
+      toast: null,
+      showToast: (message) => set({ toast: { id: Date.now(), message } }),
 
       diary: {},
       setDiaryEntry: (eventId, partial) =>

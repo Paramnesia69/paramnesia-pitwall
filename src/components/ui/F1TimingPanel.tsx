@@ -239,7 +239,7 @@ export default function F1TimingPanel({ eventId, accentColor, eventState }: Prop
         <h4 className="text-[10px] uppercase tracking-widest mb-3" style={{ color: 'var(--pw-text-tertiary)' }}>Timing</h4>
         <div className="pw-glass p-1 space-y-px">
           {[...Array(5)].map((_, i) => (
-            <div key={i} className="h-9 rounded animate-pulse" style={{ background: 'var(--pw-glass-bg)' }} />
+            <div key={i} className="pw-skeleton h-9 rounded" />
           ))}
         </div>
       </div>

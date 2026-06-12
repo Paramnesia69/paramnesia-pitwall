@@ -315,7 +315,7 @@ export default function TeamProfileOverlay() {
                     {loading ? (
                       <div className="grid grid-cols-3 gap-2">
                         {[...Array(3)].map((_, i) => (
-                          <div key={i} className="rounded-xl h-16 animate-pulse" style={{ background: `${accent}10` }} />
+                          <div key={i} className="pw-skeleton rounded-xl h-16" style={{ background: `${accent}10` }} />
                         ))}
                       </div>
                     ) : profile ? (

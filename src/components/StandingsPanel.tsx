@@ -456,7 +456,7 @@ function H2HSection() {
             {loading ? (
               <div className="mt-3 space-y-2">
                 {[...Array(5)].map((_, i) => (
-                  <div key={i} className="h-7 rounded animate-pulse" style={{ background: 'var(--pw-glass-bg)' }} />
+                  <div key={i} className="pw-skeleton h-7 rounded" />
                 ))}
               </div>
             ) : data.length === 0 ? (

@@ -29,6 +29,7 @@ import WhatsLiveBadge from '@/components/ui/WhatsLiveBadge';
 import MiniLeaderboard from '@/components/MiniLeaderboard';
 import NextAlarmBadge from '@/components/ui/NextAlarmBadge';
 import OfflineBadge from '@/components/ui/OfflineBadge';
+import Toaster from '@/components/ui/Toaster';
 
 /* ── Lazy-loaded below-fold components ──────────── */
 const StandingsPanel = lazy(() => import('@/components/StandingsPanel'));
@@ -386,6 +387,7 @@ export default function Dashboard({ featured, upcoming, seasonStats, newsFeedSlo
     <AnimatePresence>
       {liveSessions.length > 0 && <MiniLeaderboard key="mlb" sessions={liveSessions} />}
     </AnimatePresence>
+    <Toaster />
     </>
   );
 }

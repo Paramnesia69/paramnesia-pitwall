@@ -18,6 +18,7 @@ function DiaryEditor({ result, accentColor }: { result: RaceResult; accentColor:
   const entry = useStore((s) => s.diary[result.id]);
   const setDiaryEntry = useStore((s) => s.setDiaryEntry);
   const toggleWatched = useStore((s) => s.toggleWatched);
+  const showToast = useStore((s) => s.showToast);
   const meta = { eventName: result.name, series: result.series, eventDate: result.date };
   const watched = entry?.watched ?? false;
 
@@ -28,7 +29,10 @@ function DiaryEditor({ result, accentColor }: { result: RaceResult; accentColor:
           Your Log
         </span>
         <button
-          onClick={() => toggleWatched(result.id, meta)}
+          onClick={() => {
+            toggleWatched(result.id, meta);
+            showToast(watched ? 'Removed from watched' : 'Marked as watched');
+          }}
           className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider px-2 py-1 rounded-full transition-colors"
           style={{
             background: watched ? `${accentColor}20` : 'var(--pw-glass-bg)',
@@ -45,7 +49,10 @@ function DiaryEditor({ result, accentColor }: { result: RaceResult; accentColor:
       <div className="flex items-center gap-2 mb-2.5">
         <StarRating
           value={entry?.rating ?? 0}
-          onChange={(n) => setDiaryEntry(result.id, { rating: n, ...meta })}
+          onChange={(n) => {
+            setDiaryEntry(result.id, { rating: n, ...meta });
+            showToast(n > 0 ? `Rated ${n}/5` : 'Rating cleared');
+          }}
           size={18}
         />
         {entry?.rating ? (
