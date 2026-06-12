@@ -27,7 +27,7 @@ export default function StarRating({ value, onChange, size = 12, color = '#FFB80
               // Clicking the current rating again clears it
               onChange?.(value === n ? 0 : n);
             }}
-            className={interactive ? 'transition-transform hover:scale-110' : ''}
+            className={interactive ? 'p-1 -m-0.5 transition-transform hover:scale-110 active:scale-95' : ''}
             style={{ lineHeight: 0, cursor: interactive ? 'pointer' : 'default' }}
             aria-label={`${n} star${n > 1 ? 's' : ''}`}
           >

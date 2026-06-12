@@ -65,6 +65,8 @@ export const viewport: Viewport = {
   themeColor: '#06060B',
   width: 'device-width',
   initialScale: 1,
+  // Required for env(safe-area-inset-*) to be non-zero in standalone PWA mode
+  viewportFit: 'cover',
 };
 
 export default function RootLayout({
@@ -78,6 +80,18 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${orbitron.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col relative">
+        {/* Status-bar scrim — covers the notch zone in standalone PWA; zero-height on desktop */}
+        <div
+          aria-hidden
+          className="fixed top-0 inset-x-0 pointer-events-none"
+          style={{
+            height: 'env(safe-area-inset-top)',
+            zIndex: 'var(--pw-z-toast)',
+            background: 'color-mix(in srgb, var(--pw-bg-primary) 88%, transparent)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+          }}
+        />
         <AmbientBackground />
         <div className="relative flex-1" style={{ zIndex: 'var(--pw-z-cards)' }}>
           {children}

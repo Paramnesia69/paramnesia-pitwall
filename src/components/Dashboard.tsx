@@ -177,8 +177,9 @@ export default function Dashboard({ featured, upcoming, seasonStats, newsFeedSlo
       {/* ── Category Selector ────────────────── */}
       <FadeIn delay={0.05}>
         <nav
-          className="flex gap-2 overflow-x-auto pb-3 mb-8 sticky top-0 z-[100]"
+          className="flex gap-2 overflow-x-auto pb-3 mb-8 sticky z-[100]"
           style={{
+            top: 'env(safe-area-inset-top)',
             scrollbarWidth: 'none',
             maskImage: 'linear-gradient(to right, black 88%, transparent 100%)',
             WebkitMaskImage: 'linear-gradient(to right, black 88%, transparent 100%)',
@@ -195,7 +196,7 @@ export default function Dashboard({ featured, upcoming, seasonStats, newsFeedSlo
         >
           {/* All Series pill — text only */}
           <motion.button
-            className="px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap flex-shrink-0 transition-all"
+            className="px-4 py-2 min-h-11 sm:min-h-0 rounded-full text-sm font-medium whitespace-nowrap flex-shrink-0 transition-all"
             style={{
               background: activeFilter === 'all' ? 'var(--pw-accent)' : 'var(--pw-glass-bg)',
               border: `1px solid ${activeFilter === 'all' ? 'var(--pw-accent)' : 'var(--pw-glass-border)'}`,
@@ -219,10 +220,9 @@ export default function Dashboard({ featured, upcoming, seasonStats, newsFeedSlo
             return (
               <motion.button
                 key={id}
-                className="relative flex-shrink-0 rounded-xl overflow-hidden"
+                className="relative flex-shrink-0 rounded-xl overflow-hidden h-11 sm:h-10"
                 style={{
                   width: 72,
-                  height: 40,
                   background: isActive ? `${meta.accent}22` : 'var(--pw-glass-bg)',
                   border: `1px solid ${isActive ? meta.accent : 'var(--pw-glass-border)'}`,
                   boxShadow: isActive ? `0 0 18px ${meta.accent}44` : 'none',

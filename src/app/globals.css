@@ -124,6 +124,9 @@ body {
   background: var(--pw-bg-primary);
   color: var(--pw-text-primary);
   font-family: var(--pw-font-display);
+  /* Keep content clear of display cutouts in landscape (viewport-fit=cover) */
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
 ::selection {

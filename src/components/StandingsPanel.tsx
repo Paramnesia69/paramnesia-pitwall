@@ -177,7 +177,7 @@ function DriverRow({ d, maxPts, f1 = false, onDriverClick }: {
         <div className="flex items-center justify-between mb-0.5">
           {onDriverClick ? (
             <button
-              className="flex items-center min-w-0 overflow-hidden text-left"
+              className="flex items-center min-w-0 overflow-hidden text-left active:opacity-60 transition-opacity"
               onMouseEnter={() => setNameHover(true)}
               onMouseLeave={() => setNameHover(false)}
               onClick={(e) => { e.stopPropagation(); onDriverClick(d); }}
@@ -242,7 +242,7 @@ function ConstructorRow({ c, maxPts, f1 = false, onConstructorClick }: {
         <div className="flex items-center justify-between mb-0.5">
           {onConstructorClick ? (
             <button
-              className="flex items-center min-w-0 overflow-hidden text-left"
+              className="flex items-center min-w-0 overflow-hidden text-left active:opacity-60 transition-opacity"
               onMouseEnter={() => setNameHover(true)}
               onMouseLeave={() => setNameHover(false)}
               onClick={(e) => { e.stopPropagation(); onConstructorClick(c); }}
@@ -310,8 +310,9 @@ function ExpandableGrid({
 
   return (
     <div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1px 1fr', gap: '0 0' }}>
-        <div className="pr-5">
+      {/* Side-by-side on sm+; stacked single column on phones (two ~185px columns are unreadable) */}
+      <div className="grid grid-cols-1 sm:[grid-template-columns:1fr_1px_1fr]">
+        <div className="sm:pr-5">
           <div className="flex items-center gap-2 mb-2 pb-1.5" style={{ borderBottom: '1px solid var(--pw-glass-border)' }}>
             <div className="w-0.5 h-3 rounded-full shrink-0" style={{ background: 'rgba(255,255,255,0.35)' }} />
             <p className="text-[10px] font-semibold uppercase tracking-[0.18em]"
@@ -323,8 +324,8 @@ function ExpandableGrid({
             )}
           </div>
         </div>
-        <div style={{ background: 'var(--pw-glass-border)', margin: '0 12px' }} />
-        <div className="pl-5">
+        <div className="hidden sm:block" style={{ background: 'var(--pw-glass-border)', margin: '0 12px' }} />
+        <div className="mt-6 sm:mt-0 sm:pl-5">
           <div className="flex items-center gap-2 mb-2 pb-1.5" style={{ borderBottom: '1px solid var(--pw-glass-border)' }}>
             <div className="w-0.5 h-3 rounded-full shrink-0" style={{ background: 'rgba(255,255,255,0.35)' }} />
             <p className="text-[10px] font-semibold uppercase tracking-[0.18em]"

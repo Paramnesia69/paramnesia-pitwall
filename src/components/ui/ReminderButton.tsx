@@ -81,7 +81,7 @@ export default function ReminderButton({
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={handleToggle}
-        className="p-1.5 rounded-full transition-all duration-200 hover:scale-110"
+        className="p-2.5 sm:p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95"
         style={{
           color: isSet ? accentColor : 'var(--pw-text-tertiary)',
           background: isSet ? `${accentColor}15` : 'transparent',
@@ -126,7 +126,7 @@ export default function ReminderButton({
             <button
               key={opt.minutes}
               onClick={(e) => handleSelect(opt.minutes, e)}
-              className="w-full text-left px-3 py-2 text-xs transition-colors hover:bg-white/5"
+              className="w-full text-left px-3 py-2.5 sm:py-2 text-xs transition-colors hover:bg-white/5 active:bg-white/10"
               style={{ color: 'var(--pw-text-secondary)' }}
             >
               {opt.label}

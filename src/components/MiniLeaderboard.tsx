@@ -31,6 +31,7 @@ export default function MiniLeaderboard({ sessions }: Props) {
         WebkitBackdropFilter: 'blur(20px)',
         background: 'rgba(6, 6, 11, 0.94)',
         borderTop: '1px solid var(--pw-glass-border)',
+        paddingBottom: 'env(safe-area-inset-bottom)',
       }}
     >
       {/* ── Collapsed header bar ─────────────────────────── */}
@@ -93,7 +94,7 @@ export default function MiniLeaderboard({ sessions }: Props) {
 
         {/* Expand / collapse toggle */}
         <button
-          className="flex items-center gap-1 px-2 py-1 rounded-md text-[10px] hover:opacity-70 transition-opacity shrink-0"
+          className="flex items-center gap-1 px-3 self-stretch rounded-md text-[10px] hover:opacity-70 active:opacity-60 transition-opacity shrink-0"
           style={{ color: 'var(--pw-text-tertiary)' }}
           onClick={() => setExpanded((v) => !v)}
           aria-label={expanded ? 'Collapse live panel' : 'Expand live panel'}

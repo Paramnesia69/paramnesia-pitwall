@@ -6,6 +6,8 @@ import { useStore } from '@/store';
 import { getTeamLogo } from '@/lib/teamLogos';
 import type { TeamProfile, SelectedTeam } from '@/types';
 import { SERIES_META } from '@/types';
+import { useMobileSheet } from '@/lib/useMobileSheet';
+import SheetGrip from '@/components/ui/SheetGrip';
 
 const OPAQUE_LOGO_SERIES = new Set(['wec', 'elms', 'gtwce']);
 
@@ -44,7 +46,7 @@ function StatCard({ label, value, accent, delay = 0 }: { label: string; value: s
         transition: { duration: 0.12, ease: 'easeOut' },
       }}
     >
-      <span className="text-[9px] font-bold uppercase tracking-[0.18em]" style={{ color: accent, opacity: 0.7 }}>
+      <span className="text-[10px] sm:text-[9px] font-bold uppercase tracking-[0.18em]" style={{ color: accent, opacity: 0.7 }}>
         {label}
       </span>
       <span className="text-2xl font-bold tabular-nums tracking-tight" style={{ fontFamily: 'var(--font-orbitron, var(--pw-font-display))' }}>{value}</span>
@@ -58,7 +60,7 @@ function InfoRow({ label, children, accent, last }: { label: string; children: R
       className="flex items-center justify-between gap-4 px-4 py-3"
       style={last ? undefined : { borderBottom: `1px solid ${accent}14` }}
     >
-      <span className="text-[9px] font-bold uppercase tracking-[0.18em] shrink-0" style={{ color: accent, opacity: 0.6 }}>
+      <span className="text-[10px] sm:text-[9px] font-bold uppercase tracking-[0.18em] shrink-0" style={{ color: accent, opacity: 0.6 }}>
         {label}
       </span>
       <div className="min-w-0 flex items-center justify-end gap-1.5 overflow-hidden">
@@ -106,6 +108,7 @@ export default function TeamProfileOverlay() {
   const logo = t ? getTeamLogo(t.name, t.series === 'f1') : null;
   const accent = t?.teamColor ?? '#888';
   const isF1 = t?.series === 'f1';
+  const { isMobile, dragControls, sheetMotionProps, sheetStyle } = useMobileSheet(closeTeam);
 
   return (
     <AnimatePresence>
@@ -120,7 +123,7 @@ export default function TeamProfileOverlay() {
             onClick={closeTeam}
           />
 
-          {/* Panel */}
+          {/* Panel — right slide-out on desktop, bottom sheet on phones */}
           <motion.aside
             className="fixed top-0 right-0 bottom-0 z-[320] flex flex-col overflow-hidden"
             style={{
@@ -128,12 +131,24 @@ export default function TeamProfileOverlay() {
               background: 'var(--pw-bg-elevated)',
               borderLeft: `1px solid ${accent}25`,
               boxShadow: `-24px 0 80px rgba(0,0,0,0.75), inset 1px 0 0 ${accent}15`,
+              ...(isMobile
+                ? {
+                    ...sheetStyle,
+                    borderTop: `1px solid ${accent}25`,
+                    boxShadow: `0 -24px 80px rgba(0,0,0,0.75), inset 0 1px 0 ${accent}15`,
+                  }
+                : null),
             }}
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
-            transition={{ type: 'spring', stiffness: 300, damping: 32 }}
+            {...(isMobile
+              ? sheetMotionProps
+              : {
+                  initial: { x: '100%' },
+                  animate: { x: 0 },
+                  exit: { x: '100%' },
+                  transition: { type: 'spring' as const, stiffness: 300, damping: 32 },
+                })}
           >
+            {isMobile && <SheetGrip onPointerDown={(e) => dragControls.start(e)} />}
             {/* ── HERO ── */}
             <div className="relative h-56 shrink-0 overflow-hidden">
               {/* Team gradient */}

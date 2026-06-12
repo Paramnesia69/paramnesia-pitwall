@@ -52,8 +52,9 @@ export default function InstallPrompt() {
 
   return (
     <div
-      className="fixed bottom-4 left-4 right-4 z-50 flex items-center gap-3 px-4 py-3 rounded-2xl max-w-md mx-auto animate-in slide-in-from-bottom-4"
+      className="fixed left-4 right-4 z-50 flex items-center gap-3 px-4 py-3 rounded-2xl max-w-md mx-auto animate-in slide-in-from-bottom-4"
       style={{
+        bottom: 'calc(16px + env(safe-area-inset-bottom))',
         background: 'var(--pw-glass-bg)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',

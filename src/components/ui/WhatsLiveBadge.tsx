@@ -27,7 +27,11 @@ export default function WhatsLiveBadge({ sessions }: Props) {
 
   return (
     <motion.div
-      className="fixed bottom-16 right-4 z-[200] flex flex-col items-end gap-1.5"
+      className="fixed z-[200] flex flex-col items-end gap-1.5"
+      style={{
+        bottom: 'calc(64px + env(safe-area-inset-bottom))',
+        right: 'calc(16px + env(safe-area-inset-right))',
+      }}
       initial={{ opacity: 0, y: 20, scale: 0.92 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 20, scale: 0.92 }}
@@ -40,13 +44,13 @@ export default function WhatsLiveBadge({ sessions }: Props) {
           style={{ background: 'var(--pw-glass-bg)', border: '1px solid var(--pw-glass-border)', color: 'var(--pw-text-tertiary)' }}
         >
           <button
-            className="hover:opacity-70 transition-opacity px-0.5"
+            className="hover:opacity-70 active:opacity-60 transition-opacity px-2 py-1.5 -my-1.5"
             onClick={(e) => { e.stopPropagation(); setIdx((i) => (i - 1 + sessions.length) % sessions.length); }}
             aria-label="Previous live session"
           >‹</button>
           <span>{idx + 1} / {sessions.length}</span>
           <button
-            className="hover:opacity-70 transition-opacity px-0.5"
+            className="hover:opacity-70 active:opacity-60 transition-opacity px-2 py-1.5 -my-1.5"
             onClick={(e) => { e.stopPropagation(); setIdx((i) => (i + 1) % sessions.length); }}
             aria-label="Next live session"
           >›</button>

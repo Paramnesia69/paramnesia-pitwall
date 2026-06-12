@@ -8,6 +8,8 @@ import type { SessionResults, WeekendSessionType, RaceResult } from '@/types';
 import { useStore } from '@/store';
 import { getTeamLogo } from '@/lib/teamLogos';
 import StarRating from '@/components/ui/StarRating';
+import { useMobileSheet } from '@/lib/useMobileSheet';
+import SheetGrip from '@/components/ui/SheetGrip';
 
 // ─── Diary editor (feature 5) ───────────────────────────────────────────────────
 // Watched + rating + note for a finished race. Persists to the diary store with a
@@ -353,6 +355,7 @@ export default function RaceWeekendOverlay() {
   const accentColor = meta?.accent ?? '#ffffff';
 
   const activeSession = sortedSessions.find((s) => s.type === activeTab);
+  const { isMobile, dragControls, sheetMotionProps, sheetStyle } = useMobileSheet(closeResult);
 
   return (
     <AnimatePresence>
@@ -368,15 +371,21 @@ export default function RaceWeekendOverlay() {
             onClick={closeResult}
           />
 
-          {/* Panel — flex col, NO overflow on panel itself so header+tabs never scroll away */}
+          {/* Panel — flex col, NO overflow on panel itself so header+tabs never scroll away.
+              Right slide-out on desktop, bottom sheet on phones. */}
           <motion.div
             className="fixed right-0 top-0 bottom-0 w-full max-w-[540px] flex flex-col"
-            style={{ zIndex: 'var(--pw-z-modal)', background: 'var(--pw-bg-elevated)' }}
-            initial={{ x: 600 }}
-            animate={{ x: 0 }}
-            exit={{ x: 600 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            style={{ zIndex: 'var(--pw-z-modal)', background: 'var(--pw-bg-elevated)', ...(isMobile ? { ...sheetStyle, overflow: 'hidden' } : null) }}
+            {...(isMobile
+              ? sheetMotionProps
+              : {
+                  initial: { x: 600 },
+                  animate: { x: 0 },
+                  exit: { x: 600 },
+                  transition: { type: 'spring' as const, stiffness: 300, damping: 30 },
+                })}
           >
+            {isMobile && <SheetGrip onPointerDown={(e) => dragControls.start(e)} />}
             {/* Accent top border */}
             <div
               className="absolute top-0 left-0 right-0 h-px"

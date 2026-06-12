@@ -2,6 +2,7 @@
 
 import { useRef, useState, type ReactNode, type MouseEvent } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { useIsCoarsePointer } from '@/lib/useMediaQuery';
 
 interface TiltCardProps {
   children: ReactNode;
@@ -13,6 +14,9 @@ interface TiltCardProps {
 export default function TiltCard({ children, className = '', accentColor, glowOnHover = true }: TiltCardProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
+  // Touch devices: no tilt (iOS fires synthetic mouse events on tap → one-off
+  // tilt jolt); press-scale feedback instead
+  const coarse = useIsCoarsePointer();
 
   const mouseX = useMotionValue(0.5);
   const mouseY = useMotionValue(0.5);
@@ -46,15 +50,16 @@ export default function TiltCard({ children, className = '', accentColor, glowOn
         perspective: '1000px',
         transformStyle: 'preserve-3d',
       }}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={handleMouseLeave}
+      onMouseMove={coarse ? undefined : handleMouseMove}
+      onMouseEnter={coarse ? undefined : () => setIsHovered(true)}
+      onMouseLeave={coarse ? undefined : handleMouseLeave}
     >
       <motion.div
         className="pw-glass p-5 flex flex-col gap-3 cursor-pointer h-full relative overflow-hidden"
+        whileTap={coarse ? { scale: 0.98 } : undefined}
         style={{
-          rotateX,
-          rotateY,
+          rotateX: coarse ? 0 : rotateX,
+          rotateY: coarse ? 0 : rotateY,
           transformStyle: 'preserve-3d',
           boxShadow: isHovered && glowOnHover
             ? `0 8px 40px rgba(0,0,0,0.5), 0 0 0 1px var(--pw-glass-hover-border), 0 0 40px ${glowColor}`

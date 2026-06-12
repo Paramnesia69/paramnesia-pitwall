@@ -64,7 +64,9 @@
       "Bash(cp /Users/paramnesia/Documents/Claude/paramnesia-pitwall/.claude/active-work.md /Users/paramnesia/Documents/Claude/paramnesia-pitwall/.claude/active-work-backup-2026-06-12.txt)",
       "Bash(awk -F: '{print $2}')",
       "Bash(git commit -m 'chore: allowlist awk in settings.json \\(pre-phase restore point\\) *)",
-      "Bash(git tag *)"
+      "Bash(git tag *)",
+      "Bash(git bundle *)",
+      "Read(//Users/paramnesia/Documents/Claude/**)"
     ],
     "additionalDirectories": [
       "/private/tmp/src/data",

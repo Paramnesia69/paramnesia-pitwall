@@ -15,6 +15,8 @@ import EventShareButton from '@/components/ui/EventShareButton';
 import F1TimingPanel from '@/components/ui/F1TimingPanel';
 import { getCircuitImage } from '@/lib/images';
 import { getCountryFlag } from '@/lib/countryFlag';
+import { useMobileSheet } from '@/lib/useMobileSheet';
+import SheetGrip from '@/components/ui/SheetGrip';
 
 interface EventDetailOverlayProps {
   events: NormalizedRaceEvent[];
@@ -32,6 +34,7 @@ function generateCalendarUrl(event: NormalizedRaceEvent, session: NormalizedRace
 export default function EventDetailOverlay({ events }: EventDetailOverlayProps) {
   const { selectedEventId, closeEvent } = useStore();
   const event = events.find((e) => e.id === selectedEventId);
+  const { isMobile, dragControls, sheetMotionProps, sheetStyle } = useMobileSheet(closeEvent);
 
   useEffect(() => {
     if (selectedEventId) {
@@ -64,15 +67,20 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
             onClick={closeEvent}
           />
 
-          {/* Panel */}
+          {/* Panel — right slide-out on desktop, bottom sheet on phones */}
           <motion.div
             className="fixed right-0 top-0 bottom-0 w-full max-w-[520px] overflow-y-auto"
-            style={{ zIndex: 'var(--pw-z-modal)', background: 'var(--pw-bg-elevated)' }}
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
-            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            style={{ zIndex: 'var(--pw-z-modal)', background: 'var(--pw-bg-elevated)', ...(isMobile ? sheetStyle : null) }}
+            {...(isMobile
+              ? sheetMotionProps
+              : {
+                  initial: { x: '100%' },
+                  animate: { x: 0 },
+                  exit: { x: '100%' },
+                  transition: { type: 'spring' as const, stiffness: 300, damping: 30 },
+                })}
           >
+            {isMobile && <SheetGrip onPointerDown={(e) => dragControls.start(e)} />}
             {/* Hero area — accent gradient + circuit map + series logo */}
             <div className="relative h-48 overflow-hidden">
               <div
