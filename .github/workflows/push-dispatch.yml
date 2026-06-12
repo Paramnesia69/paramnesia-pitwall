@@ -1,0 +1,19 @@
+name: Push reminder dispatch
+
+# Vercel Hobby crons only run daily, so GitHub Actions drives the
+# 5-minute dispatch loop. The route is exempt from the site auth
+# middleware and protected by PUSH_CRON_SECRET instead.
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch: {}
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch due push reminders
+        run: |
+          curl -fsS -X POST \
+            -H "x-cron-secret: ${{ secrets.PUSH_CRON_SECRET }}" \
+            https://paramnesia-pitwall.vercel.app/api/push/dispatch

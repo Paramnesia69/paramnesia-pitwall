@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useStore } from '@/store';
 import { requestNotificationPermission } from '@/lib/useReminders';
+import { queuePushReminder, removePushReminder } from '@/lib/usePush';
 
 const LEAD_OPTIONS = [
   { label: '15 min before', minutes: 15 },
@@ -46,8 +47,9 @@ export default function ReminderButton({
   const handleToggle = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
     if (isSet) {
-      // Remove existing reminder
+      // Remove existing reminder (local + queued server push)
       removeReminder(existing!.id);
+      removePushReminder(eventId, sessionName);
       showToast(`Reminder removed — ${sessionName}`);
     } else {
       // Anchor right edge by default; flip when there isn't room to the left
@@ -64,6 +66,8 @@ export default function ReminderButton({
       // Notification permission denied — still set the reminder, it'll try again
     }
     addReminder({ eventId, eventName, sessionName, sessionStart, leadMinutes: minutes });
+    // Also queue a server-side push so the reminder fires with the site closed
+    queuePushReminder({ eventId, eventName, sessionName, sessionStart, leadMinutes: minutes });
     showToast(`Reminder set — ${minutes >= 60 ? '1 hour' : `${minutes} min`} before ${sessionName}`);
     setIsOpen(false);
   }, [addReminder, eventId, eventName, sessionName, sessionStart, showToast]);

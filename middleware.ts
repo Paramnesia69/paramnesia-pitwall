@@ -6,7 +6,9 @@ const COOKIE = 'pw-auth'
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  if (pathname.startsWith('/login') || pathname.startsWith('/api/auth')) {
+  // /api/push/dispatch is called by the external cron — it has no auth cookie
+  // and is protected by PUSH_CRON_SECRET inside the route instead
+  if (pathname.startsWith('/login') || pathname.startsWith('/api/auth') || pathname === '/api/push/dispatch') {
     return NextResponse.next()
   }
 

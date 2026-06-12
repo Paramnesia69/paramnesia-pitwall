@@ -21,6 +21,11 @@ function getRedis(): Redis | null {
   return null;
 }
 
+/** Raw Redis client for non-cache uses (push queue). Null when Upstash isn't configured. */
+export function getRedisClient(): Redis | null {
+  return getRedis();
+}
+
 // ── In-memory fallback ─────────────────────────────────────
 const memCache = new Map<string, { data: unknown; exp: number }>();
 
