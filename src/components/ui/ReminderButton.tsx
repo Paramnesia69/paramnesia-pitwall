@@ -30,6 +30,7 @@ export default function ReminderButton({
   accentColor = '#E10600',
 }: ReminderButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [alignLeft, setAlignLeft] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const addReminder = useStore((s) => s.addReminder);
   const removeReminder = useStore((s) => s.removeReminder);
@@ -47,6 +48,9 @@ export default function ReminderButton({
       // Remove existing reminder
       removeReminder(existing!.id);
     } else {
+      // Anchor right edge by default; flip when there isn't room to the left
+      const rect = e.currentTarget.getBoundingClientRect();
+      setAlignLeft(rect.right - 160 < 24);
       setIsOpen((prev) => !prev);
     }
   }, [isSet, existing, removeReminder]);
@@ -103,9 +107,9 @@ export default function ReminderButton({
       {/* Dropdown */}
       {isOpen && (
         <div
-          className="absolute right-0 bottom-full mb-2 py-1 rounded-xl z-50 min-w-[160px]"
+          className={`absolute ${alignLeft ? 'left-0' : 'right-0'} bottom-full mb-2 py-1 rounded-xl z-50 min-w-[160px]`}
           style={{
-            background: 'var(--pw-glass-bg)',
+            background: 'var(--pw-bg-elevated)',
             backdropFilter: 'blur(20px)',
             WebkitBackdropFilter: 'blur(20px)',
             border: '1px solid var(--pw-glass-border)',
