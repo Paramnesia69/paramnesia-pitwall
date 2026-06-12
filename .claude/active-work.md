@@ -12,7 +12,7 @@
 
 ## Phase Plan (user-approved, executing phase by phase)
 - **Phase A — done (5861fcb)**: mobile foundation (skipped: reduced-motion support)
-- **Phase B**: Endurance mode (elapsed time hero for 24h races), standings position deltas, live-hero ambient state
+- **Phase B**: Endurance mode (elapsed time hero for 24h races), live-hero ambient state (position deltas already shipped — DeltaBadge)
 - **Phase C**: Spoiler Shield, clinch calculator, command palette, Web Push reminders
 - **Phase D**: error boundaries, LazyMotion bundle cut, zod data validation, first tests
 - Ask user which items from the next phase before starting it
