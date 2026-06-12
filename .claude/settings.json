@@ -61,7 +61,10 @@
       "Bash(mkdir -p /Users/paramnesia/Documents/Claude/paramnesia-pitwall/.claude/commands)",
       "Bash(curl -s \"https://api.jolpi.ca/ergast/f1/2026/qualifying.json?limit=500\")",
       "WebFetch(domain:newsroom.porsche.com)",
-      "Bash(cp /Users/paramnesia/Documents/Claude/paramnesia-pitwall/.claude/active-work.md /Users/paramnesia/Documents/Claude/paramnesia-pitwall/.claude/active-work-backup-2026-06-12.txt)"
+      "Bash(cp /Users/paramnesia/Documents/Claude/paramnesia-pitwall/.claude/active-work.md /Users/paramnesia/Documents/Claude/paramnesia-pitwall/.claude/active-work-backup-2026-06-12.txt)",
+      "Bash(awk -F: '{print $2}')",
+      "Bash(git commit -m 'chore: allowlist awk in settings.json \\(pre-phase restore point\\) *)",
+      "Bash(git tag *)"
     ],
     "additionalDirectories": [
       "/private/tmp/src/data",
