@@ -67,7 +67,8 @@ src/
 │   ├── standings-2026.ts     # Standings: F1/MotoGP/WEC (Hypercar+LMGT3)/ELMS (3 classes)/IMSA/DTM/WRC
 │   └── overrides.json        # Manual admin overrides (note, state, streamLinks, featured)
 ├── lib/
-│   ├── events.ts             # getEventsWithState, getUpcomingEvents, getFeaturedEvent
+│   ├── endurance.ts          # getEnduranceDurationHours(name) — race length from official name; powers EnduranceTracker + state fallback
+│   ├── events.ts             # getEventsWithState, getUpcomingEvents, getFeaturedEvent; endurance-aware session-end fallback
 │   ├── teamLogos.ts          # Logo resolution — see Logo System below
 │   ├── weather.ts            # fetchWeather (OpenWeatherMap), getSimulatedWeather fallback
 │   ├── overrides.ts          # applyOverrides, getForcedFeaturedId

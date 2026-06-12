@@ -24,6 +24,13 @@ Race Diary (watched toggle + star rating + notes), Conflict Detector, Watched St
 ### Media Layer (Phase 5)
 Race Highlights (9 YouTube RSS feeds, inline lightbox player), Podcasts (4 RSS feeds with .mp3 enclosures, inline audio)
 
+### Live & Feedback Layer (Phase B, 2026-06-12)
+- **Endurance mode** — while an endurance race runs, HeroCard swaps the countdown (which targeted a past start time and rendered nothing) for `EnduranceTracker`: elapsed/remaining clocks + hour-tick progress bar ("Hour 7 of 24"). Duration parsed from official race names via `src/lib/endurance.ts` (`(\d+) hours?`, `24h`, word numbers, Rolex 24/Petit Le Mans special cases; names containing "quali" excluded — the N24 "24h Quali Race" is not 24h).
+- **State fix (critical)** — `computeState`/session mapping in `lib/events.ts` now use the parsed endurance duration for race sessions instead of the 2–3h fallback that would have flipped a live Le Mans 24H to "finished" 21 hours early.
+- **Live hero ambience** — hero accent gradient breathes (opacity 0.16→0.30, 9s ease-in-out loop) only when `event.state === 'live'`.
+- **Toasts** — store slice `toast`/`showToast` (transient) + `Toaster` glass pill (bottom-center, z-290, 2.4s auto-dismiss, safe-area aware). Wired: reminder set/removed, favorite toggled, diary watched/rating.
+- **Unified skeletons** — `.pw-skeleton` shimmer class in globals.css replaces all ad-hoc `animate-pulse` placeholders (Driver/Team overlays, StandingsPanel, F1TimingPanel, news FeedSkeleton).
+
 ### Mobile Foundation (Phase A, 2026-06-12)
 - **Bottom-sheet overlays** — all four overlays (EventDetail, RaceWeekend, DriverProfile, TeamProfile) become full-width bottom sheets below `sm`: 92dvh, rounded top, SheetGrip drag handle, swipe-down dismiss. Desktop right slide-out unchanged. Shared logic: `useMobileSheet()` (drag via `useDragControls` + `dragListener: false` so inner scroll areas don't fight the gesture).
 - **Safe-area insets** — `viewportFit: 'cover'` + `env(safe-area-inset-*)`: body L/R padding, fixed status-bar scrim in layout.tsx (height = inset-top, z-toast), sticky filter bar `top: env(...)`, MiniLeaderboard/WhatsLiveBadge/InstallPrompt bottom offsets, sheet bottom padding.

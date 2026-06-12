@@ -7,12 +7,12 @@
 - `/pitwall-agent <task>` — spawn dedicated data agent (use when main conversation is long/bloated)
 
 ## Last Commits (2026-06-12)
+`1c0bc7c` — Phase B: endurance mode + Le Mans state fix, live hero ambience, toasts, skeletons
 `5861fcb` — Phase A mobile foundation: bottom-sheet overlays, safe areas, standings stack, touch parity
-`ae99617` — fix: reminder dropdown clipping + unreadable over countdown
 
 ## Phase Plan (user-approved, executing phase by phase)
 - **Phase A — done (5861fcb)**: mobile foundation (skipped: reduced-motion support)
-- **Phase B**: Endurance mode (elapsed time hero for 24h races), live-hero ambient state (position deltas already shipped — DeltaBadge)
+- **Phase B — done (1c0bc7c)**: endurance mode, live-hero ambience, toasts, unified skeletons
 - **Phase C**: Spoiler Shield, clinch calculator, command palette, Web Push reminders
 - **Phase D**: error boundaries, LazyMotion bundle cut, zod data validation, first tests
 - Ask user which items from the next phase before starting it
