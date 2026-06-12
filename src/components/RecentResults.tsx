@@ -12,8 +12,8 @@ import SeriesBadge from '@/components/ui/SeriesBadge';
 import WatchedButton from '@/components/ui/WatchedButton';
 import StarRating from '@/components/ui/StarRating';
 import SpoilerBlur from '@/components/ui/SpoilerBlur';
+import CircuitEmblem from '@/components/ui/CircuitEmblem';
 import { useStore } from '@/store';
-import { getCircuitImage } from '@/lib/images';
 
 interface RecentResultsProps {
   activeFilter?: SeriesId | 'all';
@@ -65,7 +65,6 @@ function PodiumCard({ result }: { result: RaceResult }) {
   const rating = entry?.rating ?? 0;
   const hideSpoilers = spoilerShield && !watched && !revealed;
   const handleClick = useCallback(() => openResult(result), [openResult, result]);
-  const circuitImg = getCircuitImage(result.circuit);
 
   return (
     <motion.div
@@ -80,27 +79,15 @@ function PodiumCard({ result }: { result: RaceResult }) {
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleClick(); }}
       aria-label={`View full results for ${result.name}`}
     >
-      {/* Clipped layer: accent line + circuit watermark */}
+      {/* Accent top line */}
       <div className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none" style={{ zIndex: 0 }}>
         <div
           className="absolute top-0 left-0 right-0 h-px"
           style={{ background: `linear-gradient(90deg, transparent, ${meta.accent}, transparent)` }}
         />
-        {circuitImg && (() => {
-          const darkF = 'brightness(0) invert(1) sepia(1) hue-rotate(175deg) saturate(6) brightness(1.1)';
-          const vividF = 'brightness(1.05) contrast(1.12) saturate(1.3)';
-          const baseF = 'brightness(1.05) contrast(1.1) saturate(1.2)';
-          const f = circuitImg.filterOverride ?? (circuitImg.dark ? darkF : circuitImg.vivid ? vividF : baseF);
-          return (
-            <div className="absolute pointer-events-none select-none" style={{ width: 72, height: 72, top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
-              <img src={circuitImg.src} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', filter: `${f} blur(8px)`, opacity: circuitImg.glowOpacity * 0.4 }} />
-              <img src={circuitImg.src} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', filter: f, opacity: circuitImg.sharpOpacity * 0.7 }} />
-            </div>
-          );
-        })()}
       </div>
 
-      {/* Card content — above watermark */}
+      {/* Card content */}
       <div className="relative" style={{ zIndex: 1 }}>
 
       {/* Header */}
@@ -134,11 +121,16 @@ function PodiumCard({ result }: { result: RaceResult }) {
         </div>
       </div>
 
-      {/* Race name */}
-      <h4 className="text-sm font-semibold mb-0.5">{getDisplayName(result.name)}</h4>
-      <p className="text-[11px] mb-3" style={{ color: 'var(--pw-text-tertiary)' }}>
-        {result.circuit} · {result.country}
-      </p>
+      {/* Race name + circuit emblem */}
+      <div className="flex items-start gap-2.5 mb-3">
+        <CircuitEmblem circuitName={result.circuit} accent={meta.accent} size={38} />
+        <div className="min-w-0">
+          <h4 className="text-sm font-semibold mb-0.5 truncate">{getDisplayName(result.name)}</h4>
+          <p className="text-[11px]" style={{ color: 'var(--pw-text-tertiary)' }}>
+            {result.circuit} · {result.country}
+          </p>
+        </div>
+      </div>
 
       {/* Podium — blurred behind Spoiler Shield until watched/revealed */}
       <SpoilerBlur hidden={hideSpoilers} onReveal={() => setRevealed(true)}>

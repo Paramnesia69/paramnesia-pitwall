@@ -1,7 +1,6 @@
 'use client';
 
 import { memo } from 'react';
-import Image from 'next/image';
 import type { NormalizedRaceEvent } from '@/types';
 import { SERIES_META } from '@/types';
 import { formatDateISR, formatTimeISR } from '@/lib/events';
@@ -12,8 +11,8 @@ import FavoriteButton from '@/components/ui/FavoriteButton';
 import { WeatherBadgeCompact } from '@/components/ui/WeatherBadge';
 import ReminderButton from '@/components/ui/ReminderButton';
 import SeriesBadge from '@/components/ui/SeriesBadge';
+import CircuitEmblem from '@/components/ui/CircuitEmblem';
 import { getCountryFlag } from '@/lib/countryFlag';
-import { getCircuitImage } from '@/lib/images';
 
 interface EventCardProps {
   event: NormalizedRaceEvent;
@@ -44,52 +43,10 @@ export default memo(function EventCard({ event }: EventCardProps) {
   const nextSession = event.sessions.find((s) => s.state !== 'finished');
   const upcomingSessions = event.sessions.filter((s) => s.state !== 'finished').slice(0, 3);
   const flag = getCountryFlag(event.circuit.countryCode);
-  const circuitImg = getCircuitImage(event.circuit.name);
 
   return (
     <div className="h-full" onClick={() => openEvent(event.id)}>
       <TiltCard accentColor={meta.accent} className="h-full">
-
-        {/* Faded series logo — background watermark */}
-        {meta.logo && (
-          <div
-            className="absolute right-3 top-1/2 -translate-y-1/2 w-44 h-44 pointer-events-none select-none"
-            style={{
-              opacity: 0.18,
-              zIndex: 0,
-              maskImage: 'radial-gradient(ellipse at center, black 55%, transparent 90%)',
-              WebkitMaskImage: 'radial-gradient(ellipse at center, black 55%, transparent 90%)',
-            }}
-          >
-            <Image
-              src={meta.logo}
-              alt=""
-              fill
-              className="object-contain"
-              style={meta.logo === '/logos/porsche.svg' ? { filter: 'brightness(0) invert(1)' } : undefined}
-            />
-          </div>
-        )}
-
-        {circuitImg && (() => {
-          const darkF = 'brightness(0) invert(1) sepia(1) hue-rotate(175deg) saturate(6) brightness(1.1)';
-          const vividF = 'brightness(1.05) contrast(1.12) saturate(1.3)';
-          const baseF = 'brightness(1.05) contrast(1.1) saturate(1.2)';
-          const f = circuitImg.filterOverride ?? (circuitImg.dark ? darkF : circuitImg.vivid ? vividF : baseF);
-          return (
-            <div
-              className="absolute pointer-events-none select-none"
-              style={{ bottom: '18%', left: 0, top: circuitImg.cardTop ?? '48%', right: circuitImg.cardRight ?? '48%', zIndex: 0 }}
-            >
-              <Image src={circuitImg.src} alt="" fill className="object-contain"
-                style={{ filter: `${f} blur(18px)`, opacity: circuitImg.glowOpacity * 0.5 }} />
-              <Image src={circuitImg.src} alt="" fill className="object-contain"
-                style={{ filter: `${f} blur(5px)`, opacity: circuitImg.glowOpacity }} />
-              <Image src={circuitImg.src} alt="" fill className="object-contain"
-                style={{ filter: f, opacity: circuitImg.sharpOpacity }} />
-            </div>
-          );
-        })()}
 
         {/* Header row */}
         <div className="flex items-center justify-between gap-2 flex-wrap relative" style={{ transform: 'translateZ(20px)' }}>
@@ -122,12 +79,15 @@ export default memo(function EventCard({ event }: EventCardProps) {
           </div>
         )}
 
-        {/* Event name — parallax layer */}
-        <div style={{ transform: 'translateZ(30px)' }}>
-          <h4 className="text-lg font-semibold tracking-tight leading-tight">{event.name}</h4>
-          <p className="text-sm mt-1" style={{ color: 'var(--pw-text-secondary)' }}>
-            {flag && <span className="mr-1">{flag}</span>}{event.circuit.name} — {event.circuit.country}
-          </p>
+        {/* Event name + circuit emblem — parallax layer */}
+        <div className="flex items-start gap-3" style={{ transform: 'translateZ(30px)' }}>
+          <CircuitEmblem circuitName={event.circuit.name} accent={meta.accent} size={40} />
+          <div className="min-w-0">
+            <h4 className="text-lg font-semibold tracking-tight leading-tight">{event.name}</h4>
+            <p className="text-sm mt-1" style={{ color: 'var(--pw-text-secondary)' }}>
+              {flag && <span className="mr-1">{flag}</span>}{event.circuit.name} — {event.circuit.country}
+            </p>
+          </div>
         </div>
 
         {/* Countdown for next session */}

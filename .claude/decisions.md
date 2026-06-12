@@ -69,6 +69,13 @@
 - **CRITICAL — client→route import ban**: Client components (`'use client'`) must NEVER import anything (even `import type`) from `src/app/api/**`. Turbopack resolves the full module graph and pulls server-only modules (`next/server`) into the client bundle → runtime crash ("This page couldn't load"). **Fix pattern**: shared interfaces live in `src/types/index.ts`; route files import FROM `@/types`; components import FROM `@/types`. Direction is always one-way: types → routes & types → components. Learned from Phase 4 incident (2026-06-05).
 - **CRITICAL — Zustand object selector ban**: NEVER write `useStore((s) => ({ a: s.a, b: s.b }))`. Object literal selector returns a new reference on every call; Zustand uses `Object.is` equality → always re-renders → React error #185 in production (infinite loop). Always split into individual calls: `const a = useStore(s => s.a)`. Use `useShallow` from `zustand/react/shallow` only if object grouping is genuinely required. Learned from Phase 4 crash (2026-06-05).
 
+## Watermark System (Phase B/C, 2026-06-13)
+Rebuilt to fix non-uniform, content-covered marks. Three rules:
+- **One watermark per surface.** Hero = circuit map only (the big series-logo watermark was removed; SeriesBadge + accent gradient carry brand). Never stack circuit + logo on the same card.
+- **Placement is a reserved lane, not center.** Background marks sit in a corner/edge lane and fade directionally to zero *before* reaching text — `.pw-wm-lane-tr` / `.pw-wm-lane-r` utilities (linear-gradient masks) in globals.css. Replaces the old centered radial masks that bled under content. `--pw-wm-opacity` token = baseline strength.
+- **Dense cards use emblems, not watermarks.** EventCard + RecentResults dropped background circuit watermarks entirely; the map is now a framed `CircuitEmblem` chip (full opacity, glass border, ~38–40px) paired with the circuit name. Uniform by construction, never covered.
+- `getCircuitFilter(img)` in `images.ts` is the single source for the dark/vivid/base filter triad (was duplicated inline in 4 surfaces). **Phase A** will normalize the SVG assets so this can collapse to one layer.
+
 ## CSS & Component Patterns
 - TiltCard has `overflow-hidden` — all absolute-positioned watermarks must fit inside card
 - Card uniform height: `h-full` must chain through StaggerItem → EventCard div → TiltCard

@@ -9,7 +9,7 @@ import Countdown from '@/components/ui/Countdown';
 import EnduranceTracker from '@/components/ui/EnduranceTracker';
 import { WeatherBadgeCompact } from '@/components/ui/WeatherBadge';
 import ReminderButton from '@/components/ui/ReminderButton';
-import { getCircuitImage } from '@/lib/images';
+import { getCircuitImage, getCircuitFilter } from '@/lib/images';
 import { getCountryFlag } from '@/lib/countryFlag';
 import { getEnduranceDurationHours } from '@/lib/endurance';
 
@@ -35,15 +35,15 @@ export default function HeroCard({ event }: HeroCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 150, damping: 20 }}
     >
+      {/* Single watermark: circuit map in a top-right lane, fading toward the
+          bottom-left content (one-watermark-per-surface rule — series logo
+          watermark removed; the SeriesBadge + accent gradient carry brand) */}
       {circuitImg && (() => {
-        const darkF = 'brightness(0) invert(1) sepia(1) hue-rotate(175deg) saturate(6) brightness(1.1)';
-        const vividF = 'brightness(1.05) contrast(1.12) saturate(1.3)';
-        const baseF = 'brightness(1.05) contrast(1.1) saturate(1.2)';
-        const f = circuitImg.filterOverride ?? (circuitImg.dark ? darkF : circuitImg.vivid ? vividF : baseF);
+        const f = getCircuitFilter(circuitImg);
         return (
           <div
-            className="absolute pointer-events-none select-none"
-            style={{ top: 0, left: '36%', right: '39%', bottom: '32%', zIndex: 0 }}
+            className="pw-wm-lane-tr absolute pointer-events-none select-none"
+            style={{ top: 0, right: 0, width: '46%', height: '64%', zIndex: 0 }}
           >
             <Image src={circuitImg.src} alt="" fill className="object-contain"
               style={{ filter: `${f} blur(20px)`, opacity: circuitImg.glowOpacity * 0.5 }} />
@@ -54,26 +54,6 @@ export default function HeroCard({ event }: HeroCardProps) {
           </div>
         );
       })()}
-
-      {/* Large faded series logo — right side */}
-      {meta.logo && (
-        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none select-none" style={{ width: '45%', maxWidth: 420, aspectRatio: '1' }}>
-          <div className="relative w-full h-full" style={{
-            opacity: 0.18,
-            maskImage: 'radial-gradient(ellipse at center, black 50%, transparent 85%)',
-            WebkitMaskImage: 'radial-gradient(ellipse at center, black 50%, transparent 85%)',
-          }}>
-            <Image
-              src={meta.logo}
-              alt=""
-              fill
-              className="object-contain"
-              style={meta.logo === '/logos/porsche.svg' ? { filter: 'brightness(0) invert(1)' } : undefined}
-              priority
-            />
-          </div>
-        </div>
-      )}
 
       {/* Gradient overlay with series accent — breathes slowly while live */}
       {event.state === 'live' ? (

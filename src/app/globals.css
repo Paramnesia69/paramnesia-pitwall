@@ -64,6 +64,10 @@
   /* Typography */
   --pw-font-display: var(--font-geist-sans), system-ui, sans-serif;
   --pw-font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  /* Watermarks — single source of truth for background-mark strength.
+     Emblem chips (framed circuit thumbnails) render at full opacity instead. */
+  --pw-wm-opacity: 0.16;
 }
 
 @theme inline {
@@ -153,6 +157,21 @@ body {
 
 @keyframes pw-shimmer {
   100% { transform: translateX(100%); }
+}
+
+/* ── Watermark lane masks ──────────────────────────────────
+   A background mark lives in a corner/edge "lane" and fades directionally
+   to zero BEFORE it reaches the card's text, so content never sits on top
+   of imagery. Replaces ad-hoc centered radial masks that bled under text. */
+
+.pw-wm-lane-tr {  /* anchored top-right, fades out toward bottom-left */
+  -webkit-mask-image: linear-gradient(225deg, #000 0%, rgba(0,0,0,0.5) 34%, transparent 62%);
+          mask-image: linear-gradient(225deg, #000 0%, rgba(0,0,0,0.5) 34%, transparent 62%);
+}
+
+.pw-wm-lane-r {   /* anchored right edge, fades out toward the left */
+  -webkit-mask-image: linear-gradient(270deg, #000 0%, rgba(0,0,0,0.5) 38%, transparent 70%);
+          mask-image: linear-gradient(270deg, #000 0%, rgba(0,0,0,0.5) 38%, transparent 70%);
 }
 
 /* ── Glass Card Utility ────────────────────────────────── */
