@@ -29,8 +29,11 @@ src/
 │       ├── f1/
 │       │   ├── driver/[driverRef]/route.ts      # /api/f1/driver/:ref — Jolpica driver profile, no-store cache
 │       │   └── constructor/[constructorRef]/route.ts # /api/f1/constructor/:ref — Jolpica constructor profile, no-store cache
-│       └── motogp/
-│           └── rider/[riderRef]/route.ts        # /api/motogp/rider/:ref — MotoGP rider profile from static lib, no-store cache
+│       ├── motogp/
+│       │   └── rider/[riderRef]/route.ts        # /api/motogp/rider/:ref — MotoGP rider profile from static lib, no-store cache
+│       └── push/
+│           ├── subscribe/route.ts  # POST/DELETE — queue/remove web-push reminder in Upstash Redis
+│           └── dispatch/route.ts   # POST — send due pushes (GH Actions cron */5; middleware-exempt, PUSH_CRON_SECRET)
 ├── components/
 │   ├── Dashboard.tsx         # Client shell: series filter, event grid, lazy-loaded panels; accepts newsFeedSlot ReactNode
 │   │                         # Series order: F1→WEC→ELMS→IMSA→Nürburgring→MotoGP→GTWCE→DTM→WRC→Porsche
@@ -76,10 +79,13 @@ src/
 │   ├── images.ts             # getCircuitImage(name) → local /circuits/ SVG path (flat lookup table)
 │   ├── streamLinks.ts        # getStreamLinks(series) → StreamLink[]
 │   ├── motogpRiders.ts       # Static 2026 MotoGP grid: MOTOGP_RIDER_DATA (23 riders, Wikipedia-sourced) + MOTOGP_RIDER_REFS map
+│   ├── clinch.ts             # getClinchInfo(series, standings) — F1/MotoGP title math from remaining calendar
+│   ├── pushQueue.ts          # Server: Redis zset push:queue + push:item blobs (enqueue/remove/popDue)
+│   ├── usePush.ts            # Client: PushManager subscribe + queue/remove server push for reminders
 │   ├── useLiveData.ts        # Polls /api/events every 2min, tab-visibility aware
 │   ├── useMediaQuery.ts      # SSR-safe matchMedia hooks: useIsMobile (<640px), useIsCoarsePointer
 │   ├── useMobileSheet.ts     # Bottom-sheet motion props + style for overlays on phones (drag dismiss)
-│   ├── useReminders.ts       # Browser notification scheduler
+│   ├── useReminders.ts       # Browser notification scheduler (open-tab); usePush covers closed-tab
 │   └── useSW.ts              # Service worker registration + update detection
 ├── store/index.ts            # Zustand store (see Data Models)
 └── types/index.ts            # All shared types + SERIES_META

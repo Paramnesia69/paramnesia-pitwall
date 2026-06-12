@@ -7,15 +7,22 @@
 - `/pitwall-agent <task>` — spawn dedicated data agent (use when main conversation is long/bloated)
 
 ## Last Commits (2026-06-12)
+`f3a522b` — Phase C pt2: Web Push reminders (Redis queue + GH Actions cron dispatch)
+`c08f782` — Phase C pt1: Spoiler Shield, clinch calculator, command palette
 `1c0bc7c` — Phase B: endurance mode + Le Mans state fix, live hero ambience, toasts, skeletons
-`5861fcb` — Phase A mobile foundation: bottom-sheet overlays, safe areas, standings stack, touch parity
+`5861fcb` — Phase A mobile foundation: bottom sheets, safe areas, standings stack, touch parity
 
 ## Phase Plan (user-approved, executing phase by phase)
 - **Phase A — done (5861fcb)**: mobile foundation (skipped: reduced-motion support)
 - **Phase B — done (1c0bc7c)**: endurance mode, live-hero ambience, toasts, unified skeletons
-- **Phase C**: Spoiler Shield, clinch calculator, command palette, Web Push reminders
+- **Phase C — done (c08f782 + f3a522b)**: Spoiler Shield, clinch calculator, ⌘K palette, Web Push
 - **Phase D**: error boundaries, LazyMotion bundle cut, zod data validation, first tests
 - Ask user which items from the next phase before starting it
+
+## Web Push runtime notes
+- VAPID keys: Vercel env (NEXT_PUBLIC_VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY, VAPID_SUBJECT) + .env.local
+- PUSH_CRON_SECRET: Vercel env + GH Actions secret; protects /api/push/dispatch (middleware-exempt)
+- Dispatch cadence: GH Actions cron */5 min (.github/workflows/push-dispatch.yml) — Vercel Hobby crons are daily-only
 
 ## Current Data Coverage
 
