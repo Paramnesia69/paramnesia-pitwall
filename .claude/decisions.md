@@ -90,7 +90,7 @@
 - `strict` throws at runtime if a full `motion.*` component is reintroduced — when adding new animated components, always `import { m as motion }`.
 
 ## Testing & Data Validation (Phase D, 2026-06-12)
-- Vitest (`npm test`); `prebuild` runs the suite so Vercel builds fail on test/data errors. `npx next build` directly does NOT trigger prebuild — use `npm run build` to get the gate.
+- Vitest (`npm test`). **The CI gate is the "Run tests" step in `.github/workflows/deploy.yml`** — the deploy pipeline is GH Actions → `vercel build` (runs `next build` directly, npm prebuild does NOT fire) → `vercel deploy --prebuilt`. The `prebuild` npm hook only covers local `npm run build`.
 - `tests/data-validation.test.ts` zod-validates calendar/results/standings (unique ids, ISO dates, 2-letter country codes, sequential podium/pos, non-increasing points).
 - Time-dependent tests (clinch, conflicts) pin the clock with `vi.setSystemTime`.
 
