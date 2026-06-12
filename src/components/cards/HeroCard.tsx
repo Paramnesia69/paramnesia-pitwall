@@ -9,7 +9,7 @@ import Countdown from '@/components/ui/Countdown';
 import EnduranceTracker from '@/components/ui/EnduranceTracker';
 import { WeatherBadgeCompact } from '@/components/ui/WeatherBadge';
 import ReminderButton from '@/components/ui/ReminderButton';
-import { getCircuitImage, getCircuitFilter } from '@/lib/images';
+import CircuitEmblem from '@/components/ui/CircuitEmblem';
 import { getCountryFlag } from '@/lib/countryFlag';
 import { getEnduranceDurationHours } from '@/lib/endurance';
 
@@ -20,7 +20,6 @@ interface HeroCardProps {
 export default function HeroCard({ event }: HeroCardProps) {
   const meta = SERIES_META[event.series];
   const nextSession = event.sessions.find((s) => s.state !== 'finished');
-  const circuitImg = getCircuitImage(event.circuit.name);
   const flag = getCountryFlag(event.circuit.countryCode);
 
   // Endurance mode: while a long race runs, show elapsed/remaining instead of
@@ -35,25 +34,25 @@ export default function HeroCard({ event }: HeroCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 150, damping: 20 }}
     >
-      {/* Single watermark: circuit map in a top-right lane, fading toward the
-          bottom-left content (one-watermark-per-surface rule — series logo
-          watermark removed; the SeriesBadge + accent gradient carry brand) */}
-      {circuitImg && (() => {
-        const f = getCircuitFilter(circuitImg);
-        return (
-          <div
-            className="pw-wm-lane-tr absolute pointer-events-none select-none"
-            style={{ top: 0, right: 0, width: '46%', height: '64%', zIndex: 0 }}
-          >
-            <Image src={circuitImg.src} alt="" fill className="object-contain"
-              style={{ filter: `${f} blur(20px)`, opacity: circuitImg.glowOpacity * 0.5 }} />
-            <Image src={circuitImg.src} alt="" fill className="object-contain"
-              style={{ filter: `${f} blur(6px)`, opacity: circuitImg.glowOpacity }} />
-            <Image src={circuitImg.src} alt="" fill className="object-contain"
-              style={{ filter: f, opacity: circuitImg.sharpOpacity }} />
+      {/* Large faded series logo — right side (the hero's primary watermark) */}
+      {meta.logo && (
+        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none select-none" style={{ width: '45%', maxWidth: 420, aspectRatio: '1' }}>
+          <div className="relative w-full h-full" style={{
+            opacity: 0.18,
+            maskImage: 'radial-gradient(ellipse at center, black 50%, transparent 85%)',
+            WebkitMaskImage: 'radial-gradient(ellipse at center, black 50%, transparent 85%)',
+          }}>
+            <Image
+              src={meta.logo}
+              alt=""
+              fill
+              className="object-contain"
+              style={meta.logo === '/logos/porsche.svg' ? { filter: 'brightness(0) invert(1)' } : undefined}
+              priority
+            />
           </div>
-        );
-      })()}
+        </div>
+      )}
 
       {/* Gradient overlay with series accent — breathes slowly while live */}
       {event.state === 'live' ? (
@@ -162,20 +161,24 @@ export default function HeroCard({ event }: HeroCardProps) {
           {event.name}
         </motion.h2>
 
-        {/* Circuit + dates */}
+        {/* Circuit + dates — small tucked circuit emblem paired with the name */}
         <motion.div
+          className="flex items-start gap-3"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          <p style={{ color: 'var(--pw-text-secondary)' }} className="text-sm sm:text-base mb-1">
-            {flag && <span className="mr-1">{flag}</span>}{event.circuit.name} — {event.circuit.country}
-          </p>
-          <div className="flex items-center gap-3 mb-4">
-            <p className="text-xs font-mono" style={{ color: 'var(--pw-text-tertiary)' }}>
-              {formatDateISR(event.startDate)} – {formatDateISR(event.endDate)} · Israel Time
+          <CircuitEmblem circuitName={event.circuit.name} accent={meta.accent} size={44} />
+          <div className="min-w-0">
+            <p style={{ color: 'var(--pw-text-secondary)' }} className="text-sm sm:text-base mb-1">
+              {flag && <span className="mr-1">{flag}</span>}{event.circuit.name} — {event.circuit.country}
             </p>
-            {event.weather && <WeatherBadgeCompact weather={event.weather} />}
+            <div className="flex items-center gap-3 mb-4">
+              <p className="text-xs font-mono" style={{ color: 'var(--pw-text-tertiary)' }}>
+                {formatDateISR(event.startDate)} – {formatDateISR(event.endDate)} · Israel Time
+              </p>
+              {event.weather && <WeatherBadgeCompact weather={event.weather} />}
+            </div>
           </div>
         </motion.div>
 

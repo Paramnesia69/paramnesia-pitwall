@@ -70,11 +70,11 @@
 - **CRITICAL — Zustand object selector ban**: NEVER write `useStore((s) => ({ a: s.a, b: s.b }))`. Object literal selector returns a new reference on every call; Zustand uses `Object.is` equality → always re-renders → React error #185 in production (infinite loop). Always split into individual calls: `const a = useStore(s => s.a)`. Use `useShallow` from `zustand/react/shallow` only if object grouping is genuinely required. Learned from Phase 4 crash (2026-06-05).
 
 ## Watermark System (Phase B/C, 2026-06-13)
-Rebuilt to fix non-uniform, content-covered marks. Three rules:
-- **One watermark per surface.** Hero = circuit map only (the big series-logo watermark was removed; SeriesBadge + accent gradient carry brand). Never stack circuit + logo on the same card.
-- **Placement is a reserved lane, not center.** Background marks sit in a corner/edge lane and fade directionally to zero *before* reaching text — `.pw-wm-lane-tr` / `.pw-wm-lane-r` utilities (linear-gradient masks) in globals.css. Replaces the old centered radial masks that bled under content. `--pw-wm-opacity` token = baseline strength.
-- **Dense cards use emblems, not watermarks.** EventCard + RecentResults dropped background circuit watermarks entirely; the map is now a framed `CircuitEmblem` chip (full opacity, glass border, ~38–40px) paired with the circuit name. Uniform by construction, never covered.
-- `getCircuitFilter(img)` in `images.ts` is the single source for the dark/vivid/base filter triad (was duplicated inline in 4 surfaces). **Phase A** will normalize the SVG assets so this can collapse to one layer.
+Fixed non-uniform, content-covered circuit marks. Key rules:
+- **Series logo watermark is the hero/card brand mark — KEEP IT.** Hero = big faded series logo on the right (the primary watermark; user explicitly wants F1 etc. there, it outranks the circuit). EventCard = same faded series logo background-right. Do NOT remove these — a prior attempt to drop them in favour of a circuit watermark was rejected.
+- **Circuit = small framed emblem, NOT a background watermark.** The circuit map is a `CircuitEmblem` chip (full colour via `getCircuitFilter`, glass border, ~38–44px) paired with the circuit name on Hero / EventCard / RecentResults. "Small and tucked" — never a large background element competing with the series logo.
+- Colored maps are preserved (F1 sector colours etc.) — do NOT normalize circuits to white silhouettes (Phase A normalization was rejected; the colourful maps are wanted).
+- Placement helpers `.pw-wm-lane-tr` / `.pw-wm-lane-r` + `--pw-wm-opacity` exist in globals.css for any directional background mark; `getCircuitFilter(img)` in `images.ts` centralizes the dark/vivid/base filter triad.
 
 ## CSS & Component Patterns
 - TiltCard has `overflow-hidden` — all absolute-positioned watermarks must fit inside card
