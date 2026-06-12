@@ -200,8 +200,8 @@ const wec: CalendarEntry[] = [
     { type: 'race', name: '6 Hours of Spa', startTime: '2026-05-09T11:00:00Z' },
   ]),
   evt('wec', '24 Hours of Le Mans', { name: 'Circuit de la Sarthe', country: 'France', countryCode: 'FR', lat: 47.956, lng: 0.2075 }, '2026-06-13', '2026-06-14', [
-    { type: 'qualifying', name: 'Hyperpole', startTime: '2026-06-12T18:00:00Z' },
-    { type: 'warmup', name: 'Warmup', startTime: '2026-06-13T09:00:00Z' },
+    { type: 'qualifying', name: 'Hyperpole', startTime: '2026-06-11T18:00:00Z' },
+    { type: 'warmup', name: 'Warmup', startTime: '2026-06-13T10:00:00Z' },
     { type: 'race', name: '24 Hours of Le Mans', startTime: '2026-06-13T14:00:00Z' },
   ]),
   evt('wec', '6 Hours of São Paulo', { name: 'Interlagos Circuit', country: 'Brazil', countryCode: 'BR', lat: -23.7036, lng: -46.6997 }, '2026-07-12', '2026-07-12', [

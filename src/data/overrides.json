@@ -2,6 +2,10 @@
   "$schema": "./overrides-schema.json",
   "_README": "Manual overrides for PARAMNESIA PITWALL event data. Edit this file to fix times, add links, mark delays, etc. Keys are event IDs (format: {series}-{startDate}-{slug}). Rebuild & deploy after changes.",
 
+  "wec-2026-06-13-24-hours-of-le-mans": {
+    "note": "Opening ceremony 16:00 · Race start 17:00"
+  },
+
   "f1-2026-05-22-canadian-grand-prix": {
     "note": "Sprint weekend format",
     "streamLinks": [
