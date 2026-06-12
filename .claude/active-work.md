@@ -6,13 +6,15 @@
 - `/deploy` — push uncommitted changes live
 - `/pitwall-agent <task>` — spawn dedicated data agent (use when main conversation is long/bloated)
 
-## Last Commits (2026-06-07)
+## Last Commits (2026-06-12)
+
+`ae99617` — fix: reminder dropdown clipping at card edge + unreadable over countdown
+
+`a404e54` — data: add Porsche Supercup R1 Monaco results (Oeverhaus wins)
+
+`d91f891` — fix: correct 2026 lineup in H2H route — constructor IDs + driver refs per Jolpica
 
 `4946bf1` — fix: auto-flip F1 event state to finished via OpenF1 session date_end
-
-`fc67422` — fix: replace transitionEnd overflow with imperative DOM ref on all collapse wrappers
-
-`06cb3da` — fix: remove body overflow-x:hidden to stop clipping card hover shadows
 
 ## 16-Feature Build Status
 | Phase | Features | Status |
@@ -75,8 +77,8 @@
 - DTM: after R2 Zandvoort
 
 ## Backlog (next up)
-- **WEC results**: R3 Le Mans 24H (June 14–15)
-- **ELMS/DTM results**: R3+
-- **Nürburgring**: NLS6+ (Eifel Trophy, Jun 20)
-- **Porsche Supercup**: R1 Monaco (June 7)
+- **This weekend**: WEC R3 Le Mans 24H (Jun 13–14), GTWCE Misano (Jun 13–14), Supercup Barcelona (Jun 14)
+- **ELMS**: R3 Imola (Jul 5) — nothing missed yet
+- **DTM**: R3 Lausitzring (Jun 19–21)
+- **Nürburgring**: NLS6 Eifel Trophy (Jun 20)
 - **Logo quality**: Aprilia/Yamaha not true-colour
