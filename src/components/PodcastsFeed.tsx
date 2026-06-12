@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import type { PodcastEpisode, SeriesId } from '@/types';
 import { SERIES_META } from '@/types';
 import SeriesBadge from '@/components/ui/SeriesBadge';

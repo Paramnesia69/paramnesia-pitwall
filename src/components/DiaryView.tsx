@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import type { SeriesId } from '@/types';
 import { SERIES_META } from '@/types';
 import { ALL_RESULTS_2026 } from '@/data/results-2026';

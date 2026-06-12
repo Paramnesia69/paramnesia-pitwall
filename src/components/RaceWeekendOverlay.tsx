@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { SERIES_META } from '@/types';
 import type { SessionResults, WeekendSessionType, RaceResult } from '@/types';

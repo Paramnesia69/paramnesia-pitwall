@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '@/store';
 import { getTeamLogo } from '@/lib/teamLogos';
 import type { TeamProfile, SelectedTeam } from '@/types';

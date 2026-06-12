@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, type Variants } from 'framer-motion';
+import { m as motion, type Variants } from 'framer-motion';
 import type { ReactNode } from 'react';
 
 const containerVariants: Variants = {

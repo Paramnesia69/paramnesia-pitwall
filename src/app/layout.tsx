@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono, Orbitron } from 'next/font/google';
 import AmbientBackground from '@/components/AmbientBackground';
+import MotionProvider from '@/components/MotionProvider';
 import './globals.css';
 
 const geistSans = Geist({
@@ -92,10 +93,12 @@ export default function RootLayout({
             WebkitBackdropFilter: 'blur(20px)',
           }}
         />
-        <AmbientBackground />
-        <div className="relative flex-1" style={{ zIndex: 'var(--pw-z-cards)' }}>
-          {children}
-        </div>
+        <MotionProvider>
+          <AmbientBackground />
+          <div className="relative flex-1" style={{ zIndex: 'var(--pw-z-cards)' }}>
+            {children}
+          </div>
+        </MotionProvider>
       </body>
     </html>
   );

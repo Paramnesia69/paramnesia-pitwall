@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { useStore } from '@/store';
 import { getCountryFlag } from '@/lib/countryFlag';

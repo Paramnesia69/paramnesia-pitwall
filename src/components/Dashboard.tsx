@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useCallback, useEffect, lazy, Suspense } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import type { NormalizedRaceEvent, SeriesId } from '@/types';
@@ -31,6 +31,7 @@ import NextAlarmBadge from '@/components/ui/NextAlarmBadge';
 import OfflineBadge from '@/components/ui/OfflineBadge';
 import Toaster from '@/components/ui/Toaster';
 import SpoilerShieldToggle from '@/components/ui/SpoilerShieldToggle';
+import PanelBoundary from '@/components/PanelBoundary';
 
 /* ── Lazy-loaded below-fold components ──────────── */
 const StandingsPanel = lazy(() => import('@/components/StandingsPanel'));
@@ -303,32 +304,38 @@ export default function Dashboard({ featured, upcoming, seasonStats, newsFeedSlo
 
       {/* ── Championship Standings ─────────────── */}
       {(activeFilter === 'all' || ['f1','wec','elms','imsa','motogp','dtm','wrc'].includes(activeFilter)) && (
-        <Suspense>
-          <StandingsPanel
-            key={activeFilter}
-            defaultTab={activeFilter !== 'all' ? activeFilter as 'f1'|'wec'|'elms'|'imsa'|'motogp'|'dtm'|'wrc' : undefined}
-          />
-        </Suspense>
+        <PanelBoundary label="Championship standings">
+          <Suspense>
+            <StandingsPanel
+              key={activeFilter}
+              defaultTab={activeFilter !== 'all' ? activeFilter as 'f1'|'wec'|'elms'|'imsa'|'motogp'|'dtm'|'wrc' : undefined}
+            />
+          </Suspense>
+        </PanelBoundary>
       )}
 
       {/* ── Recent Results ──────────────────── */}
-      <Suspense>
-        <RecentResults activeFilter={activeFilter} />
-      </Suspense>
+      <PanelBoundary label="Recent results">
+        <Suspense>
+          <RecentResults activeFilter={activeFilter} />
+        </Suspense>
+      </PanelBoundary>
 
       {/* ── Race Highlights — streamed from server ── */}
-      {highlightsSlot}
+      <PanelBoundary label="Race highlights">{highlightsSlot}</PanelBoundary>
 
       {/* ── Race Diary — your watched/rated races ── */}
-      <Suspense>
-        <DiaryView activeFilter={activeFilter} />
-      </Suspense>
+      <PanelBoundary label="Race diary">
+        <Suspense>
+          <DiaryView activeFilter={activeFilter} />
+        </Suspense>
+      </PanelBoundary>
 
       {/* ── Latest News — streamed from server ── */}
-      {newsFeedSlot}
+      <PanelBoundary label="News feed">{newsFeedSlot}</PanelBoundary>
 
       {/* ── Podcasts — streamed from server ── */}
-      {podcastsSlot}
+      <PanelBoundary label="Podcasts">{podcastsSlot}</PanelBoundary>
 
       {/* ── Event Cards Grid ─────────────────── */}
       <FadeIn delay={0.1}>

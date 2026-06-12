@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, type ReactNode, type MouseEvent } from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { m as motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useIsCoarsePointer } from '@/lib/useMediaQuery';
 
 interface TiltCardProps {

@@ -83,6 +83,17 @@
 - `getCircuitImage(name)` in `src/lib/images.ts` is a flat lookup table → local paths only
 - No external CDN remote patterns needed in `next.config.mjs`
 
+## Framer Motion LazyMotion (Phase D, 2026-06-12)
+- All client components import `m as motion` from framer-motion (NOT the full `motion` proxy) — JSX stays `motion.div`.
+- `MotionProvider` in layout.tsx wraps the app in `<LazyMotion strict>` with the feature pack loaded **async** (`src/lib/motionFeatures.ts` re-exports `domMax`) so it stays out of the initial bundle.
+- `domMax` (not domAnimation) is required — mobile bottom sheets use drag.
+- `strict` throws at runtime if a full `motion.*` component is reintroduced — when adding new animated components, always `import { m as motion }`.
+
+## Testing & Data Validation (Phase D, 2026-06-12)
+- Vitest (`npm test`); `prebuild` runs the suite so Vercel builds fail on test/data errors. `npx next build` directly does NOT trigger prebuild — use `npm run build` to get the gate.
+- `tests/data-validation.test.ts` zod-validates calendar/results/standings (unique ids, ISO dates, 2-letter country codes, sequential podium/pos, non-increasing points).
+- Time-dependent tests (clinch, conflicts) pin the clock with `vi.setSystemTime`.
+
 ## Framer Motion v12 Collapse Wrappers
 - **NEVER use `transitionEnd: { overflow: 'visible' }`** for `height: 'auto'` collapse animations — it does not reliably fire in FM v12, leaving the wrapper permanently `overflow: hidden` and clipping box-shadows of edge-column cards.
 - **Correct pattern**: `useRef<HTMLDivElement>` + `onAnimationStart → hidden` + `onAnimationComplete → visible` + pre-set `hidden` synchronously in the toggle handler before collapse begins. This bypasses FM's value system entirely.

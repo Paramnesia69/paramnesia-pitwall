@@ -16,8 +16,8 @@
 - **Phase A — done (5861fcb)**: mobile foundation (skipped: reduced-motion support)
 - **Phase B — done (1c0bc7c)**: endurance mode, live-hero ambience, toasts, unified skeletons
 - **Phase C — done (c08f782 + f3a522b)**: Spoiler Shield, clinch calculator, ⌘K palette, Web Push
-- **Phase D**: error boundaries, LazyMotion bundle cut, zod data validation, first tests
-- Ask user which items from the next phase before starting it
+- **Phase D — done**: PanelBoundary error boundaries, LazyMotion (m-as-motion + async domMax), zod data validation, Vitest (39 tests, runs in prebuild)
+- All four phases complete — plan executed in full
 
 ## Web Push runtime notes
 - VAPID keys: Vercel env (NEXT_PUBLIC_VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY, VAPID_SUBJECT) + .env.local

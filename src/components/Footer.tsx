@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { SERIES_META } from '@/types';
 import type { SeriesId } from '@/types';
 
