@@ -49,16 +49,11 @@ export default memo(function EventCard({ event }: EventCardProps) {
     <div className="h-full" onClick={() => openEvent(event.id)}>
       <TiltCard accentColor={meta.accent} className="h-full">
 
-        {/* Faded series logo — background watermark */}
+        {/* Faded series logo — watermark, bottom-centre, behind the action row */}
         {meta.logo && (
           <div
-            className="absolute right-3 top-1/2 -translate-y-1/2 w-44 h-44 pointer-events-none select-none"
-            style={{
-              opacity: 0.18,
-              zIndex: 0,
-              maskImage: 'radial-gradient(ellipse at center, black 55%, transparent 90%)',
-              WebkitMaskImage: 'radial-gradient(ellipse at center, black 55%, transparent 90%)',
-            }}
+            className="absolute left-1/2 -translate-x-1/2 pointer-events-none select-none"
+            style={{ bottom: 14, width: 145, height: 73, opacity: 0.07, zIndex: 0 }}
           >
             <Image
               src={meta.logo}
@@ -105,8 +100,13 @@ export default memo(function EventCard({ event }: EventCardProps) {
         <div className="flex items-start gap-3" style={{ transform: 'translateZ(30px)' }}>
           <CircuitEmblem circuitName={event.circuit.name} size={40} opacity={0.58} />
           <div className="min-w-0">
-            <h4 className="text-lg font-semibold tracking-tight leading-tight">{event.name}</h4>
-            <p className="text-sm mt-1" style={{ color: 'var(--pw-text-secondary)' }}>
+            <h4
+              className="text-base font-bold tracking-tight leading-tight"
+              style={{ fontFamily: 'var(--font-orbitron), var(--pw-font-display)' }}
+            >
+              {event.name}
+            </h4>
+            <p className="text-sm mt-1.5" style={{ color: 'var(--pw-text-secondary)' }}>
               {flag && <span className="mr-1">{flag}</span>}{event.circuit.name} — {event.circuit.country}
             </p>
           </div>
@@ -119,42 +119,46 @@ export default memo(function EventCard({ event }: EventCardProps) {
           </div>
         )}
 
-        {/* Session progress dots */}
-        {event.sessions.length > 0 && (
-          <div className="flex items-center gap-1.5" style={{ transform: 'translateZ(10px)' }}>
-            {event.sessions.map((s, i) => (
-              <div
-                key={i}
-                style={{
-                  width: 5, height: 5, borderRadius: '50%', flexShrink: 0,
-                  background: s.state === 'live' ? '#E10600' : s.state === 'finished' ? 'rgba(255,255,255,0.18)' : meta.accent,
-                  opacity: s.state === 'finished' ? 0.4 : 0.85,
-                  boxShadow: s.state === 'live' ? '0 0 6px rgba(225,6,0,0.7)' : 'none',
-                }}
-              />
-            ))}
-          </div>
-        )}
-
-        {/* Session times */}
+        {/* Session times — two-column aligned grid, Orbitron numerals */}
         {upcomingSessions.length > 0 && (
-          <div className="flex flex-wrap gap-x-3 gap-y-1 text-[11px] font-mono" style={{ color: 'var(--pw-text-tertiary)', transform: 'translateZ(10px)' }}>
-            {upcomingSessions.map((s, i) => (
-              <span key={i} className="flex items-center gap-1">
-                {s.state === 'live' && <span className="pw-live-dot" style={{ width: 5, height: 5 }} />}
-                <span style={{ color: s.state === 'live' ? '#E10600' : undefined }}>{s.name}</span>
-                <span>{formatTimeISR(s.startTime)}</span>
-                {s.state !== 'live' && (
-                  <ReminderButton
-                    eventId={event.id}
-                    eventName={event.name}
-                    sessionName={s.name}
-                    sessionStart={s.startTime}
-                    accentColor={meta.accent}
-                  />
-                )}
-              </span>
-            ))}
+          <div className="grid grid-cols-2 gap-2" style={{ transform: 'translateZ(10px)' }}>
+            {upcomingSessions.map((s, i) => {
+              const live = s.state === 'live';
+              return (
+                <div
+                  key={i}
+                  className="flex items-center justify-between gap-1 px-2.5 py-2 rounded-lg overflow-hidden"
+                  style={{
+                    background: live ? `${meta.accent}14` : 'rgba(255,255,255,0.035)',
+                    border: `1px solid ${live ? `${meta.accent}40` : 'var(--pw-glass-border)'}`,
+                  }}
+                >
+                  <span
+                    className="text-[11px] truncate"
+                    style={{ color: live ? meta.accent : 'var(--pw-text-secondary)' }}
+                  >
+                    {s.name}
+                  </span>
+                  <div className="flex items-center gap-0.5 shrink-0">
+                    <span
+                      className="text-[12px] font-bold tabular-nums"
+                      style={{ fontFamily: 'var(--font-orbitron), var(--pw-font-mono)' }}
+                    >
+                      {formatTimeISR(s.startTime)}
+                    </span>
+                    {!live && (
+                      <ReminderButton
+                        eventId={event.id}
+                        eventName={event.name}
+                        sessionName={s.name}
+                        sessionStart={s.startTime}
+                        accentColor={meta.accent}
+                      />
+                    )}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         )}
 
