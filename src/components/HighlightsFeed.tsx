@@ -108,8 +108,8 @@ function HighlightCard({
           <TimeAgo date={item.publishedAt} />
         </div>
         <h4
-          className="text-sm font-semibold leading-snug line-clamp-2"
-          style={{ color: 'var(--pw-text-primary)' }}
+          className="text-[13px] font-bold leading-snug line-clamp-2"
+          style={{ color: 'var(--pw-text-primary)', fontFamily: 'var(--font-orbitron), var(--pw-font-display)' }}
         >
           {item.title}
         </h4>
@@ -181,8 +181,8 @@ function Lightbox({
             <div className="w-1 h-5 rounded-full" style={{ background: accent }} />
             <div className="min-w-0 flex-1">
               <h4
-                className="text-sm font-semibold leading-snug truncate"
-                style={{ color: 'var(--pw-text-primary)' }}
+                className="text-[13px] font-bold leading-snug truncate"
+                style={{ color: 'var(--pw-text-primary)', fontFamily: 'var(--font-orbitron), var(--pw-font-display)' }}
               >
                 {item.title}
               </h4>

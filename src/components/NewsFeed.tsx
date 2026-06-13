@@ -74,8 +74,8 @@ function NewsItem({ item, index }: { item: NormalizedNewsItem; index: number }) 
 
       {/* Title */}
       <h4
-        className="text-sm font-semibold leading-snug mb-1.5 transition-colors"
-        style={{ color: 'var(--pw-text-primary)' }}
+        className="text-[13px] font-bold leading-snug mb-1.5 transition-colors"
+        style={{ color: 'var(--pw-text-primary)', fontFamily: 'var(--font-orbitron), var(--pw-font-display)' }}
       >
         {item.title}
       </h4>
