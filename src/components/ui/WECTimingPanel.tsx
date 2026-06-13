@@ -9,12 +9,12 @@ interface Props {
   eventState: string;
 }
 
-/** Class accent colours — LMP2/LMGT3 follow the official ELMS/ACO race-plate
- * palette; Hypercar uses the WEC blue (this is a WEC/Le Mans context). */
+/** Class accent colours — official ELMS/ACO race-plate palette.
+ * Drives each class's active tab (banner) + its leaderboard accent. */
 const CLASS_COLOR: Record<string, string> = {
-  HYPERCAR: '#0090D4',
-  LMP2: '#1E4B8C',
-  LMGT3: '#1A6B38',
+  HYPERCAR: '#E10600', // red
+  LMP2: '#1E4B8C',     // blue
+  LMGT3: '#1A6B38',    // green
 };
 
 function ManufacturerLogo({ entry, fallback }: { entry: WECTimingEntry; fallback: string }) {
@@ -127,15 +127,16 @@ export default function WECTimingPanel({ accentColor, eventState }: Props) {
         {data.classes.map((c) => {
           const col = CLASS_COLOR[c.name] ?? accentColor;
           const on = c.name === activeTab;
+          // Active tab wears its class colour; all other tabs are neutral blue.
           return (
             <button
               key={c.name}
               onClick={() => setTab(c.name)}
               className="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wide transition-colors active:scale-95"
               style={{
-                background: on ? `${col}22` : 'var(--pw-glass-bg)',
-                border: `1px solid ${on ? `${col}66` : 'var(--pw-glass-border)'}`,
-                color: on ? col : 'var(--pw-text-tertiary)',
+                background: on ? `${col}22` : `${accentColor}14`,
+                border: `1px solid ${on ? `${col}66` : `${accentColor}3a`}`,
+                color: on ? col : accentColor,
               }}
             >
               {c.name}

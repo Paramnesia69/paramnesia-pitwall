@@ -186,7 +186,7 @@ export default function EnduranceTracker({ startTime, durationHours, circuitName
           {/* The prototype, riding on the road at the current position */}
           <motion.div
             className="absolute pointer-events-none"
-            style={{ bottom: 13 }}
+            style={{ bottom: 12 }}
             initial={false}
             animate={{ left: `${pct}%` }}
             transition={{ type: 'spring', stiffness: 60, damping: 20 }}
@@ -206,13 +206,13 @@ export default function EnduranceTracker({ startTime, durationHours, circuitName
                 />
               )}
               <img
-                src="/endurance-car.png"
+                src="/lemans-prototype.png"
                 alt=""
-                width={54}
-                height={16}
+                width={56}
+                height={13}
                 style={{
                   display: 'block',
-                  width: 54,
+                  width: 56,
                   height: 'auto',
                   filter: isNight
                     ? 'brightness(0.72) saturate(0.9) drop-shadow(0 2px 3px rgba(0,0,0,0.55))'
