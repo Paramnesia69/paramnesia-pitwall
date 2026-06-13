@@ -62,7 +62,11 @@ src/
 │   └── ui/                   # Atomic: Countdown, WeatherBadge, ReminderButton, LiveIndicator,
 │       │                     # InstallPrompt, UpdateBanner, ShareButton, ThemeToggle
 │       ├── SheetGrip.tsx     # Drag handle for mobile bottom-sheet overlays (sticky, -mb-7)
+│       ├── CircuitEmblem.tsx # Small frameless white track silhouette by the circuit name (getCircuitFilter → invert white)
+│       ├── SeriesEmblem.tsx  # Natural-colour series logo; mirrors CircuitEmblem on RecentResults
 │       └── F1TimingPanel.tsx # Fetches /api/openf1/timing; polls 45s when live
+│   # NOTE: src/app/icon.png = Next canonical round favicon (see decisions.md Logo & Watermark System — FINAL)
+│   # NOTE: all series logos render NATURAL brand colours everywhere (Porsche-only invert); no grayscale/screen/mask
 ├── data/
 │   ├── calendar-2026.ts      # Static race calendar (REAL data, never invented)
 │   ├── news-2026.ts          # Static news fallback items

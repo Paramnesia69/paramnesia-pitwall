@@ -6,18 +6,38 @@
 - `/deploy` — push uncommitted changes live
 - `/pitwall-agent <task>` — spawn dedicated data agent (use when main conversation is long/bloated)
 
-## Last Commits (2026-06-13 — Visual Redesign)
-`fefe4f1` — premium event-card redesign: Orbitron title+times, 2-col session grid, bottom-centre faded watermark (145px/0.07)
-`aab1d5a` — canonical round favicon via src/app/icon.png (defeats cached square)
-`f6a9893` — unified premium circuit watermarks (cleaned SVGs, thin cap 1.05%, uniform white) + round icon PNGs v3
-`8a05065` — restore series-logo watermark on hero + event cards; circuit = small emblem
-`dd6481b` — watermark rework B+C (lanes + circuit emblems)
-`8b8b547` — fix: Jolpica pagination — Monaco GP results were missing
+## Last Commits (2026-06-13 — Visual Redesign, DONE)
+`4243928` — circuit emblems on This Weekend + Mini-Leaderboard; standings tabs natural logos
+`58bcbe2` — Points Trajectory dashes the lower teammate of each same-colour pair
+`426084f` — filter-bar logos render NATURAL brand colours (dropped grayscale+screen+mask)
+`01b28ac` — IMSA + series emblems render natural brand colours (not white box)
+`c9f8599` — reminder bell clickable (portal dropdown), F1+GT filter-bar logos
+`555b620` — series-logo emblem on Recent Results (mirrors circuit emblem)
+`a5f2e2c` — Orbitron title type on Recent Results / News / Highlights
+`fefe4f1` — premium event-card redesign: Orbitron title+times, 2-col session grid
+`aab1d5a` — round favicon via src/app/icon.png
+`f6a9893` — unified premium circuit watermarks (cleaned SVGs, thin, uniform)
 
-## In progress (2026-06-13)
-Rolling the new card design + Orbitron type onto the other main cards:
-- Recent Results (PodiumCard), News cards — apply new design/fonts
-- Highlights — restyle ONLY the bottom title text, rest stays identical (user: highlights card is "perfect")
+## Visual Redesign — COMPLETE (2026-06-13)
+Whole-app premium pass, all shipped & live. See decisions.md "Logo & Watermark System"
+and "Card Design & Typography". Summary:
+- **Logos render NATURAL brand colours everywhere** (filter bar, standings tabs,
+  mini-leaderboard, series emblems) — only Porsche inverts (dark-fill). The old
+  grayscale+contrast+brightness+screen+mask stack was removed; it crushed red logos.
+- **CircuitEmblem** (small white track silhouette) sits by the event/circuit name on
+  Hero, EventCard, RecentResults, ThisWeekend, MiniLeaderboard.
+- **SeriesEmblem** (natural logo) mirrors it on RecentResults, right of the name.
+- **Orbitron** titles + times + 2-col/auto-fit session grids across Hero, EventCard,
+  RecentResults, News, Highlights, ThisWeekend.
+- Circuit SVGs all cleaned (no corner numbers/markers), stroke-capped 1.05% thin,
+  Shanghai replaced from Wikimedia, Portimão dots stripped.
+- Round favicon (app/icon.png). Reminder dropdown portalled (was clipped). Points
+  Trajectory dashes the lower teammate.
+
+## Still open / offered (not done — user didn't pick up)
+- "What's Live" floating badge still has the black-F1 logo bug (same one-line fix as MiniLeaderboard)
+- Nürburgring filter-bar logo may read faint in natural form
+- H2H bars don't yet distinguish same-colour teammates (names flank them, so low priority)
 
 ## Phase Plan (user-approved, executing phase by phase)
 - **Phase A — done (5861fcb)**: mobile foundation (skipped: reduced-motion support)
