@@ -9,9 +9,10 @@ interface Props {
   eventState: string;
 }
 
-/** Class accent colours — match the official ELMS/ACO race-plate palette. */
+/** Class accent colours — LMP2/LMGT3 follow the official ELMS/ACO race-plate
+ * palette; Hypercar uses the WEC blue (this is a WEC/Le Mans context). */
 const CLASS_COLOR: Record<string, string> = {
-  HYPERCAR: '#E10600',
+  HYPERCAR: '#0090D4',
   LMP2: '#1E4B8C',
   LMGT3: '#1A6B38',
 };
@@ -107,8 +108,8 @@ export default function WECTimingPanel({ accentColor, eventState }: Props) {
         <div className="flex items-center gap-2">
           <h4 className="text-[10px] uppercase tracking-widest" style={{ color: 'var(--pw-text-tertiary)' }}>Live Classification</h4>
           {isLive && (
-            <span className="flex items-center gap-1 text-[9px] font-bold uppercase" style={{ color: '#E10600' }}>
-              <span className="rounded-full animate-pulse" style={{ width: 5, height: 5, background: '#E10600', display: 'inline-block' }} />
+            <span className="flex items-center gap-1 text-[9px] font-bold uppercase" style={{ color: accentColor }}>
+              <span className="rounded-full animate-pulse" style={{ width: 5, height: 5, background: accentColor, display: 'inline-block' }} />
               Live
             </span>
           )}
