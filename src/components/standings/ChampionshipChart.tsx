@@ -23,6 +23,15 @@ export default function ChampionshipChart({ drivers, maxDrivers = 6, round }: Pr
   const topN = withData.slice(0, maxDrivers);
   if (topN.length < 2) return null;
 
+  // Teammates share a team colour — dash the lower-positioned one of each pair
+  // so the two lines are tellable apart.
+  const seenColor = new Set<string>();
+  const isSecondary = new Map<DriverStanding, boolean>();
+  for (const d of topN) {
+    isSecondary.set(d, seenColor.has(d.teamColor));
+    seenColor.add(d.teamColor);
+  }
+
   const numRounds = Math.max(...topN.map((d) => d.roundPoints!.length));
   const maxPts   = Math.max(...topN.flatMap((d) => d.roundPoints!));
 
@@ -102,7 +111,8 @@ export default function ChampionshipChart({ drivers, maxDrivers = 6, round }: Pr
                         strokeWidth={isLeader ? 2.2 : 1.6}
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        opacity={isLeader ? 0.9 : 0.55}
+                        strokeDasharray={isSecondary.get(d) ? '5 4' : undefined}
+                        opacity={isLeader ? 0.9 : 0.6}
                       />
                       {pts.map((v, i) => (
                         <circle key={i} cx={xAt(i)} cy={yAt(v)} r={i === pts.length - 1 ? 3.2 : 1.8}
@@ -117,7 +127,13 @@ export default function ChampionshipChart({ drivers, maxDrivers = 6, round }: Pr
             <div className="flex flex-wrap gap-x-5 gap-y-1.5 mt-2.5">
               {topN.map((d, i) => (
                 <div key={i} className="flex items-center gap-1.5">
-                  <span className="rounded-full shrink-0" style={{ width: 7, height: 7, background: d.teamColor, opacity: 0.85 }} />
+                  {isSecondary.get(d) ? (
+                    <svg width="14" height="6" className="shrink-0" aria-hidden>
+                      <line x1="0" y1="3" x2="14" y2="3" stroke={d.teamColor} strokeWidth="2" strokeDasharray="3 2" strokeLinecap="round" opacity="0.85" />
+                    </svg>
+                  ) : (
+                    <span className="rounded-full shrink-0" style={{ width: 7, height: 7, background: d.teamColor, opacity: 0.85 }} />
+                  )}
                   <span className="text-[10px]" style={{ color: 'var(--pw-text-tertiary)' }}>{d.name}</span>
                 </div>
               ))}
