@@ -53,7 +53,7 @@ export default memo(function EventCard({ event }: EventCardProps) {
         {meta.logo && (
           <div
             className="absolute left-1/2 -translate-x-1/2 pointer-events-none select-none"
-            style={{ bottom: 14, width: 145, height: 73, opacity: 0.07, zIndex: 0 }}
+            style={{ bottom: 14, width: 145, height: 73, opacity: 0.15, zIndex: 0 }}
           >
             <Image
               src={meta.logo}
