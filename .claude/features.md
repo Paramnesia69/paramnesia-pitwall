@@ -54,7 +54,7 @@ Makes a 24H race feel live. Two buckets:
 - `gtwce.png`, `wec.png`, `elms.png` have non-transparent backgrounds — opacity 0.18 + `maskImage: radial-gradient(ellipse at center, black 50%, transparent 85%)` keeps it acceptable. Never use `mixBlendMode: screen` — iOS Safari drops it inside stacking contexts.
 - **Series watermarks** — no filter, natural brand colors, opacity 0.12–0.18, radial-gradient maskImage. Porsche SVG only: `brightness(0) invert(1)`.
 - **Circuit map watermarks** — self-hosted Wikimedia SVGs, NO filter, opacity 0.22–0.28. 2022 F1 CourseLayout SVGs cleaned: DRS boxes, Speed Trap, and legend (アイコン group) all stripped. Only track + sector colours + corner numbers remain.
-- Peugeot logo inverted (black shield → white); Aprilia/Yamaha tinted from black SVGs — not true brand colour; Porsche brand PNG gentle boost — not true gold. All acceptable.
+- Peugeot logo = authentic two-tone (`brand-peugeot-v2.png`: black shield + white border/text/lion, no filter); Aprilia/Yamaha tinted from black SVGs — not true brand colour; Porsche brand PNG gentle boost — not true gold. All acceptable.
 - `images: { unoptimized: true }` required — no remote patterns needed (all circuit maps are self-hosted).
 - Weather API calls capped at 15 concurrent (rate limit avoidance).
 - TiltCard `overflow-hidden` clips absolute children — watermarks must fit within card bounds.

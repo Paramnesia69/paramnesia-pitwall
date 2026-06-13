@@ -49,7 +49,7 @@
 | Brand PNG default (StandingsPanel) | `brightness(1.1) saturate(1.4) contrast(1.0)` opacity 0.95 | Intentionally muted — logos sit in a dense table, not a hero card |
 | F1 context flag | `getTeamLogo(name, true)` | F1 teams need white logos in F1 contexts, brand logos in WEC/DTM contexts |
 | Mercedes-AMG, McLaren, Audi | `brightness(0) invert(1) opacity(0.85)` | Black-fill badges → white on dark bg |
-| Peugeot | `brightness(0) invert(1) opacity(0.9)` | bg-stripped black shield → white; visible on dark bg |
+| Peugeot | `cssFilter: 'none'` — authentic two-tone `brand-peugeot-v2.png` | User wanted the real emblem (black shield + white border/text/lion), not the inverted white blob. Source was a black silhouette with transparent cutouts; rebuilt by flood-filling the enclosed cutouts white. |
 | Genesis | `brightness(1.8) contrast(1.2)` | Chrome emblem — boost but preserve metallic look |
 | Porsche brand PNG | `brightness(1.1) saturate(1.8) contrast(1.05)` | Dark gold badge — gentle boost to preserve gold tones without blowing out |
 | AF Corse / Vista AF | Mapped to brand-ferrari.png | AF Corse and Vista AF run Ferrari cars |

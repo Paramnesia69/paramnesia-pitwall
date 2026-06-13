@@ -113,7 +113,7 @@ public/
 │       ├── f1-{team}.webp        # Official F1 white WebPs (11 teams)
 │       ├── brand-{make}.png      # car-logos-dataset badge PNGs (transparent bg)
 │       ├── brand-genesis.png     # pngwing high-quality (transparent bg)
-│       ├── brand-peugeot.png     # bg stripped via Pillow; black shield
+│       ├── brand-peugeot-v2.png  # authentic two-tone: black shield + white border/text/lion (cutouts filled white via Pillow flood-fill)
 │       ├── ducati.svg, aprilia.svg, yamaha.svg, ktm.svg   # Moto brand SVGs
 ```
 
@@ -156,7 +156,7 @@ Three tiers (resolved in order):
    - KTM → `ktm.svg` — no filter (orange background badge, natural)
 3. **Brand PNGs** (`MFR_MAP + partialMfrMatch`) → `{ src, white: false, png: true, cssFilter? }`:
    - Mercedes-AMG, Audi, McLaren: `brightness(0) invert(1) opacity(0.85)` (black badge → white)
-   - Peugeot/Citroën: `brightness(0) invert(1) opacity(0.9)` (bg stripped, black shield → white)
+   - Peugeot/Citroën: `cssFilter: 'none'` — authentic two-tone `brand-peugeot-v2.png` (black shield + white border/text/lion), no filter
    - Genesis: `brightness(1.8) contrast(1.2)` (chrome emblem boost)
    - AF Corse / Vista AF: mapped to `brand-ferrari.png`
    - Default: no cssFilter → component applies `brightness(1.6) saturate(2.5) contrast(1.2)`

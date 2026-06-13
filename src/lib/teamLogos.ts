@@ -123,9 +123,9 @@ const MFR_MAP: Record<string, string> = {
   Hyundai:                     '/logos/constructors/brand-hyundai.png',
   'Hyundai Motorsport':        '/logos/constructors/brand-hyundai.png',
   Lancia:                      '/logos/constructors/brand-lancia.png',
-  Peugeot:                     '/logos/constructors/brand-peugeot.png',
-  'Peugeot TotalEnergies':     '/logos/constructors/brand-peugeot.png',
-  Citroën:                     '/logos/constructors/brand-peugeot.png',
+  Peugeot:                     '/logos/constructors/brand-peugeot-v2.png',
+  'Peugeot TotalEnergies':     '/logos/constructors/brand-peugeot-v2.png',
+  Citroën:                     '/logos/constructors/brand-peugeot-v2.png',
   Acura:                       '/logos/constructors/brand-acura.png',
   'Wayne Taylor Acura':        '/logos/constructors/brand-acura.png',
   'MSR Acura':                 '/logos/constructors/brand-acura.png',
@@ -175,7 +175,7 @@ function partialMfrMatch(lower: string): string | null {
   if (lower.includes('cadillac')) return '/logos/constructors/brand-cadillac.png';
   if (lower.includes('acura')) return '/logos/constructors/brand-acura.png';
   if (lower.includes('corvette')) return '/logos/constructors/brand-corvette.png';
-  if (lower.includes('peugeot') || lower.includes('citroën') || lower.includes('citroen')) return '/logos/constructors/brand-peugeot.png';
+  if (lower.includes('peugeot') || lower.includes('citroën') || lower.includes('citroen')) return '/logos/constructors/brand-peugeot-v2.png';
   if (lower.includes('lancia')) return '/logos/constructors/brand-lancia.png';
   if (lower.includes('alpine')) return '/logos/constructors/brand-alpine.png';
   if (lower.includes('mclaren')) return '/logos/constructors/brand-mclaren.png';
@@ -223,9 +223,10 @@ export function getTeamLogo(teamName: string, f1Context = false): TeamLogoInfo |
       return { src, white: false, cssFilter: 'brightness(0) invert(1) opacity(0.85)', png: true };
     if (lower.includes('mclaren'))
       return { src, white: false, cssFilter: 'brightness(0) invert(1) opacity(0.85)', png: true };
-    // Peugeot: bg-stripped black shield — invert to white for dark bg visibility
+    // Peugeot: authentic two-tone emblem (black shield + white border/text/lion) —
+    // render naturally, no filter (the brand-peugeot-v2 asset is already black+white)
     if (lower.includes('peugeot') || lower.includes('citroen') || lower.includes('citroën'))
-      return { src, white: false, cssFilter: 'brightness(0) invert(1) opacity(0.9)', png: true };
+      return { src, white: false, cssFilter: 'none', png: true };
     // Genesis: chrome/chrome-on-white emblem — brightness boost makes it read clearly
     if (lower.includes('genesis'))
       return { src, white: false, cssFilter: 'brightness(1.8) contrast(1.2)', png: true };
