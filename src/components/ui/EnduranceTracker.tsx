@@ -125,9 +125,10 @@ export default function EnduranceTracker({ startTime, durationHours, circuitName
           <div className="text-[10px] uppercase tracking-wider" style={{ color: 'var(--pw-text-tertiary)' }}>Elapsed</div>
         </div>
 
-        {/* The lane: a road the hypercar drives along, under a day/night sky.
+        {/* The lane: the Circuit de la Sarthe straight the prototype runs down,
+            under a day/night sky. Kerbs + centre line + a chequered finish.
             Sun rises/sets and the moon rides the night at the real fractions. */}
-        <div className="relative flex-1 h-10">
+        <div className="relative flex-1 h-12">
           {/* Celestial marks above the road */}
           {inRange(sunsetFrac) && (
             <span className="absolute top-0 -translate-x-1/2 pointer-events-none" style={{ left: `${sunsetFrac * 100}%` }}><Sun size={15} horizon /></span>
@@ -139,20 +140,15 @@ export default function EnduranceTracker({ startTime, durationHours, circuitName
             <span className="absolute top-0 -translate-x-1/2 pointer-events-none" style={{ left: `${sunriseFrac * 100}%` }}><Sun size={15} horizon /></span>
           )}
 
-          {/* Road surface (day/night tinted) */}
-          <div className="absolute left-0 right-0 rounded-full overflow-hidden" style={{ bottom: 2, height: 9, background: trackBg, border: '1px solid var(--pw-glass-border)' }}>
+          {/* Track surface (day/night tinted asphalt) */}
+          <div className="absolute left-0 right-0 rounded-md overflow-hidden" style={{ bottom: 2, height: 14, background: trackBg, border: '1px solid var(--pw-glass-border)' }}>
             {/* Travelled portion, brightened with accent */}
             <motion.div
               className="absolute left-0 top-0 bottom-0"
-              style={{ background: `linear-gradient(90deg, ${accent}38, ${accent}14)` }}
+              style={{ background: `linear-gradient(90deg, ${accent}3a, ${accent}12)` }}
               initial={false}
               animate={{ width: `${pct}%` }}
               transition={{ type: 'spring', stiffness: 60, damping: 20 }}
-            />
-            {/* Dashed centre line */}
-            <div
-              className="absolute left-2 right-2 top-1/2 -translate-y-1/2 h-px pointer-events-none"
-              style={{ backgroundImage: 'repeating-linear-gradient(90deg, rgba(255,255,255,0.5) 0 5px, transparent 5px 13px)', opacity: 0.35 }}
             />
             {/* Hour posts */}
             {Array.from({ length: durationHours - 1 }, (_, i) => (
@@ -162,16 +158,35 @@ export default function EnduranceTracker({ startTime, durationHours, circuitName
                 style={{
                   left: `${((i + 1) / durationHours) * 100}%`,
                   background: 'rgba(255,255,255,0.22)',
-                  opacity: (i + 1) % 6 === 0 ? 0.85 : 0.28,
+                  opacity: (i + 1) % 6 === 0 ? 0.8 : 0.22,
                 }}
               />
             ))}
+            {/* Dashed racing centre line */}
+            <div
+              className="absolute left-2 right-2 top-1/2 -translate-y-1/2 pointer-events-none"
+              style={{ height: 2, backgroundImage: 'repeating-linear-gradient(90deg, rgba(255,255,255,0.85) 0 7px, transparent 7px 18px)', opacity: 0.5 }}
+            />
+            {/* Le Mans kerbs — top + bottom, offset half-phase */}
+            <div
+              className="absolute left-0 right-0 top-0 pointer-events-none"
+              style={{ height: 2.5, backgroundImage: `repeating-linear-gradient(90deg, ${accent} 0 6px, #eef2f8 6px 12px)`, opacity: 0.9 }}
+            />
+            <div
+              className="absolute left-0 right-0 bottom-0 pointer-events-none"
+              style={{ height: 2.5, backgroundImage: `repeating-linear-gradient(90deg, #eef2f8 0 6px, ${accent} 6px 12px)`, opacity: 0.9 }}
+            />
+            {/* Chequered start/finish at the flag end */}
+            <div
+              className="absolute right-0 top-0 bottom-0 pointer-events-none"
+              style={{ width: 6, backgroundImage: 'repeating-conic-gradient(#0b0d12 0 25%, #eef2f8 0 50%)', backgroundSize: '6px 6px', opacity: 0.85 }}
+            />
           </div>
 
-          {/* The prototype, on the road at the current position */}
+          {/* The prototype, riding on the road at the current position */}
           <motion.div
             className="absolute pointer-events-none"
-            style={{ bottom: 4 }}
+            style={{ bottom: 13 }}
             initial={false}
             animate={{ left: `${pct}%` }}
             transition={{ type: 'spring', stiffness: 60, damping: 20 }}
@@ -182,11 +197,10 @@ export default function EnduranceTracker({ startTime, durationHours, circuitName
                 <div
                   className="absolute pointer-events-none"
                   style={{
-                    right: -14,
-                    top: '38%',
-                    width: 22,
+                    right: -16,
+                    bottom: 1,
+                    width: 24,
                     height: 12,
-                    transform: 'translateY(-50%)',
                     background: 'radial-gradient(ellipse at left center, rgba(255,243,200,0.85), rgba(255,243,200,0) 72%)',
                   }}
                 />
@@ -194,15 +208,15 @@ export default function EnduranceTracker({ startTime, durationHours, circuitName
               <img
                 src="/endurance-car.png"
                 alt=""
-                width={50}
+                width={54}
                 height={16}
                 style={{
                   display: 'block',
-                  width: 50,
+                  width: 54,
                   height: 'auto',
                   filter: isNight
-                    ? 'brightness(0.72) saturate(0.9) drop-shadow(0 1px 2px rgba(0,0,0,0.5))'
-                    : 'drop-shadow(0 1px 2px rgba(0,0,0,0.45))',
+                    ? 'brightness(0.72) saturate(0.9) drop-shadow(0 2px 3px rgba(0,0,0,0.55))'
+                    : 'drop-shadow(0 2px 3px rgba(0,0,0,0.5))',
                 }}
               />
             </div>
