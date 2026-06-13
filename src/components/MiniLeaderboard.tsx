@@ -11,8 +11,11 @@ interface Props {
   sessions: LiveSessionInfo[];
 }
 
-function logoFilter(logo: string): string {
-  return logo.includes('porsche') ? 'brightness(0) invert(1)' : 'grayscale(1) contrast(2) brightness(3)';
+// Natural brand colours (like the card watermarks); only Porsche (dark-fill)
+// needs whitening. The old grayscale+contrast filter crushed red logos (F1) to
+// black.
+function logoFilter(logo: string): string | undefined {
+  return logo.includes('porsche') ? 'brightness(0) invert(1)' : undefined;
 }
 
 export default function MiniLeaderboard({ sessions }: Props) {
@@ -75,7 +78,7 @@ export default function MiniLeaderboard({ sessions }: Props) {
                         alt={s.series}
                         fill
                         className="object-contain"
-                        style={{ filter: logoFilter(s.logo), mixBlendMode: 'screen' }}
+                        style={{ filter: logoFilter(s.logo) }}
                       />
                     </div>
                   ) : (
@@ -156,7 +159,7 @@ export default function MiniLeaderboard({ sessions }: Props) {
                             alt={s.series}
                             fill
                             className="object-contain"
-                            style={{ filter: logoFilter(s.logo), mixBlendMode: 'screen', opacity: 0.9 }}
+                            style={{ filter: logoFilter(s.logo), opacity: 0.9 }}
                           />
                         </div>
                       ) : (
