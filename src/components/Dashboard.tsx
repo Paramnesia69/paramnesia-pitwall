@@ -231,19 +231,13 @@ export default function Dashboard({ featured, upcoming, seasonStats, newsFeedSlo
             const meta = SERIES_META[id];
             // Porsche + F1 are dark/red-fill SVGs that the grayscale+brightness
             // filter crushes to near-black — invert them to a white silhouette instead
-            // IMSA's detailed badge looks best in its natural brand colours
-            // (like the series watermark) — render it unfiltered. Dark/red-fill
-            // logos (Porsche, F1, GT) get crushed by the grayscale filter, so
-            // invert them to a white silhouette instead.
-            const naturalLogo = meta.logo === '/logos/imsa.svg';
-            const invertWhite = meta.logo === '/logos/porsche.svg'
-              || meta.logo === '/logos/f1.svg'
-              || meta.logo === '/logos/gtwce-v2.png';
-            const logoFilter = naturalLogo
-              ? undefined
-              : invertWhite
+            // Render logos in their natural brand colours — exactly like the
+            // event-card series watermark. The old grayscale+contrast+brightness
+            // +screen stack washed them out and fattened the strokes. Only
+            // Porsche (dark-fill SVG) needs whitening to show on the dark bar.
+            const logoFilter = meta.logo === '/logos/porsche.svg'
               ? 'brightness(0) invert(1)'
-              : 'grayscale(1) contrast(2) brightness(3)';
+              : undefined;
             return (
               <motion.button
                 key={id}
@@ -264,8 +258,6 @@ export default function Dashboard({ featured, upcoming, seasonStats, newsFeedSlo
                     className="absolute inset-0"
                     style={{
                       opacity: isActive ? 1 : 0.6,
-                      maskImage: 'radial-gradient(ellipse at center, black 45%, transparent 85%)',
-                      WebkitMaskImage: 'radial-gradient(ellipse at center, black 45%, transparent 85%)',
                       transition: 'opacity 0.2s',
                     }}
                   >
@@ -277,7 +269,6 @@ export default function Dashboard({ featured, upcoming, seasonStats, newsFeedSlo
                         className="object-contain"
                         style={{
                           filter: logoFilter,
-                          mixBlendMode: naturalLogo ? 'normal' : 'screen',
                         }}
                       />
                     </div>
