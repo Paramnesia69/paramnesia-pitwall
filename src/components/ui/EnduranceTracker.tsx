@@ -140,8 +140,17 @@ export default function EnduranceTracker({ startTime, durationHours, circuitName
             <span className="absolute top-0 -translate-x-1/2 pointer-events-none" style={{ left: `${sunriseFrac * 100}%` }}><Sun size={15} horizon /></span>
           )}
 
-          {/* Track surface (day/night tinted asphalt) */}
-          <div className="absolute left-0 right-0 rounded-md overflow-hidden" style={{ bottom: 2, height: 14, background: trackBg, border: '1px solid var(--pw-glass-border)' }}>
+          {/* Road surface (day/night tinted) — clean premium track ribbon */}
+          <div
+            className="absolute left-0 right-0 rounded-full overflow-hidden"
+            style={{
+              bottom: 2,
+              height: 10,
+              background: trackBg,
+              border: '1px solid var(--pw-glass-border)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.14), inset 0 -3px 5px rgba(0,0,0,0.4)',
+            }}
+          >
             {/* Travelled portion, brightened with accent */}
             <motion.div
               className="absolute left-0 top-0 bottom-0"
@@ -158,28 +167,14 @@ export default function EnduranceTracker({ startTime, durationHours, circuitName
                 style={{
                   left: `${((i + 1) / durationHours) * 100}%`,
                   background: 'rgba(255,255,255,0.22)',
-                  opacity: (i + 1) % 6 === 0 ? 0.8 : 0.22,
+                  opacity: (i + 1) % 6 === 0 ? 0.75 : 0.2,
                 }}
               />
             ))}
-            {/* Dashed racing centre line */}
+            {/* Dashed centre line */}
             <div
-              className="absolute left-2 right-2 top-1/2 -translate-y-1/2 pointer-events-none"
-              style={{ height: 2, backgroundImage: 'repeating-linear-gradient(90deg, rgba(255,255,255,0.85) 0 7px, transparent 7px 18px)', opacity: 0.5 }}
-            />
-            {/* Le Mans kerbs — top + bottom, offset half-phase */}
-            <div
-              className="absolute left-0 right-0 top-0 pointer-events-none"
-              style={{ height: 2.5, backgroundImage: `repeating-linear-gradient(90deg, ${accent} 0 6px, #eef2f8 6px 12px)`, opacity: 0.9 }}
-            />
-            <div
-              className="absolute left-0 right-0 bottom-0 pointer-events-none"
-              style={{ height: 2.5, backgroundImage: `repeating-linear-gradient(90deg, #eef2f8 0 6px, ${accent} 6px 12px)`, opacity: 0.9 }}
-            />
-            {/* Chequered start/finish at the flag end */}
-            <div
-              className="absolute right-0 top-0 bottom-0 pointer-events-none"
-              style={{ width: 6, backgroundImage: 'repeating-conic-gradient(#0b0d12 0 25%, #eef2f8 0 50%)', backgroundSize: '6px 6px', opacity: 0.85 }}
+              className="absolute left-2 right-2 top-1/2 -translate-y-1/2 h-px pointer-events-none"
+              style={{ backgroundImage: 'repeating-linear-gradient(90deg, rgba(255,255,255,0.55) 0 5px, transparent 5px 13px)', opacity: 0.35 }}
             />
           </div>
 

@@ -127,16 +127,17 @@ export default function WECTimingPanel({ accentColor, eventState }: Props) {
         {data.classes.map((c) => {
           const col = CLASS_COLOR[c.name] ?? accentColor;
           const on = c.name === activeTab;
-          // Active tab wears its class colour; all other tabs are neutral blue.
+          // Each class always wears its own colour — active is brighter,
+          // inactive is the same hue dimmed (never changes colour = no flapping).
           return (
             <button
               key={c.name}
               onClick={() => setTab(c.name)}
               className="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wide transition-colors active:scale-95"
               style={{
-                background: on ? `${col}22` : `${accentColor}14`,
-                border: `1px solid ${on ? `${col}66` : `${accentColor}3a`}`,
-                color: on ? col : accentColor,
+                background: on ? `${col}26` : `${col}0d`,
+                border: `1px solid ${on ? `${col}70` : `${col}2e`}`,
+                color: on ? col : `${col}b0`,
               }}
             >
               {c.name}

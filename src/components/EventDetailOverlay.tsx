@@ -231,12 +231,12 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
                       className="pw-glass p-3 flex items-center justify-between"
                       style={{
                         opacity: session.state === 'finished' ? 0.5 : 1,
-                        borderColor: session.state === 'live' ? 'rgba(225,6,0,0.4)' : undefined,
+                        borderColor: session.state === 'live' ? `${SERIES_META[event.series].accent}66` : undefined,
                       }}
                     >
                       <div className="flex items-center gap-2">
                         {session.state === 'live' && <span className="pw-live-dot" style={{ width: 6, height: 6 }} />}
-                        <span className="text-sm font-medium">{session.name}</span>
+                        <span className="text-sm font-medium" style={session.state === 'live' ? { color: SERIES_META[event.series].accent } : undefined}>{session.name}</span>
                         {session.state === 'finished' && (
                           <span className="text-[10px] px-1.5 py-0.5 rounded" style={{ color: 'var(--pw-text-tertiary)', background: 'var(--pw-glass-bg)' }}>
                             Done
@@ -297,22 +297,16 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
                         rel="noopener noreferrer"
                         className="flex items-center gap-1.5 text-xs px-3.5 py-2 rounded-full transition-all duration-200 hover:scale-[1.03]"
                         style={{
-                          background: link.type === 'official'
+                          background: link.type === 'official' || link.type === 'youtube'
                             ? `${SERIES_META[event.series].accent}12`
-                            : link.type === 'youtube'
-                            ? 'rgba(255,0,0,0.08)'
                             : 'var(--pw-glass-bg)',
                           border: `1px solid ${
-                            link.type === 'official'
+                            link.type === 'official' || link.type === 'youtube'
                               ? `${SERIES_META[event.series].accent}30`
-                              : link.type === 'youtube'
-                              ? 'rgba(255,0,0,0.2)'
                               : 'var(--pw-glass-border)'
                           }`,
-                          color: link.type === 'official'
+                          color: link.type === 'official' || link.type === 'youtube'
                             ? SERIES_META[event.series].accent
-                            : link.type === 'youtube'
-                            ? '#FF4444'
                             : 'var(--pw-text-secondary)',
                         }}
                       >
