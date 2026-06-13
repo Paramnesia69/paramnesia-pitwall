@@ -8,7 +8,7 @@ import {
   getNextMilestone,
   getDaylightState,
 } from '@/lib/enduranceClock';
-import { PhaseIcon, Sun, Moon, Hypercar } from '@/components/ui/RaceIcons';
+import { PhaseIcon, Sun, Moon } from '@/components/ui/RaceIcons';
 
 interface EnduranceTrackerProps {
   /** Race start (ISO 8601) */
@@ -168,16 +168,43 @@ export default function EnduranceTracker({ startTime, durationHours, circuitName
             ))}
           </div>
 
-          {/* The hypercar, on the road at the current position */}
+          {/* The prototype, on the road at the current position */}
           <motion.div
             className="absolute pointer-events-none"
-            style={{ bottom: 7 }}
+            style={{ bottom: 4 }}
             initial={false}
             animate={{ left: `${pct}%` }}
             transition={{ type: 'spring', stiffness: 60, damping: 20 }}
           >
-            <div style={{ transform: 'translateX(-50%)' }}>
-              <Hypercar size={30} color={accent} night={isNight} />
+            <div className="relative" style={{ transform: 'translateX(-50%)' }}>
+              {/* Headlight beam (night only) — car faces right */}
+              {isNight && (
+                <div
+                  className="absolute pointer-events-none"
+                  style={{
+                    right: -14,
+                    top: '38%',
+                    width: 22,
+                    height: 12,
+                    transform: 'translateY(-50%)',
+                    background: 'radial-gradient(ellipse at left center, rgba(255,243,200,0.85), rgba(255,243,200,0) 72%)',
+                  }}
+                />
+              )}
+              <img
+                src="/endurance-car.png"
+                alt=""
+                width={50}
+                height={16}
+                style={{
+                  display: 'block',
+                  width: 50,
+                  height: 'auto',
+                  filter: isNight
+                    ? 'brightness(0.72) saturate(0.9) drop-shadow(0 1px 2px rgba(0,0,0,0.5))'
+                    : 'drop-shadow(0 1px 2px rgba(0,0,0,0.45))',
+                }}
+              />
             </div>
           </motion.div>
         </div>
