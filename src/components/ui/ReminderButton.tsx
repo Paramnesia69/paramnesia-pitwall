@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { useStore } from '@/store';
 import { requestNotificationPermission } from '@/lib/useReminders';
 import { queuePushReminder, removePushReminder } from '@/lib/usePush';
@@ -31,8 +32,9 @@ export default function ReminderButton({
   accentColor = '#E10600',
 }: ReminderButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [alignLeft, setAlignLeft] = useState(false);
+  const [menuPos, setMenuPos] = useState<{ top: number; left: number } | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const addReminder = useStore((s) => s.addReminder);
   const removeReminder = useStore((s) => s.removeReminder);
   const getReminder = useStore((s) => s.getReminder);
@@ -52,12 +54,15 @@ export default function ReminderButton({
       removePushReminder(eventId, sessionName);
       showToast(`Reminder removed — ${sessionName}`);
     } else {
-      // Anchor right edge by default; flip when there isn't room to the left
+      // Portal-positioned menu (fixed) so card overflow:hidden can't clip it —
+      // opens above the bell, right-aligned, clamped to the viewport
       const rect = e.currentTarget.getBoundingClientRect();
-      setAlignLeft(rect.right - 160 < 24);
+      const MENU_W = 168;
+      const left = Math.max(8, Math.min(rect.right - MENU_W, window.innerWidth - MENU_W - 8));
+      setMenuPos({ top: rect.top, left });
       setIsOpen((prev) => !prev);
     }
-  }, [isSet, existing, removeReminder, showToast, sessionName]);
+  }, [isSet, existing, removeReminder, showToast, sessionName, eventId]);
 
   const handleSelect = useCallback(async (minutes: number, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -72,13 +77,13 @@ export default function ReminderButton({
     setIsOpen(false);
   }, [addReminder, eventId, eventName, sessionName, sessionStart, showToast]);
 
-  // Close dropdown on outside click
+  // Close dropdown on outside click (ignore clicks on the bell or the portal menu)
   useEffect(() => {
     if (!isOpen) return;
     const handler = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
+      const t = e.target as Node;
+      if (dropdownRef.current?.contains(t) || menuRef.current?.contains(t)) return;
+      setIsOpen(false);
     };
     document.addEventListener('click', handler, true);
     return () => document.removeEventListener('click', handler, true);
@@ -111,11 +116,15 @@ export default function ReminderButton({
         )}
       </button>
 
-      {/* Dropdown */}
-      {isOpen && (
+      {/* Dropdown — portalled to body + fixed position so card overflow can't clip it */}
+      {isOpen && menuPos && createPortal(
         <div
-          className={`absolute ${alignLeft ? 'left-0' : 'right-0'} bottom-full mb-2 py-1 rounded-xl z-50 min-w-[160px]`}
+          ref={menuRef}
+          className="fixed py-1 rounded-xl z-[400] min-w-[168px]"
           style={{
+            top: menuPos.top - 8,
+            left: menuPos.left,
+            transform: 'translateY(-100%)',
             background: 'var(--pw-bg-elevated)',
             backdropFilter: 'blur(20px)',
             WebkitBackdropFilter: 'blur(20px)',
@@ -139,7 +148,8 @@ export default function ReminderButton({
               {opt.label}
             </button>
           ))}
-        </div>
+        </div>,
+        document.body,
       )}
     </div>
   );

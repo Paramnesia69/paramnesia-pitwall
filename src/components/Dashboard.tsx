@@ -229,9 +229,9 @@ export default function Dashboard({ featured, upcoming, seasonStats, newsFeedSlo
           {ALL_SERIES.map((id) => {
             const isActive = activeFilter === id;
             const meta = SERIES_META[id];
-            // JPG photos (nurburgring) need less aggressive brightness to avoid white bleed
-            // Porsche SVG is dark-fill — invert before grayscale+brightness so it shows on dark bg
-            const logoFilter = meta.logo === '/logos/porsche.svg'
+            // Porsche + F1 are dark/red-fill SVGs that the grayscale+brightness
+            // filter crushes to near-black — invert them to a white silhouette instead
+            const logoFilter = (meta.logo === '/logos/porsche.svg' || meta.logo === '/logos/f1.svg')
               ? 'brightness(0) invert(1)'
               : 'grayscale(1) contrast(2) brightness(3)';
             return (

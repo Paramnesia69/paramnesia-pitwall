@@ -270,7 +270,7 @@ export const SERIES_META: Record<
   gtwce: {
     name: 'GT World Challenge',
     accent: '#FF6B00',
-    logo: '/logos/gtwce.png',
+    logo: '/logos/gtwce-v2.png',
   },
   dtm: { name: 'DTM', accent: '#F5C518', logo: '/logos/dtm.svg' },
   'porsche-supercup': { name: 'Porsche Supercup', accent: '#C0A062', logo: '/logos/porsche.svg' },

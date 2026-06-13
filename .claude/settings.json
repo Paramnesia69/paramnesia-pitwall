@@ -69,7 +69,10 @@
       "Read(//Users/paramnesia/Documents/Claude/**)",
       "Bash(node -e ' *)",
       "Bash(git commit -q -m 'feat: hero session grid — aligned auto-fit cells, Orbitron times \\(countdown kept\\) *)",
-      "Bash(git commit -q -m 'feat: This Weekend cards — Orbitron title + new aligned session box \\(time+bell\\) *)"
+      "Bash(git commit -q -m 'feat: This Weekend cards — Orbitron title + new aligned session box \\(time+bell\\) *)",
+      "Bash(grep -oE 'fill[:=\"]*#?[0-9a-fA-F]{3,6}|fill[:=\"]*\\(currentColor|black|white|none\\)' public/logos/f1.svg)",
+      "Bash(node -e \"const sharp=require\\('sharp'\\);sharp\\('public/logos/gtwce.png'\\).metadata\\(\\).then\\(m=>console.log\\('size',m.width+'x'+m.height,'alpha',m.hasAlpha\\)\\).then\\(\\(\\)=>sharp\\('public/logos/gtwce.png'\\).extract\\({left:1,top:1,width:6,height:6}\\).stats\\(\\).then\\(s=>console.log\\('corner RGBA:',s.channels.map\\(c=>Math.round\\(c.mean\\)\\)\\)\\)\\)\")",
+      "Bash(git commit -q -m 'fix: reminder bell clickable \\(portal\\), F1 + GT filter-bar logos *)"
     ],
     "additionalDirectories": [
       "/private/tmp/src/data",
