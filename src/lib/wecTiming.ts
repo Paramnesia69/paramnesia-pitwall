@@ -38,6 +38,24 @@ function manufacturerOf(vehicle: string): string {
   return v.split(/\s+/)[0] ?? v;
 }
 
+/** Al Kamel single-letter tyre marque → readable label. */
+const TYRE_LABELS: Record<string, string> = {
+  M: 'Michelin',
+  G: 'Goodyear',
+  P: 'Pirelli',
+  H: 'Hankook',
+  D: 'Dunlop',
+};
+function tyreLabel(code: string): string {
+  const c = code.trim().toUpperCase();
+  return TYRE_LABELS[c] ?? (c || '');
+}
+
+/** Normalize a lap time ("3'26.580" → "3:26.580"); leave other shapes intact. */
+function normalizeLap(t: string): string {
+  return t.trim().replace("'", ':');
+}
+
 /**
  * Parse an Al Kamel classification CSV into normalized per-class leaderboards.
  * Pure + exported for testing against a saved fixture.
@@ -66,16 +84,22 @@ export function parseWecClassification(
     }
     return -1;
   };
+  // The live RACE file uses FL_TIME / FL_KPH for the fastest lap; practice/quali
+  // files use TIME / KPH. Resolve both so one parser covers every session.
   const idx = {
     pos: col('POS', 'POSITION'),
     number: col('NUMBER'),
-    time: col('TIME'),
+    time: col('FL_TIME', 'TIME'),
+    flLapNum: col('FL_LAPNUM'),
     gapFirst: col('GAP_FIRST'),
-    kph: col('KPH'),
+    gapPrev: col('GAP_PREVIOUS'),
+    kph: col('FL_KPH', 'KPH'),
     laps: col('LAPS'),
     team: col('TEAM'),
     cls: col('CLASS'),
     vehicle: col('VEHICLE'),
+    tyres: col('TYRES'),
+    status: col('STATUS'),
   };
 
   // Driver columns — either split first/second (DRIVERn_FIRSTNAME/SECONDNAME)
@@ -123,9 +147,13 @@ export function parseWecClassification(
       manufacturer: manufacturerOf(vehicle),
       laps: parseInt(r[idx.laps], 10) || 0,
       gapFirst: (r[idx.gapFirst] ?? '').trim(),
+      gapPrev: (r[idx.gapPrev] ?? '').trim(),
       gapClass: '',
-      bestLapTime: (r[idx.time] ?? '').trim(),
+      bestLapTime: normalizeLap(r[idx.time] ?? ''),
+      bestLapNum: (r[idx.flLapNum] ?? '').trim(),
       kph: (r[idx.kph] ?? '').trim(),
+      tyre: tyreLabel(r[idx.tyres] ?? ''),
+      status: (r[idx.status] ?? '').trim(),
       drivers,
     });
   }

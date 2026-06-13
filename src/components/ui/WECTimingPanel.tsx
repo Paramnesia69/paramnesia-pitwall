@@ -171,6 +171,17 @@ export default function WECTimingPanel({ accentColor, eventState }: Props) {
                   {e.drivers.length > 0 && (
                     <p className="text-[9px] truncate" style={{ color: 'var(--pw-text-tertiary)' }}>{e.drivers.join(' · ')}</p>
                   )}
+                  {(e.bestLapTime || e.kph || e.tyre) && (
+                    <p className="text-[9px] truncate flex items-center gap-1.5 mt-0.5" style={{ color: 'var(--pw-text-tertiary)' }}>
+                      {e.bestLapTime && (
+                        <span className="tabular-nums" style={{ fontFamily: 'var(--font-orbitron, monospace)', color: 'var(--pw-text-secondary)' }}>{e.bestLapTime}</span>
+                      )}
+                      {e.kph && <span className="tabular-nums opacity-80">{e.kph} km/h</span>}
+                      {e.tyre && (
+                        <span className="px-1 rounded-sm font-bold uppercase tracking-wide" style={{ background: `${col}1a`, color: `${col}d0`, fontSize: 8 }}>{e.tyre}</span>
+                      )}
+                    </p>
+                  )}
                 </div>
                 <div className="text-right flex-shrink-0">
                   <p className="text-[11px] font-bold tabular-nums" style={{ color: leader ? col : 'var(--pw-text-secondary)', fontFamily: 'var(--font-orbitron, monospace)' }}>

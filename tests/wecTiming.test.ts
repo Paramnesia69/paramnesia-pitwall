@@ -84,4 +84,12 @@ describe('parseWecClassification — live race schema', () => {
     expect(hc[1].classPos).toBe(2);
     expect(hc.every((e, i) => i === 0 || e.pos >= hc[i - 1].pos)).toBe(true);
   });
+
+  it('reads FL_TIME / FL_KPH / TYRES from the race schema (not the absent TIME/KPH cols)', () => {
+    const top = data.classes.find((c) => c.name === 'HYPERCAR')!.entries[0];
+    expect(top.bestLapTime).toBe('3:26.580'); // FL_TIME, apostrophe normalized
+    expect(top.bestLapNum).toBe('20');
+    expect(top.kph).toBe('237.5');            // FL_KPH
+    expect(top.tyre).toBe('Michelin');        // TYRES "M"
+  });
 });

@@ -68,8 +68,9 @@ export default function EnduranceTracker({ startTime, durationHours, circuitName
   const daylight = sun ? getDaylightState(now, sun) : 'day';
 
   // Day/night gradient mapped onto the race timeline (only when the race
-  // actually crosses sunset → it would be all-daylight otherwise).
-  let trackBg = 'var(--pw-glass-bg)';
+  // actually crosses sunset → it would be all-daylight otherwise). Rendered as
+  // a faint "sky wash" above the broadcast hairline, not a glowing fill.
+  let skyBg: string | null = null;
   let sunsetFrac: number | null = null;
   let sunriseFrac: number | null = null;
   if (sun) {
@@ -77,20 +78,20 @@ export default function EnduranceTracker({ startTime, durationHours, circuitName
     sunriseFrac = (new Date(sun.sunriseUtc).getTime() - start) / totalMs;
     const ss = Math.max(0, Math.min(1, sunsetFrac)) * 100;
     const sr = Math.max(0, Math.min(1, sunriseFrac)) * 100;
-    const DAY = 'rgba(255,196,110,0.30)';
-    const NIGHT = 'rgba(18,24,58,0.78)';
-    const DEEP = 'rgba(10,14,40,0.88)';
-    const DUSK = 'rgba(196,96,72,0.45)';
-    const DAWN = 'rgba(236,140,150,0.42)';
-    trackBg = `linear-gradient(90deg,
+    const DAY = 'rgba(255,196,110,0.18)';
+    const NIGHT = 'rgba(30,40,90,0.46)';
+    const DEEP = 'rgba(14,20,55,0.56)';
+    const DUSK = 'rgba(196,96,72,0.28)';
+    const DAWN = 'rgba(236,140,150,0.26)';
+    skyBg = `linear-gradient(90deg,
       ${DAY} 0%,
-      ${DAY} ${Math.max(0, ss - 4)}%,
+      ${DAY} ${Math.max(0, ss - 6)}%,
       ${DUSK} ${ss}%,
-      ${NIGHT} ${Math.min(100, ss + 4)}%,
+      ${NIGHT} ${Math.min(100, ss + 6)}%,
       ${DEEP} ${(ss + sr) / 2}%,
-      ${NIGHT} ${Math.max(0, sr - 4)}%,
+      ${NIGHT} ${Math.max(0, sr - 6)}%,
       ${DAWN} ${sr}%,
-      ${DAY} ${Math.min(100, sr + 4)}%,
+      ${DAY} ${Math.min(100, sr + 6)}%,
       ${DAY} 100%)`;
   }
 
@@ -125,11 +126,11 @@ export default function EnduranceTracker({ startTime, durationHours, circuitName
           <div className="text-[10px] uppercase tracking-wider" style={{ color: 'var(--pw-text-tertiary)' }}>Elapsed</div>
         </div>
 
-        {/* The lane: the Circuit de la Sarthe straight the prototype runs down,
-            under a day/night sky. Kerbs + centre line + a chequered finish.
-            Sun rises/sets and the moon rides the night at the real fractions. */}
-        <div className="relative flex-1 h-12">
-          {/* Celestial marks above the road */}
+        {/* Broadcast hairline: a single crisp baseline the prototype runs along,
+            under a faint day/night sky wash. No tube, no glow — the car is the
+            only solid object. Sun/moon ride the real sunset/night/sunrise marks. */}
+        <div className="relative flex-1 h-14">
+          {/* Celestial marks at the top */}
           {inRange(sunsetFrac) && (
             <span className="absolute top-0 -translate-x-1/2 pointer-events-none" style={{ left: `${sunsetFrac * 100}%` }}><Sun size={15} horizon /></span>
           )}
@@ -140,63 +141,72 @@ export default function EnduranceTracker({ startTime, durationHours, circuitName
             <span className="absolute top-0 -translate-x-1/2 pointer-events-none" style={{ left: `${sunriseFrac * 100}%` }}><Sun size={15} horizon /></span>
           )}
 
-          {/* Road surface (day/night tinted) — clean premium track ribbon */}
-          <div
-            className="absolute left-0 right-0 rounded-full overflow-hidden"
-            style={{
-              bottom: 2,
-              height: 10,
-              background: trackBg,
-              border: '1px solid var(--pw-glass-border)',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.14), inset 0 -3px 5px rgba(0,0,0,0.4)',
-            }}
-          >
-            {/* Travelled portion, brightened with accent */}
-            <motion.div
-              className="absolute left-0 top-0 bottom-0"
-              style={{ background: `linear-gradient(90deg, ${accent}3a, ${accent}12)` }}
-              initial={false}
-              animate={{ width: `${pct}%` }}
-              transition={{ type: 'spring', stiffness: 60, damping: 20 }}
+          {/* Faint day/night sky wash above the baseline, fading downward */}
+          {skyBg && (
+            <div
+              className="absolute left-0 right-0 rounded-sm pointer-events-none"
+              style={{
+                top: 16,
+                height: 14,
+                background: skyBg,
+                maskImage: 'linear-gradient(to bottom, black, transparent)',
+                WebkitMaskImage: 'linear-gradient(to bottom, black, transparent)',
+              }}
             />
-            {/* Hour posts */}
-            {Array.from({ length: durationHours - 1 }, (_, i) => (
+          )}
+
+          {/* The baseline */}
+          <div className="absolute left-0 right-0 pointer-events-none" style={{ bottom: 10, height: 1, background: 'rgba(255,255,255,0.26)' }} />
+
+          {/* Travelled portion — a thin accent underline */}
+          <motion.div
+            className="absolute left-0 pointer-events-none"
+            style={{ bottom: 10, height: 1.5, background: accent, boxShadow: `0 0 4px ${accent}66` }}
+            initial={false}
+            animate={{ width: `${pct}%` }}
+            transition={{ type: 'spring', stiffness: 60, damping: 20 }}
+          />
+
+          {/* Hour notches below the baseline (every 6th taller) */}
+          {Array.from({ length: durationHours - 1 }, (_, i) => {
+            const major = (i + 1) % 6 === 0;
+            return (
               <div
                 key={i}
-                className="absolute top-0 bottom-0 w-px"
+                className="absolute w-px pointer-events-none"
                 style={{
                   left: `${((i + 1) / durationHours) * 100}%`,
-                  background: 'rgba(255,255,255,0.22)',
-                  opacity: (i + 1) % 6 === 0 ? 0.75 : 0.2,
+                  bottom: 5,
+                  height: major ? 5 : 3,
+                  background: 'rgba(255,255,255,0.5)',
+                  opacity: major ? 0.7 : 0.28,
                 }}
               />
-            ))}
-            {/* Dashed centre line */}
-            <div
-              className="absolute left-2 right-2 top-1/2 -translate-y-1/2 h-px pointer-events-none"
-              style={{ backgroundImage: 'repeating-linear-gradient(90deg, rgba(255,255,255,0.55) 0 5px, transparent 5px 13px)', opacity: 0.35 }}
-            />
-          </div>
+            );
+          })}
 
-          {/* The prototype, riding on the road at the current position */}
+          {/* The prototype, riding on the baseline at the current position */}
           <motion.div
             className="absolute pointer-events-none"
-            style={{ bottom: 12 }}
+            style={{ bottom: 10 }}
             initial={false}
             animate={{ left: `${pct}%` }}
             transition={{ type: 'spring', stiffness: 60, damping: 20 }}
           >
             <div className="relative" style={{ transform: 'translateX(-50%)' }}>
-              {/* Headlight beam (night only) — car faces right */}
+              {/* Headlight beam (night only) — a slim cone projecting FORWARD
+                  from the nose, fading out. Sits ahead of the car, not over it. */}
               {isNight && (
                 <div
                   className="absolute pointer-events-none"
                   style={{
-                    right: -16,
-                    bottom: 1,
-                    width: 24,
+                    left: 53,
+                    bottom: 2.5,
+                    width: 30,
                     height: 12,
-                    background: 'radial-gradient(ellipse at left center, rgba(255,243,200,0.85), rgba(255,243,200,0) 72%)',
+                    background: 'linear-gradient(90deg, rgba(255,243,200,0.6), rgba(255,243,200,0))',
+                    clipPath: 'polygon(0 38%, 0 62%, 100% 0, 100% 100%)',
+                    filter: 'blur(0.4px)',
                   }}
                 />
               )}

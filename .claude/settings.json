@@ -77,7 +77,13 @@
       "Bash(git commit -q -m 'fix: IMSA filter-bar logo to white silhouette \\(was crushed dark\\) *)",
       "WebFetch(domain:www.24h-lemans.com)",
       "Bash(curl -s -o /dev/null -w '%{http_code}\\\\n' -L --max-time 15 https://fiawec.alkamelsystems.com/Results/15_2026/03_LE%20MANS/657_FIA%20WEC/202606131600_Race/01_Grid_Race.PDF)",
-      "Bash(curl -s -L --max-time 20 https://fiawec.alkamelsystems.com/Results/15_2026/03_LE%20MANS/657_FIA%20WEC/202606131600_Race/)"
+      "Bash(curl -s -L --max-time 20 https://fiawec.alkamelsystems.com/Results/15_2026/03_LE%20MANS/657_FIA%20WEC/202606131600_Race/)",
+      "Bash(git commit -q -m ' *)",
+      "WebFetch(domain:www.pngegg.com)",
+      "Bash(curl -s --max-time 20 \"https://fiawec.alkamelsystems.com/Results/15_2026/03_LE%20MANS/657_FIA%20WEC/202606131600_Race/03_Classification_Race.CSV\" -o lemans.csv)",
+      "Bash(awk -F';' 'NR>1{print $13}' h4.csv)",
+      "Bash(awk -F';' 'NR>1{print $9}' h4.csv)",
+      "Bash(awk -F';' 'NR>1{print $1\"|\"$2\"|\"$13\"|\"$14\"|\"$17\"|\"$19\"|\"$20}' h4.csv)"
     ],
     "additionalDirectories": [
       "/private/tmp/src/data",

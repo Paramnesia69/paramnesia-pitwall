@@ -300,9 +300,13 @@ export interface WECTimingEntry {
   manufacturer: string;   // first token of vehicle, for logo lookup
   laps: number;
   gapFirst: string;       // gap to overall leader, as provided by Al Kamel
+  gapPrev: string;        // interval to the car ahead overall (GAP_PREVIOUS)
   gapClass: string;       // computed gap to class leader ("LEADER" | "+N laps" | gap)
-  bestLapTime: string;
-  kph: string;
+  bestLapTime: string;    // fastest lap (FL_TIME), normalized to m:ss.mmm
+  bestLapNum: string;     // lap on which the fastest lap was set (FL_LAPNUM)
+  kph: string;            // average speed of the fastest lap (FL_KPH)
+  tyre: string;           // tyre marque label (Michelin / Goodyear / …)
+  status: string;         // Al Kamel STATUS (Classified / Retired / …)
   drivers: string[];      // full driver names in the car
 }
 
