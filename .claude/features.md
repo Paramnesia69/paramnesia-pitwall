@@ -44,6 +44,11 @@ Race Highlights (9 YouTube RSS feeds, inline lightbox player), Podcasts (4 RSS f
 - **Touch parity** — TiltCard: no 3D tilt on `pointer: coarse` (iOS synthetic mouse events caused tilt jolts), `whileTap` scale instead; `active:` states on standings rows, reminder options, badge arrows.
 - **Tap targets + legibility** — filter pills 44px tall on mobile; bell/star/arrow hit areas enlarged; overlay 9px labels render 10px below `sm`.
 
+### Endurance Live Layer — Le Mans (2026-06-13)
+Makes a 24H race feel live. Two buckets:
+- **Endurance clock (hero)** — while an endurance race runs, `EnduranceTracker` shows elapsed/remaining clocks flanking a **day/night-tinted road** with a **hypercar** driving along it at the current position (headlight beam at night), a **race-phase narrative** (Le Départ → Afternoon Run → Dusk → Into the Night → Before the Dawn → Dawn → Morning Charge → Final Hour → Run to the Flag), a **premium sun/moon** at the real sunset/sunrise/night-mid points, and a **next-milestone countdown** (next hour / sunset / sunrise / flag). All pure time math on real sun facts (`lib/enduranceClock.ts`). All icons are custom inline SVG (`ui/RaceIcons.tsx`) — no emoji.
+- **WEC live classification** — on the Le Mans event overlay, `WECTimingPanel` shows per-class leaderboards (HYPERCAR / LMP2 / LMGT3): car #, team, drivers, laps, exact lap-down class gaps. Real data from Al Kamel's hourly classification CSV (`/api/wec/timing`, polls 60s while live; `pending` notice before the first hour posts). Updates ~hourly — Al Kamel's real publish cadence. Le Mans 2026-only for now (hardcoded event base).
+
 ## Known Issues / Workarounds
 - **Driver headshots** — Source is OpenF1 `headshot_url` (~100–130px native). Displayed at `maxHeight: 140`. F1 official CDN high-res path (`content/dam/fom-website/drivers/2026Drivers/`) does NOT exist — do not attempt again without a verified URL.
 - `gtwce.png`, `wec.png`, `elms.png` have non-transparent backgrounds — opacity 0.18 + `maskImage: radial-gradient(ellipse at center, black 50%, transparent 85%)` keeps it acceptable. Never use `mixBlendMode: screen` — iOS Safari drops it inside stacking contexts.

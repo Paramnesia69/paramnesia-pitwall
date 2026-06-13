@@ -22,6 +22,15 @@
 | Weather | OpenWeatherMap with simulated fallback | Real data preferred; simulated (lat/lng based) when no key or rate limited |
 | F1 event state | OpenF1 `date_end` overrides time-based guess | `computeState()` uses startTime+3h fallback; OpenF1 posts real end time — checked in `getEventsWithState()` for any live F1 event, revalidate 60s, silent fail |
 
+## WEC Live Timing & Endurance Layer (2026-06-13)
+| Decision | Choice | Reason |
+|---|---|---|
+| WEC/Le Mans live data | Poll Al Kamel hourly classification CSV | Only real public WEC timing source. **No live root file mid-race** — data is hourly snapshots in zero-padded folders `…/202606131600_Race/NN_Hour N/03_Classification_Race_Hour N.CSV`. Server proxy `/api/wec/timing` + 60s cache; `pending` until Hour 1. |
+| CSV parser | Resolve every field against BOTH schemas | Practice/quali CSV = `POS` + split `DRIVERn_FIRSTNAME/SECONDNAME`; live RACE CSV = `POSITION` + single-field `DRIVER_1..N`. Same parser handles both (verified live: Toyota #8 led Hypercar at Hour 2). |
+| No websocket for live timing | Poll CSV/REST, never a persistent socket | Vercel serverless functions are short-lived — can't hold a long connection. Al Kamel's real-time feed is a **Meteor DDP/SockJS** app (`feeds-config.alkamelsystems.com`) needing an always-on relay; out of scope + against the "no websockets" rule. Data changes slowly (per-minute), so polling matches the cadence. FIAWEC+ is UI/streaming auth, not a clean API. |
+| Endurance sun facts | Real sunset/sunrise instants keyed by circuit (`enduranceClock.ts CIRCUIT_SUN`) | Le Mans = sunset 19:58Z / sunrise 04:00Z — facts, not estimates. Powers the day/night road tint, phase, and milestones. |
+| Endurance/racing icons | Custom inline SVG (`ui/RaceIcons.tsx`), never emoji | Emoji look dated and render inconsistently across platforms — clashes with the premium aesthetic. Hypercar/start-lights/flag/sun/moon are hand-built SVGs; `getRacePhase` returns a semantic `RacePhaseIcon` key, not a glyph. |
+
 ## Logo System Decisions
 | Decision | Choice | Reason |
 |---|---|---|

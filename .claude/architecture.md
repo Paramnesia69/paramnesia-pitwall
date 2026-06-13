@@ -26,6 +26,8 @@ src/
 │       ├── og/route.ts       # /api/og?event=<id> — 1200×630 PNG OpenGraph card
 │       ├── openf1/
 │       │   └── timing/route.ts # /api/openf1/timing?eventId= — F1 live timing proxy
+│       ├── wec/
+│       │   └── timing/route.ts # /api/wec/timing — Le Mans live class timing (Al Kamel CSV proxy, thin)
 │       ├── f1/
 │       │   ├── driver/[driverRef]/route.ts      # /api/f1/driver/:ref — Jolpica driver profile, no-store cache
 │       │   └── constructor/[constructorRef]/route.ts # /api/f1/constructor/:ref — Jolpica constructor profile, no-store cache
@@ -64,7 +66,10 @@ src/
 │       ├── SheetGrip.tsx     # Drag handle for mobile bottom-sheet overlays (sticky, -mb-7)
 │       ├── CircuitEmblem.tsx # Small frameless white track silhouette by the circuit name (getCircuitFilter → invert white)
 │       ├── SeriesEmblem.tsx  # Natural-colour series logo; mirrors CircuitEmblem on RecentResults
-│       └── F1TimingPanel.tsx # Fetches /api/openf1/timing; polls 45s when live
+│       ├── F1TimingPanel.tsx # Fetches /api/openf1/timing; polls 45s when live
+│       ├── WECTimingPanel.tsx # Fetches /api/wec/timing; class tabs (HYPERCAR/LMP2/LMGT3); polls 60s when live; pending state pre-timing
+│       ├── EnduranceTracker.tsx # Hero endurance clock: day/night-tinted road + hypercar marker + phase + milestone (see Endurance Live Layer)
+│       └── RaceIcons.tsx     # Premium inline-SVG racing icons (Hypercar, start-light gantry, chequered flag, stopwatch, gradient sun/moon) — replaces emoji
 │   # NOTE: src/app/icon.png = Next canonical round favicon (see decisions.md Logo & Watermark System — FINAL)
 │   # NOTE: all series logos render NATURAL brand colours everywhere (Porsche-only invert); no grayscale/screen/mask
 ├── data/
@@ -75,6 +80,8 @@ src/
 │   └── overrides.json        # Manual admin overrides (note, state, streamLinks, featured)
 ├── lib/
 │   ├── endurance.ts          # getEnduranceDurationHours(name) — race length from official name; powers EnduranceTracker + state fallback
+│   ├── enduranceClock.ts     # Endurance race-phase + day/night (real sun facts) + next-milestone math — pure, tested
+│   ├── wecTiming.ts          # getWecTiming() — fetch Al Kamel Le Mans classification CSV → per-class leaderboard (60s cache, dual-schema parser)
 │   ├── events.ts             # getEventsWithState, getUpcomingEvents, getFeaturedEvent; endurance-aware session-end fallback
 │   ├── teamLogos.ts          # Logo resolution — see Logo System below
 │   ├── weather.ts            # fetchWeather (OpenWeatherMap), getSimulatedWeather fallback
@@ -108,6 +115,21 @@ public/
 │       ├── brand-peugeot.png     # bg stripped via Pillow; black shield
 │       ├── ducati.svg, aprilia.svg, yamaha.svg, ktm.svg   # Moto brand SVGs
 ```
+
+## Endurance Live Layer (Le Mans)
+
+Two cooperating pieces that make a 24H race feel live. See `decisions.md` for the data-source + no-websocket rationale.
+
+### Bucket 1 — Endurance clock (hero, pure time math)
+- `lib/enduranceClock.ts`: `getRacePhase` (returns `{ label, icon: RacePhaseIcon }` — a semantic key, NOT emoji), `getNextMilestone`, `getDaylightState`, `getEnduranceSun(circuitName)`. Sun facts are real instants keyed by circuit (`CIRCUIT_SUN`, Le Mans = sunset 19:58Z / sunrise 04:00Z). Pure + tested (`tests/enduranceClock.test.ts`).
+- `ui/EnduranceTracker.tsx` (rendered by `HeroCard` while a race session is live + `getEnduranceDurationHours` matches): elapsed/remaining clocks flank a **road** (day/night-tinted via gradient mapped to sunset/sunrise fractions, dashed centre line, hour posts). A **Hypercar SVG** drives the road at the current position (headlight beam at night); a premium **sun** sits at sunset/sunrise and a **moon** rides the night-mid. Phase icon + next-milestone countdown above.
+- `ui/RaceIcons.tsx`: all icons are inline SVG (no emoji). `PhaseIcon` maps `RacePhaseIcon` → component; exports `Hypercar`, `Sun`, `Moon`. Gradients use `useId()` to avoid id collisions.
+
+### Bucket 2A — WEC live classification (real data)
+- `lib/wecTiming.ts` → `/api/wec/timing` (thin proxy, mirrors openf1/timing) → `ui/WECTimingPanel.tsx` (mounted in `EventDetailOverlay` only when `series==='wec' && circuit.name==='Circuit de la Sarthe'`).
+- Source = **Al Kamel** classification CSV. **No live root file during the race**; data lives in hourly snapshots at `…/202606131600_Race/${NN}_Hour ${N}/03_Classification_Race_Hour ${N}.CSV` (zero-padded folder prefix). Fetch loop probes the current hour downward; returns `pending` before Hour 1, `live` otherwise.
+- **Dual-schema parser** (`parseWecClassification`, pure + tested): practice/quali CSVs use `POS` + split `DRIVERn_FIRSTNAME/SECONDNAME`; the live RACE CSV uses `POSITION` + single-field `DRIVER_1..N`. Each field resolved against both names. Per-class gap = exact lap-down delta to the class leader.
+- Types in `@/types`: `WECTimingData / WECTimingClass / WECTimingEntry` (client imports from `@/types` only — never the route).
 
 ## Logo System (src/lib/teamLogos.ts)
 
