@@ -8,6 +8,7 @@
 
 ## Recently shipped (2026-06-13)
 - **Endurance Live Layer (Le Mans)** — hero day/night road + hypercar + phase/milestones (`enduranceClock.ts`, `EnduranceTracker`, `RaceIcons`) and WEC live class timing (`/api/wec/timing`, `WECTimingPanel`, Al Kamel CSV). See features.md + decisions.md "WEC Live Timing & Endurance Layer".
+- **Endurance/WEC visual polish** — road marker is now a real LMP prototype PNG (`/lemans-prototype.png`, bg cut from a dithered source — see decisions.md); clean premium road ribbon (kerb/chequered edges rejected); WEC class colours fixed per class (Hypercar red / LMP2 blue / LMGT3 green, no "flapping"); live session row + YouTube links use the series accent (blue), `pw-live-dot` stays red.
 - **Visual redesign** — natural-colour logos everywhere (Porsche-only invert), CircuitEmblem/SeriesEmblem, Orbitron titles/times, cleaned circuit SVGs, round favicon. See decisions.md "Logo & Watermark System — FINAL".
 
 ## Current Data Coverage
@@ -30,4 +31,5 @@
 ## Backlog (next up)
 - **Data**: WEC R3 Le Mans 24H result (after Jun 14), GTWCE Misano, Supercup Barcelona; ELMS R3 Imola (Jul 5); DTM R3 Lausitzring (Jun 19–21); Nürburgring NLS6 (Jun 20)
 - **WEC timing**: currently Le Mans-2026-only (hardcoded event base) — generalise to other WEC rounds if wanted
+- **WEC timing — richer data (requested)**: surface more Al Kamel fields beyond pos/number/team/drivers/laps/gap (e.g. last lap, best lap + sector times, pit stops, KPH, interval, tyres). Parser already reads `TIME`/`KPH`/`GAP_FIRST`; CSV header has more. NOTE: the live race-root `03_Classification_Race.CSV` 404s when probed off-session (returns an HTML error page) — confirm the exact live column set against a real in-race fetch before building UI.
 - **Minor polish**: "What's Live" badge black-F1-logo bug (one-line fix like MiniLeaderboard); Nürburgring filter-bar logo faint; Aprilia/Yamaha not true-colour; H2H bars don't distinguish same-colour teammates

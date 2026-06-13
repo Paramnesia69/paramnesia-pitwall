@@ -67,8 +67,8 @@ src/
 │       ├── CircuitEmblem.tsx # Small frameless white track silhouette by the circuit name (getCircuitFilter → invert white)
 │       ├── SeriesEmblem.tsx  # Natural-colour series logo; mirrors CircuitEmblem on RecentResults
 │       ├── F1TimingPanel.tsx # Fetches /api/openf1/timing; polls 45s when live
-│       ├── WECTimingPanel.tsx # Fetches /api/wec/timing; class tabs (HYPERCAR/LMP2/LMGT3); polls 60s when live; pending state pre-timing
-│       ├── EnduranceTracker.tsx # Hero endurance clock: day/night-tinted road + hypercar marker + phase + milestone (see Endurance Live Layer)
+│       ├── WECTimingPanel.tsx # Fetches /api/wec/timing; class tabs (HYPERCAR red / LMP2 blue / LMGT3 green — each ALWAYS its own colour: active brighter, inactive dimmed, never recoloured); CLASS_COLOR drives tab + leaderboard accent; Live dot = series accent (blue); polls 60s when live; pending state pre-timing
+│       ├── EnduranceTracker.tsx # Hero endurance clock: day/night-tinted road ribbon + real prototype PNG marker (/lemans-prototype.png) + phase + milestone (see Endurance Live Layer)
 │       └── RaceIcons.tsx     # Premium inline-SVG racing icons (Hypercar, start-light gantry, chequered flag, stopwatch, gradient sun/moon) — replaces emoji
 │   # NOTE: src/app/icon.png = Next canonical round favicon (see decisions.md Logo & Watermark System — FINAL)
 │   # NOTE: all series logos render NATURAL brand colours everywhere (Porsche-only invert); no grayscale/screen/mask
@@ -102,6 +102,7 @@ src/
 └── types/index.ts            # All shared types + SERIES_META
 
 public/
+├── lemans-prototype.png  # Endurance road marker — real LMP prototype, bg cut from a 16-colour dithered source (see decisions.md). Versioned filename busts the cache-first SW.
 ├── logos/
 │   ├── f1.svg, wec.png, elms.png, imsa.svg, motogp.svg, wrc.svg,
 │   │   gtwce.png, dtm.svg, porsche.svg, nurburgring.svg      # Series logos
@@ -122,14 +123,15 @@ Two cooperating pieces that make a 24H race feel live. See `decisions.md` for th
 
 ### Bucket 1 — Endurance clock (hero, pure time math)
 - `lib/enduranceClock.ts`: `getRacePhase` (returns `{ label, icon: RacePhaseIcon }` — a semantic key, NOT emoji), `getNextMilestone`, `getDaylightState`, `getEnduranceSun(circuitName)`. Sun facts are real instants keyed by circuit (`CIRCUIT_SUN`, Le Mans = sunset 19:58Z / sunrise 04:00Z). Pure + tested (`tests/enduranceClock.test.ts`).
-- `ui/EnduranceTracker.tsx` (rendered by `HeroCard` while a race session is live + `getEnduranceDurationHours` matches): elapsed/remaining clocks flank a **road** (day/night-tinted via gradient mapped to sunset/sunrise fractions, dashed centre line, hour posts). A **Hypercar SVG** drives the road at the current position (headlight beam at night); a premium **sun** sits at sunset/sunrise and a **moon** rides the night-mid. Phase icon + next-milestone countdown above.
-- `ui/RaceIcons.tsx`: all icons are inline SVG (no emoji). `PhaseIcon` maps `RacePhaseIcon` → component; exports `Hypercar`, `Sun`, `Moon`. Gradients use `useId()` to avoid id collisions.
+- `ui/EnduranceTracker.tsx` (rendered by `HeroCard` while a race session is live + `getEnduranceDurationHours` matches): elapsed/remaining clocks flank a clean **road ribbon** (rounded-full, day/night-tinted gradient mapped to sunset/sunrise fractions, faint dashed centre line, hour posts, inset sheen `inset 0 1px 0 rgba(255,255,255,.14), inset 0 -3px 5px rgba(0,0,0,.4)`). A **real prototype PNG** (`/lemans-prototype.png`) drives the road at the current position (`width 56`, sits at `bottom 12`, faces right; soft headlight-beam glow + dimmed filter at night); a premium **sun** sits at sunset/sunrise and a **moon** rides the night-mid. Phase icon + next-milestone countdown above. NOTE: the old kerb/chequered-edge road was rejected as "ugly" — keep the ribbon clean.
+- `ui/RaceIcons.tsx`: all icons are inline SVG (no emoji). `PhaseIcon` maps `RacePhaseIcon` → component; exports `Hypercar` (SVG, only the `racing`-phase fallback still uses it — the road marker is now the PNG), `Sun`, `Moon`. Gradients use `useId()` to avoid id collisions.
 
 ### Bucket 2A — WEC live classification (real data)
 - `lib/wecTiming.ts` → `/api/wec/timing` (thin proxy, mirrors openf1/timing) → `ui/WECTimingPanel.tsx` (mounted in `EventDetailOverlay` only when `series==='wec' && circuit.name==='Circuit de la Sarthe'`).
 - Source = **Al Kamel** classification CSV. **No live root file during the race**; data lives in hourly snapshots at `…/202606131600_Race/${NN}_Hour ${N}/03_Classification_Race_Hour ${N}.CSV` (zero-padded folder prefix). Fetch loop probes the current hour downward; returns `pending` before Hour 1, `live` otherwise.
 - **Dual-schema parser** (`parseWecClassification`, pure + tested): practice/quali CSVs use `POS` + split `DRIVERn_FIRSTNAME/SECONDNAME`; the live RACE CSV uses `POSITION` + single-field `DRIVER_1..N`. Each field resolved against both names. Per-class gap = exact lap-down delta to the class leader.
 - Types in `@/types`: `WECTimingData / WECTimingClass / WECTimingEntry` (client imports from `@/types` only — never the route).
+- **Class colours** = official ACO/ELMS plate palette, fixed per class at all times (active = brighter, inactive = same hue dimmed): `HYPERCAR #E10600` (red), `LMP2 #1E4B8C` (blue), `LMGT3 #1A6B38` (green). Tabs never recolour on selection ("flapping" was rejected). The `· LIVE` indicator + the `EventDetailOverlay` live session row/name use the **series accent** (WEC blue `#0090D4`) with a **red** `pw-live-dot`; YouTube watch links also use the series accent (not YouTube red).
 
 ## Logo System (src/lib/teamLogos.ts)
 
