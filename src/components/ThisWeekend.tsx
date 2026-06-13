@@ -9,6 +9,7 @@ import { useStore } from '@/store';
 import Countdown from '@/components/ui/Countdown';
 import SeriesBadge from '@/components/ui/SeriesBadge';
 import ReminderButton from '@/components/ui/ReminderButton';
+import CircuitEmblem from '@/components/ui/CircuitEmblem';
 import { WeatherBadgeCompact } from '@/components/ui/WeatherBadge';
 import { getCountryFlag } from '@/lib/countryFlag';
 import { sessionKey, type ConflictInfo } from '@/lib/conflicts';
@@ -125,16 +126,22 @@ export default function ThisWeekend({ events, conflicts }: ThisWeekendProps) {
                       </div>
                     </div>
 
-                    {/* Event name */}
-                    <h4
-                      className="text-[13px] font-bold tracking-tight leading-snug mb-0.5"
-                      style={{ fontFamily: 'var(--font-orbitron), var(--pw-font-display)' }}
-                    >
-                      {event.name}
-                    </h4>
-                    <p className="text-[11px] mb-2.5" style={{ color: 'var(--pw-text-tertiary)' }}>
-                      {flag && <span className="mr-1">{flag}</span>}{event.circuit.name}
-                    </p>
+                    {/* Event name + circuit emblem (right) */}
+                    <div className="flex items-start gap-2">
+                      <div className="min-w-0 flex-1">
+                        <h4
+                          className="text-[13px] font-bold tracking-tight leading-snug mb-0.5"
+                          style={{ fontFamily: 'var(--font-orbitron), var(--pw-font-display)' }}
+                        >
+                          {event.name}
+                        </h4>
+                        <p className="text-[11px]" style={{ color: 'var(--pw-text-tertiary)' }}>
+                          {flag && <span className="mr-1">{flag}</span>}{event.circuit.name}
+                        </p>
+                      </div>
+                      <CircuitEmblem circuitName={event.circuit.name} size={30} opacity={0.5} />
+                    </div>
+                    <div className="mb-2.5" />
 
                     {/* Next session — new aligned box: name + Orbitron time + reminder bell */}
                     {nextSession && (() => {

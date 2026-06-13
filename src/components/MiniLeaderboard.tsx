@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { m as motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { useStore } from '@/store';
+import CircuitEmblem from '@/components/ui/CircuitEmblem';
 import { getCountryFlag } from '@/lib/countryFlag';
 import type { LiveSessionInfo } from '@/lib/useLiveSessions';
 
@@ -180,14 +181,19 @@ export default function MiniLeaderboard({ sessions }: Props) {
                       </span>
                     </div>
 
-                    {/* Event info */}
-                    <p className="text-sm font-semibold leading-snug mb-0.5 relative">
-                      {s.eventName}
-                    </p>
-                    <p className="text-[10px] relative" style={{ color: 'var(--pw-text-tertiary)' }}>
-                      {flag && <span className="mr-1">{flag}</span>}
-                      {s.circuitName}
-                    </p>
+                    {/* Event info + circuit emblem (right) */}
+                    <div className="flex items-start gap-2 relative">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-semibold leading-snug mb-0.5">
+                          {s.eventName}
+                        </p>
+                        <p className="text-[10px]" style={{ color: 'var(--pw-text-tertiary)' }}>
+                          {flag && <span className="mr-1">{flag}</span>}
+                          {s.circuitName}
+                        </p>
+                      </div>
+                      <CircuitEmblem circuitName={s.circuitName} size={28} opacity={0.5} />
+                    </div>
 
                     {/* Session name with accent stripe */}
                     <div

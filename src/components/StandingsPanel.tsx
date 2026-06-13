@@ -43,8 +43,6 @@ type SeriesTab = 'f1' | 'motogp' | 'wec' | 'wrc' | 'imsa' | 'dtm' | 'elms';
 const CONSTRUCTOR_REFS = F1_CONSTRUCTOR_REFS;
 
 const SERIES_TABS: SeriesTab[] = ['f1', 'wec', 'elms', 'imsa', 'motogp', 'dtm', 'wrc'];
-const LOGO_FILTER = 'grayscale(1) contrast(2) brightness(3)';
-
 /* ── Series logo tab button ── */
 function SeriesTabButton({ series, isActive, onClick }: { series: SeriesTab; isActive: boolean; onClick: () => void }) {
   const meta = SERIES_META[series];
@@ -67,16 +65,11 @@ function SeriesTabButton({ series, isActive, onClick }: { series: SeriesTab; isA
       {meta.logo ? (
         <div
           className="absolute inset-0"
-          style={{
-            opacity: isActive ? 0.9 : 0.45,
-            maskImage: 'radial-gradient(ellipse at center, black 45%, transparent 85%)',
-            WebkitMaskImage: 'radial-gradient(ellipse at center, black 45%, transparent 85%)',
-            transition: 'opacity 0.2s',
-          }}
+          style={{ opacity: isActive ? 1 : 0.6, transition: 'opacity 0.2s' }}
         >
           <div className="absolute inset-2">
             <Image src={meta.logo} alt={meta.name} fill className="object-contain"
-              style={{ filter: LOGO_FILTER, mixBlendMode: 'screen' }} />
+              style={{ filter: meta.logo === '/logos/porsche.svg' ? 'brightness(0) invert(1)' : undefined }} />
           </div>
         </div>
       ) : (
