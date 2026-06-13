@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import { getTeamLogo } from '@/lib/teamLogos';
+import WECTimingBoard from './WECTimingBoard';
 import type { WECTimingData, WECTimingEntry } from '@/types';
 
 interface Props {
@@ -73,6 +75,7 @@ export default function WECTimingPanel({ accentColor, eventState }: Props) {
   const [data, setData] = useState<WECTimingData | null>(null);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<string | null>(null);
+  const [boardOpen, setBoardOpen] = useState(false);
 
   const fetchTiming = useCallback(async () => {
     try {
@@ -154,10 +157,24 @@ export default function WECTimingPanel({ accentColor, eventState }: Props) {
             <span className="text-[9px] uppercase tracking-wide" style={{ color: 'var(--pw-text-tertiary)' }}>· Hour {data.hour}</span>
           )}
         </div>
-        <a href="https://www.fiawec.com" target="_blank" rel="noopener noreferrer" className="text-[9px] hover:opacity-80 transition-opacity" style={{ color: 'var(--pw-text-tertiary)' }}>
-          {liveSource ? 'via FIA WEC' : 'via Al Kamel'}
-        </a>
+        <div className="flex items-center gap-2.5">
+          <button
+            onClick={() => setBoardOpen(true)}
+            className="flex items-center gap-1 px-2 py-1 rounded-md text-[9px] font-bold uppercase tracking-wide transition-colors active:scale-95"
+            style={{ background: `${accentColor}1a`, border: `1px solid ${accentColor}40`, color: accentColor }}
+          >
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg>
+            Full board
+          </button>
+          <a href="https://www.fiawec.com" target="_blank" rel="noopener noreferrer" className="text-[9px] hover:opacity-80 transition-opacity" style={{ color: 'var(--pw-text-tertiary)' }}>
+            {liveSource ? 'via FIA WEC' : 'via Al Kamel'}
+          </a>
+        </div>
       </div>
+
+      <AnimatePresence>
+        {boardOpen && <WECTimingBoard accentColor={accentColor} onClose={() => setBoardOpen(false)} />}
+      </AnimatePresence>
 
       {/* Live conditions strip */}
       {data.weather && (

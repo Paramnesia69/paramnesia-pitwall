@@ -129,6 +129,15 @@ describe('normalizeGriiipBootstrap — live JSON backend', () => {
     expect(top.drivers).toContain('Sébastien BOURDAIS');
   });
 
+  it('maps last-lap sectors + hybrid energy for the leader', () => {
+    const top = data.classes.find((c) => c.name === 'HYPERCAR')!.entries[0];
+    expect(top.energyPct).toBe(37);
+    expect(top.sectors).toHaveLength(3);
+    expect(top.sectors[0].time).toBe('33.385'); // S1 33385ms
+    expect(top.sectors[1].time).toBe('1:19.441'); // S2 over a minute
+    expect(top.lastLapTime).not.toBe('');
+  });
+
   it('computes a class gap for the second car', () => {
     const second = data.classes.find((c) => c.name === 'HYPERCAR')!.entries[1];
     expect(second.classPos).toBe(2);

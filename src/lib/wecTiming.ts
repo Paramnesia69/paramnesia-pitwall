@@ -19,7 +19,7 @@
  */
 
 import { cached } from '@/lib/cache';
-import type { WECTimingData, WECTimingEntry, WECTimingClass, WECWeather } from '@/types';
+import type { WECTimingData, WECTimingEntry, WECTimingClass, WECWeather, WECSector } from '@/types';
 
 // ── Al Kamel CSV fallback (Le Mans 2026) ──────────────────────────────────
 const LE_MANS_2026_RACE =
@@ -57,6 +57,18 @@ function fmtGap(ms: number, laps: number): string {
   return '';
 }
 
+/** Format a sector/short time in ms → "ss.mmm" (or "m:ss.mmm" past a minute). */
+function fmtSectorMs(ms: number): string {
+  if (!ms || ms <= 0) return '';
+  if (ms < 60000) return (ms / 1000).toFixed(3);
+  return fmtLapMs(ms);
+}
+
+/** Normalize Griiip lap/sector colour to our palette key. */
+function lapColor(c?: string): string {
+  return c === 'Purple' || c === 'Green' ? c : '';
+}
+
 // ── Griiip bootstrap normalization (pure + tested) ─────────────────────────
 
 interface GriiipRef { pid: number; carNumber: string; classId: string }
@@ -69,8 +81,10 @@ type GriiipBootstrap = {
   gaps?: (GriiipRef & { gapToFirstMillis?: number; gapToFirstLaps?: number; gapToAheadMillis?: number; gapToAheadLaps?: number })[];
   bestLaps?: (GriiipRef & { lapTimeMillis?: number; lapNumber?: number; color?: string })[];
   runningStatuses?: (GriiipRef & { status?: string })[];
-  tires?: (GriiipRef & { tires?: { compound?: string }[] })[];
-  laps?: (GriiipRef & { lapNumber?: number })[];
+  tires?: (GriiipRef & { tires?: { compound?: string; ageInLaps?: number }[] })[];
+  laps?: (GriiipRef & { lapNumber?: number; lapTimeMillis?: number; color?: string })[];
+  sectors?: (GriiipRef & { sectorNumber?: number; lapNumber?: number; sectorTimeMillis?: number; color?: string })[];
+  carsEnergyTanks?: { items?: { pid: number; e?: number }[] };
   pitIns?: GriiipRef[];
 };
 
@@ -97,12 +111,50 @@ export function normalizeGriiipBootstrap(
   const run = byPid(boot.runningStatuses);
   const tire = byPid(boot.tires);
 
-  // Current lap per car = max lapNumber seen in the recent-laps buffer.
+  // Last completed lap per car = highest-lapNumber entry in the recent buffer.
+  const lastLap = new Map<number, { lapNumber: number; lapTimeMillis: number; color?: string }>();
+  for (const l of boot.laps ?? []) {
+    const cur = lastLap.get(l.pid);
+    if (!cur || (l.lapNumber ?? 0) > cur.lapNumber) lastLap.set(l.pid, { lapNumber: l.lapNumber ?? 0, lapTimeMillis: l.lapTimeMillis ?? 0, color: l.color });
+  }
+  // Sectors of each car's last completed lap (the lap with all three sectors).
+  const sectorsByPidLap = new Map<string, Map<number, { time: string; color: string }>>();
+  for (const s of boot.sectors ?? []) {
+    if (!s.sectorNumber || !s.lapNumber) continue;
+    const key = `${s.pid}:${s.lapNumber}`;
+    if (!sectorsByPidLap.has(key)) sectorsByPidLap.set(key, new Map());
+    sectorsByPidLap.get(key)!.set(s.sectorNumber, { time: fmtSectorMs(s.sectorTimeMillis ?? 0), color: lapColor(s.color) });
+  }
+  const lastSectors = new Map<number, WECSector[]>();
+  for (const [key, secs] of sectorsByPidLap) {
+    const [pidStr, lapStr] = key.split(':');
+    const pid = Number(pidStr);
+    const lap = Number(lapStr);
+    if (secs.size < 3) continue; // only fully-timed laps
+    const best = lastLap.get(pid);
+    // Prefer the car's last completed lap; otherwise take the highest lap we have.
+    const existing = lastSectors.get(pid);
+    const existingLap = (existing as (WECSector[] & { _lap?: number }) | undefined)?._lap ?? -1;
+    if (lap >= existingLap || lap === best?.lapNumber) {
+      const arr = [1, 2, 3].map((n) => secs.get(n) ?? { time: '', color: '' }) as WECSector[] & { _lap?: number };
+      arr._lap = lap;
+      lastSectors.set(pid, arr);
+    }
+  }
+  // Tyre age per car (laps on the current set).
+  const tyreAge = new Map<number, number>();
+  for (const t of boot.tires ?? []) {
+    const age = t.tires?.[0]?.ageInLaps;
+    if (typeof age === 'number') tyreAge.set(t.pid, age);
+  }
+  // Hybrid energy % per car.
+  const energy = new Map<number, number>();
+  for (const it of boot.carsEnergyTanks?.items ?? []) if (typeof it.e === 'number') energy.set(it.pid, it.e);
+  // Current lap per car (for the laps count) + pit-stop count.
   const lapMax = new Map<number, number>();
   for (const l of boot.laps ?? []) {
     if (l.lapNumber && l.lapNumber > (lapMax.get(l.pid) ?? 0)) lapMax.set(l.pid, l.lapNumber);
   }
-  // Pit-stop count per car.
   const pitCount = new Map<number, number>();
   for (const p of boot.pitIns ?? []) pitCount.set(p.pid, (pitCount.get(p.pid) ?? 0) + 1);
 
@@ -114,6 +166,7 @@ export function normalizeGriiipBootstrap(
     const b = best.get(p.pid);
     const vehicle = (p.manufacturer ?? '').trim();
     const compound = tire.get(p.pid)?.tires?.[0]?.compound ?? '';
+    const last = lastLap.get(p.pid);
     entries.push({
       pos: r?.overallPosition ?? 0,
       classPos: r?.position ?? 0,
@@ -129,9 +182,14 @@ export function normalizeGriiipBootstrap(
       gapClass: '',
       bestLapTime: fmtLapMs(b?.lapTimeMillis ?? 0),
       bestLapNum: b?.lapNumber ? String(b.lapNumber) : '',
-      bestLapColor: b?.color === 'Purple' || b?.color === 'Green' ? b.color : '',
+      bestLapColor: lapColor(b?.color),
+      lastLapTime: fmtLapMs(last?.lapTimeMillis ?? 0),
+      lastLapColor: lapColor(last?.color),
+      sectors: (lastSectors.get(p.pid) ?? []).map(({ time, color }) => ({ time, color })),
       kph: '',
       tyre: compound ? compound[0] + compound.slice(1).toLowerCase() : '', // SOFT → Soft
+      tyreAge: tyreAge.has(p.pid) ? tyreAge.get(p.pid)! : -1,
+      energyPct: energy.has(p.pid) ? energy.get(p.pid)! : -1,
       status: run.get(p.pid)?.status ?? '',
       pitStops: pitCount.get(p.pid) ?? 0,
       drivers: (p.drivers ?? []).map((d) => (d.displayName ?? '').trim()).filter(Boolean),
@@ -342,8 +400,13 @@ export function parseWecClassification(
       bestLapTime: normalizeLap(r[idx.time] ?? ''),
       bestLapNum: (r[idx.flLapNum] ?? '').trim(),
       bestLapColor: '',
+      lastLapTime: '',
+      lastLapColor: '',
+      sectors: [],
       kph: (r[idx.kph] ?? '').trim(),
       tyre: tyreLabel(r[idx.tyres] ?? ''),
+      tyreAge: -1,
+      energyPct: -1,
       status: (r[idx.status] ?? '').trim(),
       pitStops: 0,
       drivers,

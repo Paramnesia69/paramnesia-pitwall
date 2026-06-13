@@ -306,11 +306,22 @@ export interface WECTimingEntry {
   bestLapTime: string;    // fastest lap, normalized to m:ss.mmm
   bestLapNum: string;     // lap on which the fastest lap was set
   bestLapColor: string;   // 'Purple' (session best) | 'Green' (personal best) | '' (live source only)
+  lastLapTime: string;    // last completed lap (live source only)
+  lastLapColor: string;   // 'Purple' | 'Green' | ''
+  sectors: WECSector[];   // last completed lap sectors [S1, S2, S3] (live source only)
   kph: string;            // average speed of the fastest lap
   tyre: string;           // tyre compound (SOFT/MEDIUM/HARD/WET) or marque label
+  tyreAge: number;        // laps on the current tyre set (live source only; -1 unknown)
+  energyPct: number;      // hybrid energy % (Hypercar live source only; -1 unavailable)
   status: string;         // running status — 'Running' | 'DNF' | 'In Pit' | …
   pitStops: number;       // pit-stop count (live source only; 0 otherwise)
   drivers: string[];      // full driver names in the car
+}
+
+/** A single sector time + its broadcast colour. */
+export interface WECSector {
+  time: string;           // "33.179" or "1:20.406"
+  color: string;          // 'Purple' | 'Green' | '' (normal)
 }
 
 export interface WECTimingClass {
