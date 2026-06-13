@@ -8,6 +8,7 @@ import {
   getNextMilestone,
   getDaylightState,
 } from '@/lib/enduranceClock';
+import { PhaseIcon, Sun, Moon, Hypercar } from '@/components/ui/RaceIcons';
 
 interface EnduranceTrackerProps {
   /** Race start (ISO 8601) */
@@ -93,14 +94,20 @@ export default function EnduranceTracker({ startTime, durationHours, circuitName
       ${DAY} 100%)`;
   }
 
-  const dayGlyph = daylight === 'night' ? '🌙' : daylight === 'dusk' ? '🌇' : daylight === 'dawn' ? '🌅' : '☀️';
+  const isNight = daylight === 'night' || daylight === 'dusk';
+  // Midpoint of the night, for the moon marker.
+  const nightMidFrac =
+    sunsetFrac !== null && sunriseFrac !== null ? (sunsetFrac + sunriseFrac) / 2 : null;
+  const inRange = (f: number | null): f is number => f !== null && f > 0.01 && f < 0.99;
 
   return (
     <div className="max-w-[560px]">
       {/* Phase + hour + next milestone */}
-      <div className="flex items-center justify-between gap-3 mb-2">
+      <div className="flex items-center justify-between gap-3 mb-2.5">
         <p className="text-[10px] uppercase tracking-widest flex items-center gap-1.5" style={{ color: 'var(--pw-text-tertiary)' }}>
-          <span className="text-sm leading-none">{phase.icon}</span>
+          <span className="inline-flex items-center justify-center w-4 h-4 leading-none shrink-0" style={{ color: accent }}>
+            <PhaseIcon name={phase.icon} size={16} accent={accent} />
+          </span>
           <span style={{ color: accent }}>{phase.label}</span>
           <span className="opacity-60">· Hour {currentHour} of {durationHours}</span>
         </p>
@@ -118,26 +125,36 @@ export default function EnduranceTracker({ startTime, durationHours, circuitName
           <div className="text-[10px] uppercase tracking-wider" style={{ color: 'var(--pw-text-tertiary)' }}>Elapsed</div>
         </div>
 
-        {/* Day/night band with elapsed fill, hour ticks & sun/moon markers */}
-        <div className="relative flex-1">
-          {/* Sun / moon markers above the bar */}
-          {sunsetFrac !== null && sunsetFrac > 0 && sunsetFrac < 1 && (
-            <span className="absolute -top-4 text-[11px] leading-none -translate-x-1/2 pointer-events-none" style={{ left: `${sunsetFrac * 100}%` }}>🌇</span>
+        {/* The lane: a road the hypercar drives along, under a day/night sky.
+            Sun rises/sets and the moon rides the night at the real fractions. */}
+        <div className="relative flex-1 h-10">
+          {/* Celestial marks above the road */}
+          {inRange(sunsetFrac) && (
+            <span className="absolute top-0 -translate-x-1/2 pointer-events-none" style={{ left: `${sunsetFrac * 100}%` }}><Sun size={15} horizon /></span>
           )}
-          {sunriseFrac !== null && sunriseFrac > 0 && sunriseFrac < 1 && (
-            <span className="absolute -top-4 text-[11px] leading-none -translate-x-1/2 pointer-events-none" style={{ left: `${sunriseFrac * 100}%` }}>🌅</span>
+          {inRange(nightMidFrac) && (
+            <span className="absolute top-0 -translate-x-1/2 pointer-events-none" style={{ left: `${nightMidFrac * 100}%` }}><Moon size={14} /></span>
+          )}
+          {inRange(sunriseFrac) && (
+            <span className="absolute top-0 -translate-x-1/2 pointer-events-none" style={{ left: `${sunriseFrac * 100}%` }}><Sun size={15} horizon /></span>
           )}
 
-          <div className="relative h-2.5 rounded-full overflow-hidden" style={{ background: trackBg, border: '1px solid var(--pw-glass-border)' }}>
-            {/* Elapsed overlay — brighten the portion already run */}
+          {/* Road surface (day/night tinted) */}
+          <div className="absolute left-0 right-0 rounded-full overflow-hidden" style={{ bottom: 2, height: 9, background: trackBg, border: '1px solid var(--pw-glass-border)' }}>
+            {/* Travelled portion, brightened with accent */}
             <motion.div
               className="absolute left-0 top-0 bottom-0"
-              style={{ background: `linear-gradient(90deg, ${accent}40, ${accent}18)` }}
+              style={{ background: `linear-gradient(90deg, ${accent}38, ${accent}14)` }}
               initial={false}
               animate={{ width: `${pct}%` }}
               transition={{ type: 'spring', stiffness: 60, damping: 20 }}
             />
-            {/* Hour ticks */}
+            {/* Dashed centre line */}
+            <div
+              className="absolute left-2 right-2 top-1/2 -translate-y-1/2 h-px pointer-events-none"
+              style={{ backgroundImage: 'repeating-linear-gradient(90deg, rgba(255,255,255,0.5) 0 5px, transparent 5px 13px)', opacity: 0.35 }}
+            />
+            {/* Hour posts */}
             {Array.from({ length: durationHours - 1 }, (_, i) => (
               <div
                 key={i}
@@ -145,24 +162,24 @@ export default function EnduranceTracker({ startTime, durationHours, circuitName
                 style={{
                   left: `${((i + 1) / durationHours) * 100}%`,
                   background: 'rgba(255,255,255,0.22)',
-                  opacity: (i + 1) % 6 === 0 ? 0.9 : 0.3,
+                  opacity: (i + 1) % 6 === 0 ? 0.85 : 0.28,
                 }}
               />
             ))}
-            {/* "Now" position marker with day/night glyph */}
-            <motion.div
-              className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex items-center justify-center"
-              initial={false}
-              animate={{ left: `${pct}%` }}
-              transition={{ type: 'spring', stiffness: 60, damping: 20 }}
-            >
-              <span
-                className="block w-3.5 h-3.5 rounded-full"
-                style={{ background: accent, boxShadow: `0 0 0 2px var(--pw-bg-primary), 0 0 12px ${accent}` }}
-              />
-            </motion.div>
           </div>
-          <div className="mt-1 text-center text-[10px] leading-none">{dayGlyph}</div>
+
+          {/* The hypercar, on the road at the current position */}
+          <motion.div
+            className="absolute pointer-events-none"
+            style={{ bottom: 7 }}
+            initial={false}
+            animate={{ left: `${pct}%` }}
+            transition={{ type: 'spring', stiffness: 60, damping: 20 }}
+          >
+            <div style={{ transform: 'translateX(-50%)' }}>
+              <Hypercar size={30} color={accent} night={isNight} />
+            </div>
+          </motion.div>
         </div>
 
         {/* Remaining */}

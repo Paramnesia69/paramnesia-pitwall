@@ -55,10 +55,19 @@ export function parseWecClassification(
   }
 
   // Header → column index (names trimmed; e.g. " LAPS" → "LAPS").
+  // Al Kamel uses two schemas: practice/quali ("POS", split DRIVERn_FIRST/SECOND)
+  // and the live RACE classification ("POSITION", single-field DRIVER_1..N).
+  // Resolve each field against both names so one parser covers both.
   const header = splitRow(lines[0]).map((h) => h.trim());
-  const col = (name: string) => header.indexOf(name);
+  const col = (...names: string[]) => {
+    for (const n of names) {
+      const i = header.indexOf(n);
+      if (i >= 0) return i;
+    }
+    return -1;
+  };
   const idx = {
-    pos: col('POS'),
+    pos: col('POS', 'POSITION'),
     number: col('NUMBER'),
     time: col('TIME'),
     gapFirst: col('GAP_FIRST'),
@@ -69,12 +78,20 @@ export function parseWecClassification(
     vehicle: col('VEHICLE'),
   };
 
-  // Driver name columns (up to 6 drivers per car).
+  // Driver columns — either split first/second (DRIVERn_FIRSTNAME/SECONDNAME)
+  // or a single full-name field (DRIVER_1..DRIVER_N, used in the race file).
   const driverCols: { first: number; second: number }[] = [];
   for (let n = 1; n <= 6; n++) {
     const f = col(`DRIVER${n}_FIRSTNAME`);
     const s = col(`DRIVER${n}_SECONDNAME`);
     if (f >= 0 && s >= 0) driverCols.push({ first: f, second: s });
+  }
+  const singleDriverCols: number[] = [];
+  if (driverCols.length === 0) {
+    for (let n = 1; n <= 6; n++) {
+      const c = col(`DRIVER_${n}`);
+      if (c >= 0) singleDriverCols.push(c);
+    }
   }
 
   const entries: WECTimingEntry[] = [];
@@ -88,6 +105,10 @@ export function parseWecClassification(
       const first = (r[dc.first] ?? '').trim();
       const second = (r[dc.second] ?? '').trim();
       const full = `${first} ${second}`.trim();
+      if (full) drivers.push(full);
+    }
+    for (const dc of singleDriverCols) {
+      const full = (r[dc] ?? '').trim();
       if (full) drivers.push(full);
     }
 
@@ -175,9 +196,11 @@ async function fetchWecTiming(): Promise<WECTimingData> {
     );
   }
 
-  // 2) Hourly classification snapshots, newest first.
+  // 2) Hourly classification snapshots, newest first. Folders are zero-padded
+  //    and prefixed: `01_Hour 1`, `02_Hour 2`, … with the CSV inside.
   for (let h = Math.min(currentHour, LE_MANS_2026_DURATION_H); h >= 1; h--) {
-    const url = `${LE_MANS_2026_RACE}/Hour%20${h}/03_Classification_Race_Hour%20${h}.CSV`;
+    const hh = String(h).padStart(2, '0');
+    const url = `${LE_MANS_2026_RACE}/${hh}_Hour%20${h}/03_Classification_Race_Hour%20${h}.CSV`;
     const csv = await fetchText(url);
     if (csv) {
       return parseWecClassification(csv, `hour-${h}`, h, finished ? 'finished' : 'live');

@@ -52,3 +52,36 @@ describe('parseWecClassification', () => {
     expect(parseWecClassification('', 'x', null, 'live').status).toBe('unavailable');
   });
 });
+
+// The live RACE classification uses a different schema (POSITION, single-field
+// DRIVER_1..N) than practice/quali — the parser must handle both.
+describe('parseWecClassification — live race schema', () => {
+  const raceCsv = readFileSync(
+    fileURLToPath(new URL('./fixtures/wec-race-classification-sample.csv', import.meta.url)),
+    'utf8',
+  );
+  const data = parseWecClassification(raceCsv, 'hour-2', 2, 'live');
+
+  it('groups the three classes and 62 entries', () => {
+    expect(data.classes.map((c) => c.name)).toEqual(['HYPERCAR', 'LMP2', 'LMGT3']);
+    expect(data.classes.reduce((n, c) => n + c.entries.length, 0)).toBe(62);
+  });
+
+  it('reads POSITION + single-field driver names (Toyota #8 leads Hypercar)', () => {
+    const top = data.classes.find((c) => c.name === 'HYPERCAR')!.entries[0];
+    expect(top.pos).toBe(1);
+    expect(top.classPos).toBe(1);
+    expect(top.number).toBe('8');
+    expect(top.team).toBe('Toyota Racing');
+    expect(top.manufacturer).toBe('Toyota');
+    expect(top.gapClass).toBe('LEADER');
+    expect(top.drivers).toContain('Sébastien BUEMI');
+    expect(top.drivers.length).toBe(3);
+  });
+
+  it('orders the class by real position', () => {
+    const hc = data.classes.find((c) => c.name === 'HYPERCAR')!.entries;
+    expect(hc[1].classPos).toBe(2);
+    expect(hc.every((e, i) => i === 0 || e.pos >= hc[i - 1].pos)).toBe(true);
+  });
+});

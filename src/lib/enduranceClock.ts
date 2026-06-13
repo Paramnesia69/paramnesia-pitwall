@@ -47,14 +47,19 @@ export function getDaylightState(nowMs: number, sun: SunWindow): DaylightState {
   return 'day';
 }
 
+export type RacePhaseIcon =
+  | 'grid' | 'start' | 'day' | 'dusk' | 'night'
+  | 'predawn' | 'dawn' | 'morning' | 'final' | 'flag' | 'racing';
+
 export interface RacePhase {
   label: string;
-  icon: string;
+  icon: RacePhaseIcon;
 }
 
 /**
  * Narrative phase of the race. Sun-aware when a SunWindow is supplied,
  * otherwise falls back to elapsed-based phases (start / final hour).
+ * `icon` is a semantic key → rendered as a premium SVG by RaceIcons.PhaseIcon.
  */
 export function getRacePhase(
   nowMs: number,
@@ -66,30 +71,30 @@ export function getRacePhase(
   const finishMs = startMs + totalMs;
   const elapsed = nowMs - startMs;
 
-  if (elapsed < 0) return { label: 'On the Grid', icon: '🏁' };
-  if (nowMs >= finishMs) return { label: 'Chequered Flag', icon: '🏆' };
+  if (elapsed < 0) return { label: 'On the Grid', icon: 'grid' };
+  if (nowMs >= finishMs) return { label: 'Chequered Flag', icon: 'flag' };
 
   // Final-phase labels take priority — the run to the flag matters most.
-  if (finishMs - nowMs <= 15 * 60_000) return { label: 'Run to the Flag', icon: '🏁' };
-  if (finishMs - nowMs <= 60 * 60_000) return { label: 'Final Hour', icon: '⏱️' };
-  if (elapsed <= 60 * 60_000) return { label: 'Le Départ', icon: '🚦' };
+  if (finishMs - nowMs <= 15 * 60_000) return { label: 'Run to the Flag', icon: 'flag' };
+  if (finishMs - nowMs <= 60 * 60_000) return { label: 'Final Hour', icon: 'final' };
+  if (elapsed <= 60 * 60_000) return { label: 'Le Départ', icon: 'start' };
 
   if (sun) {
     const state = getDaylightState(nowMs, sun);
-    if (state === 'dusk') return { label: 'Dusk Falls', icon: '🌇' };
-    if (state === 'dawn') return { label: 'Dawn Breaks', icon: '🌅' };
+    if (state === 'dusk') return { label: 'Dusk Falls', icon: 'dusk' };
+    if (state === 'dawn') return { label: 'Dawn Breaks', icon: 'dawn' };
     if (state === 'night') {
       const sunrise = new Date(sun.sunriseUtc).getTime();
       // Deepest, loneliest hours
-      if (nowMs >= sunrise - 3 * 3600_000) return { label: 'Before the Dawn', icon: '🌌' };
-      return { label: 'Into the Night', icon: '🌙' };
+      if (nowMs >= sunrise - 3 * 3600_000) return { label: 'Before the Dawn', icon: 'predawn' };
+      return { label: 'Into the Night', icon: 'night' };
     }
     // Daytime — distinguish the opening afternoon from the morning run
-    if (nowMs < new Date(sun.sunsetUtc).getTime()) return { label: 'Afternoon Run', icon: '☀️' };
-    return { label: 'Morning Charge', icon: '🌤️' };
+    if (nowMs < new Date(sun.sunsetUtc).getTime()) return { label: 'Afternoon Run', icon: 'day' };
+    return { label: 'Morning Charge', icon: 'morning' };
   }
 
-  return { label: 'Race in Progress', icon: '🏎️' };
+  return { label: 'Race in Progress', icon: 'racing' };
 }
 
 export interface Milestone {
