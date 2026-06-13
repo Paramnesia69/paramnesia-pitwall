@@ -231,7 +231,13 @@ export default function Dashboard({ featured, upcoming, seasonStats, newsFeedSlo
             const meta = SERIES_META[id];
             // Porsche + F1 are dark/red-fill SVGs that the grayscale+brightness
             // filter crushes to near-black — invert them to a white silhouette instead
-            const logoFilter = (meta.logo === '/logos/porsche.svg' || meta.logo === '/logos/f1.svg')
+            // Porsche, F1, GT World Challenge are dark/red-fill logos the
+            // grayscale+brightness filter crushes to near-black — invert to a
+            // white silhouette (like the result-card series emblem) instead
+            const invertWhite = meta.logo === '/logos/porsche.svg'
+              || meta.logo === '/logos/f1.svg'
+              || meta.logo === '/logos/gtwce-v2.png';
+            const logoFilter = invertWhite
               ? 'brightness(0) invert(1)'
               : 'grayscale(1) contrast(2) brightness(3)';
             return (
@@ -253,7 +259,7 @@ export default function Dashboard({ featured, upcoming, seasonStats, newsFeedSlo
                   <div
                     className="absolute inset-0"
                     style={{
-                      opacity: isActive ? 0.9 : 0.45,
+                      opacity: isActive ? 1 : 0.6,
                       maskImage: 'radial-gradient(ellipse at center, black 45%, transparent 85%)',
                       WebkitMaskImage: 'radial-gradient(ellipse at center, black 45%, transparent 85%)',
                       transition: 'opacity 0.2s',
