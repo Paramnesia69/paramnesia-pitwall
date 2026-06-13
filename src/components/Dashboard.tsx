@@ -231,14 +231,17 @@ export default function Dashboard({ featured, upcoming, seasonStats, newsFeedSlo
             const meta = SERIES_META[id];
             // Porsche + F1 are dark/red-fill SVGs that the grayscale+brightness
             // filter crushes to near-black — invert them to a white silhouette instead
-            // Porsche, F1, GT World Challenge are dark/red-fill logos the
-            // grayscale+brightness filter crushes to near-black — invert to a
-            // white silhouette (like the result-card series emblem) instead
+            // IMSA's detailed badge looks best in its natural brand colours
+            // (like the series watermark) — render it unfiltered. Dark/red-fill
+            // logos (Porsche, F1, GT) get crushed by the grayscale filter, so
+            // invert them to a white silhouette instead.
+            const naturalLogo = meta.logo === '/logos/imsa.svg';
             const invertWhite = meta.logo === '/logos/porsche.svg'
               || meta.logo === '/logos/f1.svg'
-              || meta.logo === '/logos/gtwce-v2.png'
-              || meta.logo === '/logos/imsa-v2.svg';
-            const logoFilter = invertWhite
+              || meta.logo === '/logos/gtwce-v2.png';
+            const logoFilter = naturalLogo
+              ? undefined
+              : invertWhite
               ? 'brightness(0) invert(1)'
               : 'grayscale(1) contrast(2) brightness(3)';
             return (
@@ -274,7 +277,7 @@ export default function Dashboard({ featured, upcoming, seasonStats, newsFeedSlo
                         className="object-contain"
                         style={{
                           filter: logoFilter,
-                          mixBlendMode: 'screen',
+                          mixBlendMode: naturalLogo ? 'normal' : 'screen',
                         }}
                       />
                     </div>

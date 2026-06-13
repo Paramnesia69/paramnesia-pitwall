@@ -8,14 +8,17 @@ interface SeriesEmblemProps {
 }
 
 /**
- * Small frameless series-logo emblem — the mirror of CircuitEmblem. Rendered as
- * a neutral white silhouette so it matches the circuit mark's "design
- * characters", sized/aligned to sit opposite it across the card title.
+ * Small frameless series-logo emblem, sized/aligned to sit opposite the
+ * CircuitEmblem across the card title. Rendered in the logo's NATURAL brand
+ * colours (matching the faded series watermark on the upcoming-events cards) —
+ * white-silhouette inversion destroyed detailed badges like IMSA. Dark-fill
+ * logos (Porsche) are the one exception that must be whitened to show on dark.
  * Renders nothing when the series has no logo.
  */
-export default function SeriesEmblem({ series, size = 38, opacity = 0.6 }: SeriesEmblemProps) {
+export default function SeriesEmblem({ series, size = 38, opacity = 0.85 }: SeriesEmblemProps) {
   const meta = SERIES_META[series];
   if (!meta?.logo) return null;
+  const invert = meta.logo === '/logos/porsche.svg';
 
   return (
     <span
@@ -30,7 +33,7 @@ export default function SeriesEmblem({ series, size = 38, opacity = 0.6 }: Serie
           width: '100%',
           height: '100%',
           objectFit: 'contain',
-          filter: 'brightness(0) invert(1)',
+          filter: invert ? 'brightness(0) invert(1)' : undefined,
           opacity,
         }}
       />
