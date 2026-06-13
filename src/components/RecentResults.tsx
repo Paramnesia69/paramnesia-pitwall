@@ -13,6 +13,7 @@ import WatchedButton from '@/components/ui/WatchedButton';
 import StarRating from '@/components/ui/StarRating';
 import SpoilerBlur from '@/components/ui/SpoilerBlur';
 import CircuitEmblem from '@/components/ui/CircuitEmblem';
+import SeriesEmblem from '@/components/ui/SeriesEmblem';
 import { useStore } from '@/store';
 
 interface RecentResultsProps {
@@ -121,10 +122,10 @@ function PodiumCard({ result }: { result: RaceResult }) {
         </div>
       </div>
 
-      {/* Race name + circuit emblem */}
+      {/* Circuit emblem (left) + race name + series emblem (right, above the team column) */}
       <div className="flex items-start gap-2.5 mb-3">
         <CircuitEmblem circuitName={result.circuit} size={38} opacity={0.55} />
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <h4
             className="text-[13px] font-bold mb-0.5 truncate"
             style={{ fontFamily: 'var(--font-orbitron), var(--pw-font-display)' }}
@@ -135,6 +136,7 @@ function PodiumCard({ result }: { result: RaceResult }) {
             {result.circuit} · {result.country}
           </p>
         </div>
+        <SeriesEmblem series={result.series} size={38} opacity={0.6} />
       </div>
 
       {/* Podium — blurred behind Spoiler Shield until watched/revealed */}
