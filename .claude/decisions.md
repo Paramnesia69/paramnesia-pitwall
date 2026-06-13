@@ -76,6 +76,15 @@ Fixed non-uniform, content-covered circuit marks. Key rules:
 - Colored maps are preserved (F1 sector colours etc.) — do NOT normalize circuits to white silhouettes (Phase A normalization was rejected; the colourful maps are wanted).
 - Placement helpers `.pw-wm-lane-tr` / `.pw-wm-lane-r` + `--pw-wm-opacity` exist in globals.css for any directional background mark; `getCircuitFilter(img)` in `images.ts` centralizes the dark/vivid/base filter triad.
 
+## Card Design & Typography (2026-06-13)
+The premium card language, established on EventCard and being rolled out to the other main cards:
+- **Title = Orbitron** (`var(--font-orbitron), var(--pw-font-display)`), the racy display face — matches the hero. Use for short titles (race names); body text (circuit/place) stays Geist sans.
+- **Times = Orbitron tabular** (`tabular-nums`, `var(--font-orbitron), var(--pw-font-mono)`).
+- **Sessions = 2-column aligned grid** (`grid grid-cols-2 gap-2`), each cell = name (left) + Orbitron time + reminder bell (right); live cell accent-tinted. Replaced the ragged inline flex-wrap. Session-progress dots removed.
+- **Series-logo watermark = bottom-centre, faded.** EventCard: `absolute left-1/2 -translate-x-1/2 bottom-14 w-[145px] h-[73px] opacity-0.07` — present but never covers text (was center-right covering the session times). Porsche SVG still inverted.
+- **Circuit = frameless CircuitEmblem** beside the name (unified thin white silhouette).
+- Highlights cards: user considers them "perfect" — restyle ONLY the bottom title text to the new type, keep the rest identical.
+
 ## CSS & Component Patterns
 - TiltCard has `overflow-hidden` — all absolute-positioned watermarks must fit inside card
 - Card uniform height: `h-full` must chain through StaggerItem → EventCard div → TiltCard

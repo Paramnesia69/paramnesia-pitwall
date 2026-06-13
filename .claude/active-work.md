@@ -6,12 +6,18 @@
 - `/deploy` — push uncommitted changes live
 - `/pitwall-agent <task>` — spawn dedicated data agent (use when main conversation is long/bloated)
 
-## Last Commits (2026-06-12)
-`8b8b547` — fix: Jolpica pagination — Monaco GP results were missing (limit clamped to 100 rows; affected /api/f1/results + /api/f1/h2h)
-`f3a522b` — Phase C pt2: Web Push reminders (Redis queue + GH Actions cron dispatch)
-`c08f782` — Phase C pt1: Spoiler Shield, clinch calculator, command palette
-`1c0bc7c` — Phase B: endurance mode + Le Mans state fix, live hero ambience, toasts, skeletons
-`5861fcb` — Phase A mobile foundation: bottom sheets, safe areas, standings stack, touch parity
+## Last Commits (2026-06-13 — Visual Redesign)
+`fefe4f1` — premium event-card redesign: Orbitron title+times, 2-col session grid, bottom-centre faded watermark (145px/0.07)
+`aab1d5a` — canonical round favicon via src/app/icon.png (defeats cached square)
+`f6a9893` — unified premium circuit watermarks (cleaned SVGs, thin cap 1.05%, uniform white) + round icon PNGs v3
+`8a05065` — restore series-logo watermark on hero + event cards; circuit = small emblem
+`dd6481b` — watermark rework B+C (lanes + circuit emblems)
+`8b8b547` — fix: Jolpica pagination — Monaco GP results were missing
+
+## In progress (2026-06-13)
+Rolling the new card design + Orbitron type onto the other main cards:
+- Recent Results (PodiumCard), News cards — apply new design/fonts
+- Highlights — restyle ONLY the bottom title text, rest stays identical (user: highlights card is "perfect")
 
 ## Phase Plan (user-approved, executing phase by phase)
 - **Phase A — done (5861fcb)**: mobile foundation (skipped: reduced-motion support)
