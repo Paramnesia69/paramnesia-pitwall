@@ -210,40 +210,60 @@ export default function HeroCard({ event }: HeroCardProps) {
           </motion.div>
         )}
 
-        {/* Session pills */}
+        {/* Sessions — aligned grid filling the hero width; Orbitron times */}
         {event.sessions.length > 0 && (
           <motion.div
-            className="flex flex-wrap gap-2"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.45 }}
+            style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(132px, 1fr))', gap: 8, maxWidth: 680 }}
           >
-            {event.sessions.map((s, i) => (
-              <div
-                key={i}
-                className={`text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5 transition-all duration-200${s.state === 'live' ? ' pw-live-pill' : ''}`}
-                style={{
-                  ...(s.state !== 'live' && { background: 'var(--pw-glass-bg)' }),
-                  border: `1px solid ${s.state === 'live' ? 'rgba(225,6,0,0.4)' : 'var(--pw-glass-border)'}`,
-                  color: s.state === 'finished' ? 'var(--pw-text-tertiary)' : 'var(--pw-text-secondary)',
-                  textDecoration: s.state === 'finished' ? 'line-through' : 'none',
-                  opacity: s.state === 'finished' ? 0.5 : 1,
-                }}
-              >
-                {s.state === 'live' && <span className="pw-live-dot" style={{ width: 5, height: 5 }} />}
-                <span>{s.name}</span>
-                <span className="font-mono">{formatTimeISR(s.startTime)}</span>
-                {s.state !== 'finished' && s.state !== 'live' && (
-                  <ReminderButton
-                    eventId={event.id}
-                    eventName={event.name}
-                    sessionName={s.name}
-                    sessionStart={s.startTime}
-                    accentColor={meta.accent}
-                  />
-                )}
-              </div>
-            ))}
+            {event.sessions.map((s, i) => {
+              const live = s.state === 'live';
+              const finished = s.state === 'finished';
+              return (
+                <div
+                  key={i}
+                  className="flex items-center justify-between gap-1.5 px-3 py-2 rounded-lg overflow-hidden"
+                  style={{
+                    background: live ? `${meta.accent}14` : 'var(--pw-glass-bg)',
+                    border: `1px solid ${live ? `${meta.accent}40` : 'var(--pw-glass-border)'}`,
+                    opacity: finished ? 0.45 : 1,
+                  }}
+                >
+                  <span
+                    className="text-xs flex items-center gap-1.5 min-w-0"
+                    style={{
+                      color: live ? meta.accent : 'var(--pw-text-secondary)',
+                      textDecoration: finished ? 'line-through' : 'none',
+                    }}
+                  >
+                    {live && <span className="pw-live-dot" style={{ width: 5, height: 5 }} />}
+                    <span className="truncate">{s.name}</span>
+                  </span>
+                  <div className="flex items-center gap-0.5 shrink-0">
+                    <span
+                      className="text-[12px] font-bold tabular-nums"
+                      style={{
+                        fontFamily: 'var(--font-orbitron), var(--pw-font-mono)',
+                        textDecoration: finished ? 'line-through' : 'none',
+                      }}
+                    >
+                      {formatTimeISR(s.startTime)}
+                    </span>
+                    {!finished && !live && (
+                      <ReminderButton
+                        eventId={event.id}
+                        eventName={event.name}
+                        sessionName={s.name}
+                        sessionStart={s.startTime}
+                        accentColor={meta.accent}
+                      />
+                    )}
+                  </div>
+                </div>
+              );
+            })}
           </motion.div>
         )}
 

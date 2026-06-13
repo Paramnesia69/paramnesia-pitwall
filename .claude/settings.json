@@ -67,7 +67,8 @@
       "Bash(git tag *)",
       "Bash(git bundle *)",
       "Read(//Users/paramnesia/Documents/Claude/**)",
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "Bash(git commit -q -m 'feat: hero session grid — aligned auto-fit cells, Orbitron times \\(countdown kept\\) *)"
     ],
     "additionalDirectories": [
       "/private/tmp/src/data",
