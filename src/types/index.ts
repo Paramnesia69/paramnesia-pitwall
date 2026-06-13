@@ -302,11 +302,14 @@ export interface WECTimingEntry {
   gapFirst: string;       // gap to overall leader, as provided by Al Kamel
   gapPrev: string;        // interval to the car ahead overall (GAP_PREVIOUS)
   gapClass: string;       // computed gap to class leader ("LEADER" | "+N laps" | gap)
-  bestLapTime: string;    // fastest lap (FL_TIME), normalized to m:ss.mmm
-  bestLapNum: string;     // lap on which the fastest lap was set (FL_LAPNUM)
-  kph: string;            // average speed of the fastest lap (FL_KPH)
-  tyre: string;           // tyre marque label (Michelin / Goodyear / …)
-  status: string;         // Al Kamel STATUS (Classified / Retired / …)
+  gapAhead: string;       // interval to the car ahead in class ("LEADER" | "+N laps" | gap)
+  bestLapTime: string;    // fastest lap, normalized to m:ss.mmm
+  bestLapNum: string;     // lap on which the fastest lap was set
+  bestLapColor: string;   // 'Purple' (session best) | 'Green' (personal best) | '' (live source only)
+  kph: string;            // average speed of the fastest lap
+  tyre: string;           // tyre compound (SOFT/MEDIUM/HARD/WET) or marque label
+  status: string;         // running status — 'Running' | 'DNF' | 'In Pit' | …
+  pitStops: number;       // pit-stop count (live source only; 0 otherwise)
   drivers: string[];      // full driver names in the car
 }
 
@@ -315,10 +318,23 @@ export interface WECTimingClass {
   entries: WECTimingEntry[];
 }
 
+/** Live session conditions, when the live (Griiip) source is in use. */
+export interface WECWeather {
+  airTemp: number;        // °C
+  trackTemp: number;      // °C
+  humidity: number;       // %
+  sky: string;            // e.g. "PartiallyCloudy"
+  windKph: number;
+  windDir: string;
+}
+
 export interface WECTimingData {
   status: 'live' | 'pending' | 'finished' | 'unavailable';
-  source: string;         // which file/hour produced this snapshot
+  source: string;         // which source produced this snapshot ('live' | 'race' | 'hour-N' | 'none')
   hour: number | null;    // race hour when known
   updated: string;        // ISO timestamp of this fetch
+  leaderLap: number | null; // current leader lap (live source)
+  flag: string | null;    // current race flag (live source: 'Green' | 'Yellow' | …)
+  weather: WECWeather | null;
   classes: WECTimingClass[];
 }

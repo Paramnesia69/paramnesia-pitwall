@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { parseWecClassification } from '@/lib/wecTiming';
+import { parseWecClassification, normalizeGriiipBootstrap } from '@/lib/wecTiming';
 
 // Real Al Kamel classification CSV saved from the 2026 Le Mans Warm Up — the
 // exact format the live race classification uses.
@@ -91,5 +91,47 @@ describe('parseWecClassification — live race schema', () => {
     expect(top.bestLapNum).toBe('20');
     expect(top.kph).toBe('237.5');            // FL_KPH
     expect(top.tyre).toBe('Michelin');        // TYRES "M"
+  });
+});
+
+// The live (Griiip) backend ships a rich JSON bootstrap. normalizeGriiipBootstrap
+// folds participants + ranks + gaps + bestLaps + tyres + status into the same
+// per-class shape the panel renders.
+describe('normalizeGriiipBootstrap — live JSON backend', () => {
+  const boot = JSON.parse(
+    readFileSync(fileURLToPath(new URL('./fixtures/wec-griiip-bootstrap-sample.json', import.meta.url)), 'utf8'),
+  );
+  const data = normalizeGriiipBootstrap(boot, 'live', 96, 'Green');
+
+  it('marks the snapshot live with leader lap + flag + weather', () => {
+    expect(data.status).toBe('live');
+    expect(data.source).toBe('live');
+    expect(data.leaderLap).toBe(96);
+    expect(data.flag).toBe('Green');
+    expect(data.weather?.trackTemp).toBeGreaterThan(0);
+  });
+
+  it('orders classes HYPERCAR → LMP2 → LMGT3', () => {
+    expect(data.classes.map((c) => c.name)).toEqual(['HYPERCAR', 'LMP2', 'LMGT3']);
+  });
+
+  it('maps the Hypercar class leader with team, drivers, tyre, best lap', () => {
+    const top = data.classes.find((c) => c.name === 'HYPERCAR')!.entries[0];
+    expect(top.classPos).toBe(1);
+    expect(top.number).toBe('38');
+    expect(top.team).toBe('CADILLAC HERTZ TEAM JOTA');
+    expect(top.manufacturer).toBe('Cadillac');
+    expect(top.gapClass).toBe('LEADER');
+    expect(top.bestLapTime).toBe('3:26.605'); // 206605ms
+    expect(top.bestLapColor).toBe('Green');
+    expect(top.tyre).toBe('Medium');          // MEDIUM → Medium
+    expect(top.status).toBe('Running');
+    expect(top.drivers).toContain('Sébastien BOURDAIS');
+  });
+
+  it('computes a class gap for the second car', () => {
+    const second = data.classes.find((c) => c.name === 'HYPERCAR')!.entries[1];
+    expect(second.classPos).toBe(2);
+    expect(second.gapClass).not.toBe('LEADER');
   });
 });

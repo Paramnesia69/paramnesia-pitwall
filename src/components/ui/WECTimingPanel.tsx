@@ -17,6 +17,32 @@ const CLASS_COLOR: Record<string, string> = {
   LMGT3: '#1A6B38',    // green
 };
 
+/** Race-flag accent colours for the live header. */
+const FLAG_COLOR: Record<string, string> = {
+  Green: '#36C24A',
+  Yellow: '#F5C518',
+  Red: '#E10600',
+  FCY: '#F5C518',
+  SC: '#F5C518',
+  Checkered: '#E6E6E6',
+  Chequered: '#E6E6E6',
+};
+
+/** Tyre-compound dot colours (Griiip live). */
+const TYRE_COLOR: Record<string, string> = {
+  Soft: '#E2143C',
+  Medium: '#F5C518',
+  Hard: '#E6E6E6',
+  Wet: '#2C8FE0',
+  Intermediate: '#36C24A',
+};
+
+/** A car is "out" when its running status isn't actively running/classified. */
+function isOut(status: string): boolean {
+  const s = status.toLowerCase();
+  return s === 'dnf' || s === 'retired' || s === 'stopped' || s === 'dns' || s === 'dsq';
+}
+
 function ManufacturerLogo({ entry, fallback }: { entry: WECTimingEntry; fallback: string }) {
   const logo = getTeamLogo(entry.manufacturer);
   if (!logo) {
@@ -62,7 +88,7 @@ export default function WECTimingPanel({ accentColor, eventState }: Props) {
   useEffect(() => {
     fetchTiming();
     if (eventState === 'live' || eventState === 'starting_soon') {
-      const id = setInterval(fetchTiming, 60_000);
+      const id = setInterval(fetchTiming, 20_000);
       return () => clearInterval(id);
     }
   }, [fetchTiming, eventState]);
@@ -100,6 +126,8 @@ export default function WECTimingPanel({ accentColor, eventState }: Props) {
   const activeTab = tab ?? data.classes[0].name;
   const active = data.classes.find((c) => c.name === activeTab) ?? data.classes[0];
   const isLive = data.status === 'live';
+  const liveSource = data.source === 'live';
+  const flagColor = FLAG_COLOR[data.flag ?? ''] ?? null;
 
   return (
     <div className="mb-6">
@@ -113,14 +141,34 @@ export default function WECTimingPanel({ accentColor, eventState }: Props) {
               Live
             </span>
           )}
-          {data.hour && (
+          {flagColor && (
+            <span className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-wide" style={{ color: flagColor }}>
+              <span className="rounded-sm" style={{ width: 7, height: 7, background: flagColor, display: 'inline-block', boxShadow: `0 0 5px ${flagColor}` }} />
+              {data.flag}
+            </span>
+          )}
+          {liveSource && data.leaderLap != null && (
+            <span className="text-[9px] uppercase tracking-wide tabular-nums" style={{ color: 'var(--pw-text-tertiary)' }}>· Lap {data.leaderLap}</span>
+          )}
+          {!liveSource && data.hour && (
             <span className="text-[9px] uppercase tracking-wide" style={{ color: 'var(--pw-text-tertiary)' }}>· Hour {data.hour}</span>
           )}
         </div>
         <a href="https://www.fiawec.com" target="_blank" rel="noopener noreferrer" className="text-[9px] hover:opacity-80 transition-opacity" style={{ color: 'var(--pw-text-tertiary)' }}>
-          via Al Kamel
+          {liveSource ? 'via FIA WEC' : 'via Al Kamel'}
         </a>
       </div>
+
+      {/* Live conditions strip */}
+      {data.weather && (
+        <div className="flex items-center gap-3 mb-2 px-3 py-1.5 rounded-md text-[9px] tabular-nums" style={{ background: 'var(--pw-glass-bg)', color: 'var(--pw-text-tertiary)' }}>
+          <span>Air <span style={{ color: 'var(--pw-text-secondary)' }}>{data.weather.airTemp.toFixed(0)}°</span></span>
+          <span>Track <span style={{ color: 'var(--pw-text-secondary)' }}>{data.weather.trackTemp.toFixed(0)}°</span></span>
+          <span>Hum <span style={{ color: 'var(--pw-text-secondary)' }}>{data.weather.humidity}%</span></span>
+          {data.weather.windKph > 0 && <span>Wind <span style={{ color: 'var(--pw-text-secondary)' }}>{data.weather.windDir} {data.weather.windKph}</span></span>}
+          {data.weather.sky && <span className="capitalize">{data.weather.sky.replace(/([A-Z])/g, ' $1').trim().toLowerCase()}</span>}
+        </div>
+      )}
 
       {/* Class tabs */}
       <div className="flex gap-1.5 mb-2">
@@ -151,13 +199,17 @@ export default function WECTimingPanel({ accentColor, eventState }: Props) {
         {active.entries.map((e, idx) => {
           const col = CLASS_COLOR[active.name] ?? accentColor;
           const leader = e.classPos === 1;
+          const out = isOut(e.status);
+          const tyreCol = TYRE_COLOR[e.tyre] ?? null;
+          const bestCol = e.bestLapColor === 'Purple' ? '#B14BFF' : e.bestLapColor === 'Green' ? '#36C24A' : 'var(--pw-text-secondary)';
           return (
             <div
               key={e.number}
               className="px-3 py-2"
               style={{
                 borderBottom: idx < active.entries.length - 1 ? '1px solid var(--pw-glass-border)' : undefined,
-                background: leader ? `${col}0e` : undefined,
+                background: leader && !out ? `${col}0e` : undefined,
+                opacity: out ? 0.5 : 1,
               }}
             >
               <div className="flex items-center gap-2.5">
@@ -167,18 +219,29 @@ export default function WECTimingPanel({ accentColor, eventState }: Props) {
                 <span className="w-7 text-[11px] font-bold flex-shrink-0 tabular-nums" style={{ color: 'var(--pw-text-secondary)' }}>#{e.number}</span>
                 <ManufacturerLogo entry={e} fallback={col} />
                 <div className="flex-1 min-w-0">
-                  <p className="text-[11px] font-semibold truncate" style={{ color: 'var(--pw-text-primary)' }}>{e.team}</p>
+                  <p className="text-[11px] font-semibold truncate flex items-center gap-1.5" style={{ color: 'var(--pw-text-primary)' }}>
+                    {e.team}
+                    {out && (
+                      <span className="px-1 rounded-sm font-bold uppercase tracking-wide flex-shrink-0" style={{ background: '#E1060022', color: '#FF6B6B', fontSize: 8 }}>{e.status || 'OUT'}</span>
+                    )}
+                  </p>
                   {e.drivers.length > 0 && (
                     <p className="text-[9px] truncate" style={{ color: 'var(--pw-text-tertiary)' }}>{e.drivers.join(' · ')}</p>
                   )}
-                  {(e.bestLapTime || e.kph || e.tyre) && (
+                  {(e.bestLapTime || e.kph || e.tyre || e.pitStops > 0) && (
                     <p className="text-[9px] truncate flex items-center gap-1.5 mt-0.5" style={{ color: 'var(--pw-text-tertiary)' }}>
                       {e.bestLapTime && (
-                        <span className="tabular-nums" style={{ fontFamily: 'var(--font-orbitron, monospace)', color: 'var(--pw-text-secondary)' }}>{e.bestLapTime}</span>
+                        <span className="tabular-nums" style={{ fontFamily: 'var(--font-orbitron, monospace)', color: bestCol }}>{e.bestLapTime}</span>
                       )}
                       {e.kph && <span className="tabular-nums opacity-80">{e.kph} km/h</span>}
                       {e.tyre && (
-                        <span className="px-1 rounded-sm font-bold uppercase tracking-wide" style={{ background: `${col}1a`, color: `${col}d0`, fontSize: 8 }}>{e.tyre}</span>
+                        <span className="inline-flex items-center gap-1">
+                          {tyreCol && <span className="rounded-full" style={{ width: 6, height: 6, background: tyreCol, display: 'inline-block' }} />}
+                          <span className="uppercase tracking-wide" style={{ fontSize: 8, color: 'var(--pw-text-secondary)' }}>{e.tyre}</span>
+                        </span>
+                      )}
+                      {e.pitStops > 0 && (
+                        <span className="tabular-nums opacity-80" title="pit stops">{e.pitStops} stop{e.pitStops === 1 ? '' : 's'}</span>
                       )}
                     </p>
                   )}
