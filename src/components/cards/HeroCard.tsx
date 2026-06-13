@@ -193,6 +193,7 @@ export default function HeroCard({ event }: HeroCardProps) {
             <EnduranceTracker
               startTime={raceSession.startTime}
               durationHours={enduranceHours}
+              circuitName={event.circuit.name}
               accent={meta.accent}
             />
           </motion.div>

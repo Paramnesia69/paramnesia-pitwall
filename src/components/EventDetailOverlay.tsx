@@ -13,6 +13,7 @@ import CircuitStatsPanel from '@/components/ui/CircuitStatsPanel';
 import WeatherBadge from '@/components/ui/WeatherBadge';
 import EventShareButton from '@/components/ui/EventShareButton';
 import F1TimingPanel from '@/components/ui/F1TimingPanel';
+import WECTimingPanel from '@/components/ui/WECTimingPanel';
 import { getCircuitImage, getCircuitFilter } from '@/lib/images';
 import { getCountryFlag } from '@/lib/countryFlag';
 import { useMobileSheet } from '@/lib/useMobileSheet';
@@ -268,6 +269,14 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
               {event.series === 'f1' && (
                 <F1TimingPanel
                   eventId={event.id}
+                  accentColor={SERIES_META[event.series].accent}
+                  eventState={event.state}
+                />
+              )}
+
+              {/* WEC Live Classification — Al Kamel (Le Mans 24H) */}
+              {event.series === 'wec' && event.circuit.name === 'Circuit de la Sarthe' && (
+                <WECTimingPanel
                   accentColor={SERIES_META[event.series].accent}
                   eventState={event.state}
                 />

@@ -283,3 +283,38 @@ export const SERIES_META: Record<
   nordschleife: { name: 'Nordschleife', accent: '#4CAF50', logo: '/logos/nurburgring.svg' },
   lemans: { name: 'Le Mans', accent: '#0D64FF', logo: '/logos/lemans.svg' },
 };
+
+/**
+ * WEC / Le Mans live timing (Al Kamel classification CSV).
+ * Populated server-side by src/lib/wecTiming.ts; consumed by the WEC timing
+ * panel + mini-strip. Client components import these from @/types ONLY
+ * (never from the route — see the client→route import ban in decisions.md).
+ */
+export interface WECTimingEntry {
+  pos: number;            // overall race position
+  classPos: number;       // position within class
+  number: string;         // car number
+  team: string;
+  carClass: string;       // HYPERCAR | LMP2 | LMGT3
+  vehicle: string;        // car model, e.g. "Ferrari 499P"
+  manufacturer: string;   // first token of vehicle, for logo lookup
+  laps: number;
+  gapFirst: string;       // gap to overall leader, as provided by Al Kamel
+  gapClass: string;       // computed gap to class leader ("LEADER" | "+N laps" | gap)
+  bestLapTime: string;
+  kph: string;
+  drivers: string[];      // full driver names in the car
+}
+
+export interface WECTimingClass {
+  name: string;           // HYPERCAR | LMP2 | LMGT3
+  entries: WECTimingEntry[];
+}
+
+export interface WECTimingData {
+  status: 'live' | 'pending' | 'finished' | 'unavailable';
+  source: string;         // which file/hour produced this snapshot
+  hour: number | null;    // race hour when known
+  updated: string;        // ISO timestamp of this fetch
+  classes: WECTimingClass[];
+}

@@ -1,0 +1,54 @@
+import { describe, it, expect } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { parseWecClassification } from '@/lib/wecTiming';
+
+// Real Al Kamel classification CSV saved from the 2026 Le Mans Warm Up — the
+// exact format the live race classification uses.
+const csv = readFileSync(
+  fileURLToPath(new URL('./fixtures/wec-classification-sample.csv', import.meta.url)),
+  'utf8',
+);
+
+describe('parseWecClassification', () => {
+  const data = parseWecClassification(csv, 'race', 3, 'live');
+
+  it('carries through status / source / hour', () => {
+    expect(data.status).toBe('live');
+    expect(data.source).toBe('race');
+    expect(data.hour).toBe(3);
+  });
+
+  it('groups all three Le Mans classes in canonical order', () => {
+    expect(data.classes.map((c) => c.name)).toEqual(['HYPERCAR', 'LMP2', 'LMGT3']);
+  });
+
+  it('parses 62 entries across the classes', () => {
+    const total = data.classes.reduce((n, c) => n + c.entries.length, 0);
+    expect(total).toBe(62);
+  });
+
+  it('normalizes the Hypercar leader (Ferrari #51)', () => {
+    const top = data.classes.find((c) => c.name === 'HYPERCAR')!.entries[0];
+    expect(top.number).toBe('51');
+    expect(top.team).toBe('Ferrari AF Corse');
+    expect(top.manufacturer).toBe('Ferrari');
+    expect(top.vehicle).toBe('Ferrari 499P');
+    expect(top.classPos).toBe(1);
+    expect(top.gapClass).toBe('LEADER');
+    expect(top.drivers).toContain('Alessandro PIER GUIDI');
+    expect(top.drivers.length).toBe(3);
+  });
+
+  it('computes class position + gap for the runner-up', () => {
+    const second = data.classes.find((c) => c.name === 'HYPERCAR')!.entries[1];
+    expect(second.classPos).toBe(2);
+    expect(second.number).toBe('50');
+    // #50 completed one fewer lap than #51 in the sample → exact lap-down gap.
+    expect(second.gapClass).toBe('+1 lap');
+  });
+
+  it('handles empty / short input gracefully', () => {
+    expect(parseWecClassification('', 'x', null, 'live').status).toBe('unavailable');
+  });
+});
