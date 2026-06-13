@@ -27,8 +27,8 @@ const FLAG_COLOR: Record<string, string> = {
   Checkered: '#E6E6E6', Chequered: '#E6E6E6',
 };
 const TYRE_IMG: Record<string, string> = {
-  Soft: '/tyres/wec/soft.png', Medium: '/tyres/wec/medium.png',
-  Hard: '/tyres/wec/hard.png', Wet: '/tyres/wec/wet.png',
+  Soft: '/tyres/wec/soft-v2.png', Medium: '/tyres/wec/medium-v2.png',
+  Hard: '/tyres/wec/hard-v2.png', Wet: '/tyres/wec/wet-v2.png',
 };
 
 function lapColor(c: string): string {
