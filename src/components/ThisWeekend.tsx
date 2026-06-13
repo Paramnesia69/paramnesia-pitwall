@@ -8,6 +8,7 @@ import { formatTimeISR } from '@/lib/events';
 import { useStore } from '@/store';
 import Countdown from '@/components/ui/Countdown';
 import SeriesBadge from '@/components/ui/SeriesBadge';
+import ReminderButton from '@/components/ui/ReminderButton';
 import { WeatherBadgeCompact } from '@/components/ui/WeatherBadge';
 import { getCountryFlag } from '@/lib/countryFlag';
 import { sessionKey, type ConflictInfo } from '@/lib/conflicts';
@@ -125,31 +126,65 @@ export default function ThisWeekend({ events, conflicts }: ThisWeekendProps) {
                     </div>
 
                     {/* Event name */}
-                    <h4 className="text-sm font-semibold tracking-tight leading-snug mb-0.5">{event.name}</h4>
-                    <p className="text-[11px] mb-2" style={{ color: 'var(--pw-text-tertiary)' }}>
+                    <h4
+                      className="text-[13px] font-bold tracking-tight leading-snug mb-0.5"
+                      style={{ fontFamily: 'var(--font-orbitron), var(--pw-font-display)' }}
+                    >
+                      {event.name}
+                    </h4>
+                    <p className="text-[11px] mb-2.5" style={{ color: 'var(--pw-text-tertiary)' }}>
                       {flag && <span className="mr-1">{flag}</span>}{event.circuit.name}
                     </p>
 
-                    {/* Next session countdown or time */}
-                    {nextSession && (
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-mono flex items-center gap-1" style={{ color: clashes ? '#FFB800' : 'var(--pw-text-tertiary)' }}>
-                          {clashes && (
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
-                              aria-label="Schedule clash"
+                    {/* Next session — new aligned box: name + Orbitron time + reminder bell */}
+                    {nextSession && (() => {
+                      const live = nextSession.state === 'live';
+                      return (
+                        <>
+                          <div
+                            className="flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-lg overflow-hidden"
+                            style={{
+                              background: clashes ? '#FFB80012' : live ? `${meta.accent}14` : 'var(--pw-glass-bg)',
+                              border: `1px solid ${clashes ? '#FFB80040' : live ? `${meta.accent}40` : 'var(--pw-glass-border)'}`,
+                            }}
+                            title={clashes ? `Clashes with: ${clashes.join(', ')}` : undefined}
+                          >
+                            <span
+                              className="text-[11px] flex items-center gap-1 min-w-0"
+                              style={{ color: clashes ? '#FFB800' : live ? meta.accent : 'var(--pw-text-secondary)' }}
                             >
-                              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-                              <line x1="12" y1="9" x2="12" y2="13" />
-                              <line x1="12" y1="17" x2="12.01" y2="17" />
-                            </svg>
-                          )}
-                          <span title={clashes ? `Clashes with: ${clashes.join(', ')}` : undefined}>
-                            {nextSession.name} {formatTimeISR(nextSession.startTime)}
-                          </span>
-                        </span>
-                        <Countdown targetDate={nextSession.startTime} compact />
-                      </div>
-                    )}
+                              {clashes && (
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0" aria-label="Schedule clash">
+                                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                                  <line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" />
+                                </svg>
+                              )}
+                              <span className="truncate">{nextSession.name}</span>
+                            </span>
+                            <div className="flex items-center gap-0.5 shrink-0">
+                              <span
+                                className="text-[12px] font-bold tabular-nums"
+                                style={{ fontFamily: 'var(--font-orbitron), var(--pw-font-mono)' }}
+                              >
+                                {formatTimeISR(nextSession.startTime)}
+                              </span>
+                              {!live && (
+                                <ReminderButton
+                                  eventId={event.id}
+                                  eventName={event.name}
+                                  sessionName={nextSession.name}
+                                  sessionStart={nextSession.startTime}
+                                  accentColor={meta.accent}
+                                />
+                              )}
+                            </div>
+                          </div>
+                          <div className="mt-2 flex justify-end">
+                            <Countdown targetDate={nextSession.startTime} compact />
+                          </div>
+                        </>
+                      );
+                    })()}
                   </motion.div>
                 );
               })}
