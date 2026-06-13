@@ -237,7 +237,7 @@ export default function Dashboard({ featured, upcoming, seasonStats, newsFeedSlo
             const invertWhite = meta.logo === '/logos/porsche.svg'
               || meta.logo === '/logos/f1.svg'
               || meta.logo === '/logos/gtwce-v2.png'
-              || meta.logo === '/logos/imsa.svg';
+              || meta.logo === '/logos/imsa-v2.svg';
             const logoFilter = invertWhite
               ? 'brightness(0) invert(1)'
               : 'grayscale(1) contrast(2) brightness(3)';

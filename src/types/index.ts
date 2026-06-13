@@ -263,7 +263,7 @@ export const SERIES_META: Record<
 > = {
   f1: { name: 'Formula 1', accent: '#E10600', logo: '/logos/f1.svg' },
   wec: { name: 'WEC', accent: '#0090D4', logo: '/logos/wec.png' },
-  imsa: { name: 'IMSA', accent: '#C4A747', logo: '/logos/imsa.svg' },
+  imsa: { name: 'IMSA', accent: '#C4A747', logo: '/logos/imsa-v2.svg' },
   elms: { name: 'ELMS', accent: '#3A7BD5', logo: '/logos/elms.png' },
   motogp: { name: 'MotoGP', accent: '#BE0A14', logo: '/logos/motogp.svg' },
   wrc: { name: 'WRC', accent: '#00A651', logo: '/logos/wrc.svg' },
@@ -272,7 +272,7 @@ export const SERIES_META: Record<
     accent: '#FF6B00',
     logo: '/logos/gtwce-v2.png',
   },
-  dtm: { name: 'DTM', accent: '#F5C518', logo: '/logos/dtm.svg' },
+  dtm: { name: 'DTM', accent: '#F5C518', logo: '/logos/dtm-v2.svg' },
   'porsche-supercup': { name: 'Porsche Supercup', accent: '#C0A062', logo: '/logos/porsche.svg' },
   'porsche-carrera': { name: 'Porsche Carrera Cup', accent: '#C0A062', logo: '/logos/porsche.svg' },
   nurburgring: {
