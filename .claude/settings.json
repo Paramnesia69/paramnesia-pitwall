@@ -83,7 +83,11 @@
       "Bash(curl -s --max-time 20 \"https://fiawec.alkamelsystems.com/Results/15_2026/03_LE%20MANS/657_FIA%20WEC/202606131600_Race/03_Classification_Race.CSV\" -o lemans.csv)",
       "Bash(awk -F';' 'NR>1{print $13}' h4.csv)",
       "Bash(awk -F';' 'NR>1{print $9}' h4.csv)",
-      "Bash(awk -F';' 'NR>1{print $1\"|\"$2\"|\"$13\"|\"$14\"|\"$17\"|\"$19\"|\"$20}' h4.csv)"
+      "Bash(awk -F';' 'NR>1{print $1\"|\"$2\"|\"$13\"|\"$14\"|\"$17\"|\"$19\"|\"$20}' h4.csv)",
+      "Bash(npx vitest *)",
+      "Bash(gh run *)",
+      "Bash(node --input-type=module -e ' *)",
+      "Bash(perl -0pi -e 's/leaderLap: null, flag: null, weather: null, classes/leaderLap: null, flag: null, weather: null, commentary: null, raceLog: [], classes/g' src/lib/wecTiming.ts)"
     ],
     "additionalDirectories": [
       "/private/tmp/src/data",

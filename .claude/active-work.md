@@ -6,7 +6,13 @@
 - `/deploy` — push uncommitted changes live
 - `/pitwall-agent <task>` — spawn dedicated data agent (use when main conversation is long/bloated)
 
-## Recently shipped (2026-06-13)
+## Recently shipped (2026-06-14)
+- **WEC genuinely-live timing (Griiip)** — `wecTiming.ts` now polls the official FIA WEC backend (Griiip at `insights.griiip.com`, Firebase anon token) first, Al Kamel CSV as fallback. Real per-poll updates, no websocket. See decisions.md.
+- **Full-screen timing board** (`WECTimingBoard`, "Full board" button in `WECTimingPanel`) — every car, all classes, full telemetry columns + real tyre illustrations (`/tyres/wec/*-v3.png`).
+- **WEC race-intelligence layer** — live commentator (+MP3 play), battle highlight, gap-trend arrows, striking distance, in-pit badge, Race Log drawer. All from the Griiip bootstrap. See features.md "WEC Race-Intelligence Layer". **Verified NOT available: RPM/gear/speed/GPS-map** (don't re-investigate — documented).
+- **Asset fixes** — round transparent tyre illustrations with see-through rim gaps; authentic two-tone Peugeot emblem (`brand-peugeot-v2.png`, black shield + white linework, no filter).
+
+## Shipped 2026-06-13
 - **Endurance Live Layer (Le Mans)** — hero day/night road + hypercar + phase/milestones (`enduranceClock.ts`, `EnduranceTracker`, `RaceIcons`) and WEC live class timing (`/api/wec/timing`, `WECTimingPanel`, Al Kamel CSV). See features.md + decisions.md "WEC Live Timing & Endurance Layer".
 - **Endurance/WEC visual polish** — road marker is now a real LMP prototype PNG (`/lemans-prototype.png`, bg cut from a dithered source — see decisions.md); clean premium road ribbon (kerb/chequered edges rejected); WEC class colours fixed per class (Hypercar red / LMP2 blue / LMGT3 green, no "flapping"); live session row + YouTube links use the series accent (blue), `pw-live-dot` stays red.
 - **Visual redesign** — natural-colour logos everywhere (Porsche-only invert), CircuitEmblem/SeriesEmblem, Orbitron titles/times, cleaned circuit SVGs, round favicon. See decisions.md "Logo & Watermark System — FINAL".
@@ -29,7 +35,7 @@
 - WRC: after R7 Rally Japan (Evans 151 leads). IMSA GTP/GTD Pro/GTD: after R5 Detroit. DTM: after R2 Zandvoort.
 
 ## Backlog (next up)
-- **Data**: WEC R3 Le Mans 24H result (after Jun 14), GTWCE Misano, Supercup Barcelona; ELMS R3 Imola (Jul 5); DTM R3 Lausitzring (Jun 19–21); Nürburgring NLS6 (Jun 20)
-- **WEC timing**: currently Le Mans-2026-only (hardcoded event base) — generalise to other WEC rounds if wanted
-- **WEC timing — richer data (requested)**: surface more Al Kamel fields beyond pos/number/team/drivers/laps/gap (e.g. last lap, best lap + sector times, pit stops, KPH, interval, tyres). Parser already reads `TIME`/`KPH`/`GAP_FIRST`; CSV header has more. NOTE: the live race-root `03_Classification_Race.CSV` 404s when probed off-session (returns an HTML error page) — confirm the exact live column set against a real in-race fetch before building UI.
+- **Data (NEXT — do soon)**: **WEC R3 Le Mans 24H result** (race finished ~Jun 14 16:00 local — add podium + Hypercar/LMGT3 standings); GTWCE Misano, Supercup Barcelona; ELMS R3 Imola (Jul 5); DTM R3 Lausitzring (Jun 19–21); Nürburgring NLS6 (Jun 20). Use `/renew-results`.
+- **WEC timing — verify post-race**: the Griiip live source only serves during a live session. After Le Mans ends, `fetchGriiipLive()` returns null and it falls back to Al Kamel CSV (which then 404s) → panel shows `pending`/unavailable. Confirm the Le Mans event overlay degrades gracefully now the race is over; consider hiding the live panel once `state==='finished'`.
+- **WEC timing — generalise**: currently Le Mans-2026-only (hardcoded Al Kamel base + event gate in `EventDetailOverlay`). The Griiip path auto-discovers the live session, so it could work for any live WEC round — wire the panel to mount for any live WEC event, not just Circuit de la Sarthe.
 - **Minor polish**: "What's Live" badge black-F1-logo bug (one-line fix like MiniLeaderboard); Nürburgring filter-bar logo faint; Aprilia/Yamaha not true-colour; H2H bars don't distinguish same-colour teammates
