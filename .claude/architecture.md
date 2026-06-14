@@ -27,7 +27,9 @@ src/
 │       ├── openf1/
 │       │   └── timing/route.ts # /api/openf1/timing?eventId= — F1 live timing proxy
 │       ├── wec/
-│       │   └── timing/route.ts # /api/wec/timing — Le Mans live class timing (Al Kamel CSV proxy, thin)
+│       │   └── timing/route.ts # /api/wec/timing — WEC live class timing (Griiip live + Al Kamel CSV fallback, thin)
+│       ├── elms/
+│       │   └── timing/route.ts # /api/elms/timing — ELMS live class timing (Al Kamel CSV, auto-discovers live round, thin)
 │       ├── f1/
 │       │   ├── driver/[driverRef]/route.ts      # /api/f1/driver/:ref — Jolpica driver profile, no-store cache
 │       │   └── constructor/[constructorRef]/route.ts # /api/f1/constructor/:ref — Jolpica constructor profile, no-store cache
@@ -67,7 +69,7 @@ src/
 │       ├── CircuitEmblem.tsx # Small frameless white track silhouette by the circuit name (getCircuitFilter → invert white)
 │       ├── SeriesEmblem.tsx  # Natural-colour series logo; mirrors CircuitEmblem on RecentResults
 │       ├── F1TimingPanel.tsx # Fetches /api/openf1/timing; polls 45s when live
-│       ├── WECTimingPanel.tsx # Fetches /api/wec/timing; class tabs (HYPERCAR red / LMP2 blue / LMGT3 green — each ALWAYS its own colour: active brighter, inactive dimmed, never recoloured); CLASS_COLOR drives tab + leaderboard accent; Live dot = series accent (blue); polls 60s when live; pending state pre-timing
+│       ├── WECTimingPanel.tsx # Multi-series sportscar timing panel (WEC + ELMS). Props: endpoint (default /api/wec/timing), providerName/providerUrl, boardTitle. Class tabs (HYPERCAR red / LMP2 blue / LMP2 Pro/Am lighter blue / LMP3 purple / LMGT3 green — each ALWAYS its own colour: active brighter, inactive dimmed, never recoloured); CLASS_COLOR drives tab + leaderboard accent; Live dot = series accent; polls 20s when live; pending state pre-timing
 │       ├── EnduranceTracker.tsx # Hero endurance clock: day/night-tinted road ribbon + real prototype PNG marker (/lemans-prototype.png) + phase + milestone (see Endurance Live Layer)
 │       └── RaceIcons.tsx     # Premium inline-SVG racing icons (Hypercar, start-light gantry, chequered flag, stopwatch, gradient sun/moon) — replaces emoji
 │   # NOTE: src/app/icon.png = Next canonical round favicon (see decisions.md Logo & Watermark System — FINAL)
@@ -81,7 +83,8 @@ src/
 ├── lib/
 │   ├── endurance.ts          # getEnduranceDurationHours(name) — race length from official name; powers EnduranceTracker + state fallback
 │   ├── enduranceClock.ts     # Endurance race-phase + day/night (real sun facts) + next-milestone math — pure, tested
-│   ├── wecTiming.ts          # getWecTiming() — fetch Al Kamel Le Mans classification CSV → per-class leaderboard (60s cache, dual-schema parser)
+│   ├── wecTiming.ts          # getWecTiming() — Griiip live + Al Kamel Le Mans CSV fallback → per-class leaderboard (20s cache, dual-schema parser). Exports parseWecClassification + CLASS_ORDER (shared with ELMS)
+│   ├── elmsTiming.ts         # getElmsTiming() — Al Kamel ELMS CSV; parseLatestRaceBase auto-discovers the live round from the tree-menu homepage; reuses parseWecClassification (20s cache)
 │   ├── events.ts             # getEventsWithState, getUpcomingEvents, getFeaturedEvent; endurance-aware session-end fallback
 │   ├── teamLogos.ts          # Logo resolution — see Logo System below
 │   ├── weather.ts            # fetchWeather (OpenWeatherMap), getSimulatedWeather fallback
@@ -127,7 +130,8 @@ Two cooperating pieces that make a 24H race feel live. See `decisions.md` for th
 - `ui/RaceIcons.tsx`: all icons are inline SVG (no emoji). `PhaseIcon` maps `RacePhaseIcon` → component; exports `Hypercar` (SVG, only the `racing`-phase fallback still uses it — the road marker is now the PNG), `Sun`, `Moon`. Gradients use `useId()` to avoid id collisions.
 
 ### Bucket 2A — WEC live classification (real data)
-- `lib/wecTiming.ts` → `/api/wec/timing` (thin proxy, mirrors openf1/timing) → `ui/WECTimingPanel.tsx` (mounted in `EventDetailOverlay` only when `series==='wec' && circuit.name==='Circuit de la Sarthe'`).
+- `lib/wecTiming.ts` → `/api/wec/timing` (thin proxy, mirrors openf1/timing) → `ui/WECTimingPanel.tsx` (mounted in `EventDetailOverlay` for any `series==='wec'` event in `live`/`starting_soon` state; Griiip auto-discovers the session so it's no longer Le Mans-gated).
+- `lib/elmsTiming.ts` → `/api/elms/timing` → same `WECTimingPanel` with `endpoint="/api/elms/timing"` (mounted for any `series==='elms'` event in `live`/`starting_soon`). ELMS is Al Kamel-only (no Griiip); `parseLatestRaceBase` scrapes the Al Kamel tree-menu homepage for the highest-numbered round's `…/{timestamp}_Race` folder, then probes the live root then `Hour N` snapshots downward (4h races).
 - Source = **Al Kamel** classification CSV. **No live root file during the race**; data lives in hourly snapshots at `…/202606131600_Race/${NN}_Hour ${N}/03_Classification_Race_Hour ${N}.CSV` (zero-padded folder prefix). Fetch loop probes the current hour downward; returns `pending` before Hour 1, `live` otherwise.
 - **Dual-schema parser** (`parseWecClassification`, pure + tested): practice/quali CSVs use `POS` + split `DRIVERn_FIRSTNAME/SECONDNAME`; the live RACE CSV uses `POSITION` + single-field `DRIVER_1..N`. Each field resolved against both names. Per-class gap = exact lap-down delta to the class leader.
 - Types in `@/types`: `WECTimingData / WECTimingClass / WECTimingEntry` (client imports from `@/types` only — never the route).

@@ -32,7 +32,8 @@ const GRIIIP_API = 'https://insights.griiip.com';
 const GRIIIP_FIREBASE_KEY = 'AIzaSyDCkJK0R557QCPLoJ4_At_5s0dvW_71_V4'; // public web API key (client-embedded)
 const GRIIIP_ORIGIN = 'https://livetiming.fiawec.com';
 
-const CLASS_ORDER = ['HYPERCAR', 'LMP2', 'LMGT3'];
+// Canonical class order across WEC + ELMS (ELMS adds LMP2 Pro/Am + LMP3).
+const CLASS_ORDER = ['HYPERCAR', 'LMP2', 'LMP2 Pro/Am', 'LMP3', 'LMGT3'];
 const MULTIWORD_BRANDS = ['Aston Martin'];
 
 function manufacturerOf(vehicle: string): string {

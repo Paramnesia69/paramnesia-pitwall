@@ -9,14 +9,23 @@ import type { WECTimingData, WECTimingEntry } from '@/types';
 interface Props {
   accentColor: string;
   eventState: string;
+  /** Timing API to poll — defaults to WEC. ELMS passes /api/elms/timing. */
+  endpoint?: string;
+  /** Live-data provider name + link shown in the header. */
+  providerName?: string;
+  providerUrl?: string;
+  /** Title for the full-screen board. */
+  boardTitle?: string;
 }
 
 /** Class accent colours — official ELMS/ACO race-plate palette.
  * Drives each class's active tab (banner) + its leaderboard accent. */
 const CLASS_COLOR: Record<string, string> = {
-  HYPERCAR: '#E10600', // red
-  LMP2: '#1E4B8C',     // blue
-  LMGT3: '#1A6B38',    // green
+  HYPERCAR: '#E10600',      // red
+  LMP2: '#1E4B8C',          // blue
+  'LMP2 Pro/Am': '#2C72C7', // lighter blue (LMP2 sub-class)
+  LMP3: '#4A2090',          // purple
+  LMGT3: '#1A6B38',         // green
 };
 
 /** Race-flag accent colours for the live header. */
@@ -71,7 +80,14 @@ function ManufacturerLogo({ entry, fallback }: { entry: WECTimingEntry; fallback
   );
 }
 
-export default function WECTimingPanel({ accentColor, eventState }: Props) {
+export default function WECTimingPanel({
+  accentColor,
+  eventState,
+  endpoint = '/api/wec/timing',
+  providerName = 'FIA WEC',
+  providerUrl = 'https://www.fiawec.com',
+  boardTitle = 'Le Mans 24H',
+}: Props) {
   const [data, setData] = useState<WECTimingData | null>(null);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<string | null>(null);
@@ -79,14 +95,14 @@ export default function WECTimingPanel({ accentColor, eventState }: Props) {
 
   const fetchTiming = useCallback(async () => {
     try {
-      const res = await fetch('/api/wec/timing');
+      const res = await fetch(endpoint);
       if (res.ok) setData(await res.json());
     } catch {
       /* keep last good data */
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [endpoint]);
 
   useEffect(() => {
     fetchTiming();
@@ -166,14 +182,14 @@ export default function WECTimingPanel({ accentColor, eventState }: Props) {
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg>
             Full board
           </button>
-          <a href="https://www.fiawec.com" target="_blank" rel="noopener noreferrer" className="text-[9px] hover:opacity-80 transition-opacity" style={{ color: 'var(--pw-text-tertiary)' }}>
-            {liveSource ? 'via FIA WEC' : 'via Al Kamel'}
+          <a href={providerUrl} target="_blank" rel="noopener noreferrer" className="text-[9px] hover:opacity-80 transition-opacity" style={{ color: 'var(--pw-text-tertiary)' }}>
+            {liveSource ? `via ${providerName}` : 'via Al Kamel'}
           </a>
         </div>
       </div>
 
       <AnimatePresence>
-        {boardOpen && <WECTimingBoard accentColor={accentColor} onClose={() => setBoardOpen(false)} />}
+        {boardOpen && <WECTimingBoard accentColor={accentColor} endpoint={endpoint} title={boardTitle} onClose={() => setBoardOpen(false)} />}
       </AnimatePresence>
 
       {/* Live conditions strip */}

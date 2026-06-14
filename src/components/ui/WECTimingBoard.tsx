@@ -15,11 +15,17 @@ import type { WECTimingData, WECTimingEntry, WECRaceLogItem } from '@/types';
 interface Props {
   accentColor: string;
   onClose: () => void;
+  /** Timing API to poll — defaults to WEC. ELMS passes /api/elms/timing. */
+  endpoint?: string;
+  /** Board heading (e.g. "Le Mans 24H" or the ELMS circuit name). */
+  title?: string;
 }
 
 const CLASS_COLOR: Record<string, string> = {
   HYPERCAR: '#E10600',
   LMP2: '#1E4B8C',
+  'LMP2 Pro/Am': '#2C72C7',
+  LMP3: '#4A2090',
   LMGT3: '#1A6B38',
 };
 const FLAG_COLOR: Record<string, string> = {
@@ -206,16 +212,16 @@ function HeaderRow() {
   );
 }
 
-export default function WECTimingBoard({ accentColor, onClose }: Props) {
+export default function WECTimingBoard({ accentColor, onClose, endpoint = '/api/wec/timing', title = 'Le Mans 24H' }: Props) {
   const [data, setData] = useState<WECTimingData | null>(null);
   const [logOpen, setLogOpen] = useState(false);
 
   const fetchTiming = useCallback(async () => {
     try {
-      const res = await fetch('/api/wec/timing');
+      const res = await fetch(endpoint);
       if (res.ok) setData(await res.json());
     } catch { /* keep last good */ }
-  }, []);
+  }, [endpoint]);
 
   useEffect(() => {
     fetchTiming();
@@ -240,7 +246,7 @@ export default function WECTimingBoard({ accentColor, onClose }: Props) {
       {/* Top bar */}
       <div className="flex items-center justify-between px-5 py-3 shrink-0" style={{ borderBottom: '1px solid var(--pw-glass-border)', paddingTop: 'max(0.75rem, env(safe-area-inset-top))' }}>
         <div className="flex items-center gap-3 min-w-0">
-          <h2 className="text-sm font-bold uppercase tracking-wider truncate" style={{ ...ORBITRON, color: 'var(--pw-text-primary)' }}>Live Timing · Le Mans 24H</h2>
+          <h2 className="text-sm font-bold uppercase tracking-wider truncate" style={{ ...ORBITRON, color: 'var(--pw-text-primary)' }}>Live Timing · {title}</h2>
           {data?.status === 'live' && (
             <span className="flex items-center gap-1 text-[10px] font-bold uppercase" style={{ color: accentColor }}>
               <span className="rounded-full animate-pulse" style={{ width: 6, height: 6, background: accentColor }} />Live

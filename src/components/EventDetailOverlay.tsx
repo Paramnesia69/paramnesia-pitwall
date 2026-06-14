@@ -282,6 +282,18 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
                 />
               )}
 
+              {/* ELMS Live Classification — Al Kamel CSV (auto-discovers the live round) */}
+              {event.series === 'elms' && (event.state === 'live' || event.state === 'starting_soon') && (
+                <WECTimingPanel
+                  accentColor={SERIES_META[event.series].accent}
+                  eventState={event.state}
+                  endpoint="/api/elms/timing"
+                  providerName="European Le Mans Series"
+                  providerUrl="https://www.europeanlemansseries.com"
+                  boardTitle={event.circuit.name}
+                />
+              )}
+
               {/* Watch / stream links */}
               {event.streamLinks.length > 0 && (
                 <div className="mb-6">
