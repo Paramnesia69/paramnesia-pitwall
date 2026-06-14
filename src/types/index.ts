@@ -315,7 +315,28 @@ export interface WECTimingEntry {
   energyPct: number;      // hybrid energy % (Hypercar live source only; -1 unavailable)
   status: string;         // running status — 'Running' | 'DNF' | 'In Pit' | …
   pitStops: number;       // pit-stop count (live source only; 0 otherwise)
+  trend: string;          // gap-to-car-ahead trend — 'closing' | 'growing' | '' (live source only)
+  inBattle: boolean;      // currently in an on-track battle (live source only)
+  inPit: boolean;         // car is in the pit lane right now (live source only)
+  strikeLaps: number;     // est. laps to catch the car ahead (live source only; -1 = not striking)
   drivers: string[];      // full driver names in the car
+}
+
+/** Latest auto-commentary phrase (live source). */
+export interface WECCommentary {
+  phrase: string;
+  audioUrl: string;       // official MP3 of the spoken phrase ('' if none)
+  ts: string;             // ISO timestamp of the phrase
+}
+
+/** A single race-log event (overtake, pit, penalty, fastest lap, …). */
+export interface WECRaceLogItem {
+  id: string;
+  type: string;           // Overtake | PitIn | PitOut | Battle | FastestLap | RCMessage | DriverSwap | SignificantTimeLoss
+  lap: number;
+  carNumber: string;
+  carClass: string;       // '' for race-control messages
+  text: string;           // human-readable line
 }
 
 /** A single sector time + its broadcast colour. */
@@ -347,5 +368,7 @@ export interface WECTimingData {
   leaderLap: number | null; // current leader lap (live source)
   flag: string | null;    // current race flag (live source: 'Green' | 'Yellow' | …)
   weather: WECWeather | null;
+  commentary: WECCommentary | null; // latest auto-commentary phrase (live source)
+  raceLog: WECRaceLogItem[];        // recent race-log events, newest first (live source)
   classes: WECTimingClass[];
 }

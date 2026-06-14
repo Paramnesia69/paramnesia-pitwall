@@ -144,3 +144,53 @@ describe('normalizeGriiipBootstrap — live JSON backend', () => {
     expect(second.gapClass).not.toBe('LEADER');
   });
 });
+
+// Race-intelligence layer: trends, battles, pit, striking distance, commentary,
+// race log — folded from the same bootstrap.
+describe('normalizeGriiipBootstrap — race intelligence', () => {
+  const boot = {
+    participants: [
+      { pid: 1, carNumber: '8', classId: 'HYPERCAR', teamName: 'Toyota Racing', manufacturer: 'Toyota GR010', drivers: [{ displayName: 'Sébastien BUEMI' }] },
+      { pid: 2, carNumber: '12', classId: 'HYPERCAR', teamName: 'Jota', manufacturer: 'Cadillac V-Series.R', drivers: [{ displayName: 'Will STEVENS' }] },
+    ],
+    ranks: [
+      { pid: 1, carNumber: '8', classId: 'HYPERCAR', overallPosition: 1, position: 1 },
+      { pid: 2, carNumber: '12', classId: 'HYPERCAR', overallPosition: 2, position: 2 },
+    ],
+    gaps: [
+      { pid: 1, carNumber: '8', classId: 'HYPERCAR', gapToFirstMillis: 0 },
+      { pid: 2, carNumber: '12', classId: 'HYPERCAR', gapToFirstMillis: 499 },
+    ],
+    gapTrends: [{ pid: 2, carNumber: '12', classId: 'HYPERCAR', trendType: 'Decreasing' }],
+    runningBattles: [{ isFinished: false, pid: 1, secondaryPID: 2, attacks: [] }],
+    carLocations: [{ pid: 2, carNumber: '12', classId: 'HYPERCAR', carLocation: 'Pit' }],
+    strikingDistances: [{ pid: 2, carNumber: '12', classId: 'HYPERCAR', strikingDistanceLaps: 3.25 }],
+    commentatorPhraseLatest: { phrase: 'Stevens is closing on Buemi for the lead.', audioUrl: 'https://x/y.mp3', ts: '2026-06-13T23:00:00Z' },
+    raceLogFirstPage: { items: [
+      { type: 'Overtake', raceLogItemId: 'o1', lapNumber: 160, carNumber: '15', classId: 'HYPERCAR', pid: 9, overtakenPid: 2, newPosition: 9 },
+      { type: 'RCMessage', raceLogItemId: 'r1', lapNumber: 157, text: 'CAR 78 - REPRIMAND - PIT STOP INFRINGEMENT' },
+    ] },
+  };
+  const data = normalizeGriiipBootstrap(boot, 'live', 160, 'Green');
+
+  it('marks gap trend, battle, pit and striking distance per car', () => {
+    const cars = data.classes.find((c) => c.name === 'HYPERCAR')!.entries;
+    const p2 = cars.find((e) => e.number === '12')!;
+    expect(p2.trend).toBe('closing');
+    expect(p2.inBattle).toBe(true);
+    expect(p2.inPit).toBe(true);
+    expect(p2.strikeLaps).toBe(3.3);
+    expect(cars.find((e) => e.number === '8')!.inBattle).toBe(true);
+  });
+
+  it('surfaces the latest commentary phrase + audio', () => {
+    expect(data.commentary?.phrase).toContain('closing on Buemi');
+    expect(data.commentary?.audioUrl).toBe('https://x/y.mp3');
+  });
+
+  it('builds a readable race log with resolved car numbers', () => {
+    expect(data.raceLog).toHaveLength(2);
+    expect(data.raceLog[0].text).toBe('#15 passes #12 for P9');
+    expect(data.raceLog[1].text).toBe('CAR 78 - REPRIMAND - PIT STOP INFRINGEMENT');
+  });
+});

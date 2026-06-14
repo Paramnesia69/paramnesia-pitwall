@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { m as motion } from 'framer-motion';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { getTeamLogo } from '@/lib/teamLogos';
-import type { WECTimingData, WECTimingEntry } from '@/types';
+import type { WECTimingData, WECTimingEntry, WECRaceLogItem } from '@/types';
 
 /**
  * Full-screen WEC live-timing board — a broadcast-style timing screen showing
@@ -37,6 +37,78 @@ function lapColor(c: string): string {
 function isOut(status: string): boolean {
   const s = status.toLowerCase();
   return s === 'dnf' || s === 'retired' || s === 'stopped' || s === 'dns' || s === 'dsq';
+}
+
+/** Closing (gap shrinking) = green ▾; pulling away = muted ▴. */
+function TrendArrow({ t }: { t: string }) {
+  if (t === 'closing') return <span style={{ color: '#36C24A', fontSize: 9 }} title="closing">▾</span>;
+  if (t === 'growing') return <span style={{ color: '#9aa0a6', fontSize: 9 }} title="pulling away">▴</span>;
+  return null;
+}
+
+const BATTLE_COLOR = '#FF8C2B';
+const PIT_COLOR = '#F5C518';
+const LOG_COLOR: Record<string, string> = {
+  Overtake: '#36C24A', FastestLap: '#B14BFF', Battle: '#FF8C2B',
+  PitIn: '#F5C518', PitOut: '#F5C518', RCMessage: '#E06A6A',
+  SignificantTimeLoss: '#E06A6A', DriverSwap: 'var(--pw-text-tertiary)',
+};
+
+/** Plays the official commentary MP3 on tap (no autoplay). */
+function PlayPhrase({ url, accent }: { url: string; accent: string }) {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [playing, setPlaying] = useState(false);
+  if (!url) {
+    return (
+      <span className="shrink-0" style={{ color: accent }} aria-hidden>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 11v2M7 8v8M11 5v14M15 9v6M19 7v10" /></svg>
+      </span>
+    );
+  }
+  const toggle = () => {
+    let a = audioRef.current;
+    if (!a) { a = new Audio(url); a.onended = () => setPlaying(false); audioRef.current = a; }
+    if (playing) { a.pause(); setPlaying(false); }
+    else { a.play().then(() => setPlaying(true)).catch(() => setPlaying(false)); }
+  };
+  return (
+    <button onClick={toggle} className="shrink-0 w-6 h-6 flex items-center justify-center rounded-full active:scale-90" style={{ background: `${accent}22`, color: accent }} aria-label={playing ? 'Pause commentary' : 'Play commentary'}>
+      {playing ? (
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1" /><rect x="14" y="5" width="4" height="14" rx="1" /></svg>
+      ) : (
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+      )}
+    </button>
+  );
+}
+
+function RaceLogDrawer({ items, accent, onClose }: { items: WECRaceLogItem[]; accent: string; onClose: () => void }) {
+  return (
+    <motion.div
+      className="absolute top-0 right-0 bottom-0 z-20 flex flex-col"
+      style={{ width: 'min(340px, 86vw)', background: 'var(--pw-bg-elevated)', borderLeft: '1px solid var(--pw-glass-border)', boxShadow: '-24px 0 80px rgba(0,0,0,0.6)' }}
+      initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', stiffness: 300, damping: 32 }}
+    >
+      <div className="flex items-center justify-between px-4 py-3 shrink-0" style={{ borderBottom: '1px solid var(--pw-glass-border)', paddingTop: 'max(0.75rem, env(safe-area-inset-top))' }}>
+        <h3 className="text-[11px] font-bold uppercase tracking-wider" style={{ ...ORBITRON, color: 'var(--pw-text-primary)' }}>Race Log</h3>
+        <button onClick={onClose} className="w-7 h-7 flex items-center justify-center rounded-full" style={{ background: 'var(--pw-glass-bg)', color: 'var(--pw-text-secondary)' }} aria-label="Close race log">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6 6 18M6 6l12 12" /></svg>
+        </button>
+      </div>
+      <div className="flex-1 overflow-auto" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+        {items.length === 0 && <p className="p-4 text-[11px]" style={{ color: 'var(--pw-text-tertiary)' }}>No events yet.</p>}
+        {items.map((it) => (
+          <div key={it.id} className="flex items-start gap-2.5 px-4 py-2" style={{ borderBottom: '1px solid var(--pw-glass-border)' }}>
+            <span className="shrink-0 mt-0.5 rounded-full" style={{ width: 6, height: 6, background: LOG_COLOR[it.type] ?? 'var(--pw-text-tertiary)' }} />
+            <div className="min-w-0 flex-1">
+              <p className="text-[11px] leading-snug" style={{ color: 'var(--pw-text-secondary)' }}>{it.text}</p>
+            </div>
+            {it.lap > 0 && <span className="shrink-0 text-[9px] tabular-nums" style={{ ...ORBITRON, color: 'var(--pw-text-tertiary)' }}>L{it.lap}</span>}
+          </div>
+        ))}
+      </div>
+    </motion.div>
+  );
 }
 
 // Wide table: a fixed grid so the header and every row align.
@@ -83,6 +155,7 @@ function Row({ e, idx, total, col }: { e: WECTimingEntry; idx: number; total: nu
         borderBottom: idx < total - 1 ? '1px solid var(--pw-glass-border)' : undefined,
         background: leader && !out ? `${col}10` : undefined,
         opacity: out ? 0.45 : 1,
+        boxShadow: e.inBattle && !out ? `inset 3px 0 0 ${BATTLE_COLOR}` : undefined,
       }}
     >
       <span className="text-right font-bold tabular-nums" style={{ ...ORBITRON, color: leader ? col : 'var(--pw-text-tertiary)' }}>{e.classPos}</span>
@@ -96,6 +169,11 @@ function Row({ e, idx, total, col }: { e: WECTimingEntry; idx: number; total: nu
           <p className="truncate font-semibold flex items-center gap-1.5" style={{ color: 'var(--pw-text-primary)' }}>
             {e.team}
             {out && <span className="px-1 rounded-sm font-bold uppercase shrink-0" style={{ background: '#E1060022', color: '#FF6B6B', fontSize: 8 }}>{e.status || 'OUT'}</span>}
+            {!out && e.inPit && <span className="px-1 rounded-sm font-bold uppercase shrink-0" style={{ background: `${PIT_COLOR}22`, color: PIT_COLOR, fontSize: 8 }}>PIT</span>}
+            {!out && e.inBattle && <span className="px-1 rounded-sm font-bold uppercase shrink-0" style={{ background: `${BATTLE_COLOR}22`, color: BATTLE_COLOR, fontSize: 8 }}>BATTLE</span>}
+            {!out && !e.inBattle && e.strikeLaps > 0 && (
+              <span className="px-1 rounded-sm font-bold shrink-0 tabular-nums" title="laps to catch the car ahead" style={{ background: '#36C24A1e', color: '#36C24A', fontSize: 8 }}>◢{e.strikeLaps.toFixed(1)}L</span>
+            )}
           </p>
           {e.drivers.length > 0 && <p className="truncate text-[9px]" style={{ color: 'var(--pw-text-tertiary)' }}>{e.drivers.join(' · ')}</p>}
         </div>
@@ -109,7 +187,7 @@ function Row({ e, idx, total, col }: { e: WECTimingEntry; idx: number; total: nu
       ))}
       <span className="tabular-nums text-right" style={{ ...ORBITRON, color: lapColor(e.bestLapColor) }}>{e.bestLapTime || '—'}</span>
       <span className="tabular-nums text-right font-bold" style={{ ...ORBITRON, color: leader ? col : 'var(--pw-text-secondary)' }}>{e.gapClass}</span>
-      <span className="tabular-nums text-right text-[10px]" style={{ ...ORBITRON, color: 'var(--pw-text-tertiary)' }}>{e.gapAhead === 'LEADER' ? '—' : e.gapAhead}</span>
+      <span className="tabular-nums text-right text-[10px] inline-flex items-center justify-end gap-0.5" style={{ ...ORBITRON, color: 'var(--pw-text-tertiary)' }}><TrendArrow t={e.trend} />{e.gapAhead === 'LEADER' ? '—' : e.gapAhead}</span>
       <EnergyCell pct={e.energyPct} col={col} />
       <span className="tabular-nums text-right text-[10px]" style={{ color: 'var(--pw-text-tertiary)' }}>{e.pitStops || '—'}</span>
     </div>
@@ -130,6 +208,7 @@ function HeaderRow() {
 
 export default function WECTimingBoard({ accentColor, onClose }: Props) {
   const [data, setData] = useState<WECTimingData | null>(null);
+  const [logOpen, setLogOpen] = useState(false);
 
   const fetchTiming = useCallback(async () => {
     try {
@@ -174,10 +253,30 @@ export default function WECTimingBoard({ accentColor, onClose }: Props) {
           )}
           {data?.leaderLap != null && <span className="text-[10px] uppercase tracking-wide tabular-nums" style={{ color: 'var(--pw-text-tertiary)' }}>Lap {data.leaderLap}</span>}
         </div>
-        <button onClick={onClose} className="w-9 h-9 flex items-center justify-center rounded-full shrink-0" style={{ background: 'var(--pw-glass-bg)', color: 'var(--pw-text-secondary)' }} aria-label="Close">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6 6 18M6 6l12 12" /></svg>
-        </button>
+        <div className="flex items-center gap-2 shrink-0">
+          {data?.raceLog && data.raceLog.length > 0 && (
+            <button
+              onClick={() => setLogOpen((v) => !v)}
+              className="flex items-center gap-1.5 px-2.5 h-9 rounded-full text-[10px] font-bold uppercase tracking-wide active:scale-95"
+              style={{ background: logOpen ? `${accentColor}26` : 'var(--pw-glass-bg)', border: `1px solid ${logOpen ? `${accentColor}70` : 'var(--pw-glass-border)'}`, color: logOpen ? accentColor : 'var(--pw-text-secondary)' }}
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M4 6h16M4 12h16M4 18h10" /></svg>
+              Race Log
+            </button>
+          )}
+          <button onClick={onClose} className="w-9 h-9 flex items-center justify-center rounded-full" style={{ background: 'var(--pw-glass-bg)', color: 'var(--pw-text-secondary)' }} aria-label="Close">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6 6 18M6 6l12 12" /></svg>
+          </button>
+        </div>
       </div>
+
+      {/* Live commentary ticker */}
+      {data?.commentary && (
+        <div className="flex items-center gap-2.5 px-5 py-2 shrink-0" style={{ borderBottom: '1px solid var(--pw-glass-border)', background: `${accentColor}0c` }}>
+          <PlayPhrase url={data.commentary.audioUrl} accent={accentColor} />
+          <p className="text-[11px] leading-snug truncate" style={{ color: 'var(--pw-text-secondary)' }}>{data.commentary.phrase}</p>
+        </div>
+      )}
 
       {/* Conditions strip */}
       {data?.weather && (
@@ -212,6 +311,12 @@ export default function WECTimingBoard({ accentColor, onClose }: Props) {
           )}
         </div>
       </div>
+
+      <AnimatePresence>
+        {logOpen && data?.raceLog && (
+          <RaceLogDrawer items={data.raceLog} accent={accentColor} onClose={() => setLogOpen(false)} />
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }

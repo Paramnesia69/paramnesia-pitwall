@@ -187,6 +187,16 @@ export default function WECTimingPanel({ accentColor, eventState }: Props) {
         </div>
       )}
 
+      {/* Live commentary */}
+      {data.commentary?.phrase && (
+        <div className="flex items-start gap-2 mb-2 px-3 py-2 rounded-md" style={{ background: `${accentColor}0e`, border: `1px solid ${accentColor}22` }}>
+          <span className="shrink-0 mt-0.5" style={{ color: accentColor }} aria-hidden>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 11v2M7 8v8M11 5v14M15 9v6M19 7v10" /></svg>
+          </span>
+          <p className="text-[10px] leading-snug" style={{ color: 'var(--pw-text-secondary)' }}>{data.commentary.phrase}</p>
+        </div>
+      )}
+
       {/* Class tabs */}
       <div className="flex gap-1.5 mb-2">
         {data.classes.map((c) => {

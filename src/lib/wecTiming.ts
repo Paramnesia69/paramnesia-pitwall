@@ -19,7 +19,7 @@
  */
 
 import { cached } from '@/lib/cache';
-import type { WECTimingData, WECTimingEntry, WECTimingClass, WECWeather, WECSector } from '@/types';
+import type { WECTimingData, WECTimingEntry, WECTimingClass, WECWeather, WECSector, WECCommentary, WECRaceLogItem } from '@/types';
 
 // ── Al Kamel CSV fallback (Le Mans 2026) ──────────────────────────────────
 const LE_MANS_2026_RACE =
@@ -69,6 +69,38 @@ function lapColor(c?: string): string {
   return c === 'Purple' || c === 'Green' ? c : '';
 }
 
+/** Griiip gap-trend → our key (Decreasing = catching the car ahead). */
+function trendKey(t?: string): string {
+  if (t === 'Decreasing') return 'closing';
+  if (t === 'Increasing') return 'growing';
+  return '';
+}
+
+/** Build a human-readable race-log line from a raw item. */
+function raceLogText(it: RaceLogRaw, num: (pid?: number) => string): string {
+  const me = `#${(it.carNumber ?? '').trim()}`;
+  switch (it.type) {
+    case 'Overtake':
+      return `${me} passes #${num(it.overtakenPid)}${it.newPosition ? ` for P${it.newPosition}` : ''}`;
+    case 'Battle':
+      return `${me} battling #${num(it.secondaryPid)}`;
+    case 'PitIn':
+      return `${me} pits`;
+    case 'PitOut':
+      return it.totalTimeInPitMillis ? `${me} out of pits (${(it.totalTimeInPitMillis / 1000).toFixed(1)}s)` : `${me} out of pits`;
+    case 'FastestLap':
+      return `${me} fastest lap ${fmtLapMs(it.lapTimeMillis ?? 0)}`;
+    case 'DriverSwap':
+      return `${me} driver change`;
+    case 'SignificantTimeLoss':
+      return it.diffFromRacePace ? `${me} loses ${(it.diffFromRacePace / 1000).toFixed(1)}s` : `${me} off the pace`;
+    case 'RCMessage':
+      return (it.text ?? '').trim() || 'Race control message';
+    default:
+      return (it.text ?? `${me} ${it.type ?? ''}`).trim();
+  }
+}
+
 // ── Griiip bootstrap normalization (pure + tested) ─────────────────────────
 
 interface GriiipRef { pid: number; carNumber: string; classId: string }
@@ -86,7 +118,29 @@ type GriiipBootstrap = {
   sectors?: (GriiipRef & { sectorNumber?: number; lapNumber?: number; sectorTimeMillis?: number; color?: string })[];
   carsEnergyTanks?: { items?: { pid: number; e?: number }[] };
   pitIns?: GriiipRef[];
+  gapTrends?: (GriiipRef & { trendType?: string })[];
+  runningBattles?: { isFinished?: boolean; pid: number; secondaryPID?: number; attacks?: { pid?: number; defenderPID?: number; isFinished?: boolean }[] }[];
+  strikingDistances?: (GriiipRef & { strikingDistanceLaps?: number })[];
+  carLocations?: (GriiipRef & { carLocation?: string })[];
+  commentatorPhraseLatest?: { phrase?: string; audioUrl?: string; ts?: string };
+  raceLogFirstPage?: { items?: RaceLogRaw[] };
 };
+
+interface RaceLogRaw {
+  type?: string;
+  raceLogItemId?: string;
+  lapNumber?: number;
+  carNumber?: string;
+  classId?: string;
+  pid?: number;
+  secondaryPid?: number;
+  overtakenPid?: number;
+  newPosition?: number;
+  lapTimeMillis?: number;
+  totalTimeInPitMillis?: number;
+  diffFromRacePace?: number;
+  text?: string;
+}
 
 /** Build a per-pid lookup from an array of records keyed on `pid`. */
 function byPid<T extends { pid: number }>(arr: T[] | undefined): Map<number, T> {
@@ -157,6 +211,30 @@ export function normalizeGriiipBootstrap(
   }
   const pitCount = new Map<number, number>();
   for (const p of boot.pitIns ?? []) pitCount.set(p.pid, (pitCount.get(p.pid) ?? 0) + 1);
+  // Gap-trend (closing/growing) per car.
+  const trend = new Map<number, string>();
+  for (const g of boot.gapTrends ?? []) trend.set(g.pid, trendKey(g.trendType));
+  // Cars currently in an unfinished on-track battle.
+  const battling = new Set<number>();
+  for (const b of boot.runningBattles ?? []) {
+    if (b.isFinished) continue;
+    battling.add(b.pid);
+    if (b.secondaryPID) battling.add(b.secondaryPID);
+    for (const a of b.attacks ?? []) {
+      if (a.isFinished) continue;
+      if (a.pid) battling.add(a.pid);
+      if (a.defenderPID) battling.add(a.defenderPID);
+    }
+  }
+  // Cars in the pit lane right now.
+  const inPit = new Set<number>();
+  for (const c of boot.carLocations ?? []) if ((c.carLocation ?? '').toLowerCase() === 'pit') inPit.add(c.pid);
+  // Striking distance — laps to catch the car ahead (latest per car).
+  const strike = new Map<number, number>();
+  for (const s of boot.strikingDistances ?? []) {
+    const v = s.strikingDistanceLaps ?? -1;
+    strike.set(s.pid, v > 0 ? Math.round(v * 10) / 10 : -1);
+  }
 
   const entries: (WECTimingEntry & { _firstMs: number; _firstLaps: number })[] = [];
   for (const p of boot.participants ?? []) {
@@ -192,6 +270,10 @@ export function normalizeGriiipBootstrap(
       energyPct: energy.has(p.pid) ? energy.get(p.pid)! : -1,
       status: run.get(p.pid)?.status ?? '',
       pitStops: pitCount.get(p.pid) ?? 0,
+      trend: trend.get(p.pid) ?? '',
+      inBattle: battling.has(p.pid),
+      inPit: inPit.has(p.pid),
+      strikeLaps: strike.has(p.pid) ? strike.get(p.pid)! : -1,
       drivers: (p.drivers ?? []).map((d) => (d.displayName ?? '').trim()).filter(Boolean),
       _firstMs: g?.gapToFirstMillis ?? 0,
       _firstLaps: g?.gapToFirstLaps ?? 0,
@@ -246,7 +328,28 @@ export function normalizeGriiipBootstrap(
       }
     : null;
 
-  return { status, source: 'live', hour: null, updated: new Date().toISOString(), leaderLap, flag, weather, classes };
+  // Latest auto-commentary phrase.
+  const cp = boot.commentatorPhraseLatest;
+  const commentary: WECCommentary | null = cp?.phrase
+    ? { phrase: cp.phrase.trim(), audioUrl: (cp.audioUrl ?? '').trim(), ts: cp.ts ?? '' }
+    : null;
+
+  // Race log — newest first, with secondary car numbers resolved from participants.
+  const pidNum = new Map<number, string>();
+  for (const p of boot.participants ?? []) pidNum.set(p.pid, (p.carNumber ?? '').trim());
+  const numOf = (pid?: number) => (pid != null ? pidNum.get(pid) ?? '' : '');
+  const raceLog: WECRaceLogItem[] = (boot.raceLogFirstPage?.items ?? [])
+    .slice(0, 40)
+    .map((it) => ({
+      id: it.raceLogItemId ?? `${it.type}-${it.pid}-${it.lapNumber}`,
+      type: it.type ?? '',
+      lap: it.lapNumber ?? 0,
+      carNumber: (it.carNumber ?? '').trim(),
+      carClass: (it.classId ?? '').trim(),
+      text: raceLogText(it, numOf),
+    }));
+
+  return { status, source: 'live', hour: null, updated: new Date().toISOString(), leaderLap, flag, weather, commentary, raceLog, classes };
 }
 
 // ── Griiip fetch path ──────────────────────────────────────────────────────
@@ -326,7 +429,7 @@ export function parseWecClassification(
   status: WECTimingData['status'],
 ): WECTimingData {
   const lines = csv.replace(/^﻿/, '').split(/\r?\n/).filter((l) => l.trim().length > 0);
-  const empty: WECTimingData = { status: 'unavailable', source, hour, updated: new Date().toISOString(), leaderLap: null, flag: null, weather: null, classes: [] };
+  const empty: WECTimingData = { status: 'unavailable', source, hour, updated: new Date().toISOString(), leaderLap: null, flag: null, weather: null, commentary: null, raceLog: [], classes: [] };
   if (lines.length < 2) return empty;
 
   const header = splitRow(lines[0]).map((h) => h.trim());
@@ -409,6 +512,10 @@ export function parseWecClassification(
       energyPct: -1,
       status: (r[idx.status] ?? '').trim(),
       pitStops: 0,
+      trend: '',
+      inBattle: false,
+      inPit: false,
+      strikeLaps: -1,
       drivers,
     });
   }
@@ -437,7 +544,7 @@ export function parseWecClassification(
     classes.push({ name, entries: list });
   }
 
-  return { status, source, hour, updated: new Date().toISOString(), leaderLap: null, flag: null, weather: null, classes };
+  return { status, source, hour, updated: new Date().toISOString(), leaderLap: null, flag: null, weather: null, commentary: null, raceLog: [], classes };
 }
 
 async function fetchText(url: string): Promise<string | null> {
@@ -467,7 +574,7 @@ async function fetchAlKamelCsv(): Promise<WECTimingData> {
     const csv = await fetchText(url);
     if (csv) return parseWecClassification(csv, `hour-${h}`, h, finished ? 'finished' : 'live');
   }
-  return { status: finished ? 'unavailable' : 'pending', source: 'none', hour: currentHour >= 1 ? currentHour : null, updated: new Date().toISOString(), leaderLap: null, flag: null, weather: null, classes: [] };
+  return { status: finished ? 'unavailable' : 'pending', source: 'none', hour: currentHour >= 1 ? currentHour : null, updated: new Date().toISOString(), leaderLap: null, flag: null, weather: null, commentary: null, raceLog: [], classes: [] };
 }
 
 /** Live Griiip backend first; Al Kamel hourly CSV as fallback. */
