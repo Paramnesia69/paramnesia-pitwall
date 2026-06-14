@@ -586,5 +586,5 @@ async function fetchWecTiming(): Promise<WECTimingData> {
 
 /** Cached entry point used by the route (20s TTL — live, light on upstream). */
 export async function getWecTiming(): Promise<WECTimingData> {
-  return cached('wec:timing:lemans2026', 20, fetchWecTiming);
+  return cached('wec:timing:live', 20, fetchWecTiming);
 }

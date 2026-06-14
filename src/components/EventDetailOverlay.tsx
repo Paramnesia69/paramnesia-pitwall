@@ -274,8 +274,8 @@ export default function EventDetailOverlay({ events }: EventDetailOverlayProps) 
                 />
               )}
 
-              {/* WEC Live Classification — Al Kamel (Le Mans 24H) */}
-              {event.series === 'wec' && event.circuit.name === 'Circuit de la Sarthe' && (
+              {/* WEC Live Classification — Griiip (any WEC round), Al Kamel CSV fallback */}
+              {event.series === 'wec' && (event.state === 'live' || event.state === 'starting_soon') && (
                 <WECTimingPanel
                   accentColor={SERIES_META[event.series].accent}
                   eventState={event.state}
